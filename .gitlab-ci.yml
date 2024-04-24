@@ -1,0 +1,11 @@
+stages:
+  - danger
+
+danger:
+  stage: danger
+  image: node:20
+  only:
+    - merge_requests
+  script:
+    - npm install
+    - npm danger ci --failOnErrors
