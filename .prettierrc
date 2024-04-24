@@ -1,3 +1,11 @@
 {
-  "singleQuote": true
+  "printWidth": 140,
+  "singleQuote": true,
+  "semi": true,
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"],
+  "importOrder": ["<THIRD_PARTY_MODULES>", "^@[a-zA-Z]*/", "^[.][.]/", "^[.]/"],
+  "importOrderParserPlugins": ["typescript", "decorators-legacy"],
+  "importOrderTypeScriptVersion": "5.4.0"
 }
