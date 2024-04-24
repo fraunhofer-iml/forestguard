@@ -1,7 +1,7 @@
 {
   "name": "api-interfaces",
-  "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "api-interfaces/src",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api-interfaces/src",
   "projectType": "library",
   "tags": [],
   "// targets": "to see all targets run: nx show project api-interfaces --web",

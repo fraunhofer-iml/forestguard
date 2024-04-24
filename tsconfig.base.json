@@ -15,8 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@forrest-guard/api-interfaces": ["api-interfaces/src/index.ts"],
-      "@forrest-guard/ui": ["ui/src/index.ts"]
+      "@forrest-guard/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@forrest-guard/ui": ["libs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
