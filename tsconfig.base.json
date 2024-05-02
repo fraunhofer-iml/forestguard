@@ -16,6 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@forrest-guard/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@forrest-guard/blockchain-connector": ["libs/blockchain-connector/src/index.ts"],
+      "@forrest-guard/database": ["libs/database/src/index.ts"],
+      "@forrest-guard/file-storage": ["libs/file-storage/src/index.ts"],
       "@forrest-guard/ui": ["libs/ui/src/index.ts"]
     }
   },

@@ -1,0 +1,9 @@
+{
+  "name": "blockchain-connector",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/blockchain-connector/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project blockchain-connector --web",
+  "targets": {}
+}

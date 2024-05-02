@@ -1,0 +1,9 @@
+{
+  "name": "file-storage",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/file-storage/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project file-storage --web",
+  "targets": {}
+}
