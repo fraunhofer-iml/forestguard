@@ -7,5 +7,5 @@ danger:
   only:
     - merge_requests
   script:
-    - npm install
-    - npm danger ci --failOnErrors
+    - npm install -g danger
+    - danger ci --failOnErrors

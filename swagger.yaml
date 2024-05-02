@@ -1,0 +1,1178 @@
+openapi: 3.0.3
+info:
+  title: 'Forest Guard OpenAPI Documentation'
+  description: 'This is the OpenAPI documentation for the Forest Guard API.'
+  version: '1.0.0'
+servers:
+  - url: 'https://api.forestguard.blockchain-europe.iml.fraunhofer.de'
+    description: 'Forest Guard Production Server'
+tags:
+  - name: Authentication
+    description: 'Operations for authentication.'
+  - name: Batch
+    description: 'Operations for batches.'
+  - name: Company
+    description: 'Operations for companies.'
+  - name: Cultivation
+    description: 'Operations for cultivations.'
+  - name: Plot of Land
+    description: 'Operations for plot of lands.'
+  - name: Process
+    description: 'Operations for processes.'
+  - name: User
+    description: 'Operations for users.'
+
+##### ---- PATH DEFINITIONS ---- #####
+paths:
+  ### AUTHENTICATION ###
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: 'Login'
+      description: 'Login with email and password.'
+      operationId: 'login'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginDto'
+      responses:
+        '200':
+          description: 'Successful login.'
+        '400':
+          description: 'Invalid request.'
+        '401':
+          description: 'Invalid credentials.'
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: 'Register'
+      description: 'Register with email and password.'
+      operationId: 'register'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterDto'
+      responses:
+        '200':
+          description: 'Successful registration.'
+        '400':
+          description: 'Invalid request.'
+        '409':
+          description: 'User already exists.'
+  ### USER ###
+  /users/:
+    get:
+      tags:
+        - User
+      summary: 'Get users'
+      description: 'Get all users.'
+      operationId: 'getUsers'
+      responses:
+        '200':
+          description: 'Successful request.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: 'Invalid request.'
+    patch:
+      tags:
+        - User
+      summary: 'Update user'
+      description: 'Create a user object.'
+      operationId: 'updateUser'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserDto'
+      responses:
+        '200':
+          description: 'Successful creation.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnUserDto'
+        '400':
+          description: 'Invalid request.'
+  /users/{id}:
+    get:
+      tags:
+        - User
+      summary: 'Get user'
+      description: 'Get user by ID.'
+      operationId: 'getUser'
+      parameters:
+        - name: id
+          in: path
+          description: 'The ID of the user.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Successful request.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: 'Invalid request.'
+        '404':
+          description: 'User not found.'
+  /users/farmers:
+    post:
+      tags:
+        - User
+      summary: 'Create farmer'
+      description: 'Create a new farmer.'
+      operationId: 'createFarmer'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFarmerDto'
+      responses:
+        '200':
+          description: 'Successful creation.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnUserDto'
+        '400':
+          description: 'Invalid request.'
+
+  ### PLOT OF LAND ###
+  /pols:
+    get:
+      tags:
+        - Plot of Land
+      summary: 'Get plot of lands'
+      description: 'Get all plot of lands of a farmer.'
+      operationId: 'getPlotOfLands'
+      parameters:
+        - name: farmerId
+          in: query
+          description: 'The ID of the farmer.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Successful request.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlotOfLand'
+        '400':
+          description: 'Invalid request.'
+        '404':
+          description: 'Farmer not found.'
+    post:
+      tags:
+        - Plot of Land
+      summary: 'Create plot of land'
+      description: 'Create a new plot of land for a farmer.'
+      operationId: 'createPlotOfLand'
+      parameters:
+        - name: farmerId
+          in: query
+          description: 'The ID of the farmer.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePlotOfLandDto'
+      responses:
+        '200':
+          description: 'Successful creation.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnPlotOfLandDto'
+        '400':
+          description: 'Invalid request.'
+  /pols/${id}/:
+    get:
+      tags:
+        - Plot of Land
+      summary: 'Get plot of land'
+      description: 'Get plot of land by ID.'
+      operationId: 'getPlotOfLand'
+      parameters:
+        - name: id
+          in: path
+          description: 'The ID of the plot of land.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Successful request.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlotOfLand'
+        '400':
+          description: 'Invalid request.'
+        '404':
+          description: 'Plot of land not found.'
+    patch:
+      tags:
+        - Plot of Land
+      summary: 'Edit plot of land'
+      description: 'Create or update the seeding for a plot of land.'
+      operationId: 'createSeeding'
+      parameters:
+        - name: id
+          in: path
+          description: 'The ID of the plot of land.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchPlotOfLandDto'
+      responses:
+        '200':
+          description: 'Successful creation.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnPlotOfLandDto'
+        '400':
+          description: 'Invalid request.'
+  /pols/${polId}/proofs:
+    get:
+      tags:
+        - Plot of Land
+      summary: 'Get proofs'
+      description: 'Get all proofs of a plot of land.'
+      operationId: 'getProofs'
+      parameters:
+        - name: polId
+          in: path
+          description: 'The ID of the plot of land.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Successful request.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Proof'
+        '400':
+          description: 'Invalid request.'
+        '404':
+          description: 'Plot of land not found.'
+    post:
+      tags:
+        - Plot of Land
+      summary: 'Create proof'
+      description: 'Create a new proof for a plot of land.'
+      operationId: 'createProof'
+      parameters:
+        - name: polId
+          in: path
+          description: 'The ID of the plot of land.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Proof'
+      responses:
+        '200':
+          description: 'Successful creation.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Proof'
+        '400':
+          description: 'Invalid request.'
+  ### Process ###
+  /processes:
+    get:
+      tags:
+        - Process
+      summary: 'Get processes'
+      description: 'Get all processes.'
+      operationId: 'getProcesses'
+      responses:
+        '200':
+          description: 'Successful request.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Process'
+        '400':
+          description: 'Invalid request.'
+    post:
+      tags:
+        - Process
+      summary: 'Create process'
+      description: 'Create a new process.'
+      operationId: 'createProcess'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProcessDto'
+      responses:
+        '200':
+          description: 'Successful creation.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Process'
+        '400':
+          description: 'Invalid request.'
+
+  ### BATCH ###
+  /batches:
+    post:
+      tags:
+        - Batch
+      summary: 'Create coffee batches'
+      description: 'Create a new coffee batch.'
+      operationId: 'createCoffeeBatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateBatchDto'
+      responses:
+        '200':
+          description: 'Successful creation.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnProcessStepDto'
+        '400':
+          description: 'Invalid request.'
+  /batches/{id}:
+    get:
+      tags:
+        - Batch
+      summary: 'Get coffee batch'
+      description: 'Get coffee batch by ID.'
+      operationId: 'getCoffeeBatch'
+      parameters:
+        - name: id
+          in: path
+          description: 'The ID of the coffee batch.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Successful request.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Batch'
+        '400':
+          description: 'Invalid request.'
+        '404':
+          description: 'Coffee batch not found.'
+  /batches/{id}/related:
+    get:
+      tags:
+        - Batch
+      summary: 'Get related coffee batches'
+      description: 'Get all coffee batches that are related to the coffee batch.'
+      operationId: 'getRelatedCoffeeBatches'
+      parameters:
+        - name: id
+          in: path
+          description: 'The ID of the coffee batch.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Successful request.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessDisplayDto'
+        '400':
+          description: 'Invalid request.'
+
+  ### CULTIVATION ###
+  /cultivations/:
+    post:
+      tags:
+        - Cultivation
+      summary: 'Create '
+      description: 'Create a new product.'
+      operationId: 'createProduct'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCultivationDto'
+      responses:
+        '200':
+          description: 'Successful creation.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: 'Invalid request.'
+    get:
+      tags:
+        - Cultivation
+      summary: 'Get products'
+      description: 'Get all products.'
+      parameters:
+        - name: type
+          in: query
+          description: Filter for type
+          required: false
+          schema:
+            type: string
+      operationId: 'getProducts'
+      responses:
+        '200':
+          description: 'Successful request.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '400':
+          description: 'Invalid request.'
+  /cultivations/types/:
+    get:
+      tags:
+        - Cultivation
+      summary: 'Get product types'
+      description: 'Get all product types.'
+      operationId: 'getProductTypes'
+      responses:
+        '200':
+          description: 'Successful request.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '400':
+          description: 'Invalid request.'
+
+  ### COMPANY ###
+  /companies/:
+    post:
+      tags:
+        - Company
+      summary: 'Create company'
+      description: 'Create a new company.'
+      operationId: 'createCompany'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCompanyDto'
+      responses:
+        '200':
+          description: 'Successful creation.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '400':
+          description: 'Invalid request.'
+  /companies/${id}:
+    get:
+      tags:
+        - Company
+      summary: 'Get company'
+      description: 'Get company by ID.'
+      operationId: 'getCompany'
+      parameters:
+        - name: id
+          in: path
+          description: 'The ID of the company.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Successful request.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '400':
+          description: 'Invalid request.'
+        '404':
+          description: 'Company not found.'
+  /companies/${id}/batches/:
+    get:
+      tags:
+        - Company
+      parameters:
+        - name: id
+          in: path
+          description: 'The ID of the company.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: query
+          in: query
+          description: Filter query
+          required: false
+          schema:
+            type: string
+      summary: 'Get coffee batches'
+      description: 'Get all coffee batches of the company.'
+      operationId: 'getCoffeeBatches'
+      responses:
+        '200':
+          description: 'Successful request.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProcessDisplayDto'
+        '400':
+          description: 'Invalid request.'
+  /companies/${id}/farmers/:
+    get:
+      tags:
+        - Company
+      parameters:
+        - name: id
+          in: path
+          description: 'The ID of the company.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      summary: 'Get farmers'
+      description: 'Get all farmers related to the company.'
+      operationId: 'getCompanyRelatedFamers'
+      responses:
+        '200':
+          description: 'Successful request.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Farmer'
+        '400':
+          description: 'Invalid request.'
+
+##### ---- COMPONENT DEFINITIONS ---- #####
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          description: 'The street of the address.'
+        postalCode:
+          type: string
+          description: 'The ZIP code of the address.'
+        city:
+          type: string
+          description: 'The city of the address.'
+        state:
+          type: string
+          description: 'The state of the address.'
+        country:
+          type: string
+          description: 'The country of the address.'
+      required:
+        - street
+        - zipCode
+        - state
+        - city
+        - country
+    Entity:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: 'The unique identifier of the entity.'
+    User:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Entity'
+        - type: object
+          properties:
+            employeeId:
+              type: string
+              description: 'The ID of the user set from the users company.'
+            name:
+              type: string
+              description: 'The name of the user.'
+            firstName:
+              type: string
+              description: 'The first name of the user.'
+            email:
+              type: string
+              format: email
+              description: 'The email address of the user.'
+            role:
+              type: string
+              description: 'The role of the user.'
+            mobilePhoneNumber:
+              type: string
+              description: 'The mobile phone number of the user.'
+      required:
+        - employeeId
+        - username
+        - personalId
+        - name
+        - firstName
+        - address
+        - email
+        - country
+    Farmer:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            personalId:
+              type: string
+              description: 'The personal ID of the farmer.'
+            address:
+              $ref: '#/components/schemas/Address'
+            plotOfLands:
+              type: array
+              items:
+                $ref: '#/components/schemas/PlotOfLand'
+    Company:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Entity'
+        - type: object
+          properties:
+            name:
+              type: string
+              description: 'The name of the cooperation.'
+            address:
+              $ref: '#/components/schemas/Address'
+            employees:
+              type: array
+              items:
+                $ref: '#/components/schemas/User'
+            farmers:
+              type: array
+              items:
+                $ref: '#/components/schemas/Farmer'
+      required:
+        - id
+        - name
+        - address
+    PlotOfLand:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: 'The unique identifier of the plot of land.'
+        country:
+          type: string
+          description: 'The country of the plot of land.'
+        region:
+          type: string
+          description: 'The region of the plot of land.'
+        district:
+          type: string
+          description: 'The district of the plot of land.'
+        nationalPlotOfLandId:
+          type: string
+          description: 'The national plot of land ID.'
+        localPlotOfLandId:
+          type: string
+          description: 'The local plot of land ID.'
+        description:
+          type: string
+          description: 'The description of the plot of land.'
+        polygonData:
+          type: string
+          description: 'The border data of the plot of land.'
+        areaInHA:
+          type: number
+          description: 'The area of the plot of land in hectare.'
+        cultivatedWith:
+          $ref: '#/components/schemas/Product'
+        proofs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Proof'
+    Proof:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: 'The unique identifier of the proof.'
+        type:
+          type: string
+          description: 'The type of the proof.'
+        documentRef:
+          type: string
+          description: 'The reference to the document.'
+        notice:
+          type: string
+          description: 'The notice of the proof.'
+      required:
+        - id
+        - type
+        - documentRef
+        - notice
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: 'The unique identifier of the product.'
+        type:
+          type: string
+          description: 'The type of the product.'
+        sort:
+          type: string
+          description: 'The sort of the product.'
+    Process:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: 'The unique identifier of the process.'
+        name:
+          type: string
+          description: 'The name of the process.'
+      required:
+        - id
+        - name
+    ProcessStep:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: 'The unique identifier of the process step.'
+        location:
+          type: string
+          description: 'The location the process step took place.'
+        date:
+          type: string
+          format: date-time
+          description: 'The date of the process step.'
+        process:
+          $ref: '#/components/schemas/Process'
+        recordedBy:
+          $ref: '#/components/schemas/User'
+        executedBy:
+          $ref: '#/components/schemas/Entity'
+      required:
+        - id
+        - type
+        - startedAt
+        - endedAt
+        - notice
+    Batch:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: 'The unique identifier of the coffee batch.'
+        idEUInfoSystem:
+          type: string
+          description: 'The ID of the coffee batch in the EU information system.'
+        in:
+          type: array
+          items:
+            $ref: '#/components/schemas/Batch'
+          description: 'The coffee batches that were used to create this coffee batch.'
+        out:
+          type: array
+          items:
+            $ref: '#/components/schemas/Batch'
+          description: 'The coffee batches that were created from this coffee batch.'
+        weight:
+          type: number
+          description: 'The weight of the coffee batch.'
+        active:
+          type: boolean
+          description: 'The status of the coffee batch.'
+          default: true
+        recipient:
+          $ref: '#/components/schemas/Entity'
+        processStep:
+          $ref: '#/components/schemas/ProcessStep'
+      required:
+        - id
+        - in
+        - out
+        - recipient
+        - mass
+        - processStep
+
+    ### DTOs ###
+    LoginDto:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: 'The email address of the user.'
+        password:
+          type: string
+          format: password
+          description: 'The password of the user.'
+      required:
+        - email
+        - password
+    RegisterDto:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: 'The email address of the user.'
+        password:
+          type: string
+          format: password
+          description: 'The password of the user.'
+        role:
+          type: string
+          description: 'The role of the user.'
+        firstName:
+          type: string
+          description: 'The first name of the user.'
+        name:
+          type: string
+          description: 'The last name of the user.'
+      required:
+        - email
+        - password
+    CreateFarmerDto:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateUserDto'
+        - type: object
+          properties:
+            personalId:
+              type: string
+              description: 'The personal ID of the farmer.'
+            address:
+              $ref: '#/components/schemas/Address'
+      required:
+        - personalId
+        - address
+    UpdateUserDto:
+      type: object
+      properties:
+        employeeId:
+          type: string
+          description: 'The ID of the employee set from the users company.'
+        name:
+          type: string
+          description: 'The name of the farmer.'
+        firstName:
+          type: string
+          description: 'The first name of the farmer.'
+        email:
+          type: string
+          format: email
+          description: 'The email address of the farmer.'
+        mobilePhoneNumber:
+          type: string
+          description: 'The mobile phone number of the farmer.'
+        role:
+          type: string
+          description: 'The role of the employee.'
+          default: 'EMPLOYEE'
+    ReturnUserDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: 'The unique identifier of the employee.'
+        name:
+          type: string
+          description: 'The name of the employee.'
+        firstName:
+          type: string
+          description: 'The first name of the employee.'
+        email:
+          type: string
+          format: email
+          description: 'The email address of the employee.'
+    CreateCompanyDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'The name of the company.'
+        address:
+          $ref: '#/components/schemas/Address'
+      required:
+        - name
+        - address
+    CreatePlotOfLandDto:
+      type: object
+      properties:
+        country:
+          type: string
+          description: 'The country of the plot of land.'
+        region:
+          type: string
+          description: 'The region of the plot of land.'
+        district:
+          type: string
+          description: 'The district of the plot of land.'
+        nationalPlotOfLandId:
+          type: string
+          description: 'The national plot of land ID.'
+        localPlotOfLandId:
+          type: string
+          description: 'The local plot of land ID.'
+        description:
+          type: string
+          description: 'The description of the plot of land.'
+        polygonData:
+          type: string
+          description: 'The border data of the plot of land.'
+        areaInHA:
+          type: number
+          description: 'The area of the plot of land in hectare.'
+        cultivatedWith:
+          type: string
+          format: uuid
+      required:
+        - country
+        - region
+        - district
+        - description
+        - polygonData
+        - areaInHA
+    PatchPlotOfLandDto:
+      type: object
+      properties:
+        cultivatedWith:
+          type: string
+          description: 'The ID of the cultivation that is cultivated.'
+      required:
+        - type
+        - sort
+    ReturnPlotOfLandDto:
+      type: object
+      properties:
+        country:
+          type: string
+          description: 'The country of the plot of land.'
+        region:
+          type: string
+          description: 'The region of the plot of land.'
+        district:
+          type: string
+          description: 'The district of the plot of land.'
+        nationalPlotOfLandId:
+          type: string
+          description: 'The national plot of land ID.'
+        localPlotOfLandId:
+          type: string
+          description: 'The local plot of land ID.'
+        description:
+          type: string
+          description: 'The description of the plot of land.'
+        polygonData:
+          type: string
+          description: 'The border data of the plot of land.'
+        areaInHA:
+          type: number
+          description: 'The area of the plot of land in hectare.'
+    CreateProofDto:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'The type of the proof.'
+        documentRef:
+          type: string
+          description: 'The reference to the document.'
+        notice:
+          type: string
+          description: 'The notice of the proof.'
+      required:
+        - type
+        - documentRef
+        - notice
+    CreateProcessDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'The name of the process.'
+        harvestedLand:
+          type: string
+          format: uuid
+      required:
+        - name
+    CreateProcessStepDto:
+      type: object
+      properties:
+        location:
+          type: string
+          description: 'The location the process step took place.'
+        date:
+          type: string
+          format: date-time
+          description: 'The date of the process step.'
+        process:
+          type: string
+          format: uuid
+          description: 'The ID of the process.'
+        recordedBy:
+          type: string
+          format: uuid
+          description: 'The ID of the user that recorded the process step.'
+        executedBy:
+          type: string
+          format: uuid
+          description: 'The ID of the user that executed the process step.'
+      required:
+        - location
+        - date
+        - process
+        - executedBy
+    CreateBatchDto:
+      type: object
+      properties:
+        idEUInfoSystem:
+          type: string
+          description: 'The ID of the coffee batch in the EU information system.'
+        in:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: 'The coffee batch IDs that were used to create this coffee batch.'
+        weight:
+          type: number
+          description: 'The weight of the coffee batch.'
+        recipient:
+          type: string
+          format: uuid
+          description: 'The recipient id of the coffee batch.'
+        processStep:
+          $ref: '#/components/schemas/CreateProcessStepDto'
+      required:
+        - in
+        - recipient
+        - weight
+        - processStep
+    ReturnProcessStepDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: 'The unique identifier of the process step.'
+    ProcessDisplayDto:
+      type: object
+      properties:
+        coffeeBatches:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              weight:
+                type: number
+              recipient:
+                type: string
+                format: uuid
+              processStep:
+                type: string
+                format: uuid
+        edges:
+          type: array
+          items:
+            type: object
+            properties:
+              from:
+                type: string
+                format: uuid
+                description: 'An ID of a coffee batch.'
+              to:
+                type: string
+                format: uuid
+                description: 'An ID of a coffee batch.'
+    CreateCultivationDto:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'The type of the product.'
+        sort:
+          type: string
+          description: 'The sort of the product.'
+      required:
+        - type
+        - sort
