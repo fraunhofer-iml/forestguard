@@ -1,0 +1,24 @@
+{
+  "name": "entity-management-svc",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/entity-management-svc/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "entity-management-svc:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "entity-management-svc:build:development"
+        },
+        "production": {
+          "buildTarget": "entity-management-svc:build:production"
+        }
+      }
+    }
+  }
+}
