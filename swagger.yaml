@@ -390,6 +390,30 @@ paths:
                 $ref: '#/components/schemas/ReturnProcessStepDto'
         '400':
           description: 'Invalid request.'
+  /batches/harvests:
+    post:
+      tags:
+        - Batch
+      summary: 'Create harvest batch'
+      description: 'Create a new harvest.'
+      operationId: 'createHarvestCoffeeBatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateBatchDto'
+      responses:
+        '200':
+          description: 'Successful creation.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnProcessStepDto'
+        '400':
+          description: 'Invalid request.'
   /batches/{id}:
     get:
       tags:
@@ -824,6 +848,8 @@ components:
           $ref: '#/components/schemas/User'
         executedBy:
           $ref: '#/components/schemas/Entity'
+        farmedLand:
+          $ref: '#/components/schemas/PlotOfLand'
       required:
         - id
         - type
@@ -1067,9 +1093,6 @@ components:
         name:
           type: string
           description: 'The name of the process.'
-        harvestedLand:
-          type: string
-          format: uuid
       required:
         - name
     CreateProcessStepDto:
@@ -1094,6 +1117,9 @@ components:
           type: string
           format: uuid
           description: 'The ID of the user that executed the process step.'
+        harvestedLand:
+          type: string
+          format: uuid
       required:
         - location
         - date
