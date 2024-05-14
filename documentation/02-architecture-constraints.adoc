@@ -1,0 +1,188 @@
+[[chapter-architecture-constraints]]
+:docinfo: shared
+:toc: left
+:toclevels: 3
+:sectnums:
+:copyright: Open Logistics Foundation License 1.3
+
+= Architecture Constraints
+
+Various constraints are respected for the design of the {projectName} project.
+They all affect the solution.
+We list these restrictions and explain their motivations.
+Some of these constraints go beyond individual {projectName} modules and are valid for the whole platform or organization.
+
+== Technical Constraints
+
+The following technical constraints apply:
+
+[cols="0,3,6",options="header",]
+|===
+| *Id*
+| *Constraint*
+| *Value/Description*
+
+| *BAP1*
+| Basic Architecture Patterns
+| Microservices
+
+| *BAP2*
+| Basic Architecture Patterns
+| Every Microservice is executed in an application container
+
+| *BAP3*
+| Basic Architecture Patterns
+| Loose coupling
+
+| *BAP4*
+| Basic Architecture Patterns
+| Event-based communication (when appropriate)
+
+| *TE1*
+| Target environment
+| OKD/Kubernetes (basic stack of a Silicon Economy Platform)
+
+| *BSD1*
+| Basic Stack for Development: Application Container
+| Docker
+
+| *BSD2*
+| Basic Stack for Development: Interfaces/Communication
+| HTTP/REST, MQTT, AMQP, WebSockets
+
+| *BSD3*
+| Basic Stack for Development: programming languages
+| Programming Languages: JavaScript/TypeScript
+
+| *BSD4*
+| Basic Stack for Development: blockchain
+| Blockchain Development: Solidity
+
+| *BSD5*
+| Basic Stack for Development: frontend
+| Frontend Development: Angular
+
+| *BSD6*
+| Basic Stack for Development: other
+| All other technologies must be compatible with OKD/Kubernetes
+
+| *BC1*
+| Continuous Integration Pipeline constraints
+| Integrated with the GitLab CI Runner
+
+| *BC2*
+| Project License
+| Developed under the Open Logistics Foundation License 1.3
+
+| *BC3*
+| Requirements at libraries
+| Only libraries under a Copy-Left free Open Source License can be used. Accepted open source licenses are, among others, *Apache License 2.0, MIT License, BSD License*
+
+| *BC4*
+| Libraries constraints
+| Frameworks & libraries under an open-source license (such as GPL, LGPL) are restricted by the use of the Open Logistics Foundation License 1.3
+|===
+
+== Organizational Constraints
+
+The following organizational constraints apply:
+
+[cols="0,3,6",options="header",]
+|===
+| *Id*
+| *Constraint*
+| *Background and/or Motivation*
+
+| *O1*
+| *Schedule*
+| TBD
+
+| *O2*
+| *Parts*
+| The milestones described in *O1* already address the individual modules of the {projectName} project.
+
+| *O3*
+| *Process model*
+| Development, agile/Scrum. To describe the architecture arc42 is used. +
+An architecture documentation structured according to this template is a key project result.
+
+| *O4*
+| *Development tools*
+| Design with http://draw.io/[Draw.io], in addition Magic Draw or Enterprise Architect. +
+Solidity and JavaScript source code created in IntelliJ and Visual Studio Code.
+
+| *O5*
+| *Configuration management*
+| Git at GitLab hosted by link:https://gitlab.cc-asp.fraunhofer.de/oe260/forest-guard/core[Fraunhofer IML]
+
+| *O6*
+| *Test tools and test processes*
+| Unit testing as part of a CI/CD Pipeline (stage test) +
+
+JavaScript based components: TBD +
+Solidity based components: TBD.
+
+| *O7*
+| *Other tools*
+| Node.js 20.x.y as JavaScript runtime +
+npm 10.x.y for dependency management +
+Solidity 0.8.x for smart contract development +
+Hardhat 2.22.x as Ethereum development framework +
+Kubernetes (OKD version 4.15)
+|===
+
+== Political Constraints
+
+The following political constraints apply:
+
+[cols="0,3,6",options="header"]
+|===
+| *Id*
+| *Constraint*
+| *Background and / or Motivation*
+
+| *P1*
+| Release as Open Source
+| The source code of the solution is made available as open source. License: Open Logistics Foundation License 1.3, Hosted by the Open Logistics Foundation.
+
+| *P2*
+| All dependencies are Open Source
+| A complete list of (transitive) dependencies and their Open Source licenses needs to be provided.
+|===
+
+== Conventions
+
+All conventions are listed in the https://oe160.iml.fraunhofer.de/wiki/display/HOW/Developer+Guidelines[Silicon Economy Development Guidelines].
+Some of them are listed in the following table:
+
+[cols="0,2,4",options="header"]
+|===
+| *Id*
+| *Convention*
+| *Background and / or Motivation*
+
+| *C1*
+| Architecture documentation
+| Terminology and structure according to _arc42_, version 6.0
+
+| *C2*
+| Coding guidelines for Solidity
+| https://docs.soliditylang.org/en/latest/style-guide.html[Official Solidity Style Guide], checked using plugin https://github.com/protofire/solhint[solhint]
+
+| *C3*
+| Coding guidelines for TypeScript
+| https://angular.io/guide/styleguide[Angular coding style] / https://github.com/google/gts[Google TypeScript Style] conventions, checked using SonarQube
+
+| *C4*
+| Language
+| Documentation in English, naming of things (components, interfaces, variables) in diagrams and source code in English
+
+| *C5*
+| Versioning
+| Semantic Versioning 2.0.0 (https://semver.org/lang/de/) in GitLab
+
+| *C6*
+| Specific file formats
+| JSON (preferred), YAML, XML
+|===
+

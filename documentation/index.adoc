@@ -1,0 +1,96 @@
+= Software Documentation for the {projectName}
+:doctype: book
+:toc: left
+:toclevels: 3
+:sectnumlevels: 5
+:leveloffset: 1
+:icons: font
+:copyright: Open Logistics Foundation License 1.3
+:projectName: Forest Guard
+
+[[section-preface]]
+= Preface
+
+== Motivation
+
+TBD
+
+== Documentation Approach
+
+The documentation of this project is in English and is based on the https://arc42.de/template[arc42 template].
+
+The https://agilemanifesto.org/[Agile Manifesto] says: "Working software over comprehensive documentation".
+It does *not* say "no documentation".
+Even in lean, agile and iterative development approaches, an appropriate amount of documentation will help numerous stakeholders doing a better job.
+arc42 is completely process-agnostic, and especially well-suited for lean and agile development approaches.
+It is supposed to be used "on demand" - you provide only the type or amount of information required for your specific documentation purpose.
+Documentation shall be part of your Definition-of-Done.
+Therefore, arc42 is _automatically_ included in Scrum processes.
+
+== Main Authors
+
+[cols="1e,2e",options="header"]
+|===
+| Name
+| E-Mail
+
+| Roman Koller (Product Owner)
+| roman.koller@iml.fraunhofer.de
+
+| Dominik Schmitt (Scrum Master)
+| dominik.schmitt@iml.fraunhofer.de
+
+| Dominik Sparer (Lead Developer)
+| dominik.sparer@iml.fraunhofer.de
+
+| Kristin Bäßler (Developer)
+| kristin.baessler@iml.fraunhofer.de
+
+| Maximilian Hegenbarth (Developer)
+| maximilian.hegenbarth@iml.fraunhofer.de
+
+| Michael Pichura (Developer)
+| michael.pichura@iml.fraunhofer.de
+
+| Matthias Schönborn (Developer)
+| matthias.schoenborn@iml.fraunhofer.de
+|===
+
+<<<
+include::01-introduction-and-goals.adoc[]
+
+<<<
+include::02-architecture-constraints.adoc[]
+
+<<<
+include::03-system-scope-and-context.adoc[]
+
+<<<
+include::04-solution-strategy.adoc[]
+
+<<<
+include::05-building-block-view.adoc[]
+
+<<<
+include::06-runtime-view.adoc[]
+
+<<<
+include::07-deployment-view.adoc[]
+
+<<<
+include::08-cross-cutting-concepts.adoc[]
+
+<<<
+include::09-design-decisions.adoc[]
+
+<<<
+include::10-quality-requirements.adoc[]
+
+<<<
+include::11-risks-and-technical-debts.adoc[]
+
+<<<
+include::12-tutorial.adoc[]
+
+<<<
+include::glossary.adoc[]

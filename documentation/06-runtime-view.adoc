@@ -1,0 +1,19 @@
+[[chapter-runtime-view]]
+:docinfo: shared
+:toc: left
+:toclevels: 3
+:sectnums:
+:copyright: Open Logistics Foundation License 1.3
+
+= Runtime View
+
+In contrast to the static building block view, this section visualizes dynamic aspects of the {projectName} project.
+
+The runtime view describes concrete behavior and interactions of the system's building blocks across the architecture, i.e., how instances of building blocks of {projectName} perform their job and communicate at runtime.
+
+Important usage scenarios with architectural relevance are e.g. interactions at critical external interfaces, operation and administration (launch, start-up, stop), and error and exception scenarios.
+
+== TBD
+
+TBD
+
