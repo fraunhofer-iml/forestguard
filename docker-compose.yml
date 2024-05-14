@@ -1,0 +1,70 @@
+services:
+  ############
+  # DATABASE #
+  ############
+
+  postgres:
+    image: postgres:16.1
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=forest_guard
+    logging:
+      options:
+        max-size: 10m
+        max-file: '3'
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  minio:
+    image: quay.io/minio/minio
+    restart: unless-stopped
+    environment:
+      # TODO-MP: these envs are deprecated https://min.io/docs/minio/linux/reference/minio-server/minio-server.html#envvar.MINIO_ACCESS_KEY
+      - MINIO_ACCESS_KEY=admin
+      - MINIO_SECRET_KEY=blockchain
+    ports:
+      - '9000:9000'
+      - '9090:9090'
+    volumes:
+      - minio-data:/data
+    command: server /data --console-address ":9090"
+
+  minio-setup:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_started
+    entrypoint: >
+      /bin/sh -c "
+      echo '### MinIO setup started ...';
+      mc alias set minio-service http://minio:9000 admin blockchain;
+      mc mb minio-service/forest-guard;
+      mc anonymous set download minio-service/forest-guard;
+      echo '### ... MinIO setup ended';
+      exit 0
+      "
+
+  #########
+  # UTILS #
+  #########
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    environment:
+      RABBITMQ_LOGS: '-error'
+
+networks:
+  default:
+    name: forest-guard-dev
+    driver: bridge
+
+volumes:
+  postgres-data:
+  minio-data:

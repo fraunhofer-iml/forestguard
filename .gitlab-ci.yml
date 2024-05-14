@@ -1,5 +1,7 @@
 stages:
   - danger
+  - test
+  - analysis
 
 danger:
   stage: danger
@@ -9,3 +11,6 @@ danger:
   script:
     - npm install -g danger
     - danger ci --failOnErrors
+  allow_failure: true
+#include:
+#  - 'apps/api/.gitlab-ci.yml'

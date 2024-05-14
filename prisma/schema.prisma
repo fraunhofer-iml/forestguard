@@ -1,0 +1,173 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  FARMER
+  EMPLOYEE
+}
+
+model Address {
+  id         String @id @default(cuid())
+  street     String
+  city       String
+  state      String
+  postalCode String
+  country    String
+
+  companies Company[]
+  users     User[]
+}
+
+model Entity {
+  id String @id @default(cuid())
+
+  company Company?
+
+  user User?
+
+  executedProcessSteps ProcessStep[] @relation("executedByEntity")
+  recordedProcessSteps ProcessStep[] @relation("recordedByEntity")
+
+  batches Batch[]
+}
+
+model Company {
+  id   String @id @default(cuid())
+  name String
+
+  entity   Entity @relation(fields: [entityId], references: [id])
+  entityId String @unique
+
+  address   Address? @relation(fields: [addressId], references: [id])
+  addressId String   @map("address_id")
+
+  users User[]
+}
+
+model User {
+  id                String @id @default(cuid())
+  firstName         String
+  lastName          String
+  email             String
+  mobilePhoneNumber String
+  role              Role
+
+  entity   Entity @relation(fields: [entityId], references: [id])
+  entityId String @unique
+
+  company   Company? @relation(fields: [companyId], references: [id])
+  companyId String?
+
+  // Remaining columns for role Farmer
+  address   Address? @relation(fields: [addressId], references: [id])
+  addressId String?
+
+  personalId String?
+
+  plotsOfLand PlotOfLand[]
+}
+
+model PlotOfLand {
+  id                   String @id @default(cuid())
+  country              String
+  region               String
+  district             String
+  nationalPlotOfLandId String
+  localPlotOfLandId    String
+  description          String
+  polygonData          String
+  areaInHA             Int
+
+  cultivatedWith Cultivation @relation(fields: [cultivationId], references: [id])
+  cultivationId  String
+
+  proofs Proof[]
+
+  farmer   User   @relation(fields: [farmerId], references: [id])
+  farmerId String
+
+  farmedBy ProcessStep[]
+}
+
+model Cultivation {
+  id   String @id @default(cuid())
+  type String
+  sort String
+
+  plotsOfLand PlotOfLand[]
+}
+
+model Proof {
+  documentId  String @id
+  type        String
+  documentRef String
+  notice      String
+
+  plotOfLand   PlotOfLand @relation(fields: [plotOfLandId], references: [id])
+  plotOfLandId String
+}
+
+model Process {
+  id   String @id @default(cuid())
+  name String
+
+  processSteps ProcessStep[]
+}
+
+model ProcessStep {
+  id       String   @id @default(cuid())
+  location String
+  date     DateTime @default(now())
+
+  process   Process @relation(fields: [processId], references: [id])
+  processId String
+
+  farmedLand   PlotOfLand? @relation(fields: [farmedLandId], references: [id])
+  farmedLandId String?
+
+  executedBy         Entity @relation("executedByEntity", fields: [executedByEntityId], references: [id])
+  executedByEntityId String
+
+  recordedBy         Entity @relation("recordedByEntity", fields: [recordedByEntityId], references: [id])
+  recordedByEntityId String
+
+  batches Batch[]
+}
+
+model Batch {
+  id             String  @id @default(cuid())
+  euInfoSystemId String?
+  weight         Int
+  active         Boolean
+
+  in  BatchRelation[] @relation("inputs")
+  out BatchRelation[] @relation("outputs")
+
+  recipient   Entity @relation(fields: [recipientId], references: [id])
+  recipientId String
+
+  processStep   ProcessStep @relation(fields: [processStepId], references: [id])
+  processStepId String
+}
+
+model BatchRelation {
+  in   Batch  @relation("inputs", fields: [inId], references: [id])
+  inId String
+
+  out   Batch  @relation("outputs", fields: [outId], references: [id])
+  outId String
+
+  @@id([outId, inId])
+}
