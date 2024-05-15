@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
+import { ContentLayoutComponent } from './content-layout.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-describe('AppComponent', () => {
-  let component: AppComponent;
-  let fixture: ComponentFixture<AppComponent>
+describe('ContentLayoutComponent', () => {
+  let component: ContentLayoutComponent;
+  let fixture: ComponentFixture<ContentLayoutComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [],
-      declarations: [AppComponent],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      declarations: [ContentLayoutComponent],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AppComponent);
+    fixture = TestBed.createComponent(ContentLayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
