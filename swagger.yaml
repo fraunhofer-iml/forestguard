@@ -57,7 +57,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterDto'
+              $ref: '#/components/schemas/RegistrationDto'
       responses:
         '200':
           description: 'Successful registration.'
@@ -95,14 +95,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateUserDto'
+              $ref: '#/components/schemas/UserUpdateDto'
       responses:
         '200':
           description: 'Successful creation.'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReturnUserDto'
+                $ref: '#/components/schemas/User'
         '400':
           description: 'Invalid request.'
   /users/{id}:
@@ -143,14 +143,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateFarmerDto'
+              $ref: '#/components/schemas/FarmerCreateDto'
       responses:
         '200':
           description: 'Successful creation.'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReturnUserDto'
+                $ref: '#/components/schemas/User'
         '400':
           description: 'Invalid request.'
 
@@ -202,14 +202,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreatePlotOfLandDto'
+              $ref: '#/components/schemas/PlotOfLandCreateDto'
       responses:
         '200':
           description: 'Successful creation.'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReturnPlotOfLandDto'
+                $ref: '#/components/schemas/PlotOfLand'
         '400':
           description: 'Invalid request.'
   /pols/${id}/:
@@ -257,14 +257,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchPlotOfLandDto'
+              $ref: '#/components/schemas/PlotOfLandUpdateDto'
       responses:
         '200':
           description: 'Successful creation.'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReturnPlotOfLandDto'
+                $ref: '#/components/schemas/PlotOfLand'
         '400':
           description: 'Invalid request.'
   /pols/${polId}/proofs:
@@ -354,7 +354,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateProcessDto'
+              $ref: '#/components/schemas/ProcessCreateDto'
       responses:
         '200':
           description: 'Successful creation.'
@@ -380,14 +380,14 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/CreateBatchDto'
+                $ref: '#/components/schemas/BatchCreateDto'
       responses:
         '200':
           description: 'Successful creation.'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReturnProcessStepDto'
+                $ref: '#/components/schemas/Process'
         '400':
           description: 'Invalid request.'
   /batches/harvests:
@@ -404,14 +404,14 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/CreateBatchDto'
+                $ref: '#/components/schemas/BatchCreateDto'
       responses:
         '200':
           description: 'Successful creation.'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReturnProcessStepDto'
+                $ref: '#/components/schemas/Process'
         '400':
           description: 'Invalid request.'
   /batches/{id}:
@@ -478,7 +478,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCultivationDto'
+              $ref: '#/components/schemas/CultivationCreateDto'
       responses:
         '200':
           description: 'Successful creation.'
@@ -544,7 +544,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCompanyDto'
+              $ref: '#/components/schemas/CompanyCreateDto'
       responses:
         '200':
           description: 'Successful creation.'
@@ -626,7 +626,7 @@ paths:
             format: uuid
       summary: 'Get farmers'
       description: 'Get all farmers related to the company.'
-      operationId: 'getCompanyRelatedFamers'
+      operationId: 'getCompanyRelatedFarmers'
       responses:
         '200':
           description: 'Successful request.'
@@ -662,9 +662,9 @@ components:
           description: 'The country of the address.'
       required:
         - street
-        - zipCode
-        - state
+        - postalCode
         - city
+        - state
         - country
     Entity:
       type: object
@@ -673,6 +673,8 @@ components:
           type: string
           format: uuid
           description: 'The unique identifier of the entity.'
+      required:
+        - id
     User:
       type: object
       allOf:
@@ -682,12 +684,12 @@ components:
             employeeId:
               type: string
               description: 'The ID of the user set from the users company.'
-            name:
-              type: string
-              description: 'The name of the user.'
             firstName:
               type: string
               description: 'The first name of the user.'
+            lastName:
+              type: string
+              description: 'The last name of the user.'
             email:
               type: string
               format: email
@@ -700,13 +702,11 @@ components:
               description: 'The mobile phone number of the user.'
       required:
         - employeeId
-        - username
-        - personalId
         - name
         - firstName
-        - address
         - email
-        - country
+        - role
+        - mobilePhoneNumber
     Farmer:
       allOf:
         - $ref: '#/components/schemas/User'
@@ -729,7 +729,7 @@ components:
           properties:
             name:
               type: string
-              description: 'The name of the cooperation.'
+              description: 'The name of the company.'
             address:
               $ref: '#/components/schemas/Address'
             employees:
@@ -797,11 +797,6 @@ components:
         notice:
           type: string
           description: 'The notice of the proof.'
-      required:
-        - id
-        - type
-        - documentRef
-        - notice
     Product:
       type: object
       properties:
@@ -852,10 +847,12 @@ components:
           $ref: '#/components/schemas/PlotOfLand'
       required:
         - id
-        - type
-        - startedAt
-        - endedAt
-        - notice
+        - location
+        - date
+        - process
+        - recordedBy
+        - executedBy
+        - farmedLand
     Batch:
       type: object
       properties:
@@ -910,7 +907,7 @@ components:
       required:
         - email
         - password
-    RegisterDto:
+    RegistrationDto:
       type: object
       properties:
         email:
@@ -927,16 +924,16 @@ components:
         firstName:
           type: string
           description: 'The first name of the user.'
-        name:
+        lastName:
           type: string
           description: 'The last name of the user.'
       required:
         - email
         - password
-    CreateFarmerDto:
+    FarmerCreateDto:
       type: object
       allOf:
-        - $ref: '#/components/schemas/UpdateUserDto'
+        - $ref: '#/components/schemas/UserUpdateDto'
         - type: object
           properties:
             personalId:
@@ -947,47 +944,30 @@ components:
       required:
         - personalId
         - address
-    UpdateUserDto:
+    UserUpdateDto:
       type: object
       properties:
         employeeId:
           type: string
           description: 'The ID of the employee set from the users company.'
-        name:
-          type: string
-          description: 'The name of the farmer.'
         firstName:
           type: string
           description: 'The first name of the farmer.'
+        lastName:
+          type: string
+          description: 'The last name of the farmer.'
         email:
           type: string
           format: email
           description: 'The email address of the farmer.'
-        mobilePhoneNumber:
-          type: string
-          description: 'The mobile phone number of the farmer.'
         role:
           type: string
           description: 'The role of the employee.'
           default: 'EMPLOYEE'
-    ReturnUserDto:
-      type: object
-      properties:
-        id:
+        mobilePhoneNumber:
           type: string
-          format: uuid
-          description: 'The unique identifier of the employee.'
-        name:
-          type: string
-          description: 'The name of the employee.'
-        firstName:
-          type: string
-          description: 'The first name of the employee.'
-        email:
-          type: string
-          format: email
-          description: 'The email address of the employee.'
-    CreateCompanyDto:
+          description: 'The mobile phone number of the farmer.'
+    CompanyCreateDto:
       type: object
       properties:
         name:
@@ -998,7 +978,7 @@ components:
       required:
         - name
         - address
-    CreatePlotOfLandDto:
+    PlotOfLandCreateDto:
       type: object
       properties:
         country:
@@ -1035,42 +1015,12 @@ components:
         - description
         - polygonData
         - areaInHA
-    PatchPlotOfLandDto:
+    PlotOfLandUpdateDto:
       type: object
       properties:
         cultivatedWith:
           type: string
           description: 'The ID of the cultivation that is cultivated.'
-      required:
-        - type
-        - sort
-    ReturnPlotOfLandDto:
-      type: object
-      properties:
-        country:
-          type: string
-          description: 'The country of the plot of land.'
-        region:
-          type: string
-          description: 'The region of the plot of land.'
-        district:
-          type: string
-          description: 'The district of the plot of land.'
-        nationalPlotOfLandId:
-          type: string
-          description: 'The national plot of land ID.'
-        localPlotOfLandId:
-          type: string
-          description: 'The local plot of land ID.'
-        description:
-          type: string
-          description: 'The description of the plot of land.'
-        polygonData:
-          type: string
-          description: 'The border data of the plot of land.'
-        areaInHA:
-          type: number
-          description: 'The area of the plot of land in hectare.'
     CreateProofDto:
       type: object
       properties:
@@ -1087,7 +1037,7 @@ components:
         - type
         - documentRef
         - notice
-    CreateProcessDto:
+    ProcessCreateDto:
       type: object
       properties:
         name:
@@ -1095,7 +1045,7 @@ components:
           description: 'The name of the process.'
       required:
         - name
-    CreateProcessStepDto:
+    ProcessStepCreateDto:
       type: object
       properties:
         location:
@@ -1125,7 +1075,7 @@ components:
         - date
         - process
         - executedBy
-    CreateBatchDto:
+    BatchCreateDto:
       type: object
       properties:
         idEUInfoSystem:
@@ -1145,19 +1095,12 @@ components:
           format: uuid
           description: 'The recipient id of the coffee batch.'
         processStep:
-          $ref: '#/components/schemas/CreateProcessStepDto'
+          $ref: '#/components/schemas/ProcessStepCreateDto'
       required:
         - in
         - recipient
         - weight
         - processStep
-    ReturnProcessStepDto:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: 'The unique identifier of the process step.'
     ProcessDisplayDto:
       type: object
       properties:
@@ -1190,7 +1133,7 @@ components:
                 type: string
                 format: uuid
                 description: 'An ID of a coffee batch.'
-    CreateCultivationDto:
+    CultivationCreateDto:
       type: object
       properties:
         type:

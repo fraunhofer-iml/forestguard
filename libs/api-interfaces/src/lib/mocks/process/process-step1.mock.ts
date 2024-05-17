@@ -1,0 +1,14 @@
+import { ProcessStepDto } from '../../dtos';
+import { process1Mock } from './process1.mock';
+import { user1Mock } from '../entity';
+import { plotOfLand1Mock } from '../plot-of-land';
+
+export const processStep1Mock: ProcessStepDto = {
+  id: '6eb8e77c-cc08-44de-9b7a-2cdfc9387e7d',
+  location: 'location',
+  date: '2024-05-13T13:08:44.247Z',
+  process: process1Mock,
+  recordedBy: user1Mock,
+  executedBy: user1Mock,
+  farmedLand: plotOfLand1Mock
+}
