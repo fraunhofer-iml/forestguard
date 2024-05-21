@@ -10,22 +10,22 @@ if (packagesChanged && !lockfileChanged) {
   warn(`${message} - <i>${idea}</i>`);
 }
 
-// ENCURAGE SMALLER MRs
+// ENCOURAGE SMALLER MRs
 var bigPRThreshold = 50;
 if (danger.gitlab.mr.changes_count.length > bigPRThreshold) {
-  warn(':exclamation: Big PR (' + danger.gitlab.mr.changes_count.length + ')');
+  warn(':exclamation: Big MR (' + danger.gitlab.mr.changes_count.length + ')');
   markdown(
     '> (' +
       danger.gitlab.mr.changes_count.length +
-      ') : Pull Request size seems relatively large. If Pull Request contains multiple changes, split each into separate PR will helps faster, easier review.'
+      ') : Merge request size seems relatively large. If merge request contains multiple changes, split each into separate MR will helps faster, easier review.'
   );
 }
 
 if (!danger.gitlab.mr.assignee) {
   const method = danger.gitlab.mr.title.includes('WIP') ? warn : fail;
-  method('This pull request needs an assignee, and optionally include any reviewers.');
+  method('This merge request needs an assignee, and optionally include any reviewers.');
 }
 
 if (danger.gitlab.mr.description.length < 10) {
-  fail('This pull request needs a description.');
+  fail('This merge request needs a description.');
 }
