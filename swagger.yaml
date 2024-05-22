@@ -59,7 +59,7 @@ paths:
             schema:
               $ref: '#/components/schemas/RegistrationDto'
       responses:
-        '200':
+        '201':
           description: 'Successful registration.'
         '400':
           description: 'Invalid request.'
@@ -145,7 +145,7 @@ paths:
             schema:
               $ref: '#/components/schemas/FarmerCreateDto'
       responses:
-        '200':
+        '201':
           description: 'Successful creation.'
           content:
             application/json:
@@ -204,7 +204,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PlotOfLandCreateDto'
       responses:
-        '200':
+        '201':
           description: 'Successful creation.'
           content:
             application/json:
@@ -316,7 +316,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Proof'
       responses:
-        '200':
+        '201':
           description: 'Successful creation.'
           content:
             application/json:
@@ -356,7 +356,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ProcessCreateDto'
       responses:
-        '200':
+        '201':
           description: 'Successful creation.'
           content:
             application/json:
@@ -382,7 +382,7 @@ paths:
               items:
                 $ref: '#/components/schemas/BatchCreateDto'
       responses:
-        '200':
+        '201':
           description: 'Successful creation.'
           content:
             application/json:
@@ -406,7 +406,7 @@ paths:
               items:
                 $ref: '#/components/schemas/BatchCreateDto'
       responses:
-        '200':
+        '201':
           description: 'Successful creation.'
           content:
             application/json:
@@ -471,8 +471,8 @@ paths:
       tags:
         - Cultivation
       summary: 'Create '
-      description: 'Create a new product.'
-      operationId: 'createProduct'
+      description: 'Create a cultivation.'
+      operationId: 'createCultivation'
       requestBody:
         required: true
         content:
@@ -480,19 +480,19 @@ paths:
             schema:
               $ref: '#/components/schemas/CultivationCreateDto'
       responses:
-        '200':
+        '201':
           description: 'Successful creation.'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                $ref: '#/components/schemas/Cultivation'
         '400':
           description: 'Invalid request.'
     get:
       tags:
         - Cultivation
-      summary: 'Get products'
-      description: 'Get all products.'
+      summary: 'Get cultivations'
+      description: 'Get all cultivations.'
       parameters:
         - name: type
           in: query
@@ -500,7 +500,7 @@ paths:
           required: false
           schema:
             type: string
-      operationId: 'getProducts'
+      operationId: 'getCultivations'
       responses:
         '200':
           description: 'Successful request.'
@@ -509,16 +509,16 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Product'
+                  $ref: '#/components/schemas/Cultivation'
         '400':
           description: 'Invalid request.'
   /cultivations/types/:
     get:
       tags:
         - Cultivation
-      summary: 'Get product types'
-      description: 'Get all product types.'
-      operationId: 'getProductTypes'
+      summary: 'Get cultivation types'
+      description: 'Get all cultivation types.'
+      operationId: 'getCultivationTypes'
       responses:
         '200':
           description: 'Successful request.'
@@ -546,7 +546,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CompanyCreateDto'
       responses:
-        '200':
+        '201':
           description: 'Successful creation.'
           content:
             application/json:
@@ -776,7 +776,7 @@ components:
           type: number
           description: 'The area of the plot of land in hectare.'
         cultivatedWith:
-          $ref: '#/components/schemas/Product'
+          $ref: '#/components/schemas/Cultivation'
         proofs:
           type: array
           items:
@@ -797,19 +797,19 @@ components:
         notice:
           type: string
           description: 'The notice of the proof.'
-    Product:
+    Cultivation:
       type: object
       properties:
         id:
           type: string
           format: uuid
-          description: 'The unique identifier of the product.'
+          description: 'The unique identifier of the cultivation.'
         type:
           type: string
-          description: 'The type of the product.'
+          description: 'The type of the cultivation.'
         sort:
           type: string
-          description: 'The sort of the product.'
+          description: 'The sort of the cultivation.'
     Process:
       type: object
       properties:
@@ -863,16 +863,6 @@ components:
         idEUInfoSystem:
           type: string
           description: 'The ID of the coffee batch in the EU information system.'
-        in:
-          type: array
-          items:
-            $ref: '#/components/schemas/Batch'
-          description: 'The coffee batches that were used to create this coffee batch.'
-        out:
-          type: array
-          items:
-            $ref: '#/components/schemas/Batch'
-          description: 'The coffee batches that were created from this coffee batch.'
         weight:
           type: number
           description: 'The weight of the coffee batch.'
@@ -1138,10 +1128,10 @@ components:
       properties:
         type:
           type: string
-          description: 'The type of the product.'
+          description: 'The type of the cultivation.'
         sort:
           type: string
-          description: 'The sort of the product.'
+          description: 'The sort of the cultivation.'
       required:
         - type
         - sort

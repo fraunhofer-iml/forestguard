@@ -1,11 +1,16 @@
 import { ConfigurationModule } from '@forrest-guard/configuration';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AuthenticationModule } from './authentication/authentication.module';
+import { BatchModule } from './batch/batch.module';
+import { CompanyModule } from './company/company.module';
+import { CultivationModule } from './cultivation/cultivation.module';
+import { PlotOfLandModule } from './plot-of-land/plot-of-land.module';
+import { ProcessModule } from './process/process.module';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [ConfigurationModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [ConfigurationModule, AuthenticationModule, BatchModule, CompanyModule, CultivationModule, PlotOfLandModule, ProcessModule, UserModule],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

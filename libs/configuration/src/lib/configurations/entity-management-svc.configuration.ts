@@ -1,6 +1,6 @@
 import { registerAs } from '@nestjs/config';
 
-export const ENTITY_MANAGEMENT_CONFIG_IDENTIFIER = 'api';
+export const ENTITY_MANAGEMENT_CONFIG_IDENTIFIER = 'entity';
 
 export interface EntityManagementSvcConfiguration {
   port: number;

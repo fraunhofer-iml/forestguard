@@ -15,12 +15,12 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@forrest-guard/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@forrest-guard/blockchain-connector": ["libs/blockchain-connector/src/index.ts"],
+      "@forrest-guard/api-interfaces": ["libs/api-interfaces/src/lib/index.ts"],
+      "@forrest-guard/blockchain-connector": ["libs/blockchain-connector/src/lib/index.ts"],
+      "@forrest-guard/database": ["libs/database/src/lib/index.ts"],
+      "@forrest-guard/file-storage": ["libs/file-storage/src/lib/index.ts"],
+      "@forrest-guard/ui": ["libs/ui/src/lib/index.ts"],
       "@forrest-guard/configuration": ["libs/configuration/src/index.ts"],
-      "@forrest-guard/database": ["libs/database/src/index.ts"],
-      "@forrest-guard/file-storage": ["libs/file-storage/src/index.ts"],
-      "@forrest-guard/ui": ["libs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

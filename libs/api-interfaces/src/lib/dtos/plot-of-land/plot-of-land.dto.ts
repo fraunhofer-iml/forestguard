@@ -1,4 +1,4 @@
-import { ProductDto } from './product.dto';
+import { CultivationDto } from './cultivation.dto';
 import { ProofDto } from './proof.dto';
 
 export interface PlotOfLandDto {
@@ -11,6 +11,6 @@ export interface PlotOfLandDto {
   description?: string;
   polygonData?: string;
   areaInHA?: number;
-  cultivatedWith?: ProductDto;
+  cultivatedWith?: CultivationDto;
   proofs?: ProofDto[];
 }
