@@ -1,0 +1,15 @@
+[
+  {
+    "id": "ctest009",
+    "country": "USA",
+    "region": "Midwest",
+    "district": "District 9",
+    "nationalPlotOfLandId": "US-987654321",
+    "localPlotOfLandId": "IN-123456789",
+    "description": "A large plot of fertile land in the Midwest.",
+    "polygonData": "POLYGON((...))",
+    "areaInHA": 100,
+    "cultivationId": "ctest008",
+    "farmerId": "ctest006"
+  }
+]

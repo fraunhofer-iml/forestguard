@@ -3,7 +3,13 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "clean": "rm -rf .angular dist node_modules prisma/dev.db prisma/erd.png",
+    "set-up-database": "npx prisma db push --force-reset && npx prisma db seed",
+    "clean-install": "npm run clean && npm install && npm run set-up-database",
     "dev": "nx run-many --all --parallel --target serve"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "private": true,
   "dependencies": {
@@ -21,6 +27,7 @@
     "@nestjs/core": "^10.0.2",
     "@nestjs/platform-express": "^10.0.2",
     "@nestjs/swagger": "^7.3.1",
+    "@prisma/client": "^5.14.0",
     "axios": "^1.6.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",

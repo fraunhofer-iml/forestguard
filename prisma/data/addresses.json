@@ -1,0 +1,18 @@
+[
+  {
+    "id": "ctest003",
+    "street": "123 Main St",
+    "city": "Springfield",
+    "state": "IL",
+    "postalCode": "62704",
+    "country": "USA"
+  },
+  {
+    "id": "ctest004",
+    "street": "456 Elm St",
+    "city": "Shelbyville",
+    "state": "IN",
+    "postalCode": "46176",
+    "country": "USA"
+  }
+]
