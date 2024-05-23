@@ -1,20 +1,19 @@
-import { Injectable, LogLevel } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { API_CONFIG_IDENTIFIER, ApiConfiguration } from './configurations/api.configuration';
-import { ENTITY_MANAGEMENT_CONFIG_IDENTIFIER, EntityManagementSvcConfiguration } from './configurations/entity-management-svc.configuration';
+import {
+  ENTITY_MANAGEMENT_CONFIG_IDENTIFIER,
+  EntityManagementSvcConfiguration,
+} from './configurations/entity-management-svc.configuration';
+import { GENERAL_CONFIG_IDENTIFIER, GeneralConfiguration } from './configurations/general.configuration';
 import { PROCESS_CONFIG_IDENTIFIER, ProcessSvcConfiguration } from './configurations/process-svc.configuration';
 
 @Injectable()
 export class ConfigurationService {
   constructor(private readonly configService: ConfigService) {}
 
-  public getLogLevel(): LogLevel[] {
-    const logLevel = this.configService.get<string>('LOG_SETTINGS', 'error,verbose').split(',');
-    return <LogLevel[]>logLevel;
-  }
-
-  public getSwaggerPath(): string {
-    return this.configService.get<string>('SWAGGER_PATH', 'api');
+  public getGeneralConfiguration(): GeneralConfiguration | undefined {
+    return this.configService.get<GeneralConfiguration>(GENERAL_CONFIG_IDENTIFIER);
   }
 
   public getApiConfiguration(): ApiConfiguration | undefined {
