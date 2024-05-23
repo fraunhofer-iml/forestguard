@@ -1,35 +1,36 @@
-api:run-tests:
+entity-management:run-tests:
   needs: []
   stage: test
   extends: .default
   script:
-    - npx nx test api
+    - npm ci --cache .npm --prefer-offline
+    - npx nx test entity-management-svc
   artifacts:
     paths:
-      - ./apps/api/coverage
+      - ./apps/entity-management-svc/coverage
     expire_in: 1 week
   only:
     - merge_requests
     - main
 
-api:sonarqube-check-mr:
+entity-management:sonarqube-check-mr:
   needs:
-    - api:run-tests
+    - entity-management:run-tests
   stage: analysis
   image:
     name: sonarsource/sonar-scanner-cli:5.0
     entrypoint: ['']
   variables:
-    SONAR_USER_HOME: '/apps/api/.sonar' # Defines the location of the analysis task cache
+    SONAR_USER_HOME: '/apps/entity-management-svc/.sonar' # Defines the location of the analysis task cache
     GIT_DEPTH: '0' # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
     key: '${CI_JOB_NAME}'
     paths:
-      - /apps/api/.sonar/cache
+      - /apps/entity-management-svc/.sonar/cache
   script:
     - >
       sonar-scanner 
-      -Dsonar.projectBaseDir=./apps/api/ 
+      -Dsonar.projectBaseDir=./apps/entity-management-svc/ 
       -Dsonar.pullrequest.key=${CI_MERGE_REQUEST_IID} 
       -Dsonar.pullrequest.branch=${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME} 
       -Dsonar.pullrequest.base=${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}
@@ -37,39 +38,39 @@ api:sonarqube-check-mr:
   only:
     - merge_requests
 
-api:sonarqube-check-main:
+entity-management:sonarqube-check-main:
   needs:
-    - api:run-tests
+    - entity-management:run-tests
   stage: analysis
   image:
     name: sonarsource/sonar-scanner-cli:5.0
     entrypoint: ['']
   variables:
-    SONAR_USER_HOME: '/apps/api/.sonar' # Defines the location of the analysis task cache
+    SONAR_USER_HOME: '/apps/entity-management-svc/.sonar' # Defines the location of the analysis task cache
     GIT_DEPTH: '0' # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
     key: '${CI_JOB_NAME}'
     paths:
-      - /apps/api/.sonar/cache
+      - /apps/entity-management-svc/.sonar/cache
   script:
-    - sonar-scanner -Dsonar.projectBaseDir=./apps/api/
+    - sonar-scanner -Dsonar.projectBaseDir=./apps/entity-management-svc/
   allow_failure: true
   only:
     - main
 
-api:build:
+entity-management:build:
   stage: build
   extends: .default
   script:
     - npm ci --cache .npm --prefer-offline
-    - npx nx build api
+    - npx nx build entity-management-svc
   artifacts:
     paths:
-      - dist/apps/api
+      - dist/apps/entity-management-svc
   only:
     - main
 
-api:archive:
+entity-management:archive:
   stage: archive
   image: docker
   services:
@@ -77,7 +78,7 @@ api:archive:
   before_script:
     - echo "$HARBOR_TOKEN" | docker login $CRI_URL -u $HARBOR_USER --password-stdin
   script:
-    - docker build --pull --cache-from ${CRI_PATH}/api -t ${CRI_PATH}/api:$CI_COMMIT_SHA --build-arg APP=api -f docker/nest.dockerfile  .
-    - docker push ${CRI_PATH}/api:$CI_COMMIT_SHA
+    - docker build --pull --cache-from ${CRI_PATH}/entity-management -t ${CRI_PATH}/entity-management:$CI_COMMIT_SHA --build-arg APP=entity-management-svc -f docker/nest.dockerfile  .
+    - docker push ${CRI_PATH}/entity-management:$CI_COMMIT_SHA
   only:
     - main

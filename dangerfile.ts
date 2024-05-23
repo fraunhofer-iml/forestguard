@@ -29,3 +29,8 @@ if (!danger.gitlab.mr.assignee) {
 if (danger.gitlab.mr.description.length < 10) {
   fail('This merge request needs a description.');
 }
+
+// Check for Merge Request Description if it only contains Resolves/Related to Issue fail
+if (danger.gitlab.mr.description.match(/(Resolves) \D+-\d+/)) {
+  fail('Merge Request Description should not only contain Resolves/Related to Issue');
+}

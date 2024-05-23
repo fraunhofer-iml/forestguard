@@ -59,6 +59,17 @@
     "@nx/angular:library": {
       "linter": "eslint",
       "unitTestRunner": "jest"
+    },
+    "@nx/js": {
+      "release-version": {
+        "packageRoot": "."
+      }
+    }
+  },
+  "release": {
+    "projects": ["apps/*"],
+    "version": {
+      "conventionalCommits": true
     }
   }
 }

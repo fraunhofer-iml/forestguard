@@ -19,6 +19,38 @@
           "buildTarget": "process-svc:build:production"
         }
       }
+    },
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/process-svc",
+        "main": "apps/process-svc/src/main.ts",
+        "tsConfig": "apps/process-svc/tsconfig.app.json",
+        "webpackConfig": "apps/process-svc/webpack.config.js",
+        "assets": []
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "generatePackageJson": true
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "options": {
+        "jestConfig": "apps/process-svc/jest.config.ts",
+        "codeCoverage": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true
+        }
+      }
     }
   }
 }

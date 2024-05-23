@@ -24,7 +24,7 @@ export class PlotOfLandDto {
     description?: string,
     polygonData?: string,
     areaInHA?: number,
-    cultivatedWith?: ProductDto,
+    cultivatedWith?: CultivationDto,
     proofs?: ProofDto[]
   ) {
     this.id = id;

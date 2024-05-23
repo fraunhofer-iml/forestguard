@@ -11,8 +11,6 @@ export class BatchDto {
 
   constructor(
     id: string,
-    ins: BatchDto[],
-    out: BatchDto[],
     weight: number,
     active: boolean,
     recipient: UserDto | CompanyDto,
@@ -20,8 +18,6 @@ export class BatchDto {
     idEUInfoSystem?: string
   ) {
     this.id = id;
-    this.in = ins;
-    this.out = out;
     this.weight = weight;
     this.active = active;
     this.recipient = recipient;

@@ -32,7 +32,7 @@ node_modules
 # misc
 /.sass-cache
 /connect.lock
-/coverage
+coverage
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log
@@ -45,3 +45,4 @@ Thumbs.db
 
 .nx/cache
 .angular
+.scannerwork

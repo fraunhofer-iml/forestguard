@@ -1,6 +1,6 @@
 {
   "name": "@forrest-guard/source",
-  "version": "0.0.0",
+  "version": "0.3.0",
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf .angular dist node_modules prisma/dev.db prisma/erd.png",
@@ -80,6 +80,7 @@
     "jest-environment-jsdom": "^29.4.1",
     "jest-environment-node": "^29.4.1",
     "jest-preset-angular": "~14.0.3",
+    "js-yaml": "^4.1.0",
     "nx": "18.2.2",
     "postcss": "^8.4.5",
     "prettier": "^2.6.2",

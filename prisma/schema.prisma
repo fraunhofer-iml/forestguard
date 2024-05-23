@@ -25,8 +25,7 @@ model Address {
 }
 
 model Entity {
-  id String @id @default(cuid())
-
+  id      String   @id @default(cuid())
   company Company?
 
   user User?

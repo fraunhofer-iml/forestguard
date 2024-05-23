@@ -1,16 +1,66 @@
+variables:
+  CRI_URL: hub.cc-asp.fraunhofer.de
+  CRI_PATH: ${CRI_URL}/forest-guard
+
 stages:
   - danger
   - test
   - analysis
+  - build
+  - archive
+  - deploy
+
+.default:
+  image: node:20.13-alpine3.19
+  interruptible: true
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+  before_script:
+    - npm ci --cache .npm --prefer-offline
 
 danger:
   stage: danger
-  image: node:20
-  only:
-    - merge_requests
+  extends: .default
   script:
     - npm install -g danger
     - danger ci --failOnErrors
   allow_failure: true
-#include:
-#  - 'apps/api/.gitlab-ci.yml'
+  only:
+    - merge_requests
+
+include:
+  - 'apps/api/.gitlab-ci.yml'
+  - 'apps/entity-management-svc/.gitlab-ci.yml'
+  - 'apps/frontend/.gitlab-ci.yml'
+  - 'apps/process-svc/.gitlab-ci.yml'
+
+all:deploy:
+  stage: deploy
+  image: alpine:latest
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - echo "Deploying images with tag $CI_COMMIT_SHA"
+    - apk add --no-cache git curl bash coreutils
+    - curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+    - mv kustomize /usr/local/bin/
+    - git clone https://semantic-release:${GL_TOKEN}@gitlab.cc-asp.fraunhofer.de/oe260/forest-guard/pipeline.git
+    - git config --global user.email "gitlab@oe260.iml.fhg.de"
+    - git config --global user.name "GitLab CI/CD"
+  script:
+    - cd pipeline/kustomize/api/overlays/development
+    - kustomize edit set image ${CRI_PATH}/api:$CI_COMMIT_SHA
+    - cd ../../../entity-management/overlays/development
+    - kustomize edit set image ${CRI_PATH}/entity-management:$CI_COMMIT_SHA
+    - cd ../../../frontend/overlays/development
+    - kustomize edit set image ${CRI_PATH}/frontend:$CI_COMMIT_SHA
+    - cd ../../../process/overlays/development
+    - kustomize edit set image ${CRI_PATH}/process:$CI_COMMIT_SHA
+    - git commit -am '[skip ci] manifest-image update'
+    - git push origin main
+  only:
+    - main
