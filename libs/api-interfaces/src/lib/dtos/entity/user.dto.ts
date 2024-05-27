@@ -1,6 +1,5 @@
-import { EntityDto } from './entity.dto';
-
-export class UserDto extends EntityDto {
+export class UserDto {
+  id: string;
   employeeId: string;
   firstName: string;
   lastName: string;
@@ -9,7 +8,7 @@ export class UserDto extends EntityDto {
   mobilePhoneNumber: string;
 
   constructor(id: string, employeeId: string, firstName: string, lastName: string, email: string, role: string, mobilePhoneNumber: string) {
-    super(id);
+    this.id = id;
     this.employeeId = employeeId;
     this.firstName = firstName;
     this.lastName = lastName;

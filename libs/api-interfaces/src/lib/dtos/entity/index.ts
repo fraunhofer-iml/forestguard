@@ -1,4 +1,3 @@
-export * from './entity.dto';
 export * from './user.dto';
 export * from './user-update.dto';
 export * from './company.dto';

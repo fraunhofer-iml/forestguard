@@ -1,0 +1,99 @@
+import { AddressDto, CompanyDto, FarmerDto, PlotOfLandDto, ProofDto, UserDto } from '@forrest-guard/api-interfaces';
+import { BadRequestException } from '@nestjs/common';
+import { Address, Proof } from '@prisma/client';
+import { CompanyWithRelations, PlotOfLandWithRelations, UserWithRelations } from './company.types';
+
+export class CompanyMapper {
+  public static mapCompanyPrismaToCompanyDto(company: CompanyWithRelations): CompanyDto {
+    if (!company) {
+      throw new BadRequestException('Company is required');
+    }
+
+    const { id, name, address, users } = company;
+
+    return {
+      id,
+      name,
+      address: address ? this.mapAddressToDto(address) : address,
+      employees: users
+        ? users.filter((user: UserWithRelations) => user.role === 'EMPLOYEE').map((user: UserWithRelations) => this.mapEmployeeToDto(user))
+        : [],
+      farmers: users
+        ? users.filter((user: UserWithRelations) => user.role === 'FARMER').map((user: UserWithRelations) => this.mapFarmerToDto(user))
+        : [],
+    };
+  }
+
+  private static mapAddressToDto(address: Address): AddressDto {
+    const { street, postalCode, city, state, country } = address;
+
+    return { street, postalCode, city, state, country };
+  }
+
+  private static mapEmployeeToDto(user: UserWithRelations): UserDto {
+    const { id, employeeId, firstName, lastName, email, mobilePhoneNumber, role } = user;
+
+    return {
+      id,
+      employeeId,
+      firstName,
+      lastName,
+      email,
+      mobilePhoneNumber,
+      role,
+    };
+  }
+
+  private static mapFarmerToDto(user: UserWithRelations): FarmerDto {
+    const { id, employeeId, firstName, lastName, email, mobilePhoneNumber, role, personalId, address, plotsOfLand } = user;
+
+    return {
+      id,
+      employeeId,
+      firstName,
+      lastName,
+      email,
+      mobilePhoneNumber,
+      role,
+      personalId,
+      address: address ? this.mapAddressToDto(address) : null,
+      plotOfLands: plotsOfLand ? plotsOfLand.map((plotOfLand: PlotOfLandWithRelations) => this.mapPlotOfLandToDto(plotOfLand)) : [],
+    };
+  }
+
+  private static mapPlotOfLandToDto(plot: PlotOfLandWithRelations): PlotOfLandDto {
+    const {
+      id,
+      country,
+      region,
+      district,
+      nationalPlotOfLandId,
+      localPlotOfLandId,
+      description,
+      polygonData,
+      areaInHA,
+      cultivatedWith,
+      proofs,
+    } = plot;
+
+    return {
+      id,
+      country,
+      region,
+      district,
+      nationalPlotOfLandId,
+      localPlotOfLandId,
+      description,
+      polygonData,
+      areaInHA,
+      cultivatedWith,
+      proofs: proofs ? proofs.map((proof: Proof) => this.mapProofToDto(proof)) : [],
+    };
+  }
+
+  private static mapProofToDto(proof: Proof): ProofDto {
+    const { documentId, type, documentRef, notice } = proof;
+
+    return { id: documentId, type, documentRef, notice };
+  }
+}

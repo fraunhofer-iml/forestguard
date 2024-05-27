@@ -63,7 +63,9 @@ model User {
   company   Company? @relation(fields: [companyId], references: [id])
   companyId String?
 
-  // Remaining columns for role Farmer
+  employeeId String?
+
+  // Columns for role FARMER
   address   Address? @relation(fields: [addressId], references: [id])
   addressId String?
 

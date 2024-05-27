@@ -1,12 +1,9 @@
-import { ConfigurationModule } from '@forrest-guard/configuration';
-import { PrismaService } from '@forrest-guard/database';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { CompanyModule } from './company/company.module';
 
 @Module({
-  imports: [ConfigurationModule],
-  controllers: [AppController],
-  providers: [AppService, PrismaService],
+  imports: [CompanyModule],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

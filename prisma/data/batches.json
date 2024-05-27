@@ -1,10 +1,10 @@
 [
   {
-    "id": "ctest012",
+    "id": "ctest701",
     "euInfoSystemId": "EU-654321",
     "weight": 2000,
     "active": true,
-    "recipientId": "ctest002",
-    "processStepId": "ctest011"
+    "recipientId": "ctest102",
+    "processStepId": "ctest601"
   }
 ]
