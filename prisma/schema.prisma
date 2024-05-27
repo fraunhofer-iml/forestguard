@@ -85,13 +85,13 @@ model PlotOfLand {
   polygonData          String
   areaInHA             Int
 
-  cultivatedWith Cultivation @relation(fields: [cultivationId], references: [id])
-  cultivationId  String
+  cultivatedWith Cultivation? @relation(fields: [cultivationId], references: [id])
+  cultivationId  String?
 
   proofs Proof[]
 
-  farmer   User   @relation(fields: [farmerId], references: [id])
-  farmerId String
+  farmer   User?   @relation(fields: [farmerId], references: [id])
+  farmerId String?
 
   farmedBy ProcessStep[]
 }
