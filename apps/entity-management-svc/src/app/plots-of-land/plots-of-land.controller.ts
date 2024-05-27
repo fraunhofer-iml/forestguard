@@ -20,8 +20,8 @@ export class PlotsOfLandController {
   }
 
   @MessagePattern(PlotOfLandMessagePatterns.READ_BY_ID)
-  async readPlotOfLandById(@Payload() payload: { id: string }): Promise<PlotOfLand> {
-    return this.plotsOfLandService.readPlotOfLand(payload.id);
+  async readPlotOfLandById(@Payload() payload: { id: string }): Promise<PlotOfLand[]> {
+    return this.plotsOfLandService.readPlotsOfLand(payload.id);
   }
 
   @MessagePattern(PlotOfLandMessagePatterns.UPDATE_BY_ID)
