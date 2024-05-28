@@ -5,7 +5,7 @@ ARG APP
 USER root
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 RUN rm -rf /usr/share/nginx/html/*
-COPY ./dist/apps/${APP}/ /usr/share/nginx/html/
+COPY ./dist/apps/${APP}/browser/ /usr/share/nginx/html/
 
 USER nginx
 EXPOSE 8080:8080
