@@ -116,7 +116,7 @@ model Proof {
 
 model Process {
   id   String @id @default(cuid())
-  name String
+  name String @unique
 
   processSteps ProcessStep[]
 }

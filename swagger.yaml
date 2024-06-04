@@ -384,10 +384,6 @@ paths:
       responses:
         '201':
           description: 'Successful creation.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Process'
         '400':
           description: 'Invalid request.'
   /batches/harvests:
@@ -408,10 +404,6 @@ paths:
       responses:
         '201':
           description: 'Successful creation.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Process'
         '400':
           description: 'Invalid request.'
   /batches/{id}:
@@ -609,7 +601,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ProcessDisplayDto'
+                  $ref: '#/components/schemas/Batch'
         '400':
           description: 'Invalid request.'
   /companies/${id}/farmers/:
