@@ -5,16 +5,16 @@ import { ProcessDto } from './process.dto';
 export class ProcessStepDto {
   id: string;
   location: string;
-  date: string;
+  date: Date;
   process: ProcessDto;
-  recordedBy?: UserDto;
+  recordedBy?: UserDto | CompanyDto;
   executedBy: UserDto | CompanyDto;
   farmedLand?: PlotOfLandDto;
 
   constructor(
     id: string,
     location: string,
-    date: string,
+    date: Date,
     process: ProcessDto,
     executedBy: UserDto | CompanyDto,
     recordedBy?: UserDto,

@@ -5,6 +5,7 @@
   "scripts": {
     "clean": "rm -rf .angular dist node_modules prisma/dev.db prisma/erd.png",
     "set-up-database": "npx prisma db push --force-reset && npx prisma db seed",
+    "sud": "npm run set-up-database",
     "clean-install": "npm run clean && npm install && npm run set-up-database",
     "dev": "nx run-many --all --parallel 5 --target serve"
   },

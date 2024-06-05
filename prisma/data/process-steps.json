@@ -5,6 +5,7 @@
     "date": "2024-05-21T00:00:00.000Z",
     "processId": "ctest501",
     "executedByEntityId": "ctest101",
-    "recordedByEntityId": "ctest102"
+    "recordedByEntityId": "ctest102",
+    "farmedLandId": "ctest401"
   }
 ]

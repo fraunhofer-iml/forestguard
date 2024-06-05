@@ -1,12 +1,4 @@
-import {
-  company1Mock,
-  CompanyCreateDto,
-  CompanyDto,
-  farmer1Mock,
-  FarmerDto,
-  processDisplay1Mock,
-  ProcessDisplayDto,
-} from '@forrest-guard/api-interfaces';
+import { BatchDto, company1Mock, CompanyCreateDto, CompanyDto, farmer1Mock, FarmerDto } from '@forrest-guard/api-interfaces';
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CompanyService } from './company.service';
@@ -34,8 +26,8 @@ export class CompanyController {
   @ApiOperation({ description: 'Get all coffee batches of the company' })
   @ApiOkResponse({ description: 'Successful request.' })
   @ApiQuery({ name: 'query', required: false })
-  getBatches(@Param('id') id: string, @Query('query') query?: string): ProcessDisplayDto[] {
-    return [processDisplay1Mock];
+  getBatches(@Param('id') id: string, @Query('query') query?: string): Promise<BatchDto[]> {
+    return this.companyService.readBatchesByCompanyId(id);
   }
 
   @Get(':id/farmers')

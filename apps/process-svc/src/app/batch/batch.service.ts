@@ -1,8 +1,10 @@
-import { BatchCreateDto, ProcessStepCreateDto } from '@forrest-guard/api-interfaces';
+import { BatchCreateDto, BatchDto, ProcessStepCreateDto } from '@forrest-guard/api-interfaces';
 import { PrismaService } from '@forrest-guard/database';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { Prisma, Process } from '@prisma/client';
+import { mapBatchPrismaToBatchDto } from './batch.mapper';
+import { readCoffeeBatchesByCompanyIdQuery } from './batch.queries';
 
 @Injectable()
 export class BatchService {
@@ -14,6 +16,12 @@ export class BatchService {
       await this.dbBatchCreate(dto, harvestProcess.id);
     }
     return HttpStatus.CREATED;
+  }
+
+  async readBatchesByCompanyId(companyId: string): Promise<BatchDto[]> {
+    const batches = await this.prismaService.batch.findMany(readCoffeeBatchesByCompanyIdQuery(companyId));
+
+    return batches.map(mapBatchPrismaToBatchDto);
   }
 
   private async getHarvestProcess() {

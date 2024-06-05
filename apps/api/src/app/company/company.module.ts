@@ -4,7 +4,7 @@ import { CompanyController } from './company.controller';
 import { CompanyService } from './company.service';
 
 @Module({
-  imports: [new Broker().getEntityManagementBroker()],
+  imports: [new Broker().getEntityManagementBroker(), new Broker().getProcessBroker()],
   controllers: [CompanyController],
   providers: [CompanyService],
 })
