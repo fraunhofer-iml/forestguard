@@ -4,6 +4,20 @@ import { ContentLayoutComponent } from './layouts/content-layout/content-layout.
 export const appRoutes: Route[] = [
   {
     path: '',
-    component: ContentLayoutComponent
-  }
+    component: ContentLayoutComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'overview',
+        pathMatch: 'full',
+      },
+      {
+        path: 'harvest',
+        loadChildren: () =>
+          import('./pages/harvest/harvest.module').then(
+            (m) => m.HarvestModule
+          ),
+      },
+    ],
+  },
 ];
