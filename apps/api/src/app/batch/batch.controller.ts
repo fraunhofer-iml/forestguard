@@ -1,7 +1,6 @@
 import { Body, Controller, Get, HttpStatus, Param, Post } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
-  batch1Mock,
   BatchCreateDto,
   BatchDto,
   process1Mock,
@@ -33,8 +32,8 @@ export class BatchController {
   @Get(':id')
   @ApiOperation({ description: 'Get coffee batch by ID' })
   @ApiOkResponse({ description: 'Successful request.' })
-  getBatch(@Param('id') id: string): BatchDto {
-    return batch1Mock;
+  getBatch(@Param('id') id: string): Promise<BatchDto> {
+    return this.batchService.readBatch(id);
   }
 
   @Get(':id/related')

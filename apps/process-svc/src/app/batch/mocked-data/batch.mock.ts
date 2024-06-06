@@ -1,5 +1,28 @@
-import { Role } from '@prisma/client';
+import { Process, Role } from '@prisma/client';
 import { BatchWithRelations } from '../batch.types';
+import { BatchCreateDto } from '@forrest-guard/api-interfaces';
+
+export const mockedPrismaHarvestingProcess: Process = {
+  id: 'ctest501',
+  name: 'Harvesting',
+};
+
+export const mockedCreateBatchDtos: BatchCreateDto[] = [
+  {
+    idEUInfoSystem: null,
+    in: [],
+    weight: 33,
+    recipient: 'ctest102',
+    processStep: {
+      location: '',
+      date: '2024-05-24T08:28:24Z',
+      process: null,
+      recordedBy: 'ctest102',
+      executedBy: 'ctest101',
+      harvestedLand: 'ctest401',
+    },
+  },
+];
 
 export const mockedPrismaBatchWithRelations1: BatchWithRelations = {
   id: '1',
@@ -32,6 +55,20 @@ export const mockedPrismaBatchWithRelations1: BatchWithRelations = {
       nationalPlotOfLandId: '1',
       polygonData: 'PolygonData1',
       region: 'Region1',
+      cultivatedWith: {
+        id: 'ctest301',
+        type: 'Corn',
+        sort: 'Dent Corn',
+      },
+      proofs: [
+        {
+          documentId: 'DOC123456',
+          type: 'Organic Certification',
+          documentRef: 'ORG123456',
+          notice: 'This land is certified organic.',
+          plotOfLandId: 'ctest401',
+        },
+      ],
     },
     recordedBy: {
       id: '1',
@@ -181,6 +218,20 @@ export const mockedPrismaBatchWithRelations2: BatchWithRelations = {
       nationalPlotOfLandId: '2',
       polygonData: 'PolygonData2',
       region: 'Region2',
+      cultivatedWith: {
+        id: 'ctest301',
+        type: 'Corn',
+        sort: 'Dent Corn',
+      },
+      proofs: [
+        {
+          documentId: 'DOC123456',
+          type: 'Organic Certification',
+          documentRef: 'ORG123456',
+          notice: 'This land is certified organic.',
+          plotOfLandId: 'ctest401',
+        },
+      ],
     },
     recordedBy: {
       id: '2',

@@ -1,14 +1,15 @@
-import { BatchCreateDto } from '@forrest-guard/api-interfaces';
 import { PrismaService } from '@forrest-guard/database';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import {
+  mockedCreateBatchDtos,
+  mockedPrismaBatchWithRelations1,
+  mockedPrismaBatchWithRelations2,
+  mockedPrismaHarvestingProcess,
+} from './mocked-data/batch.mock';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Process } from '@prisma/client';
 import { BatchService } from './batch.service';
-import { mockedPrismaBatchWithRelations1, mockedPrismaBatchWithRelations2 } from './mocked-data/batch.mock';
-
-const HARVESTING_PROCESS: Process = {
-  id: 'ctest501',
-  name: 'Harvesting',
-};
+import { BatchDto } from '@forrest-guard/api-interfaces';
+import { BatchWithRelations } from './batch.types';
 
 describe('BatchService', () => {
   let service: BatchService;
@@ -26,6 +27,7 @@ describe('BatchService', () => {
             },
             batch: {
               create: jest.fn(),
+              findUniqueOrThrow: jest.fn(),
               findMany: jest.fn(),
             },
           },
@@ -42,31 +44,36 @@ describe('BatchService', () => {
   });
 
   it('should create one harvest batch', async () => {
-    const givenBatchCreateDtos: BatchCreateDto[] = [
-      {
-        idEUInfoSystem: null,
-        in: [],
-        weight: 33,
-        recipient: 'ctest102',
-        processStep: {
-          location: '',
-          date: '2024-05-24T08:28:24Z',
-          process: null,
-          recordedBy: 'ctest102',
-          executedBy: 'ctest101',
-          harvestedLand: 'ctest401',
-        },
-      },
-    ];
 
-    jest.spyOn(prisma.process, 'findUnique').mockResolvedValue(HARVESTING_PROCESS);
+    jest.spyOn(prisma.process, 'findUnique').mockResolvedValue(mockedPrismaHarvestingProcess);
     jest.spyOn(prisma.batch, 'create').mockImplementation();
-    await service.createHarvests(givenBatchCreateDtos);
+    await service.createHarvests(mockedCreateBatchDtos);
 
-    expect(prisma.batch.create).toHaveBeenCalledTimes(givenBatchCreateDtos.length);
+    expect(prisma.batch.create).toHaveBeenCalledTimes(mockedCreateBatchDtos.length);
 
     jest.spyOn(prisma.batch, 'create').mockRejectedValue(new Error('Error'));
-    await expect(service.createHarvests(givenBatchCreateDtos)).rejects.toThrow();
+    await expect(service.createHarvests(mockedCreateBatchDtos)).rejects.toThrow();
+  });
+
+  it('should return a valid BatchDto', async () => {
+    const givenBatchId = mockedPrismaBatchWithRelations1.id;
+
+    jest.spyOn(prisma.batch, 'findUniqueOrThrow').mockResolvedValue(mockedPrismaBatchWithRelations1);
+    const actualBatchDto = await service.readBatchById(givenBatchId);
+
+    expectResultToBeBatchDto(actualBatchDto, mockedPrismaBatchWithRelations1);
+    expectResultEntitiesToBeDtoUsers(actualBatchDto, mockedPrismaBatchWithRelations1);
+  });
+
+  it('should throw a NotFoundException', async () => {
+    const givenBatchId = '123';
+    const expectedException = new PrismaClientKnownRequestError('', { code: 'P2025', clientVersion: '' });
+
+    jest.spyOn(prisma.batch, 'findUniqueOrThrow').mockImplementation(() => {
+      throw expectedException;
+    });
+
+    await expect(service.readBatchById(givenBatchId)).rejects.toThrow(expectedException);
   });
 
   it('should read coffee batches by company ID', async () => {
@@ -76,23 +83,30 @@ describe('BatchService', () => {
     jest.spyOn(prisma.batch, 'findMany').mockResolvedValue(mockBatches);
 
     const result = await service.readBatchesByCompanyId(companyId);
-
     expect(result).toHaveLength(mockBatches.length);
-    expect(result[0].id).toBe(mockBatches[0].id);
-    expect(result[0].weight).toBe(mockBatches[0].weight);
-    expect(result[0].recipient).toStrictEqual(mockBatches[0].recipient.user);
-    expect(result[0].processStep.location).toBe(mockBatches[0].processStep.location);
-    expect(result[0].processStep.date).toBe(mockBatches[0].processStep.date);
-    expect(result[0].processStep.recordedBy).toBe(mockBatches[0].processStep.recordedBy.user);
-    expect(result[0].processStep.executedBy).toBe(mockBatches[0].processStep.executedBy.user);
-    expect(result[0].processStep.farmedLand).toBe(mockBatches[0].processStep.farmedLand);
-    expect(result[1].id).toBe(mockBatches[1].id);
-    expect(result[1].weight).toBe(mockBatches[1].weight);
-    expect(result[1].recipient).toStrictEqual(mockBatches[1].recipient.company);
-    expect(result[1].processStep.location).toBe(mockBatches[1].processStep.location);
-    expect(result[1].processStep.date).toBe(mockBatches[1].processStep.date);
-    expect(result[1].processStep.recordedBy).toBe(mockBatches[1].processStep.recordedBy.company);
-    expect(result[1].processStep.executedBy).toBe(mockBatches[1].processStep.executedBy.company);
-    expect(result[1].processStep.farmedLand).toBe(mockBatches[1].processStep.farmedLand);
+    expectResultToBeBatchDto(result[0], mockBatches[0]);
+    expectResultEntitiesToBeDtoUsers(result[0], mockBatches[0]);
+    expectResultToBeBatchDto(result[1], mockBatches[1]);
+    expectResultEntitiesToBeDtoCompanies(result[1], mockBatches[1]);
   });
 });
+
+function expectResultToBeBatchDto(result: BatchDto, mockBatch: BatchWithRelations) {
+  expect(result.id).toBe(mockBatch.id);
+  expect(result.weight).toBe(mockBatch.weight);
+  expect(result.processStep.location).toBe(mockBatch.processStep.location);
+  expect(result.processStep.date).toBe(mockBatch.processStep.date);
+  expect(result.processStep.farmedLand).toBe(mockBatch.processStep.farmedLand);
+}
+
+function expectResultEntitiesToBeDtoUsers(result: BatchDto, mockBatch: BatchWithRelations) {
+  expect(result.recipient).toStrictEqual(mockBatch.recipient.user);
+  expect(result.processStep.recordedBy).toBe(mockBatch.processStep.recordedBy.user);
+  expect(result.processStep.executedBy).toBe(mockBatch.processStep.executedBy.user);
+}
+
+function expectResultEntitiesToBeDtoCompanies(result: BatchDto, mockBatch: BatchWithRelations) {
+  expect(result.recipient).toStrictEqual(mockBatch.recipient.company);
+  expect(result.processStep.recordedBy).toBe(mockBatch.processStep.recordedBy.company);
+  expect(result.processStep.executedBy).toBe(mockBatch.processStep.executedBy.company);
+}

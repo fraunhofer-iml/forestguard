@@ -94,6 +94,6 @@ export class CompanyMapper {
   private static mapProofToDto(proof: Proof): ProofDto {
     const { documentId, type, documentRef, notice } = proof;
 
-    return { id: documentId, type, documentRef, notice };
+    return { documentId, type, documentRef, notice };
   }
 }

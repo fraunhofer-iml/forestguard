@@ -1,14 +1,15 @@
-import { BatchCreateDto, BatchDto, ProcessStepCreateDto } from '@forrest-guard/api-interfaces';
+import { BatchCreateDto, BatchDto } from '@forrest-guard/api-interfaces';
 import { PrismaService } from '@forrest-guard/database';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
-import { Prisma, Process } from '@prisma/client';
+import { Process } from '@prisma/client';
 import { mapBatchPrismaToBatchDto } from './batch.mapper';
-import { readCoffeeBatchesByCompanyIdQuery } from './batch.queries';
+import { readCoffeeBatchesByCompanyIdQuery, createHarvestQuery, readBatchByIdQuery } from './batch.queries';
 
 @Injectable()
 export class BatchService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {
+  }
 
   async createHarvests(batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
     const harvestProcess: Process = await this.getHarvestProcess();
@@ -16,6 +17,11 @@ export class BatchService {
       await this.dbBatchCreate(dto, harvestProcess.id);
     }
     return HttpStatus.CREATED;
+  }
+
+  async readBatchById(id: string): Promise<BatchDto> {
+    const batch = await this.prismaService.batch.findUniqueOrThrow(readBatchByIdQuery(id));
+    return mapBatchPrismaToBatchDto(batch);
   }
 
   async readBatchesByCompanyId(companyId: string): Promise<BatchDto[]> {
@@ -35,7 +41,7 @@ export class BatchService {
   private async dbBatchCreate(batchCreateDto: BatchCreateDto, harvestProcessId: string) {
     try {
       await this.prismaService.batch.create({
-        data: this.toBatchQuery(batchCreateDto, harvestProcessId),
+        data: createHarvestQuery(batchCreateDto, harvestProcessId),
       });
     } catch (e) {
       throw new RpcException({
@@ -45,46 +51,4 @@ export class BatchService {
     }
   }
 
-  private toBatchQuery(batchCreateDto: BatchCreateDto, harvestProcessId: string): Prisma.BatchCreateInput {
-    return {
-      euInfoSystemId: batchCreateDto.idEUInfoSystem,
-      weight: batchCreateDto.weight,
-      active: true,
-      recipient: {
-        connect: {
-          id: batchCreateDto.recipient,
-        },
-      },
-      processStep: {
-        create: this.toProcessStepQuery(batchCreateDto.processStep, harvestProcessId),
-      },
-    };
-  }
-
-  private toProcessStepQuery(processStepCreateDto: ProcessStepCreateDto, harvestProcessId: string): Prisma.ProcessStepCreateInput {
-    return {
-      location: processStepCreateDto.location,
-      date: processStepCreateDto.date,
-      process: {
-        connect: {
-          id: harvestProcessId,
-        },
-      },
-      recordedBy: {
-        connect: {
-          id: processStepCreateDto.recordedBy,
-        },
-      },
-      executedBy: {
-        connect: {
-          id: processStepCreateDto.executedBy,
-        },
-      },
-      farmedLand: {
-        connect: {
-          id: processStepCreateDto.harvestedLand,
-        },
-      },
-    };
-  }
 }

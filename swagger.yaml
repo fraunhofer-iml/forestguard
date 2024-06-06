@@ -776,7 +776,7 @@ components:
     Proof:
       type: object
       properties:
-        id:
+        documentId:
           type: string
           format: uuid
           description: 'The unique identifier of the proof.'

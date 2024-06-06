@@ -1,11 +1,11 @@
 export class ProofDto {
-  id: string;
+  documentId: string;
   type: string;
   documentRef: string;
   notice: string;
 
-  constructor(id: string, type: string, documentRef: string, notice: string) {
-    this.id = id;
+  constructor(documentId: string, type: string, documentRef: string, notice: string) {
+    this.documentId = documentId;
     this.type = type;
     this.documentRef = documentRef;
     this.notice = notice;

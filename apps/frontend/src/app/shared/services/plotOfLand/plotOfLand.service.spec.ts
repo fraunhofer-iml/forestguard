@@ -36,7 +36,7 @@ describe('PlotOfLandService', (): void => {
     }
 
     proofsMock = [{
-      id: 'aa7dc794-5d99-4758-be05-a813a28d0124',
+      documentId: 'aa7dc794-5d99-4758-be05-a813a28d0124',
       type: 'ownership',
       documentRef: '/ownership/1',
       notice: 'notice'
@@ -59,7 +59,7 @@ describe('PlotOfLandService', (): void => {
       },
       proofs: [
         {
-          id: 'aa7dc794-5d99-4758-be05-a813a28d0124',
+          documentId: 'aa7dc794-5d99-4758-be05-a813a28d0124',
           type: 'ownership',
           documentRef: '/ownership/1',
           notice: 'notice'
@@ -67,14 +67,14 @@ describe('PlotOfLandService', (): void => {
       ]
     }
     proofsMock = [{
-      id: 'aa7dc794-5d99-4758-be05-a813a28d0124',
+      documentId: 'aa7dc794-5d99-4758-be05-a813a28d0124',
       type: 'ownership',
       documentRef: '/ownership/1',
       notice: 'notice'
     }];
 
     proofMock = {
-      id: 'aa7dc794-5d99-4758-be05-a813a28d0124',
+      documentId: 'aa7dc794-5d99-4758-be05-a813a28d0124',
       type: 'ownership',
       documentRef: '/ownership/1',
       notice: 'notice'

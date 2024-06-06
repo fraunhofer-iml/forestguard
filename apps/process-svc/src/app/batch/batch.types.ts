@@ -1,4 +1,4 @@
-import { Address, Batch, Company, Entity, PlotOfLand, Process, ProcessStep, User } from '@prisma/client';
+import { Address, Batch, Company, Cultivation, Entity, PlotOfLand, Process, ProcessStep, Proof, User } from '@prisma/client';
 
 export type BatchWithRelations = Batch & {
   recipient: EntityWithRelations;
@@ -9,7 +9,7 @@ export type ProcessStepWithRelations = ProcessStep & {
   process: Process;
   recordedBy: EntityWithRelations;
   executedBy: EntityWithRelations;
-  farmedLand: PlotOfLand;
+  farmedLand: PlotOfLandWithRelations;
 };
 
 export type EntityWithRelations = Entity & {
@@ -23,4 +23,10 @@ export type UserWithRelations = User & {
 
 export type CompanyWithRelations = Company & {
   address: Address;
+};
+
+
+export type PlotOfLandWithRelations = PlotOfLand & {
+  cultivatedWith: Cultivation;
+  proofs: Proof[];
 };

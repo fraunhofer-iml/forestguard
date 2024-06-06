@@ -135,7 +135,7 @@ const COMPANY_DTO_MOCK: CompanyDto = {
           },
           proofs: [
             {
-              id: 'DOC123456',
+              documentId: 'DOC123456',
               type: 'Organic Certification',
               documentRef: 'ORG123456',
               notice: 'This land is certified organic.',
