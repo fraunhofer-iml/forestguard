@@ -2,10 +2,10 @@ import { UserDto } from '../../dtos';
 
 export const user1Mock: UserDto = {
   id: 'ctest101',
-  employeeId: '1',
-  firstName: 'Morgan',
-  lastName: 'Hall',
-  email: 'user@example.com',
+  firstName: 'Jane',
+  lastName: 'Smith',
+  email: 'jane.smith@acme.com',
+  mobilePhoneNumber: '555-987-6543',
   role: 'EMPLOYEE',
-  mobilePhoneNumber: '+5114841700',
+  employeeId: 'EID12345678',
 };

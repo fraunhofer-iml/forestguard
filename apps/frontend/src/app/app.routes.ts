@@ -18,6 +18,13 @@ export const appRoutes: Route[] = [
             (m) => m.HarvestModule
           ),
       },
+      {
+        path: 'overview',
+        loadChildren: () =>
+          import('./pages/overview/overview.module').then(
+            (m) => m.OverviewModule
+          ),
+      },
     ],
   },
 ];

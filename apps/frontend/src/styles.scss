@@ -1,9 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/**
+* Generated theme by Material Theme Generator
+* https://materialtheme.arcsine.dev
+* Fork at: https://materialtheme.arcsine.dev/?c=YHBhbGV0dGU$YHByaW1hcnk$YF48IzVlODMzMiIsIj9lcjwjY2ZkYWMyIiwiO2VyPCM0MjY2MWZ$LCIlPmBePCMyMTM5MWYiLCI~ZXI8I2JjYzRiYyIsIjtlcjwjMTQyNDEyfiwid2Fybj5gXjwjZmYwMDAwIiwiP2VyPCNmZmIzYjMiLCI7ZXI8I2ZmMDAwMH4sIj9UZXh0PCMwMDAwMDAiLCI~PTwjZmFmYWZhIiwiO1RleHQ8I2ZmZmZmZiIsIjs9PCMyYzJjMmN$LCJmb250cz5bYEA8KC00fixgQDwoLTN$LGBAPCgtMn4sYEA8KC0xfixgQDxoZWFkbGluZX4sYEA8dGl0bGV$LGBAPHN1YiktMn4sYEA8c3ViKS0xfixgQDxib2R5LTJ$LGBAPGJvZHktMX4sYEA8YnV0dG9ufixgQDxjYXB0aW9ufixgQDxpbnB1dCIsInNpemU$bnVsbH1dLCJpY29uczxGaWxsZWQiLCI~bmVzcz50cnVlLCJ2ZXJzaW9uPjEzfQ==
+*/
+
+@use '@angular/material' as mat;
+@use './styles/m3-theme.scss';
 
 @import 'material-icons/iconfont/material-icons.css';
-@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 
 @font-face {
   font-display: swap;
@@ -53,6 +57,69 @@
   src: url('assets/fonts/roboto-v30-latin-900.woff2') format('woff2');
 }
 
-body {
+html {
+  // Apply the light theme by default
+  @include mat.core-theme(m3-theme.$light-theme);
+  @include mat.button-theme(m3-theme.$light-theme);
+  @include mat.system-level-colors(m3-theme.$light-theme);
+  @include mat.card-theme(m3-theme.$light-theme);
+  @include mat.checkbox-theme(m3-theme.$light-theme);
+  @include mat.dialog-theme(m3-theme.$light-theme);
+  @include mat.expansion-theme(m3-theme.$light-theme);
+  @include mat.form-field-theme(m3-theme.$light-theme);
+  @include mat.icon-theme(m3-theme.$light-theme);
+  @include mat.input-theme(m3-theme.$light-theme);
+  @include mat.list-theme(m3-theme.$light-theme);
+  @include mat.menu-theme(m3-theme.$light-theme);
+  @include mat.progress-bar-theme(m3-theme.$light-theme);
+  @include mat.progress-spinner-theme(m3-theme.$light-theme);
+  @include mat.radio-theme(m3-theme.$light-theme);
+  @include mat.select-theme(m3-theme.$light-theme);
+  @include mat.sidenav-theme(m3-theme.$light-theme);
+  @include mat.slider-theme(m3-theme.$light-theme);
+  @include mat.snack-bar-theme(m3-theme.$light-theme);
+  @include mat.tabs-theme(m3-theme.$light-theme);
+  @include mat.toolbar-theme(m3-theme.$light-theme);
+  @include mat.tooltip-theme(m3-theme.$light-theme);
+
+  // Set the default font family
   font-family: 'Roboto', sans-serif;
+}
+
+// Handle buttons appropriately, with respect to line-height
+.mat-raised-button,
+.mat-stroked-button,
+.mat-flat-button {
+  padding: 0 1.15em;
+  margin: 0 0.65em;
+  min-width: 3em;
+  line-height: 36.4px;
+}
+
+.mat-standard-chip {
+  padding: 0.5em 0.85em;
+  min-height: 2.5em;
+}
+
+.material-icons {
+  font-size: 24px;
+  font-family: 'Material Icons', 'Material Icons';
+  .mat-badge-content {
+    font-family: 'Roboto';
+  }
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline__notch {
+  border-right-style: hidden;
+}
+.mat-mdc-input-element {
+  box-shadow: none !important;
+}
+
+.card {
+  @apply bg-white rounded-xl p-8;
 }

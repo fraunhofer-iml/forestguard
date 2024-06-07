@@ -1,38 +1,54 @@
-<aside class="w-80 h-screen bg-white border-r-2 fixed">
+<aside class="w-80 h-svh bg-white fixed py-2">
   <ul>
-    <div>
-      <li class="my-2 mx-4 hover:bg-green-700 hover:bg-opacity-25 rounded-full py-1">
-        <a class="flex flex-row items-center gap-4 px-6 cursor-pointer py-4">
+    <div class="m-4 space-y-2">
+      <li class="mb-8">
+        <div class="flex items-center">
+          <img ngSrc="./assets/images/logo_forestguard.png" alt="Logo of Forestguard" width="30" height="34" class="mr-4" />
+          <img ngSrc="./assets/images/forestguard.png" alt="Forestguard" width="140" height="13" />
+        </div>
+      </li>
+      <li>
+        <a
+          routerLink="/overview"
+          routerLinkActive="bg-secondary-800 hover:bg-secondary-800"
+          class="flex flex-row items-center gap-2 px-4 cursor-pointer py-2 rounded-xl hover:bg-secondary-400/25"
+        >
           <span class="material-icons-outlined">home</span>
           Overview
         </a>
       </li>
-      <li class="my-2 mx-4 hover:bg-green-700 hover:bg-opacity-25 rounded-full py-1">
-        <a routerLink="/harvest"
-           class="flex flex-row items-center gap-4 px-6 cursor-pointer py-4">
+      <li>
+        <a
+          routerLink="/harvest"
+          routerLinkActive="bg-secondary-700 hover:bg-secondary-700"
+          class="flex flex-row items-center gap-2 px-4 cursor-pointer py-2 rounded-xl hover:bg-secondary-400/25"
+        >
           <span class="material-icons-outlined">add_circle</span>
           Add Harvest
         </a>
       </li>
     </div>
   </ul>
-  <ul class="absolute bottom-16 left-0 right-0 border-t-2">
-    <li class="mt-8">
-      <a class=" flex flex-row items-center gap-4 px-6 mx-4 cursor-pointer">
+  <ul class="absolute bottom-0 left-0 right-0 border-t-2">
+    <li class="p-4">
+      <!-- <div class="flex flex-row gap-4 items-center">
+        <div class="h-12 w-12 rounded-full bg-tertiary-300 flex items-center justify-center text-white">US</div>
+        <div class="flex flex-col">
+          <span class="font-semibold">John Doe</span>
+          <span>Schirmer Kaffee</span>
+        </div>
+      </div> -->
+      <a class="flex flex-row items-center gap-2 cursor-pointer py-2 rounded-xl hover:bg-secondary-400/25 px-4">
         <span class="material-icons-outlined">logout</span>
         Logout
       </a>
     </li>
-    <li class="p-5 w-80 border-t-2 border-b-2 mt-6">
-      <img ngSrc="./assets/images/bmuv_support.jpg" alt="BMUV" width="1527" height="569" priority="">
+    <li class="p-4 w-80 border-t-2 border-b-2">
+      <img ngSrc="./assets/images/bmuv_support.jpg" alt="BMUV" width="1527" height="569" priority="" />
     </li>
-    <li class="my-4 space-x-20 text-xs">
-      <a class="ml-10 mt-1 cursor-pointer">
-        Imprint
-      </a>
-      <a class="cursor-pointer">
-        Privacy Policy
-      </a>
+    <li class="my-4 text-xs flex items-center justify-between px-4">
+      <a href="#"> Imprint </a>
+      <a href="#"> Privacy Policy </a>
     </li>
   </ul>
 </aside>

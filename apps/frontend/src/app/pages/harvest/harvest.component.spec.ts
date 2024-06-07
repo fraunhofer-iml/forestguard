@@ -1,13 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HarvestComponent } from './harvest.component';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { UserService } from '../../shared/services/user/user.service';
-import { HttpClient, HttpHandler } from '@angular/common/http';
-import { BatchService } from '../../shared/services/batch/batch.service';
 import { of } from 'rxjs';
+import { HttpClient, HttpHandler } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BatchService } from '../../shared/services/batch/batch.service';
 import { CompanyService } from '../../shared/services/company/company.service';
 import { PlotOfLandService } from '../../shared/services/plotOfLand/plotOfLand.service';
 import { PlotOfLandMockService } from '../../shared/services/plotOfLand/plotOfLandMock.service';
+import { UserService } from '../../shared/services/user/user.service';
+import { HarvestComponent } from './harvest.component';
 import { HarvestService } from './service/harvest.service';
 
 describe('HarvestComponent', () => {
@@ -23,10 +24,7 @@ describe('HarvestComponent', () => {
     await TestBed.configureTestingModule({
       imports: [],
       declarations: [HarvestComponent],
-      schemas: [
-        CUSTOM_ELEMENTS_SCHEMA,
-        NO_ERRORS_SCHEMA
-      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
       providers: [
         UserService,
         { provide: BatchService, useValue: batchServiceMock },
@@ -35,8 +33,9 @@ describe('HarvestComponent', () => {
         PlotOfLandMockService,
         HarvestService,
         HttpClient,
-        HttpHandler
-      ]
+        HttpHandler,
+        provideHttpClientTesting(),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HarvestComponent);
@@ -54,7 +53,7 @@ describe('HarvestComponent', () => {
     expect(component.harvestFormGroup.pristine).toBe(true);
     expect(component.harvestFormGroup.untouched).toBe(true);
   });
-  
+
   it('should mark all controls as touched', () => {
     component.submitHarvest();
 

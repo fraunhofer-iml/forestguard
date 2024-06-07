@@ -8,7 +8,7 @@ export class ProcessDisplayDto {
   }
 }
 
-class CoffeeBatch {
+export class CoffeeBatch {
   id?: string;
   weight?: number;
   recipient?: string;
@@ -22,7 +22,7 @@ class CoffeeBatch {
   }
 }
 
-class Edge {
+export class Edge {
   from?: string;
   to?: string;
 

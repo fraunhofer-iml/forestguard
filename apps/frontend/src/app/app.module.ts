@@ -9,11 +9,14 @@ import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
 import { ContentLayoutComponent } from './layouts/content-layout/content-layout.component';
 import { SidenavComponent } from './layouts/sidenav/sidenav.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   declarations: [AppComponent, SidenavComponent, ContentLayoutComponent],
   imports: [BrowserModule, RouterModule.forRoot(appRoutes), MatToolbarModule, NgOptimizedImage, BrowserAnimationsModule, NgxSonnerToaster],
-  providers: [],
+  providers: [
+    provideAnimationsAsync()
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
