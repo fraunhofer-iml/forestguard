@@ -36,7 +36,7 @@
     "axios": "^1.6.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
-    "material-icons": "^1.13.12",
+    "material-symbols": "^0.20.0",
     "nestjs-minio": "^2.6.1",
     "ngx-sonner": "^1.0.0",
     "reflect-metadata": "^0.1.13",

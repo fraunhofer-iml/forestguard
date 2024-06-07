@@ -1,0 +1,63 @@
+<header class="font-semibold pb-5 flex flex-row gap-4 text-neutral-300 items-center">
+  <a class="material-symbols-outlined cursor-pointer" routerLink="/batches"> chevron_left </a>
+  <h1 class="font-medium">Batch Details {{ id$ | async }}</h1>
+</header>
+
+<div *ngIf="batch$ | async as batch">
+  <div class="card">
+    <div class="flex flex-row items-center justify-between">
+      <div>
+        <span class="text-neutral-500 text-sm">{{ batch.processStep.process.name }}</span>
+        <h2 class="text-lg font-medium text-neutral-400">Batch {{ batch.id }}</h2>
+      </div>
+      <div class="grid grid-cols-2 space-x-4 text-neutral-500">
+        <p class="text-right font-medium">Date</p>
+        <p>{{ batch.processStep.date | date }}</p>
+        <p class="text-right font-medium">Process Owner</p>
+        <p>{{ getUserOrCompanyName(batch.processStep.executedBy) }}</p>
+        <p class="text-right font-medium">Author of Entry</p>
+        <p>{{ getUserOrCompanyName(batch.processStep.recordedBy) }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+    <div class="card text-neutral-300">
+      <h1 class="text-lg font-semibold">{{ batch.processStep.process.name }} Details</h1>
+      <div class="mt-8 grid grid-cols-1 md:grid-cols-2">
+        <span class="border-b-2 py-2 font-medium">Process Owner (Farmer)</span>
+        <p class="border-b-2 py-2 text-neutral-500">{{ getUserOrCompanyName(batch.processStep.executedBy) }}</p>
+        <span class="border-b-2 py-2 font-medium">Field</span>
+        <p class="border-b-2 py-2 text-neutral-500">{{ batch.processStep.farmedLand?.description }}</p>
+        <span class="border-b-2 py-2 font-medium">Weight [kg]</span>
+        <p class="border-b-2 py-2 text-neutral-500">{{ batch.weight }}</p>
+        <span class="py-2 font-medium">Harvest Date</span>
+        <p class="py-2 text-neutral-500">{{ batch.processStep.date | date }}</p>
+      </div>
+    </div>
+    <div class="card text-neutral-300">
+      <h1 class="text-lg font-semibold">PDF Documents</h1>
+      <div class="h-full flex items-center justify-start w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center w-full justify-center">
+          <div>Proof of Freedom from deforestation</div>
+          <div class="space-x-4 flex flex-row select-none w-full justify-end">
+            <div class="p-1 h-10 w-10 rounded-full bg-green-600 flex items-center justify-center">
+              <span class="material-symbols-outlined text-white"> done </span>
+            </div>
+            <div class="p-1 h-10 w-10 rounded-full hover:bg-gray-200 flex items-center justify-center cursor-pointer">
+              <span class="material-symbols-outlined"> file_download </span>
+            </div>
+          </div>
+          <div>Proof of Ownership for plot of land</div>
+          <div class="space-x-4 flex flex-row select-none w-full justify-end">
+            <div class="p-1 h-10 w-10 rounded-full bg-orange-500 flex items-center justify-center">
+              <span class="material-symbols-outlined text-white"> warning </span>
+            </div>
+            <div class="p-1 h-10 w-10 rounded-full hover:bg-gray-200 flex items-center justify-center cursor-not-allowed">
+              <span class="material-symbols-outlined text-gray-300"> file_download </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

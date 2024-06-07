@@ -1,22 +1,16 @@
 import { NgxSonnerToaster } from 'ngx-sonner';
-import { NgOptimizedImage } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
-import { ContentLayoutComponent } from './layouts/content-layout/content-layout.component';
-import { SidenavComponent } from './layouts/sidenav/sidenav.component';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
-  declarations: [AppComponent, SidenavComponent, ContentLayoutComponent],
-  imports: [BrowserModule, RouterModule.forRoot(appRoutes), MatToolbarModule, NgOptimizedImage, BrowserAnimationsModule, NgxSonnerToaster],
-  providers: [
-    provideAnimationsAsync()
-  ],
+  declarations: [AppComponent],
+  imports: [CoreModule, BrowserModule, RouterModule.forRoot(appRoutes), NgxSonnerToaster],
+  providers: [provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

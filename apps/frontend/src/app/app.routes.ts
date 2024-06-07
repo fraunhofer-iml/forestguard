@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { ContentLayoutComponent } from './layouts/content-layout/content-layout.component';
+import { ContentLayoutComponent } from './core/components/content-layout/content-layout.component';
 
 export const appRoutes: Route[] = [
   {
@@ -8,15 +8,16 @@ export const appRoutes: Route[] = [
     children: [
       {
         path: '',
-        redirectTo: 'overview',
+        redirectTo: 'batches',
         pathMatch: 'full',
       },
       {
         path: 'harvest',
-        loadChildren: () =>
-          import('./pages/harvest/harvest.module').then(
-            (m) => m.HarvestModule
-          ),
+        loadChildren: () => import('./features/harvest/harvest.module').then((m) => m.HarvestModule),
+      },
+      {
+        path: 'batches',
+        loadChildren: () => import('./features/batches/batches.module').then((m) => m.BatchesModule),
       },
       {
         path: 'overview',
