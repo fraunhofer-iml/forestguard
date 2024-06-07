@@ -1,7 +1,11 @@
-import { PlotOfLandCreateDto, PlotOfLandDto, PlotOfLandUpdateDto, proof1Mock, ProofDto } from '@forrest-guard/api-interfaces';
-import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { PlotOfLandCreateDto, PlotOfLandDto, PlotOfLandUpdateDto, ProofCreateDto, ProofDto } from '@forrest-guard/api-interfaces';
+import { Express } from 'express';
+import { Body, Controller, Get, Param, Patch, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBody, ApiConsumes, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PlotOfLandService } from './plot-of-land.service';
+import { ProofUploadDto } from './proof-upload.dto';
+import 'multer';
 
 @ApiTags('PlotOfLands')
 @Controller('pols')
@@ -36,17 +40,23 @@ export class PlotOfLandController {
     return this.plotOfLandService.updatePlotOfLand(plotOfLandUpdateDto, id);
   }
 
-  @Get(':polId/proofs')
-  @ApiOperation({ description: 'Get all proofs of a plot of land' })
-  @ApiOkResponse({ description: 'Successful request.' })
-  getProofs(@Param('polId') polId: string): ProofDto[] {
-    return [proof1Mock];
+  @Post(':id/proofs')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ description: 'Create a proof for a plot of land' })
+  @ApiBody({
+    description: 'The proof of the given plot of land. Either of type `PROOF_OF_FREEDOM` of `PROOF_OF_OWNERSHIP`.',
+    type: ProofUploadDto,
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiCreatedResponse({ description: 'Successful creation.' })
+  postProof(@Param('id') plotOfLandId: string, @Body() dto: ProofCreateDto, @UploadedFile() file: Express.Multer.File): Promise<ProofDto> {
+    return this.plotOfLandService.createProof(plotOfLandId, dto, file);
   }
 
-  @Post(':polId/proofs')
-  @ApiOperation({ description: 'Create a proof for a plot of land' })
-  @ApiCreatedResponse({ description: 'Successful creation.' })
-  createProofs(@Param('polId') polId: string, @Body() proofDto: ProofDto): ProofDto {
-    return proof1Mock;
+  @Get(':id/proofs')
+  @ApiOperation({ description: 'Get all proofs of a plot of land' })
+  @ApiOkResponse({ description: 'Successful request.' })
+  getProofsByPlotOfLandId(@Param('id') id: string): Promise<ProofDto[]> {
+    return this.plotOfLandService.readProofsByPlotOfLandId(id);
   }
 }

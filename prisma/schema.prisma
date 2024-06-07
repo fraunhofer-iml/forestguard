@@ -12,6 +12,11 @@ enum Role {
   EMPLOYEE
 }
 
+enum ProofType {
+  PROOF_OF_FREEDOM
+  PROOF_OF_OWNERSHIP
+}
+
 model Address {
   id         String @id @default(cuid())
   street     String
@@ -105,10 +110,10 @@ model Cultivation {
 }
 
 model Proof {
-  documentId  String @id
-  type        String
+  documentId  String    @id @default(cuid())
+  type        ProofType
   documentRef String
-  notice      String
+  notice      String?
 
   plotOfLand   PlotOfLand @relation(fields: [plotOfLandId], references: [id])
   plotOfLandId String

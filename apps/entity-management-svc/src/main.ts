@@ -31,7 +31,7 @@ async function bootstrap() {
 
   await app.listen().then(() =>
     Logger.log(
-      `🚀 Entity manager service is running with RMQ:
+      `🗂️ Entity Manager service is running with RMQ:
         ${amqpUri}:${AmqpClientEnum.QUEUE_ENTITY_MANAGEMENT}`
     )
   );

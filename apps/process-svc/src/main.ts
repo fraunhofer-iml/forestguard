@@ -31,7 +31,7 @@ async function bootstrap() {
 
   await app.listen().then(() =>
     Logger.log(
-      `🚀 Process service is running with RMQ:
+      `🔄 Process service is running with RMQ:
         ${amqpUri}:${AmqpClientEnum.QUEUE_PROCESS}`
     )
   );

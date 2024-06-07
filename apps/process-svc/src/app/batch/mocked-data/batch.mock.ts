@@ -1,6 +1,6 @@
 import { Process, Role } from '@prisma/client';
 import { BatchWithRelations } from '../batch.types';
-import { BatchCreateDto } from '@forrest-guard/api-interfaces';
+import { BatchCreateDto, ProofType } from '@forrest-guard/api-interfaces';
 
 export const mockedPrismaHarvestingProcess: Process = {
   id: 'ctest501',
@@ -63,7 +63,7 @@ export const mockedPrismaBatchWithRelations1: BatchWithRelations = {
       proofs: [
         {
           documentId: 'DOC123456',
-          type: 'Organic Certification',
+          type: ProofType.PROOF_OF_FREEDOM,
           documentRef: 'ORG123456',
           notice: 'This land is certified organic.',
           plotOfLandId: 'ctest401',
@@ -226,7 +226,7 @@ export const mockedPrismaBatchWithRelations2: BatchWithRelations = {
       proofs: [
         {
           documentId: 'DOC123456',
-          type: 'Organic Certification',
+          type: ProofType.PROOF_OF_FREEDOM,
           documentRef: 'ORG123456',
           notice: 'This land is certified organic.',
           plotOfLandId: 'ctest401',

@@ -67,7 +67,7 @@ const COMPANY_PRISMA_MOCK: CompanyWithRelations = {
           proofs: [
             {
               documentId: 'DOC123456',
-              type: 'Organic Certification',
+              type: 'PROOF_OF_FREEDOM',
               documentRef: 'ORG123456',
               notice: 'This land is certified organic.',
               plotOfLandId: 'ctest401',
@@ -136,7 +136,7 @@ const COMPANY_DTO_MOCK: CompanyDto = {
           proofs: [
             {
               documentId: 'DOC123456',
-              type: 'Organic Certification',
+              type: 'PROOF_OF_FREEDOM',
               documentRef: 'ORG123456',
               notice: 'This land is certified organic.',
             },

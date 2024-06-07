@@ -5,6 +5,8 @@ import { Inject, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class FileStorageService {
+  public readonly fileStorageUrl;
+
   private readonly bucketName;
 
   constructor(@Inject(MINIO_CONNECTION) private readonly client: Client, private readonly configurationService: ConfigurationService) {
@@ -14,6 +16,7 @@ export class FileStorageService {
       throw new Error('GeneralConfiguration is not defined.');
     }
 
+    this.fileStorageUrl = `http://${generalConfiguration.minio.endPoint}:${generalConfiguration.minio.port}/${generalConfiguration.minio.bucketName}`;
     this.bucketName = generalConfiguration.minio.bucketName;
   }
 
