@@ -35,7 +35,9 @@
       <span>Uploaded Files</span>
       <span class="ml-4">{{ lengthOfUploadedFiles() }}/{{ selectOptions?.length }}</span>
     </div>
-    <span class="material-symbols-outlined text-right border-gray-600 border-b-2 p-2"> pending </span>
+    <span class="material-symbols-outlined text-right border-gray-600 border-b-2 p-2">{{
+      lengthOfUploadedFiles() === selectOptions?.length ? 'check_circle' : 'pending'
+    }}</span>
     @for (option of selectOptions; track $index) {
     <div class="p-2 border-b border-gray-200">
       {{ option.key }}
