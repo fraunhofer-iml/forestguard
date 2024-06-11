@@ -1,14 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterModule } from '@angular/router';
 import { SidenavComponent } from './sidenav.component';
 
-describe('HeaderComponent', () => {
+describe('SidenavComponent', () => {
   let component: SidenavComponent;
   let fixture: ComponentFixture<SidenavComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [],
-      declarations: [SidenavComponent]
+      imports: [RouterModule.forRoot([])],
+      declarations: [SidenavComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SidenavComponent);

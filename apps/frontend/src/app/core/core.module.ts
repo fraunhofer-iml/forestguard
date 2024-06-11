@@ -8,5 +8,6 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
 @NgModule({
   declarations: [SidenavComponent, ContentLayoutComponent],
   imports: [CommonModule, RouterModule, NgOptimizedImage, BrowserAnimationsModule],
+  exports: [SidenavComponent, ContentLayoutComponent],
 })
 export class CoreModule {}

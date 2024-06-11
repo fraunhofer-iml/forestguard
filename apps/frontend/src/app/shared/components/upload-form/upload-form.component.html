@@ -1,0 +1,48 @@
+<div class="card">
+  <h1 class="font-semibold text-gray-700 pb-4">{{ title || 'Upload' }}</h1>
+  <form [formGroup]="formGroup">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label class="w-full">Document Type</mat-label>
+      <mat-select formControlName="documentType" placeholder="Select Document Type" class="w-full !border-none">
+        <mat-option *ngFor="let option of selectOptions" [value]="option.value">
+          {{ option.key }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="flex items-center justify-center w-full">
+      <label
+        for="dropzone-file"
+        class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 hover:bg-gray-100"
+      >
+        <div class="flex flex-col items-center justify-center pt-5 pb-6" *ngIf="!formGroup.value.file">
+          <span class="material-symbols-outlined text-gray-500 text-4xl"> cloud_upload </span>
+          <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+          <p class="text-xs text-gray-500">PNG, JPG, PDF</p>
+        </div>
+        <div class="flex flex-col items-center justify-center pt-5 pb-6" *ngIf="formGroup.value.file">
+          <span class="material-symbols-outlined text-green-500 text-4xl"> check_circle</span>
+          <span class="mb-2 text-sm text-gray-500 font-semibold">{{ formGroup.value.file.name }}</span>
+        </div>
+        <input id="dropzone-file" type="file" class="hidden" (change)="onFileSelected($event)" />
+      </label>
+    </div>
+    <button mat-flat-button class="mt-4" [disabled]="!formGroup.valid" (click)="submitDocument()">Upload</button>
+  </form>
+</div>
+<div class="card mt-4">
+  <div class="grid grid-cols-2">
+    <div class="border-gray-600 border-b-2 p-2">
+      <span>Uploaded Files</span>
+      <span class="ml-4">{{ lengthOfUploadedFiles() }}/{{ selectOptions?.length }}</span>
+    </div>
+    <span class="material-symbols-outlined text-right border-gray-600 border-b-2 p-2"> pending </span>
+    @for (option of selectOptions; track $index) {
+    <div class="p-2 border-b border-gray-200">
+      {{ option.key }}
+    </div>
+    <span class="material-symbols-outlined text-right p-2 border-b border-gray-200" [ngClass]="{ 'text-green-600': option.file }">
+      {{ option.file ? 'check_circle' : 'pending' }}
+    </span>
+    }
+  </div>
+</div>

@@ -55,7 +55,7 @@ describe('ProofService', () => {
       notice: '',
     };
     const givenFile: Express.Multer.File = {
-      originalname: 'proof.pdf',
+      originalname: '1-1-1-1-1.pdf',
       buffer: Buffer.of(1),
       fieldname: '',
       encoding: '',
@@ -70,6 +70,7 @@ describe('ProofService', () => {
 
     jest.spyOn(fileStorageService, 'uploadFile').mockResolvedValue(null);
     jest.spyOn(prismaService.proof, 'create').mockResolvedValue(expectedResult);
+    jest.spyOn(crypto, 'randomUUID').mockReturnValue('1-1-1-1-1');
 
     const actualResult = await proofService.createProof(givenPlotOfLandId, givenDto, givenFile);
 

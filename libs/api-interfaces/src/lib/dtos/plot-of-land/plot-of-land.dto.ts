@@ -2,7 +2,7 @@ import { CultivationDto } from './cultivation.dto';
 import { ProofDto } from './proof.dto';
 
 export class PlotOfLandDto {
-  id?: string;
+  id: string;
   country?: string;
   region?: string;
   district?: string;
@@ -15,7 +15,7 @@ export class PlotOfLandDto {
   proofs?: ProofDto[];
 
   constructor(
-    id?: string,
+    id: string,
     country?: string,
     region?: string,
     district?: string,

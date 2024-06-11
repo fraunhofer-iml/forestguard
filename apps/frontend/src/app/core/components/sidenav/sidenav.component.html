@@ -10,17 +10,18 @@
       <li>
         <a
           routerLink="/batches"
+          [routerLinkActiveOptions]="{ exact: true }"
           routerLinkActive="bg-secondary-800 hover:bg-secondary-800"
           class="flex flex-row items-center gap-2 px-4 cursor-pointer py-2 rounded-xl hover:bg-secondary-400/25"
         >
           <span class="material-symbols-outlined">home</span>
-          Overview
+          Batches
         </a>
       </li>
       <li>
         <a
-          routerLink="/harvest"
-          routerLinkActive="bg-secondary-700 hover:bg-secondary-700"
+          routerLink="/batches/harvest"
+          routerLinkActive="bg-secondary-800 hover:bg-secondary-800"
           class="flex flex-row items-center gap-2 px-4 cursor-pointer py-2 rounded-xl hover:bg-secondary-400/25"
         >
           <span class="material-symbols-outlined">add_circle</span>

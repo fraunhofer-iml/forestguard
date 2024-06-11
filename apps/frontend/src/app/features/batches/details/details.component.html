@@ -1,6 +1,7 @@
-<header class="font-semibold pb-5 flex flex-row gap-4 text-neutral-300 items-center">
-  <a class="material-symbols-outlined cursor-pointer" routerLink="/batches"> chevron_left </a>
-  <h1 class="font-medium">Batch Details {{ id$ | async }}</h1>
+<header class="font-semibold pb-4 flex flex-row gap-2 text-neutral-300 items-center">
+  <a routerLink="/batches" class="font-semibold text-gray-700 hover:underline">Batches</a>
+  <span class="material-symbols-outlined text-lg"> chevron_right </span>
+  <h1 class="font-medium">{{ id$ | async }}</h1>
 </header>
 
 <div *ngIf="batch$ | async as batch">
@@ -39,23 +40,50 @@
       <div class="h-full flex items-center justify-start w-full">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center w-full justify-center">
           <div>Proof of Freedom from deforestation</div>
-          <div class="space-x-4 flex flex-row select-none w-full justify-end">
+          <div
+            class="space-x-4 flex flex-row select-none w-full justify-end"
+            *ngIf="getProof(ProofType.PROOF_OF_FREEDOM, batch.processStep.farmedLand?.proofs) as proof; else notUploaded"
+          >
             <div class="p-1 h-10 w-10 rounded-full bg-green-600 flex items-center justify-center">
               <span class="material-symbols-outlined text-white"> done </span>
             </div>
             <div class="p-1 h-10 w-10 rounded-full hover:bg-gray-200 flex items-center justify-center cursor-pointer">
-              <span class="material-symbols-outlined"> file_download </span>
+              <a class="material-symbols-outlined" [href]="MINIO_URL + proof.documentRef"> file_download </a>
             </div>
           </div>
+          <ng-template #notUploaded>
+            <div class="space-x-4 flex flex-row select-none w-full justify-end">
+              <div class="p-1 h-10 w-10 rounded-full bg-orange-500 flex items-center justify-center">
+                <span class="material-symbols-outlined text-white"> warning </span>
+              </div>
+              <div class="p-1 h-10 w-10 rounded-full hover:bg-gray-200 flex items-center justify-center cursor-not-allowed">
+                <span class="material-symbols-outlined text-gray-300"> file_download </span>
+              </div>
+            </div>
+          </ng-template>
+
           <div>Proof of Ownership for plot of land</div>
-          <div class="space-x-4 flex flex-row select-none w-full justify-end">
-            <div class="p-1 h-10 w-10 rounded-full bg-orange-500 flex items-center justify-center">
-              <span class="material-symbols-outlined text-white"> warning </span>
+          <div
+            class="space-x-4 flex flex-row select-none w-full justify-end"
+            *ngIf="getProof(ProofType.PROOF_OF_OWNERSHIP, batch.processStep.farmedLand?.proofs) as proof; else notUploaded"
+          >
+            <div class="p-1 h-10 w-10 rounded-full bg-green-600 flex items-center justify-center">
+              <span class="material-symbols-outlined text-white"> done </span>
             </div>
-            <div class="p-1 h-10 w-10 rounded-full hover:bg-gray-200 flex items-center justify-center cursor-not-allowed">
-              <span class="material-symbols-outlined text-gray-300"> file_download </span>
+            <div class="p-1 h-10 w-10 rounded-full hover:bg-gray-200 flex items-center justify-center cursor-pointer">
+              <a class="material-symbols-outlined" [href]="MINIO_URL + proof.documentRef"> file_download </a>
             </div>
           </div>
+          <ng-template #notUploaded>
+            <div class="space-x-4 flex flex-row select-none w-full justify-end">
+              <div class="p-1 h-10 w-10 rounded-full bg-orange-500 flex items-center justify-center">
+                <span class="material-symbols-outlined text-white"> warning </span>
+              </div>
+              <div class="p-1 h-10 w-10 rounded-full hover:bg-gray-200 flex items-center justify-center cursor-not-allowed">
+                <span class="material-symbols-outlined text-gray-300"> file_download </span>
+              </div>
+            </div>
+          </ng-template>
         </div>
       </div>
     </div>

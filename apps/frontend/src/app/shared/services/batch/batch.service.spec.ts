@@ -79,7 +79,6 @@ describe('BatchService', (): void => {
           role: 'EMPLOYEE',
           mobilePhoneNumber: '+5114841700',
         },
-        farmedLand: {},
       },
     };
   });

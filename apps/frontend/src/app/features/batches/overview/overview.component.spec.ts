@@ -56,6 +56,7 @@ const MOCK_BATCH: BatchDto = {
     },
     location: 'test',
     farmedLand: {
+      id: 'test',
       description: 'test',
     },
     recordedBy: {

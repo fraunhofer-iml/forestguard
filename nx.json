@@ -64,6 +64,9 @@
       "release-version": {
         "packageRoot": "."
       }
+    },
+    "@nx/angular:component": {
+      "style": "css"
     }
   },
   "release": {

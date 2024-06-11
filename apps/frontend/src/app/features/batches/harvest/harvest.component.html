@@ -1,0 +1,52 @@
+<header class="font-semibold pb-4 flex flex-row gap-2 text-neutral-300 items-center">
+  <a routerLink="/batches" class="font-semibold text-gray-700 hover:underline">Batches</a>
+  <span class="material-symbols-outlined text-lg"> chevron_right </span>
+  <h1 class="font-medium">Add Harvest</h1>
+</header>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div class="card">
+    <h1 class="font-semibold text-gray-700 pb-4">Harvest Details</h1>
+    <form [formGroup]="harvestFormGroup">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label class="w-full">Process Owner (Farmer)</mat-label>
+        <mat-select formControlName="processOwner" placeholder="Process Owner (Farmer)" class="w-full !border-none">
+          <mat-option *ngFor="let farmer of farmers$ | async" [value]="farmer.id">
+            {{ farmer.lastName }}, {{ farmer.firstName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Weight</mat-label>
+        <input matInput type="number" formControlName="weight" placeholder="Weight" />
+      </mat-form-field>
+
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Date</mat-label>
+        <input matInput formControlName="date" [matDatepicker]="picker" />
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Plot of Land</mat-label>
+        <input matInput formControlName="plotOfLand" placeholder="Plot of Land" />
+      </mat-form-field>
+
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Author of Entry</mat-label>
+        <mat-select formControlName="authorOfEntry" placeholder="Author of Entry">
+          <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }} </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </div>
+  <app-upload-form [selectOptions]="uploadSelectOption" [title]="'Upload Proofs'" (uploadDocument)="submitFile($event)" />
+</div>
+
+<div class="card mt-4">
+  <div class="inline-flex justify-end gap-4 w-full">
+    <button mat-button [disabled]="loading" (click)="clearInputFields()">Clear</button>
+    <button mat-flat-button [disabled]="loading" (click)="submitHarvest()">{{ loading ? 'Saving...' : 'Save' }}</button>
+  </div>
+</div>

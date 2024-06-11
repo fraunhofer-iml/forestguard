@@ -1,4 +1,4 @@
-import { ProofCreateDto, ProofType } from '@forrest-guard/api-interfaces';
+import { ProofCreateDto } from '@forrest-guard/api-interfaces';
 import { PrismaService } from '@forrest-guard/database';
 import { FileStorageService } from '@forrest-guard/file-storage';
 import { Express } from 'express';
@@ -11,12 +11,15 @@ export class ProofService {
   constructor(private readonly prismaService: PrismaService, private readonly fileStorageService: FileStorageService) {}
 
   async createProof(plotOfLandId: string, proofCreateDto: ProofCreateDto, file: Express.Multer.File): Promise<Proof> {
-    await this.fileStorageService.uploadFile(file.originalname, Buffer.from(file.buffer));
+    const id = crypto.randomUUID();
+    const typeEnding = file.originalname.split('.').pop();
+    const fileName = `${id}.${typeEnding}`;
+    await this.fileStorageService.uploadFile(fileName, Buffer.from(file.buffer));
 
     return this.prismaService.proof.create({
       data: {
         type: proofCreateDto.type,
-        documentRef: file.originalname,
+        documentRef: fileName,
         notice: null,
         plotOfLand: {
           connect: {

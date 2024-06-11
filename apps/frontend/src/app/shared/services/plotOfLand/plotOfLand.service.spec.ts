@@ -1,9 +1,8 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpClient, HttpHandler } from "@angular/common/http";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-
-import { PlotOfLandService } from './plotOfLand.service';
 import { PlotOfLandCreateDto, PlotOfLandDto, PlotOfLandUpdateDto, ProofDto } from '@forrest-guard/api-interfaces';
+import { HttpClient, HttpHandler } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { PlotOfLandService } from './plotOfLand.service';
 
 describe('PlotOfLandService', (): void => {
   let service: PlotOfLandService;
@@ -15,11 +14,7 @@ describe('PlotOfLandService', (): void => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [
-        PlotOfLandService,
-        HttpClient,
-        HttpHandler
-      ],
+      providers: [PlotOfLandService, HttpClient, HttpHandler],
       imports: [HttpClientTestingModule],
     }).compileComponents();
 
@@ -32,15 +27,17 @@ describe('PlotOfLandService', (): void => {
       localPlotOfLandId: 'l1',
       description: 'Lorem ipsum dolor sit amet.',
       polygonData: '[{ lat: -32.364, lng: 153.207 }]',
-      areaInHA: 1
-    }
+      areaInHA: 1,
+    };
 
-    proofsMock = [{
-      documentId: 'aa7dc794-5d99-4758-be05-a813a28d0124',
-      type: 'ownership',
-      documentRef: '/ownership/1',
-      notice: 'notice'
-    }];
+    proofsMock = [
+      {
+        documentId: 'aa7dc794-5d99-4758-be05-a813a28d0124',
+        type: 'ownership',
+        documentRef: '/ownership/1',
+        notice: 'notice',
+      },
+    ];
 
     plotOfLandMock = {
       id: '53252ae9-fb8e-4a19-8f03-ed6ed5977501',
@@ -55,34 +52,36 @@ describe('PlotOfLandService', (): void => {
       cultivatedWith: {
         id: '4f7afc7e-2795-4548-bf45-8217a23ef6b2',
         type: 'coffee',
-        sort: 'arabica'
+        sort: 'arabica',
       },
       proofs: [
         {
           documentId: 'aa7dc794-5d99-4758-be05-a813a28d0124',
           type: 'ownership',
           documentRef: '/ownership/1',
-          notice: 'notice'
-        }
-      ]
-    }
-    proofsMock = [{
-      documentId: 'aa7dc794-5d99-4758-be05-a813a28d0124',
-      type: 'ownership',
-      documentRef: '/ownership/1',
-      notice: 'notice'
-    }];
+          notice: 'notice',
+        },
+      ],
+    };
+    proofsMock = [
+      {
+        documentId: 'aa7dc794-5d99-4758-be05-a813a28d0124',
+        type: 'ownership',
+        documentRef: '/ownership/1',
+        notice: 'notice',
+      },
+    ];
 
     proofMock = {
       documentId: 'aa7dc794-5d99-4758-be05-a813a28d0124',
       type: 'ownership',
       documentRef: '/ownership/1',
-      notice: 'notice'
-    }
+      notice: 'notice',
+    };
 
     plotOfLandUpdateMock = {
-      cultivatedWith: 'string'
-    }
+      cultivatedWith: 'string',
+    };
   });
 
   it('should create', (): void => {
@@ -91,35 +90,38 @@ describe('PlotOfLandService', (): void => {
 
   it('should create a plotOfLand', () => {
     const farmerId = '53252ae9-fb8e-4a19-8f03-ed6ed5977501';
-    service.createPlotOfLand(farmerId, plotOfLandCreateMock).subscribe(res => {
+    service.createPlotOfLand(farmerId, plotOfLandCreateMock).subscribe((res) => {
       expect(res).toEqual(plotOfLandMock);
     });
   });
 
   it('should get plotOfLand by id', () => {
     const plotOfLandId = '53252ae9-fb8e-4a19-8f03-ed6ed5977501';
-    service.getPlotOfLandById(plotOfLandId).subscribe(res => {
+    service.getPlotOfLandById(plotOfLandId).subscribe((res) => {
       expect(res).toEqual(plotOfLandMock);
     });
   });
 
   it('should get proofs', () => {
     const polId = 'aa7dc794-5d99-4758-be05-a813a28d0124';
-    service.getProofsOfPlotOfLand(polId).subscribe(res => {
+    service.getProofsOfPlotOfLand(polId).subscribe((res) => {
       expect(res).toEqual(proofsMock);
     });
   });
 
   it('should update a plotOfLand', () => {
     const id = '53252ae9-fb8e-4a19-8f03-ed6ed5977501';
-    service.updatePlotOfLand(id, plotOfLandCreateMock).subscribe(res => {
+    service.updatePlotOfLand(id, plotOfLandCreateMock).subscribe((res) => {
       expect(res).toEqual(plotOfLandUpdateMock);
     });
   });
 
   it('should create a proof', () => {
     const id = '53252ae9-fb8e-4a19-8f03-ed6ed5977501';
-    service.createProof(id, proofMock).subscribe(res => {
+    const formData = new FormData();
+    formData.append('file', new Blob());
+    formData.append('type', proofMock.type);
+    service.createProof(id, formData).subscribe((res) => {
       expect(res).toEqual(proofMock);
     });
   });

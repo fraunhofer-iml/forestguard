@@ -23,4 +23,7 @@ export const environment = {
   USERS: {
     URL: `${BASE_URL}/users`,
   },
+  MINIO: {
+    URL: 'http://153.97.12.226:9000/forest-guard/',
+  },
 };
