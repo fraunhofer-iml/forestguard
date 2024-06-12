@@ -13,6 +13,11 @@ export class BatchController {
     return this.batchService.createHarvests(batchCreateDtos);
   }
 
+  @MessagePattern(BatchMessagePatterns.CREATE)
+  async createBatches(@Payload() batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
+    return this.batchService.createBatches(batchCreateDtos);
+  }
+
   @MessagePattern(BatchMessagePatterns.READ_BY_ID)
   async readBatchById(@Payload() payload: { id: string }): Promise<BatchDto> {
     return this.batchService.readBatchById(payload.id);

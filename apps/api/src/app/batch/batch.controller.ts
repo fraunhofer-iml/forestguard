@@ -1,25 +1,19 @@
 import { Body, Controller, Get, HttpStatus, Param, Post } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import {
-  BatchCreateDto,
-  BatchDto,
-  process1Mock,
-  processDisplay1Mock,
-  ProcessDisplayDto,
-  ProcessDto,
-} from '@forrest-guard/api-interfaces';
+import { BatchCreateDto, BatchDto, processDisplay1Mock, ProcessDisplayDto } from '@forrest-guard/api-interfaces';
 import { BatchService } from './batch.service';
 
 @ApiTags('Batches')
 @Controller('batches')
 export class BatchController {
-  constructor(private readonly batchService: BatchService) {}
+  constructor(private readonly batchService: BatchService) {
+  }
 
   @Post()
   @ApiOperation({ description: 'Create coffee batches' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
-  createBatches(@Body() batchCreateDtos: BatchCreateDto[]): ProcessDto {
-    return process1Mock;
+  createBatches(@Body() batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
+    return this.batchService.createBatches((batchCreateDtos));
   }
 
   @Post('harvests')

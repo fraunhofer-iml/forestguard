@@ -1,11 +1,6 @@
-import { Process, Role } from '@prisma/client';
+import { Role } from '@prisma/client';
 import { BatchWithRelations } from '../batch.types';
 import { BatchCreateDto, ProofType } from '@forrest-guard/api-interfaces';
-
-export const mockedPrismaHarvestingProcess: Process = {
-  id: 'ctest501',
-  name: 'Harvesting',
-};
 
 export const mockedCreateBatchDtos: BatchCreateDto[] = [
   {

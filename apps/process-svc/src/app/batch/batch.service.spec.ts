@@ -4,7 +4,6 @@ import {
   mockedCreateBatchDtos,
   mockedPrismaBatchWithRelations1,
   mockedPrismaBatchWithRelations2,
-  mockedPrismaHarvestingProcess,
 } from './mocked-data/batch.mock';
 import { Test, TestingModule } from '@nestjs/testing';
 import { BatchService } from './batch.service';
@@ -22,11 +21,9 @@ describe('BatchService', () => {
         {
           provide: PrismaService,
           useValue: {
-            process: {
-              findUnique: jest.fn(),
-            },
             batch: {
               create: jest.fn(),
+              updateMany: jest.fn(),
               findUniqueOrThrow: jest.fn(),
               findMany: jest.fn(),
             },
@@ -45,7 +42,6 @@ describe('BatchService', () => {
 
   it('should create one harvest batch', async () => {
 
-    jest.spyOn(prisma.process, 'findUnique').mockResolvedValue(mockedPrismaHarvestingProcess);
     jest.spyOn(prisma.batch, 'create').mockImplementation();
     await service.createHarvests(mockedCreateBatchDtos);
 
@@ -53,6 +49,29 @@ describe('BatchService', () => {
 
     jest.spyOn(prisma.batch, 'create').mockRejectedValue(new Error('Error'));
     await expect(service.createHarvests(mockedCreateBatchDtos)).rejects.toThrow();
+  });
+
+  it('should create one batch and connect it to an existing one', async () => {
+    const mockedCreateBatchDtosWithLinks = mockedCreateBatchDtos.slice();
+    const links = ['l1', 'l2', 'l3'];
+    mockedCreateBatchDtosWithLinks[0].in = links;
+
+    jest.spyOn(prisma.batch, 'create').mockImplementation();
+    jest.spyOn(prisma.batch, 'updateMany').mockImplementation();
+    await service.createBatches(mockedCreateBatchDtosWithLinks);
+
+    expect(prisma.batch.create).toHaveBeenCalledTimes(mockedCreateBatchDtosWithLinks.length);
+    expect(prisma.batch.updateMany).toHaveBeenCalledWith({
+      where: {
+        id: { in: links },
+      },
+      data: {
+        active: false,
+      },
+    });
+
+    jest.spyOn(prisma.batch, 'create').mockRejectedValue(new Error('Error'));
+    await expect(service.createHarvests(mockedCreateBatchDtosWithLinks)).rejects.toThrow();
   });
 
   it('should return a valid BatchDto', async () => {

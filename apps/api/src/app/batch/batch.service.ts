@@ -12,6 +12,10 @@ export class BatchService {
     return firstValueFrom(this.processService.send(BatchMessagePatterns.CREATE_HARVESTS, batchCreateDtos));
   }
 
+  createBatches(batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
+    return firstValueFrom(this.processService.send(BatchMessagePatterns.CREATE, batchCreateDtos));
+  }
+
   readBatch(id: string): Promise<BatchDto> {
     return firstValueFrom(this.processService.send(BatchMessagePatterns.READ_BY_ID, { id }));
   }
