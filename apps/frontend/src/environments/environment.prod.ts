@@ -24,6 +24,6 @@ export const environment = {
     URL: `${BASE_URL}/users`,
   },
   MINIO: {
-    URL: 'http://153.97.12.226:9000/forest-guard/',
+    URL: 'https://minioo.public.blockchain-europe.iml.fraunhofer.de/forest-guard/',
   },
 };
