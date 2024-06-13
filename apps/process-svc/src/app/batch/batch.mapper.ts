@@ -1,5 +1,6 @@
-import { BatchDto } from '@forrest-guard/api-interfaces';
+import { BatchDto, CoffeeBatch, Edge, ProcessDisplayDto } from '@forrest-guard/api-interfaces';
 import { BatchWithRelations } from './batch.types';
+import { Batch, BatchRelation } from '@prisma/client';
 
 export const mapBatchPrismaToBatchDto = (batch: BatchWithRelations): BatchDto => {
   return {
@@ -12,5 +13,30 @@ export const mapBatchPrismaToBatchDto = (batch: BatchWithRelations): BatchDto =>
     recipient: {
       ...(batch.recipient.user ?? batch.recipient.company),
     },
+  };
+};
+
+export const mapToProcessDisplayDto = (batchRelations: BatchRelation[], batches: Batch[]): ProcessDisplayDto => {
+  return {
+    coffeeBatches: batches.map(mapBatchToCoffeeBatch),
+    edges: batchRelations.map(mapBatchRelationToEdge),
+  };
+};
+
+export const mapBatchToCoffeeBatch = (batch: Batch): CoffeeBatch => {
+  const { id, weight, recipientId, processStepId } = batch;
+  return {
+    id: id,
+    weight: weight,
+    recipient: recipientId,
+    processStep: processStepId,
+  };
+};
+
+export const mapBatchRelationToEdge = (batchRelation: BatchRelation): Edge => {
+  const { inId, outId } = batchRelation;
+  return {
+    from: inId,
+    to: outId,
   };
 };

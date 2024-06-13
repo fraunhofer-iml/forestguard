@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpStatus, Param, Post } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { BatchCreateDto, BatchDto, processDisplay1Mock, ProcessDisplayDto } from '@forrest-guard/api-interfaces';
+import { BatchCreateDto, BatchDto, ProcessDisplayDto } from '@forrest-guard/api-interfaces';
 import { BatchService } from './batch.service';
 
 @ApiTags('Batches')
@@ -33,7 +33,7 @@ export class BatchController {
   @Get(':id/related')
   @ApiOperation({ description: 'Get all coffee batches that are related to the coffee batch' })
   @ApiOkResponse({ description: 'Successful request.' })
-  getRelatedBatches(@Param('id') id: string): ProcessDisplayDto {
-    return processDisplay1Mock;
+  getRelatedBatches(@Param('id') id: string): Promise<ProcessDisplayDto> {
+    return this.batchService.getRelatedBatches(id);
   }
 }

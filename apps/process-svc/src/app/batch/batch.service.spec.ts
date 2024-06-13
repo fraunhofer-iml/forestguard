@@ -2,6 +2,7 @@ import { PrismaService } from '@forrest-guard/database';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import {
   mockedCreateBatchDtos,
+  mockedPrismaBatchRelations,
   mockedPrismaBatchWithRelations1,
   mockedPrismaBatchWithRelations2,
 } from './mocked-data/batch.mock';
@@ -9,6 +10,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BatchService } from './batch.service';
 import { BatchDto } from '@forrest-guard/api-interfaces';
 import { BatchWithRelations } from './batch.types';
+import { mapBatchRelationToEdge, mapBatchToCoffeeBatch } from './batch.mapper';
 
 describe('BatchService', () => {
   let service: BatchService;
@@ -25,6 +27,9 @@ describe('BatchService', () => {
               create: jest.fn(),
               updateMany: jest.fn(),
               findUniqueOrThrow: jest.fn(),
+              findMany: jest.fn(),
+            },
+            batchRelation: {
               findMany: jest.fn(),
             },
           },
@@ -107,6 +112,24 @@ describe('BatchService', () => {
     expectResultEntitiesToBeDtoUsers(result[0], mockBatches[0]);
     expectResultToBeBatchDto(result[1], mockBatches[1]);
     expectResultEntitiesToBeDtoCompanies(result[1], mockBatches[1]);
+  });
+
+  it('should read all related batches by batch ID', async () => {
+    const testBatchId = 'testBatchId';
+    const mockBatches = [mockedPrismaBatchWithRelations1, mockedPrismaBatchWithRelations2];
+
+    jest.spyOn(prisma.batchRelation, 'findMany').mockResolvedValue([]).mockResolvedValueOnce(mockedPrismaBatchRelations);
+    jest.spyOn(prisma.batch, 'findMany').mockResolvedValue(mockBatches);
+
+    const result = await service.readRelatedBatchesById(testBatchId);
+
+    expect(prisma.batchRelation.findMany).toHaveBeenCalledWith({
+      where: {
+        inId: testBatchId,
+      },
+    });
+    expect(result.coffeeBatches).toStrictEqual(mockBatches.map(mapBatchToCoffeeBatch));
+    expect(result.edges).toStrictEqual(mockedPrismaBatchRelations.map(mapBatchRelationToEdge));
   });
 });
 
