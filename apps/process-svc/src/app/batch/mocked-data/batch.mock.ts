@@ -1,14 +1,8 @@
-import { BatchRelation, Process, Role } from '@prisma/client';
+import { BatchRelation, Role } from '@prisma/client';
 import { BatchWithRelations } from '../batch.types';
 import { BatchCreateDto, ProofType } from '@forrest-guard/api-interfaces';
 
-export const mockedPrismaHarvestingProcess: Process = {
-  id: 'ctest501',
-  name: 'Harvesting',
-};
-
-export const mockedCreateBatchDtos: BatchCreateDto[] = [
-  {
+export const mockedCreateBatchDto: BatchCreateDto = {
     idEUInfoSystem: null,
     in: [],
     weight: 33,
@@ -21,8 +15,7 @@ export const mockedCreateBatchDtos: BatchCreateDto[] = [
       executedBy: 'ctest101',
       harvestedLand: 'ctest401',
     },
-  },
-];
+  };
 
 export const mockedPrismaBatchWithRelations1: BatchWithRelations = {
   id: '1',
@@ -289,15 +282,15 @@ export const mockedPrismaBatchWithRelations2: BatchWithRelations = {
 
 export const mockedPrismaBatchRelations: BatchRelation[] = [
   {
-    inId: "clx4fzcrh00001z7u086f78oj",
-    outId: "clxa4gnuw00005nam96my7yw8"
+    inId: 'clx4fzcrh00001z7u086f78oj',
+    outId: 'clxa4gnuw00005nam96my7yw8',
   },
   {
-    inId: "clx3c5o7i0002127ulhkouwlh",
-    outId: "clxa4gnuw00005nam96my7yw8"
+    inId: 'clx3c5o7i0002127ulhkouwlh',
+    outId: 'clxa4gnuw00005nam96my7yw8',
   },
   {
-    inId: "clx3c4n2p0000127u45e6nlgu",
-    outId: "clxa4gnuw00005nam96my7yw8"
-  }
-]
+    inId: 'clx3c4n2p0000127u45e6nlgu',
+    outId: 'clxa4gnuw00005nam96my7yw8',
+  },
+];

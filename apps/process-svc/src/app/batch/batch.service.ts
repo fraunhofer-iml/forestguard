@@ -2,21 +2,21 @@ import { BatchCreateDto, BatchDto, ProcessDisplayDto } from '@forrest-guard/api-
 import { PrismaService } from '@forrest-guard/database';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
-import { batchQuery, createBatchQuery, readBatchByIdQuery, readCoffeeBatchesByCompanyIdQuery } from './batch.queries';
-import { BatchRelation } from '@prisma/client';
+import { Batch, BatchRelation } from '@prisma/client';
 import { mapBatchPrismaToBatchDto, mapToProcessDisplayDto } from './batch.mapper';
+import { batchQuery, createBatchQuery, readBatchByIdQuery, readCoffeeBatchesByCompanyIdQuery } from './batch.queries';
 
-enum SearchDirection{
+enum SearchDirection {
   PREVIOUS_BATCHES,
-  FORTHCOMING_BATCHES
+  FORTHCOMING_BATCHES,
 }
 
 function batchRelationToIdMapper(searchDirection: SearchDirection) {
   switch (searchDirection) {
     case SearchDirection.PREVIOUS_BATCHES:
-      return ({inId}) => inId;
+      return ({ inId }) => inId;
     case SearchDirection.FORTHCOMING_BATCHES:
-      return ({outId}) => outId;
+      return ({ outId }) => outId;
   }
 }
 
@@ -30,23 +30,32 @@ function filterProperty(id: string, searchDirection: SearchDirection) {
       return {
         inId: id,
       };
-      }
+  }
 }
 
 @Injectable()
 export class BatchService {
-  constructor(private readonly prismaService: PrismaService) {
-  }
+  constructor(private readonly prismaService: PrismaService) {}
 
   async createHarvests(batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
+    if (batchCreateDtos.length === 0) {
+      return HttpStatus.NO_CONTENT;
+    }
+    const batches: Batch[] = [];
     for (const dto of batchCreateDtos) {
       dto.processStep.process = 'Harvesting';
-      await this.createHarvest(dto);
+      batches.push(await this.createHarvest(dto));
+    }
+    if (batchCreateDtos.length > 1) {
+      await this.mergeIntoOneHarvestBatch(batchCreateDtos, batches);
     }
     return HttpStatus.CREATED;
   }
 
   async createBatches(batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
+    if (batchCreateDtos.length === 0) {
+      return HttpStatus.NO_CONTENT;
+    }
     for (const dto of batchCreateDtos) {
       await this.createBatch(dto);
     }
@@ -79,15 +88,14 @@ export class BatchService {
     let batchRelationsLength: number;
     do {
       batchRelationsLength = batchRelations.length;
-      nextLevelBatchRelations = await this.getImmediatelyBatchRelations(nextLevelBatchIds, searchDirection);
+      nextLevelBatchRelations = await this.getDirectBatchRelations(nextLevelBatchIds, searchDirection);
       nextLevelBatchIds = nextLevelBatchRelations.map(batchRelationToIdMapper(searchDirection));
       batchRelations.push(...nextLevelBatchRelations);
-    }
-    while (batchRelations.length > batchRelationsLength);
+    } while (batchRelations.length > batchRelationsLength);
     return batchRelations;
   }
 
-  private async getImmediatelyBatchRelations(batchIds: string[], searchDirection: SearchDirection): Promise<BatchRelation[]> {
+  private async getDirectBatchRelations(batchIds: string[], searchDirection: SearchDirection): Promise<BatchRelation[]> {
     const batchRelations: BatchRelation[] = [];
     for (const batchId of batchIds) {
       batchRelations.push(...(await this.findBatchRelations(batchId, searchDirection)));
@@ -95,9 +103,9 @@ export class BatchService {
     return batchRelations;
   }
 
-  private async createHarvest(dto: BatchCreateDto) {
+  private async createHarvest(dto: BatchCreateDto): Promise<Batch> {
     try {
-      await this.prismaService.batch.create({
+      return await this.prismaService.batch.create({
         data: batchQuery(dto),
       });
     } catch (e) {
@@ -108,12 +116,21 @@ export class BatchService {
     }
   }
 
-  private async createBatch(dto: BatchCreateDto) {
+  private async mergeIntoOneHarvestBatch(batchCreateDtos: BatchCreateDto[], batches: Batch[]) {
+    const mergeBatchCreateDto = structuredClone(batchCreateDtos[0]); // all batches are identical
+    mergeBatchCreateDto.in = batches.map(batch => batch.id);
+    mergeBatchCreateDto.weight = batches.reduce((total, batch) => total + batch.weight, 0);
+    mergeBatchCreateDto.processStep.harvestedLand = undefined;
+    await this.createBatch(mergeBatchCreateDto);
+  }
+
+  private async createBatch(dto: BatchCreateDto): Promise<Batch> {
     try {
-      await this.prismaService.batch.create({
+      const batch = await this.prismaService.batch.create({
         data: createBatchQuery(dto),
       });
       await this.setBatchesInactive(dto);
+      return batch;
     } catch (e) {
       throw new RpcException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -135,7 +152,7 @@ export class BatchService {
 
   private findBatchRelations(id: string, searchDirection: SearchDirection) {
     return this.prismaService.batchRelation.findMany({
-      where: filterProperty(id, searchDirection)
+      where: filterProperty(id, searchDirection),
     });
   }
 
@@ -147,5 +164,4 @@ export class BatchService {
       },
     });
   }
-
 }

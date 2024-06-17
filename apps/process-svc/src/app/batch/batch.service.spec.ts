@@ -1,7 +1,7 @@
 import { PrismaService } from '@forrest-guard/database';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import {
-  mockedCreateBatchDtos,
+  mockedCreateBatchDto,
   mockedPrismaBatchRelations,
   mockedPrismaBatchWithRelations1,
   mockedPrismaBatchWithRelations2,
@@ -46,18 +46,26 @@ describe('BatchService', () => {
   });
 
   it('should create one harvest batch', async () => {
+    const createBatchDtos = [mockedCreateBatchDto];
+    jest.spyOn(prisma.batch, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1);
 
-    jest.spyOn(prisma.batch, 'create').mockImplementation();
-    await service.createHarvests(mockedCreateBatchDtos);
-
-    expect(prisma.batch.create).toHaveBeenCalledTimes(mockedCreateBatchDtos.length);
+    await service.createHarvests(createBatchDtos);
+    expect(prisma.batch.create).toHaveBeenCalledTimes(createBatchDtos.length);
 
     jest.spyOn(prisma.batch, 'create').mockRejectedValue(new Error('Error'));
-    await expect(service.createHarvests(mockedCreateBatchDtos)).rejects.toThrow();
+    await expect(service.createHarvests(createBatchDtos)).rejects.toThrow();
+  });
+
+  it('should create multiple harvest batches', async () => {
+    const createBatchDtos = [mockedCreateBatchDto, mockedCreateBatchDto];
+    jest.spyOn(prisma.batch, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1);
+
+    await service.createHarvests(createBatchDtos);
+    expect(prisma.batch.create).toHaveBeenCalledTimes(createBatchDtos.length + 1);
   });
 
   it('should create one batch and connect it to an existing one', async () => {
-    const mockedCreateBatchDtosWithLinks = mockedCreateBatchDtos.slice();
+    const mockedCreateBatchDtosWithLinks = [mockedCreateBatchDto].slice();
     const links = ['l1', 'l2', 'l3'];
     mockedCreateBatchDtosWithLinks[0].in = links;
 
