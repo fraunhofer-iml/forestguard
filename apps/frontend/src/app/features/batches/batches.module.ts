@@ -3,9 +3,10 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerModule, MatDatepickerToggle } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
@@ -20,9 +21,10 @@ import { BatchDetailsComponent } from './details/details.component';
 import { HarvestComponent } from './harvest/harvest.component';
 import { HarvestService } from './harvest/service/harvest.service';
 import { BatchOverviewComponent } from './overview/overview.component';
+import { BatchUpdateComponent } from './update/batch-update.component';
 
 @NgModule({
-  declarations: [BatchOverviewComponent, TypeSafeMatCellDefDirective, BatchDetailsComponent, HarvestComponent],
+  declarations: [BatchOverviewComponent, TypeSafeMatCellDefDirective, BatchDetailsComponent, HarvestComponent, BatchUpdateComponent],
   imports: [
     CommonModule,
     BatchesRoutingModule,
@@ -41,7 +43,19 @@ import { BatchOverviewComponent } from './overview/overview.component';
     MatNativeDateModule,
     MatDatepickerModule,
     MatSelectModule,
+    MatCheckboxModule,
   ],
-  providers: [CompanyService, BatchService, MatDatepickerModule, HarvestService],
+  providers: [
+    CompanyService,
+    BatchService,
+    MatDatepickerModule,
+    HarvestService,
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: {
+        subscriptSizing: 'dynamic',
+      },
+    },
+  ],
 })
 export class BatchesModule {}

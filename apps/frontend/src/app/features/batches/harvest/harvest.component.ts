@@ -18,8 +18,8 @@ import { HarvestService } from './service/harvest.service';
   templateUrl: './harvest.component.html',
 })
 export class HarvestComponent {
-  users$: Observable<UserDto[]>;
-  farmers$: Observable<FarmerDto[]>;
+  users$: Observable<UserDto[]> = this.userService.getUsers();
+  farmers$: Observable<FarmerDto[]> = this.companyService.getFarmersByCompanyId('id');
   harvestFormGroup: FormGroup<HarvestForm> = new FormGroup<HarvestForm>({
     processOwner: new FormControl(null, Validators.required),
     weight: new FormControl(null, [Validators.required, Validators.min(1)]),
@@ -48,10 +48,7 @@ export class HarvestComponent {
     private companyService: CompanyService,
     private plotOfLandMockService: PlotOfLandMockService,
     private harvestService: HarvestService
-  ) {
-    this.users$ = this.userService.getUsers();
-    this.farmers$ = this.companyService.getFarmersByCompanyId('id');
-  }
+  ) {}
 
   submitHarvest(): void {
     if (this.harvestFormGroup.valid && this.harvestFormGroup.value.plotOfLand) {

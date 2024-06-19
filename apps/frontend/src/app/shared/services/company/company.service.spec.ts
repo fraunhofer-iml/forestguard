@@ -58,7 +58,24 @@ describe('CompanyService', (): void => {
           id: '5122ea21-c437-4458-9102-279111269703',
           weight: 0,
           recipient: '13c9913c-d324-43d1-b834-f536a9e0453c',
-          processStep: '6eb8e77c-cc08-44de-9b7a-2cdfc9387e7d'
+          processStep: {
+            id: '0e66ad1',
+            location: 'location',
+            date: new Date('2024-05-13T13:08:44.247Z'),
+            process: {
+              id: '',
+              name: 'harvest',
+            },
+            executedBy: {
+              id: '9d8530e66ad1',
+              employeeId: '8918e6b71',
+              firstName: 'Pascal',
+              lastName: 'Lohse',
+              email: 'string',
+              role: 'USER',
+              mobilePhoneNumber: '348934000'
+            },
+          }
         }
       ],
       edges: [

@@ -1,4 +1,4 @@
-import { ProofDto, ProofType } from '@forrest-guard/api-interfaces';
+import { Edge, ProofDto, ProofType } from '@forrest-guard/api-interfaces';
 import { of } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -60,6 +60,40 @@ describe('BatchDetailsComponent', () => {
       ];
       const result = component.getProof(ProofType.PROOF_OF_OWNERSHIP, proofs);
       expect(result).toBeUndefined();
+    });
+
+    describe('findOrder', () => {
+      it('should return an empty array when edges are undefined', () => {
+        expect(component.findOrder(undefined, 'A')).toEqual([]);
+      });
+
+      it('should return the correct order for a simple chain', () => {
+        const edges: Edge[] = [
+          { from: 'A', to: 'B' },
+          { from: 'B', to: 'C' },
+        ];
+        const result = component.findOrder(edges, 'A');
+        expect(result).toEqual(['C', 'B', 'A']);
+      });
+
+      it('should return the correct order when starting in the middle of the chain', () => {
+        const edges: Edge[] = [
+          { from: 'A', to: 'B' },
+          { from: 'B', to: 'C' },
+        ];
+        const result = component.findOrder(edges, 'B');
+        expect(result).toEqual(['C', 'B', 'A']);
+      });
+
+      it('should return the correct order for multiple disconnected components', () => {
+        const edges: Edge[] = [
+          { from: 'A', to: 'B' },
+          { from: 'C', to: 'D' },
+          { from: 'E', to: 'F' },
+        ];
+        const result = component.findOrder(edges, 'E');
+        expect(result).toEqual(['F', 'E']);
+      });
     });
   });
 });

@@ -1,0 +1,93 @@
+<header class="font-semibold pb-4 flex flex-row gap-2 text-neutral-300 items-center">
+  <a routerLink="/batches" class="font-semibold text-gray-700 hover:underline">Batches</a>
+  <span class="material-symbols-outlined text-lg"> chevron_right </span>
+  <h1 class="font-medium">Update</h1>
+</header>
+
+<div class="card text-neutral-300">
+  <h1 class="text-lg font-semibold">Process Information</h1>
+  <form class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4" [formGroup]="formGroup">
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Date</mat-label>
+      <input matInput formControlName="date" [matDatepicker]="picker" />
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Location</mat-label>
+      <input matInput formControlName="location" placeholder="Location" />
+    </mat-form-field>
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Process Name</mat-label>
+      <input matInput formControlName="processName" placeholder="Process" />
+    </mat-form-field>
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Author of Entry</mat-label>
+      <mat-select formControlName="recordedBy" placeholder="Author">
+        <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }} </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Process Owner</mat-label>
+      <mat-select formControlName="executedBy" placeholder="Process Owner">
+        <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }} </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="w-full" appearance="outline" *ngIf="batchIds.length === 0">
+      <mat-label>Farmed Land</mat-label>
+      <input matInput formControlName="plotOfLand" placeholder="Process" />
+    </mat-form-field>
+  </form>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 mt-4 gap-4 text-neutral-300">
+  <div class="card">
+    <h1 class="text-lg font-semibold">Input Batches</h1>
+    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="border border-gray-300 p-4 rounded-xl" *ngFor="let batch of batches$ | async">
+        <h2 class="font-medium">{{ batch.id }}</h2>
+        <p class="text-sm text-neutral-500 mt-2">Weight [kg]: {{ batch.weight }}</p>
+        <p class="text-sm text-neutral-500">Last process: {{ batch.processStep.process.name }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h1 class="text-lg font-semibold">Output Batches</h1>
+    <div>
+      <form [formGroup]="outputBatchForm" class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div
+          formArrayName="outBatches"
+          class="border border-gray-300 p-4 rounded-xl relative"
+          *ngFor="let item of outBatches.controls; let i = index"
+        >
+          <span class="material-symbols-outlined absolute top-4 right-4 cursor-pointer" (click)="removeBatchItem(i)"> close </span>
+          <h2>Batch {{ i + 1 }}</h2>
+          <div [formGroupName]="i" class="space-y-4 mt-4">
+            <mat-form-field class="w-full" appearance="outline">
+              <mat-label>Weight</mat-label>
+              <input matInput type="number" formControlName="weight" id="{{ 'weight' + i }}" placeholder="Weight" />
+            </mat-form-field>
+            <mat-form-field class="w-full" appearance="outline">
+              <mat-label>Recipient</mat-label>
+              <mat-select formControlName="recipient" id="{{ 'recipient' + i }}" placeholder="Recipient">
+                <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }} </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div
+          class="border border-gray-300 p-4 rounded-xl flex items-center justify-center cursor-pointer hover:bg-neutral-980 transition min-h-52"
+          (click)="addBatchItem()"
+        >
+          <Button>Add Batch</Button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="card mt-4">
+  <div class="inline-flex justify-end gap-4 w-full">
+    <a mat-button href="/batches">Abort</a>
+    <button mat-flat-button (click)="submit()" type="submit">Save</button>
+  </div>
+</div>

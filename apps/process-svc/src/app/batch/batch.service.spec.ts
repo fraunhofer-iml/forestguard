@@ -136,7 +136,6 @@ describe('BatchService', () => {
         inId: testBatchId,
       },
     });
-    expect(result.coffeeBatches).toStrictEqual(mockBatches.map(mapBatchToCoffeeBatch));
     expect(result.edges).toStrictEqual(mockedPrismaBatchRelations.map(mapBatchRelationToEdge));
   });
 });

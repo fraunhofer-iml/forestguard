@@ -1,9 +1,11 @@
 import { BatchDto } from '@forrest-guard/api-interfaces';
 import { map, Observable } from 'rxjs';
+import { SelectionModel } from '@angular/cdk/collections';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { COMPANY_ID } from '../../../shared/constants';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
@@ -13,8 +15,9 @@ import { getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
   templateUrl: './overview.component.html',
 })
 export class BatchOverviewComponent implements AfterViewInit {
-  displayedColumnsOfBatches: string[] = ['batchId', 'weight', 'process', 'date', 'processOwner'];
+  displayedColumnsOfBatches: string[] = ['select', 'batchId', 'process', 'date', 'processOwner', 'weight'];
   dataSource: MatTableDataSource<BatchDto> = new MatTableDataSource<BatchDto>();
+  selection = new SelectionModel<BatchDto>(true, []);
   paginator?: MatPaginator;
   sort?: MatSort;
   batches$?: Observable<MatTableDataSource<BatchDto>>;
@@ -30,7 +33,7 @@ export class BatchOverviewComponent implements AfterViewInit {
     this.setDataSourceAttributes();
   }
 
-  constructor(private companyService: CompanyService) {}
+  constructor(private companyService: CompanyService, private router: Router) {}
 
   ngAfterViewInit(): void {
     this.getBatches();
@@ -39,7 +42,7 @@ export class BatchOverviewComponent implements AfterViewInit {
   }
 
   getBatches() {
-    this.batches$ = this.companyService.getBatchesOfCompany(COMPANY_ID).pipe(
+    this.batches$ = this.companyService.getBatchesOfCompany(COMPANY_ID, '{"active": true}').pipe(
       map((batches) => {
         const dataSource = this.dataSource;
         dataSource.data = batches;
@@ -97,5 +100,35 @@ export class BatchOverviewComponent implements AfterViewInit {
     };
 
     return listAsFlatString(ead).includes(transformedFilter);
+  }
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  toggleAllRows() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      return;
+    }
+
+    this.selection.select(...this.dataSource.data);
+  }
+
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?: BatchDto): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'}`;
+  }
+
+  routeToAddProcess(): void {
+    const selectedBatchesString = this.selection.selected.map((batch) => batch.id).join(',');
+    this.router.navigateByUrl(`/batches/update?batchIds=${selectedBatchesString}`);
   }
 }

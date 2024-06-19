@@ -22,27 +22,25 @@ export const createBatchQuery = (batchCreateDto: BatchCreateDto) => ({
   processStep: {
     create: {
       ...processStepQuery(batchCreateDto),
-      farmedLand: batchCreateDto.processStep.harvestedLand ?
-        {
-          connect: {
-            id: batchCreateDto.processStep.harvestedLand,
-          },
-        } : undefined,
+      farmedLand: batchCreateDto.processStep.harvestedLand
+        ? {
+            connect: {
+              id: batchCreateDto.processStep.harvestedLand,
+            },
+          }
+        : undefined,
     },
   },
 });
 
-const relationsPointingToInputBatches = (batchCreateDto: BatchCreateDto) => (
-  batchCreateDto.in.map(batchId => (
-    {
-      in: {
-        connect: {
-          id: batchId,
-        },
+const relationsPointingToInputBatches = (batchCreateDto: BatchCreateDto) =>
+  batchCreateDto.in.map((batchId) => ({
+    in: {
+      connect: {
+        id: batchId,
       },
-    }
-  ))
-);
+    },
+  }));
 
 export const readBatchByIdQuery = (id: string) => ({
   where: {
@@ -54,6 +52,7 @@ export const readBatchByIdQuery = (id: string) => ({
 export const readCoffeeBatchesByCompanyIdQuery = (companyId: string) => ({
   where: {
     recipientId: companyId,
+    active: true,
   },
   include: readBatchIncludeQuery(),
 });
@@ -68,7 +67,7 @@ const processStepQuery = (batchCreateDto: BatchCreateDto) => ({
       },
       where: {
         name: batchCreateDto.processStep.process,
-      }
+      },
     },
   },
   recordedBy: {

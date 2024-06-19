@@ -73,7 +73,19 @@ cd forest-guard
 npm install
 ```
 
-3. Run app in development mode
+3. Start the dependent services via docker compose:
+
+```bash
+docker compose up
+```
+
+4. Set up database
+
+```bash
+npm run set-up-database
+```
+
+5. Run app in development mode
 
 ```bash
 npm run dev

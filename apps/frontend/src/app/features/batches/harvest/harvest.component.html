@@ -6,7 +6,7 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
   <div class="card">
     <h1 class="font-semibold text-gray-700 pb-4">Harvest Details</h1>
-    <form [formGroup]="harvestFormGroup">
+    <form [formGroup]="harvestFormGroup" class="space-y-4">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label class="w-full">Process Owner (Farmer)</mat-label>
         <mat-select formControlName="processOwner" placeholder="Process Owner (Farmer)" class="w-full !border-none">

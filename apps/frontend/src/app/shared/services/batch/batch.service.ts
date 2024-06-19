@@ -1,19 +1,12 @@
+import { BatchCreateDto, BatchDto, ProcessDisplayDto, ProcessDto } from '@forrest-guard/api-interfaces';
+import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
 import { Injectable } from '@angular/core';
-import {
-  BatchCreateDto,
-  BatchDto,
-  ProcessDisplayDto,
-  ProcessDto,
-} from '@forrest-guard/api-interfaces';
+import { environment } from '../../../../environments/environment';
 
 @Injectable()
 export class BatchService {
-  constructor(
-    private httpClient: HttpClient
-  ) {}
+  constructor(private httpClient: HttpClient) {}
 
   public createBatches(batches: BatchCreateDto[]): Observable<ProcessDto> {
     return this.httpClient.post<ProcessDto>(environment.BATCHES.URL, batches);
@@ -27,7 +20,7 @@ export class BatchService {
     return this.httpClient.get<BatchDto>(`${environment.BATCHES.URL}/${id}`);
   }
 
-  public getRelatedBatches(id: string): Observable<ProcessDisplayDto> {
-    return this.httpClient.get<ProcessDisplayDto>(`${environment.BATCHES.URL}/${id}/related`);
+  public getRelatedBatches(id: string): Observable<{ data: ProcessDisplayDto; id: string }> {
+    return this.httpClient.get<ProcessDisplayDto>(`${environment.BATCHES.URL}/${id}/related`).pipe(map((data) => ({ data, id })));
   }
 }
