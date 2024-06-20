@@ -1,12 +1,13 @@
+import { AmqpException } from '@forrest-guard/amqp';
 import { AddressDto, CompanyDto, FarmerDto, PlotOfLandDto, ProofDto, UserDto } from '@forrest-guard/api-interfaces';
-import { BadRequestException } from '@nestjs/common';
+import { HttpStatus } from '@nestjs/common';
 import { Address, Proof } from '@prisma/client';
 import { CompanyWithRelations, PlotOfLandWithRelations, UserWithRelations } from './company.types';
 
 export class CompanyMapper {
   public static mapCompanyPrismaToCompanyDto(company: CompanyWithRelations): CompanyDto {
     if (!company) {
-      throw new BadRequestException('Company is required');
+      throw new AmqpException('Company is required', HttpStatus.BAD_REQUEST);
     }
 
     const { id, name, address, users } = company;

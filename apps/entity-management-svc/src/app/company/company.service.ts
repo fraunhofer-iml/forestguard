@@ -1,6 +1,7 @@
+import { AmqpException } from '@forrest-guard/amqp';
 import { CompanyDto } from '@forrest-guard/api-interfaces';
 import { PrismaService } from '@forrest-guard/database';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { CompanyMapper } from './company.mapper';
 import { CompanyWithRelations } from './company.types';
 
@@ -29,7 +30,7 @@ export class CompanyService {
     });
 
     if (!company) {
-      throw new NotFoundException(`No Company found.`);
+      throw new AmqpException('No Company found.', HttpStatus.NOT_FOUND);
     }
 
     return CompanyMapper.mapCompanyPrismaToCompanyDto(company);

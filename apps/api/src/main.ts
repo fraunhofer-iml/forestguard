@@ -2,6 +2,8 @@ import { ConfigurationService } from '@forrest-guard/configuration';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AllErrorsInterceptor } from './all-errors.interceptor';
+import { AllExceptionsFilter } from './all-exceptions.filter';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
@@ -21,6 +23,8 @@ async function bootstrap() {
       transform: true,
     })
   );
+  app.useGlobalInterceptors(new AllErrorsInterceptor());
+  app.useGlobalFilters(new AllExceptionsFilter());
   app.useLogger(configuration.getGeneralConfiguration().logLevel);
 
   await app.listen(configuration.getApiConfiguration().port);

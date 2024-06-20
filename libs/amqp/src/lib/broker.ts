@@ -1,4 +1,4 @@
-import { DynamicModule, NotFoundException } from '@nestjs/common';
+import { DynamicModule } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AmqpClientEnum } from './queues';
 
@@ -15,7 +15,7 @@ export class Broker {
     const amqpUri = process.env['AMQP_URI'];
 
     if (!amqpUri) {
-      throw new NotFoundException('AMQP_URI is not defined');
+      throw new Error('AMQP_URI is not defined');
     }
 
     return ClientsModule.register([

@@ -1,5 +1,5 @@
+import { AmqpException } from '@forrest-guard/amqp';
 import { CompanyDto } from '@forrest-guard/api-interfaces';
-import { BadRequestException } from '@nestjs/common';
 import { CompanyMapper } from './company.mapper';
 import { CompanyWithRelations } from './company.types';
 import { COMPANY_DTO_MOCK, COMPANY_PRISMA_MOCK } from './mocked-data/company.mock';
@@ -21,7 +21,7 @@ describe('CompanyMapper', () => {
 
   it('should throw an exception when the company is null', () => {
     givenCompanyPrisma = null;
-    const expectedException = BadRequestException;
+    const expectedException = AmqpException;
 
     expect(() => CompanyMapper.mapCompanyPrismaToCompanyDto(givenCompanyPrisma)).toThrow(expectedException);
   });

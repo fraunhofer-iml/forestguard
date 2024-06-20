@@ -1,4 +1,4 @@
-import { AmqpClientEnum } from '@forrest-guard/amqp';
+import { AmqpClientEnum, PrismaErrorsInterceptor } from '@forrest-guard/amqp';
 import { ConfigurationService } from '@forrest-guard/configuration';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
@@ -7,7 +7,7 @@ import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const appContext = await NestFactory.createApplicationContext(AppModule);
-  
+
   const configuration = appContext.get(ConfigurationService);
   const amqpUri = configuration.getGeneralConfiguration().amqpUri;
 
@@ -27,6 +27,7 @@ async function bootstrap() {
       transform: true,
     })
   );
+  app.useGlobalInterceptors(new PrismaErrorsInterceptor());
   app.useLogger(configuration.getGeneralConfiguration().logLevel);
 
   await app.listen().then(() =>

@@ -1,7 +1,6 @@
 import { BatchCreateDto, BatchDto, ProcessDisplayDto } from '@forrest-guard/api-interfaces';
 import { PrismaService } from '@forrest-guard/database';
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { RpcException } from '@nestjs/microservices';
 import { Batch, BatchRelation } from '@prisma/client';
 import { mapBatchPrismaToBatchDto, mapToProcessDisplayDto } from './batch.mapper';
 import { batchQuery, createBatchQuery, readBatchByIdQuery, readCoffeeBatchesByCompanyIdQuery } from './batch.queries';
@@ -104,39 +103,25 @@ export class BatchService {
   }
 
   private async createHarvest(dto: BatchCreateDto): Promise<Batch> {
-    try {
-      return await this.prismaService.batch.create({
-        data: batchQuery(dto),
-      });
-    } catch (e) {
-      throw new RpcException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: e.message,
-      });
-    }
+    return await this.prismaService.batch.create({
+      data: batchQuery(dto),
+    });
   }
 
   private async mergeIntoOneHarvestBatch(batchCreateDtos: BatchCreateDto[], batches: Batch[]) {
     const mergeBatchCreateDto = structuredClone(batchCreateDtos[0]); // all batches are identical
-    mergeBatchCreateDto.in = batches.map(batch => batch.id);
+    mergeBatchCreateDto.in = batches.map((batch) => batch.id);
     mergeBatchCreateDto.weight = batches.reduce((total, batch) => total + batch.weight, 0);
     mergeBatchCreateDto.processStep.harvestedLand = undefined;
     await this.createBatch(mergeBatchCreateDto);
   }
 
   private async createBatch(dto: BatchCreateDto): Promise<Batch> {
-    try {
-      const batch = await this.prismaService.batch.create({
-        data: createBatchQuery(dto),
-      });
-      await this.setBatchesInactive(dto);
-      return batch;
-    } catch (e) {
-      throw new RpcException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: e.message,
-      });
-    }
+    const batch = await this.prismaService.batch.create({
+      data: createBatchQuery(dto),
+    });
+    await this.setBatchesInactive(dto);
+    return batch;
   }
 
   private setBatchesInactive(dto: BatchCreateDto) {

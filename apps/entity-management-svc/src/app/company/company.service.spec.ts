@@ -1,5 +1,5 @@
+import { AmqpException } from '@forrest-guard/amqp';
 import { PrismaService } from '@forrest-guard/database';
-import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CompanyMapper } from './company.mapper';
 import { CompanyService } from './company.service';
@@ -59,9 +59,9 @@ describe('CompanyService', () => {
     });
   });
 
-  it('should throw a NotFoundException', async () => {
+  it('should throw a AmqpException', async () => {
     const givenCompanyId = '123';
-    const expectedException = NotFoundException;
+    const expectedException = AmqpException;
 
     jest.spyOn(prisma.company, 'findFirst').mockResolvedValue(null);
 
