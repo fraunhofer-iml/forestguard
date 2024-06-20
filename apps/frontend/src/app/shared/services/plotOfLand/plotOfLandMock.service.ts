@@ -14,6 +14,7 @@ export class PlotOfLandMockService {
       description: plotOfLandDescription,
       polygonData: '',
       areaInHA: 0,
+      cultivatedWith: '',
     };
   }
 }

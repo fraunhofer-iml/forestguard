@@ -90,8 +90,8 @@ model PlotOfLand {
   polygonData          String
   areaInHA             Int
 
-  cultivatedWith Cultivation? @relation(fields: [cultivationId], references: [id])
-  cultivationId  String?
+  cultivatedWith Cultivation @relation(fields: [cultivationId], references: [id])
+  cultivationId  String
 
   proofs Proof[]
 
@@ -107,6 +107,8 @@ model Cultivation {
   sort String
 
   plotsOfLand PlotOfLand[]
+
+  @@unique([type, sort])
 }
 
 model Proof {

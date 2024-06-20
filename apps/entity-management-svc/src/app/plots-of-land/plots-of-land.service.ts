@@ -1,11 +1,18 @@
 import { PlotOfLandCreateDto, PlotOfLandUpdateDto } from '@forrest-guard/api-interfaces';
+import { ConfigurationService } from '@forrest-guard/configuration';
 import { PrismaService } from '@forrest-guard/database';
 import { Injectable } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 import { PlotOfLand } from '@prisma/client';
 
 @Injectable()
 export class PlotsOfLandService {
-  constructor(private readonly prismaService: PrismaService) {}
+  private readonly cultivationType: string;
+
+  constructor(private readonly prismaService: PrismaService, private readonly configurationService: ConfigurationService) {
+    const generalConfiguration = this.configurationService.getEntityManagementConfiguration();
+    this.cultivationType = generalConfiguration.cultivationType;
+  }
 
   async readPlotsOfLand(farmerId?: string | undefined): Promise<PlotOfLand[]> {
     return await this.prismaService.plotOfLand.findMany({
@@ -20,7 +27,10 @@ export class PlotsOfLandService {
   }
 
   async createPlotOfLand(plotOfLand: PlotOfLandCreateDto, farmerId: string): Promise<PlotOfLand> {
-    // TODO: Implement farmer and cultivatedWith if required by release 2 of forrest guard
+    if (!plotOfLand.cultivatedWith) {
+      throw new RpcException('Sort of Cultivation is required');
+    }
+
     const { areaInHA, country, description, district, polygonData, region, localPlotOfLandId, nationalPlotOfLandId } = plotOfLand;
     return this.prismaService.plotOfLand.create({
       data: {
@@ -32,6 +42,20 @@ export class PlotsOfLandService {
         region: region || '',
         localPlotOfLandId: localPlotOfLandId || '',
         nationalPlotOfLandId: nationalPlotOfLandId || '',
+        cultivatedWith: {
+          connectOrCreate: {
+            where: {
+              type_sort: {
+                type: this.cultivationType,
+                sort: plotOfLand.cultivatedWith.toLowerCase(),
+              },
+            },
+            create: {
+              type: this.cultivationType,
+              sort: plotOfLand.cultivatedWith.toLowerCase(),
+            },
+          },
+        },
         farmer: {
           connect: {
             id: farmerId,

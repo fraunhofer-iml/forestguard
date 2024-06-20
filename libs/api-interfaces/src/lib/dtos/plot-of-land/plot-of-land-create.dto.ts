@@ -7,7 +7,7 @@ export class PlotOfLandCreateDto {
   description: string;
   polygonData: string;
   areaInHA: number;
-  cultivatedWith?: string;
+  cultivatedWith: string;
 
   constructor(
     country: string,
@@ -16,7 +16,7 @@ export class PlotOfLandCreateDto {
     description: string,
     polygonData: string,
     areaInHA: number,
-    cultivatedWith?: string,
+    cultivatedWith: string,
     nationalPlotOfLandId?: string,
     localPlotOfLandId?: string
   ) {

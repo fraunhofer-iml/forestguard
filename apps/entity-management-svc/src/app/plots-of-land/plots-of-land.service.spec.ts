@@ -1,4 +1,6 @@
+import { ConfigurationService } from '@forrest-guard/configuration';
 import { PrismaService } from '@forrest-guard/database';
+import { RpcException } from '@nestjs/microservices';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PlotOfLand } from '@prisma/client';
 import { PlotsOfLandService } from './plots-of-land.service';
@@ -35,6 +37,16 @@ describe('PlotsOfLandService', () => {
               update: jest.fn(),
               delete: jest.fn(),
             },
+            cultivation: {
+              findFirst: jest.fn(),
+              create: jest.fn(),
+            },
+          },
+        },
+        {
+          provide: ConfigurationService,
+          useValue: {
+            getEntityManagementConfiguration: jest.fn().mockReturnValue({ cultivationType: 'coffee' }),
           },
         },
       ],
@@ -46,6 +58,7 @@ describe('PlotsOfLandService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+    expect(prisma).toBeDefined();
   });
 
   it('should return a valid PlotOfLandDto', async () => {
@@ -72,7 +85,7 @@ describe('PlotsOfLandService', () => {
     expect(prisma.plotOfLand.findMany).toHaveBeenCalledWith({ where: { farmerId: undefined } });
   });
 
-  it('should create a PlotOfLandDto', async () => {
+  it('should create a PlotOfLandDto with existing cultivation', async () => {
     const givenPlotOfLandCreateDto = {
       areaInHA: 1,
       country: 'Germany',
@@ -82,6 +95,7 @@ describe('PlotsOfLandService', () => {
       region: 'Region',
       localPlotOfLandId: 'Local',
       nationalPlotOfLandId: 'National',
+      cultivatedWith: 'Arabica',
     };
 
     jest.spyOn(prisma.plotOfLand, 'create').mockResolvedValue(PLOT_OF_LAND_TEST_DTO);
@@ -90,7 +104,74 @@ describe('PlotsOfLandService', () => {
     expect(actualPlotOfLandDto).toEqual(PLOT_OF_LAND_TEST_DTO);
 
     expect(prisma.plotOfLand.create).toHaveBeenCalledWith({
-      data: { ...givenPlotOfLandCreateDto, farmer: { connect: { id: '1' } } },
+      data: {
+        ...givenPlotOfLandCreateDto,
+        cultivatedWith: {
+          connectOrCreate: {
+            where: {
+              type_sort: {
+                type: 'coffee',
+                sort: givenPlotOfLandCreateDto.cultivatedWith.toLowerCase(),
+              },
+            },
+            create: {
+              type: 'coffee',
+              sort: givenPlotOfLandCreateDto.cultivatedWith.toLowerCase(),
+            },
+          },
+        },
+        farmer: {
+          connect: {
+            id: '1',
+          },
+        },
+      },
+    });
+  });
+
+  it('should create a PlotOfLandDto with new cultivation', async () => {
+    const givenPlotOfLandCreateDto = {
+      areaInHA: 1,
+      country: 'Germany',
+      description: 'Description',
+      district: 'District',
+      polygonData: 'Polygon',
+      region: 'Region',
+      localPlotOfLandId: 'Local',
+      nationalPlotOfLandId: 'National',
+      cultivatedWith: 'Robusta',
+    };
+
+    jest.spyOn(prisma.cultivation, 'findFirst').mockResolvedValue(undefined);
+    jest.spyOn(prisma.cultivation, 'create').mockResolvedValue({ id: '2', type: 'coffee', sort: 'robusta' });
+    jest.spyOn(prisma.plotOfLand, 'create').mockResolvedValue(PLOT_OF_LAND_TEST_DTO);
+    const actualPlotOfLandDto = await service.createPlotOfLand(givenPlotOfLandCreateDto, '1');
+
+    expect(actualPlotOfLandDto).toEqual(PLOT_OF_LAND_TEST_DTO);
+
+    expect(prisma.plotOfLand.create).toHaveBeenCalledWith({
+      data: {
+        ...givenPlotOfLandCreateDto,
+        cultivatedWith: {
+          connectOrCreate: {
+            where: {
+              type_sort: {
+                type: 'coffee',
+                sort: givenPlotOfLandCreateDto.cultivatedWith.toLowerCase(),
+              },
+            },
+            create: {
+              type: 'coffee',
+              sort: givenPlotOfLandCreateDto.cultivatedWith.toLowerCase(),
+            },
+          },
+        },
+        farmer: {
+          connect: {
+            id: '1',
+          },
+        },
+      },
     });
   });
 
@@ -157,8 +238,10 @@ describe('PlotsOfLandService', () => {
       district: 'District',
       polygonData: 'Polygon',
       region: 'Region',
+      cultivatedWith: 'Arabica',
     };
 
+    jest.spyOn(prisma.cultivation, 'findFirst').mockResolvedValue({ id: '1', type: 'coffee', sort: 'arabica' });
     await expect(service.createPlotOfLand(givenPlotOfLandCreateDto, '1')).resolves.toEqual(undefined);
   });
 
@@ -181,6 +264,7 @@ describe('PlotsOfLandService', () => {
       cultivatedWith: '1',
     };
 
+    jest.spyOn(prisma.cultivation, 'findFirst').mockResolvedValue({ id: '1', type: 'coffee', sort: 'arabica' });
     await expect(service.createPlotOfLand(givenPlotOfLandCreateDto, '1')).resolves.toEqual(undefined);
   });
 
@@ -191,5 +275,22 @@ describe('PlotsOfLandService', () => {
     };
 
     await expect(service.updatePlotOfLand('1', givenPlotOfLandUpdateDto)).resolves.toEqual(undefined);
+  });
+
+  it('should throw an error when trying to create a PlotOfLandDto with undefined cultivatedWith', async () => {
+    const givenPlotOfLandCreateDto = {
+      areaInHA: 1,
+      country: 'Germany',
+      description: 'Description',
+      district: 'District',
+      polygonData: 'Polygon',
+      region: 'Region',
+      localPlotOfLandId: 'Local',
+      nationalPlotOfLandId: 'National',
+      cultivatedWith: undefined,
+    };
+
+    const expectedException = RpcException;
+    await expect(service.createPlotOfLand(givenPlotOfLandCreateDto, '1')).rejects.toThrow(expectedException);
   });
 });
