@@ -52,8 +52,8 @@
       </ng-container>
 
       <!-- Weight -->
-      <ng-container matColumnDef="weight">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header class="!text-right">Weight [kg]</th>
+      <ng-container matColumnDef="weight" class="headline-text !text-right">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition="before" class="!text-right">Weight [kg]</th>
         <td mat-cell class="!text-right" *matCellDef="let el; dataSource: batches">{{ el.weight }}</td>
       </ng-container>
 
