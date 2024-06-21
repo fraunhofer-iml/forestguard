@@ -406,6 +406,24 @@ paths:
           description: 'Successful creation.'
         '400':
           description: 'Invalid request.'
+  /batches/harvests/combined:
+    post:
+      tags:
+        - Batch
+      summary: 'Create combined harvest batch'
+      description: 'Create a new harvest with multiple plot of lands.'
+      operationId: 'createCombinedHarvestCoffeeBatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchCombinedCreateDto'
+      responses:
+        '201':
+          description: 'Successful creation.'
+        '400':
+          description: 'Invalid request.'
   /batches/{id}:
     get:
       tags:
@@ -1057,6 +1075,33 @@ components:
         - date
         - process
         - executedBy
+    ProcessStepWithMultipleHarvestedLandsCreateDto:
+      type: object
+      properties:
+        location:
+          type: string
+          description: 'The location the process step took place.'
+        date:
+          type: string
+          format: date-time
+          description: 'The date of the process step.'
+        recordedBy:
+          type: string
+          format: uuid
+          description: 'The ID of the user that recorded the process step.'
+        executedBy:
+          type: string
+          format: uuid
+          description: 'The ID of the user that executed the process step.'
+        harvestedLands:
+          type: array
+          items:
+            type: string
+            format: uuid
+      required:
+        - location
+        - date
+        - executedBy
     BatchCreateDto:
       type: object
       properties:
@@ -1080,6 +1125,25 @@ components:
           $ref: '#/components/schemas/ProcessStepCreateDto'
       required:
         - in
+        - recipient
+        - weight
+        - processStep
+    BatchCombinedCreateDto:
+      type: object
+      properties:
+        idEUInfoSystem:
+          type: string
+          description: 'The ID of the coffee batch in the EU information system.'
+        weight:
+          type: number
+          description: 'The weight of the coffee batch.'
+        recipient:
+          type: string
+          format: uuid
+          description: 'The recipient id of the coffee batch.'
+        processStep:
+          $ref: '#/components/schemas/ProcessStepWithMultipleHarvestedLandsCreateDto'
+      required:
         - recipient
         - weight
         - processStep

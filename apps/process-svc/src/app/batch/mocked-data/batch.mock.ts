@@ -1,6 +1,6 @@
 import { BatchRelation, Role } from '@prisma/client';
 import { BatchWithRelations } from '../batch.types';
-import { BatchCreateDto, ProofType } from '@forrest-guard/api-interfaces';
+import { BatchCombinedCreateDto, BatchCreateDto, ProofType } from '@forrest-guard/api-interfaces';
 
 export const mockedCreateBatchDto: BatchCreateDto = {
     idEUInfoSystem: null,
@@ -16,6 +16,19 @@ export const mockedCreateBatchDto: BatchCreateDto = {
       harvestedLand: 'ctest401',
     },
   };
+
+export const mockedCombinedBatchDto: BatchCombinedCreateDto = {
+  idEUInfoSystem: null,
+  weight: 33,
+  recipient: 'ctest102',
+  processStep: {
+    location: '',
+    date: '2024-05-24T08:28:24Z',
+    recordedBy: 'ctest102',
+    executedBy: 'ctest101',
+    harvestedLands: ['harvestedLand1', 'harvestedLand2', 'harvestedLand3'],
+  },
+};
 
 export const mockedPrismaBatchWithRelations1: BatchWithRelations = {
   id: '1',

@@ -1,5 +1,5 @@
 import { BatchMessagePatterns, CompanyMessagePatterns } from '@forrest-guard/amqp';
-import { BatchCreateDto, BatchDto, ProcessDisplayDto } from '@forrest-guard/api-interfaces';
+import { BatchCombinedCreateDto, BatchCreateDto, BatchDto, ProcessDisplayDto } from '@forrest-guard/api-interfaces';
 import { Controller, HttpStatus } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { BatchService } from './batch.service';
@@ -12,6 +12,11 @@ export class BatchController {
   @MessagePattern(BatchMessagePatterns.CREATE_HARVESTS)
   async createHarvests(@Payload() batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
     return this.batchService.createHarvests(batchCreateDtos);
+  }
+
+  @MessagePattern(BatchMessagePatterns.CREATE_COMBINED_HARVESTS)
+  async createCombinedHarvests(@Payload() batchCombinedCreateDto: BatchCombinedCreateDto): Promise<HttpStatus> {
+    return this.batchService.createCombinedHarvests(batchCombinedCreateDto);
   }
 
   @MessagePattern(BatchMessagePatterns.CREATE)

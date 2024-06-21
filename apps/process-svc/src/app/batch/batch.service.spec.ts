@@ -1,6 +1,7 @@
 import { PrismaService } from '@forrest-guard/database';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import {
+  mockedCombinedBatchDto,
   mockedCreateBatchDto,
   mockedPrismaBatchRelations,
   mockedPrismaBatchWithRelations1,
@@ -10,7 +11,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BatchService } from './batch.service';
 import { BatchDto } from '@forrest-guard/api-interfaces';
 import { BatchWithRelations } from './batch.types';
-import { mapBatchRelationToEdge, mapBatchToCoffeeBatch } from './batch.mapper';
+import { mapBatchRelationToEdge } from './batch.mapper';
 
 describe('BatchService', () => {
   let service: BatchService;
@@ -62,6 +63,14 @@ describe('BatchService', () => {
 
     await service.createHarvests(createBatchDtos);
     expect(prisma.batch.create).toHaveBeenCalledTimes(createBatchDtos.length + 1);
+  });
+
+  it('should create multiple harvest batches to multiple plot of lands', async () => {
+    const combinedBatchDto = mockedCombinedBatchDto;
+    jest.spyOn(prisma.batch, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1);
+
+    await service.createCombinedHarvests(combinedBatchDto);
+    expect(prisma.batch.create).toHaveBeenCalledTimes(combinedBatchDto.processStep.harvestedLands.length + 1);
   });
 
   it('should create one batch and connect it to an existing one', async () => {
