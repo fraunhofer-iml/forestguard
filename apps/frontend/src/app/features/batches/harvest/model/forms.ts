@@ -1,9 +1,10 @@
-import { FormControl } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
 export interface HarvestForm {
   processOwner: FormControl<string | null>;
+  recipient: FormControl<string | null>;
   weight: FormControl<number | null>;
   date: FormControl<Date | null>;
-  plotOfLand: FormControl<string | null>;
+  plotsOfLand: FormArray<FormGroup>,
   authorOfEntry: FormControl<string | null>;
 }

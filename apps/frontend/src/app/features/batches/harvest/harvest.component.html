@@ -3,46 +3,79 @@
   <span class="material-symbols-outlined text-lg"> chevron_right </span>
   <h1 class="font-medium">Add Harvest</h1>
 </header>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-  <div class="card">
-    <h1 class="font-semibold text-gray-700 pb-4">Harvest Details</h1>
-    <form [formGroup]="harvestFormGroup" class="space-y-4">
+
+<h1 class="font-semibold text-gray-700 pb-4">Add Harvest</h1>
+<form [formGroup]="harvestFormGroup" class="space-y-4">
+  <div class="flex">
+    <div class="card w-1/2">
       <mat-form-field appearance="outline" class="w-full">
-        <mat-label class="w-full">Process Owner (Farmer)</mat-label>
-        <mat-select formControlName="processOwner" placeholder="Process Owner (Farmer)" class="w-full !border-none">
+        <mat-label>Process Owner</mat-label>
+        <mat-select formControlName="processOwner" placeholder="Process Owner" class="w-full !border-none">
           <mat-option *ngFor="let farmer of farmers$ | async" [value]="farmer.id">
             {{ farmer.lastName }}, {{ farmer.firstName }}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field class="w-full" appearance="outline">
+      <mat-form-field class="w-full mt-5" appearance="outline">
+        <mat-label>Recipient</mat-label>
+        <mat-select formControlName="recipient" placeholder="Recipient">
+          <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }} </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="w-full mt-5" appearance="outline">
         <mat-label>Weight</mat-label>
         <input matInput type="number" formControlName="weight" placeholder="Weight" />
       </mat-form-field>
 
-      <mat-form-field class="w-full" appearance="outline">
+      <mat-form-field class="w-full mt-5" appearance="outline">
         <mat-label>Date</mat-label>
         <input matInput formControlName="date" [matDatepicker]="picker" />
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field class="w-full" appearance="outline">
-        <mat-label>Plot of Land</mat-label>
-        <input matInput formControlName="plotOfLand" placeholder="Plot of Land" />
-      </mat-form-field>
-
-      <mat-form-field class="w-full" appearance="outline">
+      <mat-form-field class="w-full mt-5" appearance="outline">
         <mat-label>Author of Entry</mat-label>
         <mat-select formControlName="authorOfEntry" placeholder="Author of Entry">
           <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }} </mat-option>
         </mat-select>
       </mat-form-field>
-    </form>
+    </div>
+
+    <!-- Plots of Land -->
+    <div class="card w-1/2 ml-5">
+      <div class="inline-flex justify-end cursor-pointer w-full">
+        <a mat-button
+           (click)="addPlotOfLand()"
+        >Add Plot of Land</a>
+      </div>
+      <div class="mt-5">
+        <div formArrayName="plotsOfLand"
+          *ngFor="let plotOfLand of plotsOfLand.controls; let i = index">
+          <div [formGroupName]="i">
+            <mat-form-field appearance="outline" class="w-full mt-5">
+              <mat-label class="w-full">Plot of Land</mat-label>
+              <div class="flex">
+              <mat-select formControlName="plotOfLand" placeholder="Plot of Land" class="w-full !border-none">
+                <mat-option *ngFor="let plotOfLand of plotsOfLand$ | async" [value]="plotOfLand.id">
+                  {{ plotOfLand.description }}
+                </mat-option>
+              </mat-select>
+                <div class="justify-end ml-1"
+                     *ngIf="this.plotsOfLand.length > 1 && i">
+                  <span class="material-symbols-outlined cursor-pointer"
+                        (click)="removePlotOfLand(i)"> close </span>
+                </div>
+              </div>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <app-upload-form [selectOptions]="uploadSelectOption" [title]="'Upload Proofs'" (uploadDocument)="submitFile($event)" />
-</div>
+</form>
 
 <div class="card mt-4">
   <div class="inline-flex justify-end gap-4 w-full">

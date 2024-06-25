@@ -6,6 +6,8 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { UserService } from '../../../shared/services/user/user.service';
+import { Messages } from '../../../shared/messages';
+import { Uris } from '../../../shared/uris';
 
 @Component({
   selector: 'app-batch-update',
@@ -65,7 +67,7 @@ export class BatchUpdateComponent implements OnInit {
     this.outputBatchForm.markAllAsTouched();
 
     if (this.formGroup.invalid || this.outputBatchForm.invalid) {
-      toast.error('Please fill in all required fields');
+      toast.error(Messages.error);
     } else {
 
       const createBatchesDto: BatchCreateDto[] = this.outBatches.value.map((batch: {
@@ -86,8 +88,8 @@ export class BatchUpdateComponent implements OnInit {
       }));
 
       this.batchService.createBatches(createBatchesDto).subscribe(() => {
-        toast.success('Process step added successfully');
-        this.router.navigateByUrl('/batches');
+        toast.success(Messages.successProcessStep);
+        this.router.navigateByUrl(Uris.batches);
       });
     }
   }

@@ -9,7 +9,7 @@ export class UserController {
   @ApiOperation({ description: 'Get all users' })
   @ApiOkResponse({ description: 'Successful request.' })
   getUsers(): UserDto[] {
-    return [user1Mock];
+    return [user1Mock, farmer1Mock];
   }
 
   @Patch()

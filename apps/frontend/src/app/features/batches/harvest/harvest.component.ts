@@ -1,104 +1,108 @@
-import { FarmerDto, PlotOfLandDto, ProofDto, ProofType, UserDto } from '@forrest-guard/api-interfaces';
+import { FarmerDto, PlotOfLandDto, UserDto } from '@forrest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
-import { combineLatest, mergeMap, Observable } from 'rxjs';
+import { catchError, EMPTY, Observable } from 'rxjs';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { UploadFormSelectType } from '../../../shared/components/upload-form/upload-form-select.type';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FARMER_ID } from '../../../shared/constants';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
-import { PlotOfLandMockService } from '../../../shared/services/plotOfLand/plotOfLandMock.service';
 import { UserService } from '../../../shared/services/user/user.service';
 import { HarvestForm } from './model/forms';
 import { HarvestService } from './service/harvest.service';
+import { Messages } from '../../../shared/messages';
 
 @Component({
   selector: 'app-harvest',
   templateUrl: './harvest.component.html',
 })
 export class HarvestComponent {
+  loading = false;
+  plotsOfLand$: Observable<PlotOfLandDto[]> | undefined;
   users$: Observable<UserDto[]> = this.userService.getUsers();
-  farmers$: Observable<FarmerDto[]> = this.companyService.getFarmersByCompanyId('id');
+  farmers$: Observable<FarmerDto[]> = this.companyService.getFarmersByCompanyId(FARMER_ID);
   harvestFormGroup: FormGroup<HarvestForm> = new FormGroup<HarvestForm>({
     processOwner: new FormControl(null, Validators.required),
+    recipient: new FormControl(null, Validators.required),
     weight: new FormControl(null, [Validators.required, Validators.min(1)]),
     date: new FormControl(new Date(), Validators.required),
-    plotOfLand: new FormControl(null, Validators.required),
     authorOfEntry: new FormControl(null, Validators.required),
+    plotsOfLand: new FormArray([this.createPlotOfLand()]),
   });
-
-  loading = false;
-
-  uploadSelectOption: UploadFormSelectType[] = [
-    {
-      value: ProofType.PROOF_OF_FREEDOM,
-      key: 'Proof of freedom',
-    },
-    {
-      value: ProofType.PROOF_OF_OWNERSHIP,
-      key: 'Proof of ownership',
-    },
-  ];
 
   constructor(
     private userService: UserService,
     private batchService: BatchService,
     private plotOfLandService: PlotOfLandService,
     private companyService: CompanyService,
-    private plotOfLandMockService: PlotOfLandMockService,
     private harvestService: HarvestService
-  ) {}
+  ) {
+    this.plotsOfLand.disable();
+    this.getPlotsOfLandByFarmerId();
+  }
+
+  get plotsOfLand(): FormArray {
+    return this.harvestFormGroup.get('plotsOfLand') as FormArray;
+  }
+
+  createPlotOfLand(): FormGroup {
+    return new FormGroup({
+      plotOfLand: new FormControl(null, Validators.required)
+    });
+  }
+
+  addPlotOfLand() {
+    if(this.harvestFormGroup.get('processOwner')?.value != null) {
+      this.plotsOfLand.push(this.createPlotOfLand());
+    }
+  }
+
+  removePlotOfLand(index : number){
+    this.plotsOfLand.removeAt(index);
+  }
 
   submitHarvest(): void {
-    if (this.harvestFormGroup.valid && this.harvestFormGroup.value.plotOfLand) {
+    const plotsOfLand =  this.plotsOfLand.value.map((item: {plotOfLand: string}) => item.plotOfLand);
+
+    if (this.harvestFormGroup.valid && this.harvestFormGroup.value.plotsOfLand) {
       this.loading = true;
-      this.plotOfLandService
-        .createPlotOfLand(FARMER_ID, this.plotOfLandMockService.createNewPlotOfLand(this.harvestFormGroup.value.plotOfLand))
+      this.batchService.createHarvestBatchesCombined(this.harvestService.createNewHarvestBatch(this.harvestFormGroup, plotsOfLand))
         .pipe(
-          mergeMap((plotOfLand: PlotOfLandDto) => {
-            const createProofsObservables: Observable<ProofDto>[] = [];
-
-            this.uploadSelectOption.forEach((option) => {
-              if (option.file) {
-                const formData = new FormData();
-                formData.append('file', option.file);
-                formData.append('type', option.value);
-                createProofsObservables.push(this.plotOfLandService.createProof(plotOfLand.id, formData));
-              }
-            });
-
-            return combineLatest([
-              this.batchService.createHarvestBatches([this.harvestService.createNewHarvestBatch(this.harvestFormGroup, plotOfLand.id)]),
-              ...createProofsObservables,
-            ]);
+          catchError(() => {
+            this.loading = false;
+            toast.error(Messages.errorCreateHarvest);
+            return EMPTY;
           })
         )
         .subscribe(() => {
-          this.loading = false;
-          this.clearInputFields();
-          toast.success('Harvest successfully added');
-          this.uploadSelectOption.forEach((option) => {
-            option.file = undefined;
-          });
-        });
+        this.loading = false;
+        this.clearInputFields();
+        toast.success(Messages.successHarvest);
+      });
     } else {
       this.harvestFormGroup.markAllAsTouched();
+      toast.success(Messages.error);
     }
   }
 
   clearInputFields(): void {
+    this.plotsOfLand.clear();
+    this.addPlotOfLand();
+    this.plotsOfLand.disable();
     this.harvestFormGroup.reset();
     this.harvestFormGroup.patchValue({
       date: new Date(),
     });
   }
 
-  submitFile({ file, documentType }: { file: File; documentType: string }): void {
-    const option = this.uploadSelectOption.find((option) => option.value === documentType);
-
-    if (!option) return;
-
-    option.file = file;
+  private getPlotsOfLandByFarmerId(): void {
+    this.harvestFormGroup.controls.processOwner.valueChanges.subscribe(farmerId => {
+      if(farmerId) {
+        this.plotsOfLand$ = this.plotOfLandService.getPlotsOfLandByFarmerId(farmerId);
+        this.plotsOfLand$.subscribe(() => {
+          this.plotsOfLand.enable();
+          })
+      }
+    });
   }
 }

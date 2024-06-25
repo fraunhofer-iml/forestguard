@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
+import { Uris } from '../../uris';
 
 @Injectable()
 export class CompanyService {
@@ -17,7 +18,7 @@ export class CompanyService {
   }
 
   public getFarmersByCompanyId(id: string): Observable<FarmerDto[]> {
-    return this.httpClient.get<FarmerDto[]>(`${environment.COMPANIES.URL}/${id}/farmers`);
+    return this.httpClient.get<FarmerDto[]>(`${environment.COMPANIES.URL}/${id}${Uris.farmers}`);
   }
 
   public getBatchesOfCompany(companyId: string, query?: string): Observable<BatchDto[]> {
@@ -25,6 +26,6 @@ export class CompanyService {
     if (query) {
       params = params.set('query', query);
     }
-    return this.httpClient.get<BatchDto[]>(`${environment.COMPANIES.URL}/${companyId}/batches`, { params });
+    return this.httpClient.get<BatchDto[]>(`${environment.COMPANIES.URL}/${companyId}${Uris.batches}`, { params });
   }
 }

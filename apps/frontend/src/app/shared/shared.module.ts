@@ -9,13 +9,12 @@ import { UploadFormComponent } from './components/upload-form/upload-form.compon
 import { BatchService } from './services/batch/batch.service';
 import { CompanyService } from './services/company/company.service';
 import { PlotOfLandService } from './services/plotOfLand/plotOfLand.service';
-import { PlotOfLandMockService } from './services/plotOfLand/plotOfLandMock.service';
 import { UserService } from './services/user/user.service';
 
 @NgModule({
   declarations: [UploadFormComponent],
   imports: [CommonModule, MatFormFieldModule, MatSelectModule, MatButtonModule, ReactiveFormsModule],
-  providers: [provideHttpClient(), CompanyService, BatchService, PlotOfLandService, UserService, PlotOfLandMockService],
+  providers: [provideHttpClient(), CompanyService, BatchService, PlotOfLandService, UserService],
   exports: [UploadFormComponent],
 })
 export class SharedModule {}

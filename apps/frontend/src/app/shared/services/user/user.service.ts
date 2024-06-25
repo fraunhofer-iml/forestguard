@@ -8,6 +8,7 @@ import {
   UserDto,
   UserUpdateDto
 } from '@forrest-guard/api-interfaces';
+import { Uris } from '../../uris';
 
 @Injectable()
 export class UserService {
@@ -28,6 +29,6 @@ export class UserService {
   }
 
   public createFarmer(farmer: FarmerCreateDto): Observable<FarmerDto> {
-    return this.httpClient.post<FarmerDto>(`${environment.USERS.URL}/farmers`, farmer);
+    return this.httpClient.post<FarmerDto>(`${environment.USERS.URL}${Uris.farmers}`, farmer);
   }
 }

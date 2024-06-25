@@ -1,9 +1,9 @@
 import { PlotOfLandCreateDto, PlotOfLandDto, PlotOfLandUpdateDto, ProofDto } from '@forrest-guard/api-interfaces';
-import { forkJoin, Observable, switchMap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { UploadFormSelectType } from '../../components/upload-form/upload-form-select.type';
+import { Uris } from '../../uris';
 
 @Injectable()
 export class PlotOfLandService {
@@ -18,11 +18,11 @@ export class PlotOfLandService {
   }
 
   public getProofsOfPlotOfLand(polId: string): Observable<ProofDto[]> {
-    return this.httpClient.get<ProofDto[]>(`${environment.PLOTSOFLAND.URL}/${polId}/proofs`);
+    return this.httpClient.get<ProofDto[]>(`${environment.PLOTSOFLAND.URL}/${polId}${Uris.proofs}`);
   }
 
   public createProof(polId: string, formData: FormData): Observable<ProofDto> {
-    return this.httpClient.post<ProofDto>(`${environment.PLOTSOFLAND.URL}/${polId}/proofs`, formData);
+    return this.httpClient.post<ProofDto>(`${environment.PLOTSOFLAND.URL}/${polId}${Uris.proofs}`, formData);
   }
 
   public getPlotsOfLandByFarmerId(farmerId: string): Observable<PlotOfLandDto[]> {

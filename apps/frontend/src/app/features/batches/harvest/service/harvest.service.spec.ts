@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClient, HttpHandler } from "@angular/common/http";
 
 import { HarvestService } from './harvest.service';
-import { BatchCreateDto, ProcessStepCreateDto } from '@forrest-guard/api-interfaces';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { BatchCombinedCreateDto, ProcessStepWithMultipleHarvestedLandsCreateDto } from '@forrest-guard/api-interfaces';
 
 describe('HarvestService', (): void => {
   let service: HarvestService;
@@ -28,6 +28,7 @@ describe('HarvestService', (): void => {
   });
 
   it('should create a ProcessStepCreateDto', () => {
+    const plotsOfLand: string[] = ['ctest401'];
     const formGroup: FormGroup = formBuilder.group({
       date: new Date('2023-01-01'),
       processOwner: 'McFarland, Guillermo',
@@ -35,22 +36,21 @@ describe('HarvestService', (): void => {
       weight: 100,
     });
 
-    const plotOfLandId = '348905';
-    const result = service.createNewProcessStep(formGroup, plotOfLandId);
+    const result = service.createNewProcessStep(formGroup, plotsOfLand);
 
-    const expected: ProcessStepCreateDto = {
+    const expected: ProcessStepWithMultipleHarvestedLandsCreateDto = {
       location: '',
       date: '2023-01-01T00:00:00.000Z',
-      process: '',
       recordedBy: 'McFarland, Guillermo',
       executedBy: 'Smith, Jane',
-      harvestedLand: '348905',
+      harvestedLands: plotsOfLand,
     };
 
     expect(result).toEqual(expected);
   });
 
   it('should create a BatchCreateDto', () => {
+    const plotsOfLand: string[] = ['ctest401'];
     const formGroup: FormGroup = formBuilder.group({
       date: new Date('2023-01-01'),
       processOwner: 'McFarland, Guillermo',
@@ -58,20 +58,17 @@ describe('HarvestService', (): void => {
       weight: 100,
     });
 
-    const plotOfLandId = '348905';
-    const result = service.createNewHarvestBatch(formGroup, plotOfLandId);
+    const result = service.createNewHarvestBatch(formGroup, plotsOfLand);
 
-    const expected: BatchCreateDto = {
-      in: [],
+    const expected: BatchCombinedCreateDto = {
       weight: 100,
-      recipient: 'Smith, Jane',
+      recipient: '',
       processStep: {
         location: '',
         date: '2023-01-01T00:00:00.000Z',
-        process: '',
         recordedBy: 'McFarland, Guillermo',
         executedBy: 'Smith, Jane',
-        harvestedLand: '348905',
+        harvestedLands: plotsOfLand,
       },
     };
     expect(result).toEqual(expected);
