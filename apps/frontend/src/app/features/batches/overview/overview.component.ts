@@ -44,6 +44,7 @@ export class BatchOverviewComponent implements AfterViewInit {
   getBatches() {
     this.batches$ = this.companyService.getBatchesOfCompany(COMPANY_ID, '{"active": true}').pipe(
       map((batches) => {
+        batches.reverse();
         const dataSource = this.dataSource;
         dataSource.data = batches;
         return dataSource;

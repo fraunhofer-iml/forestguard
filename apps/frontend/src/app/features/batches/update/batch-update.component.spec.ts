@@ -7,6 +7,7 @@ import { HttpClient, HttpHandler } from '@angular/common/http';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { toast } from 'ngx-sonner';
 
 
 describe('BatchUpdateComponent', () => {
@@ -98,5 +99,33 @@ describe('BatchUpdateComponent', () => {
 
     expect(component.formGroup.valid).toBeTruthy();
     expect(component.outputBatchForm.valid).toBeFalsy();
+  });
+
+  it('should handle batches with missing weight control', () => {
+    component.outBatches.push(new FormGroup({
+      weight: new FormControl(10)
+    }));
+    component.outBatches.push(new FormGroup({}));
+    component.outBatches.push(new FormGroup({
+      weight: new FormControl(30)
+    }));
+    expect(component.getOutputWeight()).toBe(40);
+  });
+
+  it('should calculate weight of batches correctly', () => {
+    const expectedResult = 0;
+    const result = component.calculateTotalWeightOfBatches();
+    expect(result).toEqual(expectedResult);
+  });
+
+  it('should show error if formGroup is invalid', () => {
+    const toastErrorMock = jest.spyOn(toast, 'error');
+    jest.spyOn(component.formGroup, 'invalid', 'get').mockReturnValue(true);
+    jest.spyOn(component.outputBatchForm, 'invalid', 'get').mockReturnValue(false);
+    jest.spyOn(component, 'getOutputWeight').mockReturnValue(1);
+    jest.spyOn(component, 'calculateTotalWeightOfBatches').mockReturnValue(2);
+
+    component.submit();
+    expect(toastErrorMock).toHaveBeenCalledWith('Please fill in all required fields');
   });
 });

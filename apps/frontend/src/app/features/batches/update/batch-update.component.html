@@ -30,7 +30,7 @@
     <mat-form-field class="w-full" appearance="outline">
       <mat-label>Process Owner</mat-label>
       <mat-select formControlName="executedBy" placeholder="Process Owner">
-        <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }} </mat-option>
+        <mat-option *ngFor="let farmer of farmers$ | async" [value]="farmer.id"> {{ farmer.lastName }}, {{ farmer.firstName }} </mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field class="w-full" appearance="outline" *ngIf="batchIds.length === 0">
@@ -43,9 +43,10 @@
 <div class="grid grid-cols-1 md:grid-cols-2 mt-4 gap-4 text-neutral-300">
   <div class="card">
     <h1 class="text-lg font-semibold">Input Batches</h1>
-    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <p>Input Weight: {{ calculateTotalWeightOfBatches() }}</p>
+    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
       <div class="border border-gray-300 p-4 rounded-xl" *ngFor="let batch of batches$ | async">
-        <h2 class="font-medium">{{ batch.id }}</h2>
+        <h2 class="font-medium text-sm">{{ batch.id }}</h2>
         <p class="text-sm text-neutral-500 mt-2">Weight [kg]: {{ batch.weight }}</p>
         <p class="text-sm text-neutral-500">Last process: {{ batch.processStep.process.name }}</p>
       </div>
@@ -53,6 +54,7 @@
   </div>
   <div class="card">
     <h1 class="text-lg font-semibold">Output Batches</h1>
+    <p>Output Weight: {{ getOutputWeight() }}</p>
     <div>
       <form [formGroup]="outputBatchForm" class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div
@@ -65,7 +67,7 @@
           <div [formGroupName]="i" class="space-y-4 mt-4">
             <mat-form-field class="w-full" appearance="outline">
               <mat-label>Weight</mat-label>
-              <input matInput type="number" formControlName="weight" id="{{ 'weight' + i }}" placeholder="Weight" />
+              <input matInput type="number" formControlName="weight" id="{{ 'weight' + i }}" min="0" placeholder="Weight" />
             </mat-form-field>
             <mat-form-field class="w-full" appearance="outline">
               <mat-label>Recipient</mat-label>
