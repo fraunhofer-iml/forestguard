@@ -3,7 +3,13 @@ import { PrismaService } from '@forrest-guard/database';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Batch, BatchRelation } from '@prisma/client';
 import { mapBatchCombinedToBatchCreateDto, mapBatchPrismaToBatchDto, mapToProcessDisplayDto } from './batch.mapper';
-import { batchQuery, createBatchQuery, readBatchByIdQuery, readCoffeeBatchesByCompanyIdQuery } from './batch.queries';
+import {
+  batchQuery,
+  createBatchQuery,
+  readBatchByIdQuery,
+  readBatchesByIdsQuery,
+  readCoffeeBatchesByCompanyIdQuery,
+} from './batch.queries';
 
 enum SearchDirection {
   PREVIOUS_BATCHES,
@@ -174,10 +180,6 @@ export class BatchService {
 
   private getCorrespondingBatches(batchRelations: BatchRelation[]) {
     const batchIds = batchRelations.flatMap(({ inId, outId }) => [inId, outId]);
-    return this.prismaService.batch.findMany({
-      where: {
-        id: { in: batchIds },
-      },
-    });
+    return this.prismaService.batch.findMany(readBatchesByIdsQuery(batchIds));
   }
 }

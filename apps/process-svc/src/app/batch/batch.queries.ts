@@ -49,6 +49,13 @@ export const readBatchByIdQuery = (id: string) => ({
   include: readBatchIncludeQuery(),
 });
 
+export const readBatchesByIdsQuery = (ids: string[]) => ({
+  where: {
+    id: { in: ids },
+  },
+  include: readBatchIncludeQuery(),
+});
+
 export const readCoffeeBatchesByCompanyIdQuery = (companyId: string) => ({
   where: {
     recipientId: companyId,

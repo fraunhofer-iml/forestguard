@@ -1164,8 +1164,7 @@ components:
                 type: string
                 format: uuid
               processStep:
-                type: string
-                format: uuid
+                $ref: '#/components/schemas/Batch'
         edges:
           type: array
           items:
