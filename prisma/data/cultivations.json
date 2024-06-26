@@ -3,5 +3,15 @@
     "id": "ctest301",
     "type": "Corn",
     "sort": "Dent Corn"
+  },
+  {
+    "id": "ctest302",
+    "type": "Coffee",
+    "sort": "Arabica"
+  },
+  {
+    "id": "ctest303",
+    "type": "Coffee",
+    "sort": "Canephora (Robusta)"
   }
 ]
