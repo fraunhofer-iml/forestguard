@@ -4,12 +4,10 @@ import { Observable, zip } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Messages } from '../../../shared/messages';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { UserService } from '../../../shared/services/user/user.service';
-import { Messages } from '../../../shared/messages';
 import { Uris } from '../../../shared/uris';
-import { CompanyService } from '../../../shared/services/company/company.service';
-import { FARMER_ID } from '../../../shared/constants';
 
 @Component({
   selector: 'app-batch-update',
@@ -18,7 +16,6 @@ import { FARMER_ID } from '../../../shared/constants';
 })
 export class BatchUpdateComponent implements OnInit {
   batchIds: string[] = this.route.snapshot.queryParams['batchIds']?.split(',') || [];
-  batches: BatchDto[] = []
   formGroup: FormGroup = new FormGroup({
     location: new FormControl(null, Validators.required),
     date: new FormControl(new Date(), Validators.required),
@@ -38,7 +35,6 @@ export class BatchUpdateComponent implements OnInit {
     outBatches: new FormArray([this.createBatch()]),
   });
 
-  farmers$= this.companyService.getFarmersByCompanyId(FARMER_ID);
   users$ = this.userService.getUsers();
   batches$ = new Observable<BatchDto[]>();
 
@@ -46,8 +42,7 @@ export class BatchUpdateComponent implements OnInit {
     private route: ActivatedRoute,
     private userService: UserService,
     private router: Router,
-    private batchService: BatchService,
-    private companyService: CompanyService
+    private batchService: BatchService
   ) {}
 
   get outBatches(): FormArray {
@@ -58,9 +53,6 @@ export class BatchUpdateComponent implements OnInit {
     const observableList = this.batchIds.map((batchId) => this.batchService.getBatchById(batchId));
 
     this.batches$ = zip(...observableList);
-    this.batches$.subscribe(batches => {
-      this.batches = batches;
-    })
   }
 
   getOutputWeight(): number {
@@ -70,8 +62,8 @@ export class BatchUpdateComponent implements OnInit {
     }, 0);
   }
 
-  calculateTotalWeightOfBatches(): number {
-    return this.batches.reduce((total, batch) => total + batch.weight, 0);
+  calculateTotalWeightOfBatches(batches: BatchDto[]): number {
+    return batches.reduce((total, batch) => total + batch.weight, 0);
   }
 
   createBatch(): FormGroup {
@@ -87,30 +79,27 @@ export class BatchUpdateComponent implements OnInit {
 
     if (this.formGroup.invalid || this.outputBatchForm.invalid) {
       toast.error(Messages.error);
-    } else {
-
-      const createBatchesDto: BatchCreateDto[] = this.outBatches.value.map((batch: {
-        weight: number;
-        recipient: string
-      }) => ({
-        weight: batch.weight,
-        recipient: batch.recipient,
-        in: this.batchIds,
-        processStep: new ProcessStepCreateDto(
-          this.formGroup.value.location,
-          this.formGroup.value.date,
-          this.formGroup.value.processName,
-          this.formGroup.value.executedBy,
-          this.formGroup.value.recordedBy,
-          this.formGroup.value.plotOfLand
-        ),
-      }));
-
-      this.batchService.createBatches(createBatchesDto).subscribe(() => {
-        toast.success(Messages.successProcessStep);
-        this.router.navigateByUrl(Uris.batches);
-      });
+      return;
     }
+
+    const createBatchesDto: BatchCreateDto[] = this.outBatches.value.map((batch: { weight: number; recipient: string }) => ({
+      weight: batch.weight,
+      recipient: batch.recipient,
+      in: this.batchIds,
+      processStep: new ProcessStepCreateDto(
+        this.formGroup.value.location,
+        this.formGroup.value.date,
+        this.formGroup.value.processName,
+        this.formGroup.value.executedBy,
+        this.formGroup.value.recordedBy,
+        this.formGroup.value.plotOfLand
+      ),
+    }));
+
+    this.batchService.createBatches(createBatchesDto).subscribe(() => {
+      toast.success(Messages.successProcessStep);
+      this.router.navigateByUrl(Uris.batches);
+    });
   }
 
   addBatchItem(): void {

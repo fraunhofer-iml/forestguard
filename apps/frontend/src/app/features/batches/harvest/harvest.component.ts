@@ -4,13 +4,13 @@ import { catchError, EMPTY, Observable } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FARMER_ID } from '../../../shared/constants';
+import { Messages } from '../../../shared/messages';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
 import { UserService } from '../../../shared/services/user/user.service';
 import { HarvestForm } from './model/forms';
 import { HarvestService } from './service/harvest.service';
-import { Messages } from '../../../shared/messages';
 
 @Component({
   selector: 'app-harvest',
@@ -47,26 +47,27 @@ export class HarvestComponent {
 
   createPlotOfLand(): FormGroup {
     return new FormGroup({
-      plotOfLand: new FormControl(null, Validators.required)
+      plotOfLand: new FormControl(null, Validators.required),
     });
   }
 
   addPlotOfLand() {
-    if(this.harvestFormGroup.get('processOwner')?.value != null) {
+    if (this.harvestFormGroup.get('processOwner')?.value != null) {
       this.plotsOfLand.push(this.createPlotOfLand());
     }
   }
 
-  removePlotOfLand(index : number){
+  removePlotOfLand(index: number) {
     this.plotsOfLand.removeAt(index);
   }
 
   submitHarvest(): void {
-    const plotsOfLand =  this.plotsOfLand.value.map((item: {plotOfLand: string}) => item.plotOfLand);
+    const plotsOfLand = this.plotsOfLand.value.map((item: { plotOfLand: string }) => item.plotOfLand);
 
     if (this.harvestFormGroup.valid && this.harvestFormGroup.value.plotsOfLand) {
       this.loading = true;
-      this.batchService.createHarvestBatchesCombined(this.harvestService.createNewHarvestBatch(this.harvestFormGroup, plotsOfLand))
+      this.batchService
+        .createHarvestBatchesCombined(this.harvestService.createNewHarvestBatch(this.harvestFormGroup, plotsOfLand))
         .pipe(
           catchError(() => {
             this.loading = false;
@@ -75,13 +76,13 @@ export class HarvestComponent {
           })
         )
         .subscribe(() => {
-        this.loading = false;
-        this.clearInputFields();
-        toast.success(Messages.successHarvest);
-      });
+          this.loading = false;
+          this.clearInputFields();
+          toast.success(Messages.successHarvest);
+        });
     } else {
       this.harvestFormGroup.markAllAsTouched();
-      toast.success(Messages.error);
+      toast.error(Messages.error);
     }
   }
 
@@ -96,12 +97,12 @@ export class HarvestComponent {
   }
 
   private getPlotsOfLandByFarmerId(): void {
-    this.harvestFormGroup.controls.processOwner.valueChanges.subscribe(farmerId => {
-      if(farmerId) {
+    this.harvestFormGroup.controls.processOwner.valueChanges.subscribe((farmerId) => {
+      if (farmerId) {
         this.plotsOfLand$ = this.plotOfLandService.getPlotsOfLandByFarmerId(farmerId);
         this.plotsOfLand$.subscribe(() => {
           this.plotsOfLand.enable();
-          })
+        });
       }
     });
   }

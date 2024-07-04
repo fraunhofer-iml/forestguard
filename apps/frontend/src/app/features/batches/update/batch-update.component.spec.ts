@@ -1,14 +1,14 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { BatchUpdateComponent } from './batch-update.component';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
-import { UserService } from '../../../shared/services/user/user.service';
-import { HttpClient, HttpHandler } from '@angular/common/http';
-import { CompanyService } from '../../../shared/services/company/company.service';
-import { BatchService } from '../../../shared/services/batch/batch.service';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { BatchDto } from '@forrest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
-
+import { HttpClient, HttpHandler } from '@angular/common/http';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { BatchService } from '../../../shared/services/batch/batch.service';
+import { CompanyService } from '../../../shared/services/company/company.service';
+import { UserService } from '../../../shared/services/user/user.service';
+import { BatchUpdateComponent } from './batch-update.component';
 
 describe('BatchUpdateComponent', () => {
   let component: BatchUpdateComponent;
@@ -17,7 +17,7 @@ describe('BatchUpdateComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [BatchUpdateComponent],
-      schemas: [ NO_ERRORS_SCHEMA ],
+      schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
           provide: ActivatedRoute,
@@ -27,20 +27,17 @@ describe('BatchUpdateComponent', () => {
                 get: () => '0de044f0-bc57-495f-94c1-12ddb4fd05a1',
               },
               queryParams: {
-                batchIds:
-                  '0de044f0-bc57-495f-94c1-493085934ß5' +
-                  '0de044f0-bc57-495f-94c1-12ddb4fd05a1'
-              }
+                batchIds: '0de044f0-bc57-495f-94c1-493085934ß5' + '0de044f0-bc57-495f-94c1-12ddb4fd05a1',
+              },
             },
-          }
+          },
         },
         UserService,
         CompanyService,
         BatchService,
         HttpClient,
-        HttpHandler
-      ]
-
+        HttpHandler,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BatchUpdateComponent);
@@ -91,7 +88,7 @@ describe('BatchUpdateComponent', () => {
       processName: 'Harvesting',
       recordedBy: 'Recorder',
       executedBy: 'Executor',
-      plotOfLand: 'Coffeefield'
+      plotOfLand: 'Coffeefield',
     });
 
     component.addBatchItem();
@@ -102,20 +99,23 @@ describe('BatchUpdateComponent', () => {
   });
 
   it('should handle batches with missing weight control', () => {
-    component.outBatches.push(new FormGroup({
-      weight: new FormControl(10)
-    }));
+    component.outBatches.push(
+      new FormGroup({
+        weight: new FormControl(10),
+      })
+    );
     component.outBatches.push(new FormGroup({}));
-    component.outBatches.push(new FormGroup({
-      weight: new FormControl(30)
-    }));
+    component.outBatches.push(
+      new FormGroup({
+        weight: new FormControl(30),
+      })
+    );
     expect(component.getOutputWeight()).toBe(40);
   });
 
   it('should calculate weight of batches correctly', () => {
-    const expectedResult = 0;
-    const result = component.calculateTotalWeightOfBatches();
-    expect(result).toEqual(expectedResult);
+    const result = component.calculateTotalWeightOfBatches([{ weight: 10 }, { weight: 20 }] as BatchDto[]);
+    expect(result).toEqual(30);
   });
 
   it('should show error if formGroup is invalid', () => {
