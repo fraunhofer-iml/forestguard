@@ -1,9 +1,7 @@
 export class CultivationCreateDto {
-  type: string;
   sort: string;
 
-  constructor(type: string, sort: string) {
-    this.type = type;
+  constructor(sort: string) {
     this.sort = sort;
   }
 }

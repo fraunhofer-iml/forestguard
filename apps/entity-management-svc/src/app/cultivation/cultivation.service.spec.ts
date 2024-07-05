@@ -1,4 +1,5 @@
 import { CultivationDto } from '@forrest-guard/api-interfaces';
+import { ConfigurationService } from '@forrest-guard/configuration';
 import { PrismaService } from '@forrest-guard/database';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CultivationService } from './cultivation.service';
@@ -16,7 +17,14 @@ describe('CultivationService', () => {
           useValue: {
             cultivation: {
               findMany: jest.fn(),
+              create: jest.fn(),
             },
+          },
+        },
+        {
+          provide: ConfigurationService,
+          useValue: {
+            getEntityManagementConfiguration: jest.fn().mockReturnValue({ cultivationType: 'coffee' }),
           },
         },
       ],
@@ -28,6 +36,22 @@ describe('CultivationService', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  describe('createCultivation', () => {
+    it('should return a CultivationDto', async () => {
+      const givenSort = 'Arabica';
+
+      const expectedCultivation: CultivationDto = { id: '1', type: 'coffee', sort: givenSort };
+      jest.spyOn(prismaService.cultivation, 'create').mockResolvedValue(expectedCultivation);
+
+      const actualCultivation = await cultivationService.createCultivation({ sort: givenSort });
+
+      expect(actualCultivation).toEqual(expectedCultivation);
+      expect(prismaService.cultivation.create).toHaveBeenCalledWith({
+        data: { type: 'coffee', sort: givenSort },
+      });
+    });
   });
 
   describe('readCultivationsByType', () => {
