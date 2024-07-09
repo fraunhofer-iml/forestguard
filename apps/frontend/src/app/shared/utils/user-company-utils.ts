@@ -5,7 +5,7 @@ import { CompanyDto, UserDto } from '@forrest-guard/api-interfaces';
  * @param input The data to get the name from
  * @returns The name of the user or company
  */
-export const getUserOrCompanyName = (input: UserDto | CompanyDto | undefined) => {
+export const getUserOrCompanyName = (input: UserDto | CompanyDto | undefined): string => {
   if (!input) return '';
   if ((input as UserDto).firstName) {
     input = input as UserDto;

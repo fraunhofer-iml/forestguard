@@ -1,26 +1,12 @@
-import { ProcessStepDto } from './process-step.dto';
+import { BatchDto } from '../batch';
 
 export class ProcessDisplayDto {
-  coffeeBatches?: CoffeeBatch[];
+  coffeeBatches?: BatchDto[];
   edges?: Edge[];
 
-  constructor(coffeeBatches?: CoffeeBatch[], edges?: Edge[]) {
+  constructor(coffeeBatches?: BatchDto[], edges?: Edge[]) {
     this.coffeeBatches = coffeeBatches;
     this.edges = edges;
-  }
-}
-
-export class CoffeeBatch {
-  id?: string;
-  weight?: number;
-  recipient?: string;
-  processStep?: ProcessStepDto;
-
-  constructor(id?: string, weight?: number, recipient?: string, processStep?: ProcessStepDto) {
-    this.id = id;
-    this.weight = weight;
-    this.recipient = recipient;
-    this.processStep = processStep;
   }
 }
 

@@ -4,6 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { CompanyService } from './company.service';
 import { CompanyDto, ProcessDisplayDto } from '@forrest-guard/api-interfaces';
+import { Role } from '@prisma/client';
 
 describe('CompanyService', (): void => {
   let service: CompanyService;
@@ -55,25 +56,71 @@ describe('CompanyService', (): void => {
     processDisplay = {
       coffeeBatches: [
         {
-          id: '5122ea21-c437-4458-9102-279111269703',
-          weight: 0,
-          recipient: '13c9913c-d324-43d1-b834-f536a9e0453c',
+          id: '',
+          active: false,
+          weight: 100,
+          recipient: {
+            address: {
+              city: 'test',
+              country: 'test',
+              postalCode: 'test',
+              state: 'test',
+              street: 'test',
+            },
+            email: 'test',
+            employeeId: 'test',
+            firstName: 'test',
+            id: 'test',
+            lastName: 'test',
+            mobilePhoneNumber: 'test',
+            role: Role.EMPLOYEE,
+            name: 'test',
+          },
           processStep: {
-            id: '0e66ad1',
-            location: 'location',
-            date: new Date('2024-05-13T13:08:44.247Z'),
+            date: new Date(),
+            id: 'test',
             process: {
-              id: '',
-              name: 'harvest',
+              id: 'test',
+              name: 'test',
             },
             executedBy: {
-              id: '9d8530e66ad1',
-              employeeId: '8918e6b71',
-              firstName: 'Pascal',
-              lastName: 'Lohse',
-              email: 'string',
-              role: 'USER',
-              mobilePhoneNumber: '348934000'
+              address: {
+                city: 'test',
+                country: 'test',
+                postalCode: 'test',
+                state: 'test',
+                street: 'test',
+              },
+              email: 'test',
+              employeeId: 'test',
+              firstName: 'test',
+              id: 'test',
+              lastName: 'test',
+              mobilePhoneNumber: 'test',
+              role: Role.EMPLOYEE,
+              name: 'test',
+            },
+            location: 'test',
+            farmedLand: {
+              id: 'test',
+              description: 'test',
+            },
+            recordedBy: {
+              address: {
+                city: 'test',
+                country: 'test',
+                postalCode: 'test',
+                state: 'test',
+                street: 'test',
+              },
+              email: 'test',
+              employeeId: 'test',
+              firstName: 'test',
+              id: 'test',
+              lastName: 'test',
+              mobilePhoneNumber: 'test',
+              role: Role.EMPLOYEE,
+              name: 'test',
             },
           }
         }

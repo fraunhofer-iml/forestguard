@@ -5,6 +5,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { BatchDetailsComponent } from './details.component';
+import { BatchStatusEnum } from './enum/batchStatusEnum';
 
 describe('BatchDetailsComponent', () => {
   let component: BatchDetailsComponent;
@@ -60,6 +61,14 @@ describe('BatchDetailsComponent', () => {
       ];
       const result = component.getProof(ProofType.PROOF_OF_OWNERSHIP, proofs);
       expect(result).toBeUndefined();
+    });
+
+    it('should return "active" status when active is true', () => {
+      expect(component.isBatchActive(true)).toBe(BatchStatusEnum.active);
+    });
+
+    it('should return "inactive" status when active is false', () => {
+      expect(component.isBatchActive(false)).toBe(BatchStatusEnum.inactive);
     });
 
     describe('findOrder', () => {

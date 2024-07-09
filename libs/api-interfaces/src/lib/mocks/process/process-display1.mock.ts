@@ -1,13 +1,9 @@
 import { ProcessDisplayDto } from '../../dtos';
+import { batch1Mock } from '../batch';
 
 export const processDisplay1Mock: ProcessDisplayDto = {
   coffeeBatches: [
-    {
-      id: '5122ea21-c437-4458-9102-279111269703',
-      weight: 0,
-      recipient: '13c9913c-d324-43d1-b834-f536a9e0453c',
-      //processStep: '6eb8e77c-cc08-44de-9b7a-2cdfc9387e7d'
-    },
+    batch1Mock
   ],
   edges: [
     {

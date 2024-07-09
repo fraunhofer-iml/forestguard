@@ -2,56 +2,44 @@
   <a routerLink="/batches" class="font-semibold text-gray-700 hover:underline">Batches</a>
   <span class="material-symbols-outlined text-lg"> chevron_right </span>
   <h1 class="font-medium">{{ id$ | async }}</h1>
+    <p *ngIf="batch$ | async as batch"
+       [ngClass]="batch.active ? 'bg-green-600' : 'bg-gray-400'"
+       class=" ml-auto text-white rounded-full px-4 py-2 mb-4">
+      Status: {{ isBatchActive(batch.active) }}
+    </p>
 </header>
 
 <div *ngIf="batch$ | async as batch">
-  <div *ngIf="related$ | async as relations" class="space-y-4">
-    <div class="card" *ngIf="relations.coffeeBatches.length === 0">
-      <div class="flex flex-row items-center justify-between">
-        <div>
-          <span class="text-neutral-500 text-sm">{{ batch.processStep.process.name }}</span>
-          <h2 class="text-lg font-medium text-neutral-400">Batch {{ batch.id }}</h2>
-        </div>
-        <div class="grid grid-cols-2 space-x-4 text-neutral-500">
-          <p class="text-right font-medium">Date</p>
-          <p>{{ batch.processStep.date | date }}</p>
-          <p class="text-right font-medium">Process Owner</p>
-          <p>{{ getUserOrCompanyName(batch.processStep.executedBy) }}</p>
-          <p class="text-right font-medium">Author of Entry</p>
-          <p>{{ getUserOrCompanyName(batch.processStep.recordedBy) }}</p>
-        </div>
+  <div class="card">
+    <div class="flex flex-row items-center justify-between">
+      <div>
+        <span class="text-neutral-500 text-sm">{{ batch.processStep.process.name }}</span>
+        <h2 class="text-lg font-medium text-neutral-400">Batch {{ batch.id }}</h2>
+        <span class="text-neutral-500 text-sm">Weight [kg] {{ batch.weight }}</span>
       </div>
-    </div>
-    <div *ngIf="relations.coffeeBatches.length > 0" class="space-y-4">
-      <div class="card" *ngFor="let relation of relations.edges">
-        <div class="flex flex-row items-center justify-between" *ngIf="getBatchById(relation, relations.coffeeBatches) as batch">
-          <div class="flex flex-col">
-            <span class="text-neutral-500 text-sm">{{ batch.processStep?.process?.name }}</span>
-            <a class="text-lg font-medium text-neutral-400" [routerLink]="'/batches/' + batch.id">Batch {{ batch.id }}</a>
-          </div>
-          <div class="grid grid-cols-2 space-x-4 text-neutral-500">
-            <p class="text-right font-medium">Date</p>
-            <p>{{ batch.processStep?.date | date }}</p>
-          </div>
-        </div>
+      <div class="grid grid-cols-2 space-x-4 text-neutral-500">
+        <p class="text-right font-medium">Process Date</p>
+        <p>{{ batch.processStep.date | date }}</p>
+        <p class="text-right font-medium">Process Owner</p>
+        <p>{{ getUserOrCompanyName(batch.processStep.executedBy) }}</p>
+        <p class="text-right font-medium">Recipient</p>
+        <p>{{ getUserOrCompanyName(batch.recipient) }}</p>
+        <p class="text-right font-medium">Author of Entry</p>
+        <p>{{ getUserOrCompanyName(batch.processStep.recordedBy) }}</p>
       </div>
     </div>
   </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" *ngIf="batch.processStep.farmedLand">
     <div class="card text-neutral-300">
       <h1 class="text-lg font-semibold">{{ batch.processStep.process.name }} Details</h1>
       <div class="mt-8 grid grid-cols-1 md:grid-cols-2">
-        <span class="border-b-2 py-2 font-medium">Process Owner (Farmer)</span>
-        <p class="border-b-2 py-2 text-neutral-500">{{ getUserOrCompanyName(batch.processStep.executedBy) }}</p>
-        <span class="border-b-2 py-2 font-medium" *ngIf="batch.processStep.farmedLand">Field</span>
-        <p class="border-b-2 py-2 text-neutral-500" *ngIf="batch.processStep.farmedLand">{{ batch.processStep.farmedLand.description }}</p>
-        <span class="border-b-2 py-2 font-medium">Weight [kg]</span>
-        <p class="border-b-2 py-2 text-neutral-500">{{ batch.weight }}</p>
-        <span class="py-2 font-medium">Harvest Date</span>
-        <p class="py-2 text-neutral-500">{{ batch.processStep.date | date }}</p>
+        <span class="border-b-2 py-2 font-medium">Field</span>
+        <p class="border-b-2 py-2 text-neutral-500">{{ batch.processStep.farmedLand.description }}</p>
+        <span class="py-2 font-medium">Sort of Coffee</span>
+        <p class="py-2 text-neutral-500">{{ batch.processStep.farmedLand.cultivatedWith?.sort }}</p>
       </div>
     </div>
-    <div class="card text-neutral-300" *ngIf="batch.processStep.farmedLand">
+    <div class="card text-neutral-300">
       <h1 class="text-lg font-semibold">PDF Documents</h1>
       <div class="h-full flex items-center justify-start w-full">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center w-full justify-center">

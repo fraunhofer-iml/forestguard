@@ -1,10 +1,11 @@
-import { BatchDto, CoffeeBatch, Edge, ProofDto, ProofType } from '@forrest-guard/api-interfaces';
+import { BatchDto, Edge, ProofDto, ProofType } from '@forrest-guard/api-interfaces';
 import { map, Observable, switchMap } from 'rxjs';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
+import { BatchStatusEnum } from './enum/batchStatusEnum';
 
 @Component({
   selector: 'app-batch-details',
@@ -13,16 +14,6 @@ import { getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
 export class BatchDetailsComponent {
   id$ = this.route.params.pipe(map((params) => params['id']));
   batch$: Observable<BatchDto> = this.id$.pipe(switchMap((id) => this.batchesService.getBatchById(id)));
-
-  related$: Observable<{ coffeeBatches: CoffeeBatch[]; edges: string[] }> = this.id$.pipe(
-    switchMap((id) => this.batchesService.getRelatedBatches(id)),
-    map(({ data, id }) => {
-      return {
-        coffeeBatches: data.coffeeBatches || [],
-        edges: this.findOrder(data.edges, id),
-      };
-    })
-  );
 
   MINIO_URL = environment.MINIO.URL;
 
@@ -35,8 +26,8 @@ export class BatchDetailsComponent {
     return proofs?.find((proof) => proof.type === type);
   }
 
-  getBatchById(id: string, batches: CoffeeBatch[]): CoffeeBatch | undefined {
-    return batches.find((batch) => batch.id === id);
+  isBatchActive(active: boolean): string {
+    return active ? BatchStatusEnum.active : BatchStatusEnum.inactive;
   }
 
   /**
