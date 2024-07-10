@@ -12,7 +12,7 @@ export const environment = {
     URL: `${BASE_URL}/companies`,
   },
   CULTIVATIONS: {
-    URL: `${BASE_URL}/cultitations`,
+    URL: `${BASE_URL}/cultivations`,
   },
   PLOTSOFLAND: {
     URL: `${BASE_URL}/pols`,

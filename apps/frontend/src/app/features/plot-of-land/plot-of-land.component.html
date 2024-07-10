@@ -1,0 +1,59 @@
+<header class="font-semibold pb-4 flex flex-row gap-2 text-neutral-300 items-center">
+  <h1 class="font-medium">Add Plot of Land</h1>
+</header>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div class="card">
+    <form [formGroup]="plotOfLandFormGroup">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label class="w-full">Farmer</mat-label>
+        <mat-select formControlName="processOwner" placeholder="Farmer" class="w-full !border-none">
+          <mat-option *ngFor="let farmer of farmers$ | async" [value]="farmer.id">
+            {{ farmer.lastName }}, {{ farmer.firstName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Region</mat-label>
+        <input matInput formControlName="region" placeholder="Region" />
+      </mat-form-field>
+
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Plot Of Land</mat-label>
+        <input matInput formControlName="plotOfLand" placeholder="Plot Of Land" />
+      </mat-form-field>
+
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Sort Of Coffee</mat-label>
+        <input placeholder="Sort Of Coffee" matInput formControlName="sortOfCoffee" [matAutocomplete]="auto" />
+        <mat-autocomplete autoActiveFirstOption="" #auto="matAutocomplete">
+          <mat-option *ngFor="let option of coffeeOptions$ | async" [value]="option.sort">
+            {{ option.sort }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Local Plot of Land ID</mat-label>
+        <input matInput formControlName="localPlotOfLandId" placeholder="Local Plot of Land ID" />
+      </mat-form-field>
+
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>National Plot of Land ID</mat-label>
+        <input matInput formControlName="nationalPlotOfLandId" placeholder="National Plot of Land ID" />
+      </mat-form-field>
+
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Polygondata</mat-label>
+        <input matInput formControlName="polygondata" placeholder="Polygondata" />
+      </mat-form-field>
+    </form>
+  </div>
+  <app-upload-form [selectOptions]="uploadSelectOption" [title]="'Upload Proofs'" (uploadDocument)="submitFile($event)"></app-upload-form>
+</div>
+<div class="card mt-4">
+  <div class="inline-flex justify-end gap-4 w-full">
+    <button mat-button (click)="clearInputFields()">Clear</button>
+    <button mat-flat-button (click)="submitPlotOfLand()">Save</button>
+  </div>
+</div>

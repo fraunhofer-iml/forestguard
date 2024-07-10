@@ -10,11 +10,12 @@ import { BatchService } from './services/batch/batch.service';
 import { CompanyService } from './services/company/company.service';
 import { PlotOfLandService } from './services/plotOfLand/plotOfLand.service';
 import { UserService } from './services/user/user.service';
+import { CultivationService } from './services/cultivation/cultivation.service';
 
 @NgModule({
   declarations: [UploadFormComponent],
   imports: [CommonModule, MatFormFieldModule, MatSelectModule, MatButtonModule, ReactiveFormsModule],
-  providers: [provideHttpClient(), CompanyService, BatchService, PlotOfLandService, UserService],
+  providers: [provideHttpClient(), CompanyService, BatchService, PlotOfLandService, UserService, CultivationService],
   exports: [UploadFormComponent],
 })
 export class SharedModule {}

@@ -36,7 +36,12 @@
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field class="w-full mt-5" appearance="outline">
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Plot of Land</mat-label>
+        <input matInput formControlName="plotOfLand" placeholder="Plot of Land" />
+      </mat-form-field>
+    
+      <mat-form-field class="w-full" appearance="outline">
         <mat-label>Author of Entry</mat-label>
         <mat-select formControlName="authorOfEntry" placeholder="Author of Entry">
           <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }} </mat-option>
