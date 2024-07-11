@@ -23,8 +23,6 @@ export class PlotOfLandController {
   @ApiOperation({ description: 'Create a plot of land for a farmer' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
   createPlotOfLand(@Query('farmerId') farmerId: string, @Body() plotOfLandCreateDto: PlotOfLandCreateDto): Promise<PlotOfLandDto> {
-    // TODO-MP: This workaround is temporary and intended for the sprint review only. It will be removed by FOR-224 once merged into main.
-    plotOfLandCreateDto.cultivatedWith = "Arabica";
     return this.plotOfLandService.createPlotOfLand(plotOfLandCreateDto, farmerId);
   }
 
