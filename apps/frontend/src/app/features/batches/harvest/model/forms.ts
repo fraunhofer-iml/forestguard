@@ -5,6 +5,6 @@ export interface HarvestForm {
   recipient: FormControl<string | null>;
   weight: FormControl<number | null>;
   date: FormControl<Date | null>;
-  plotsOfLand: FormArray<FormGroup>,
+  plotsOfLand: FormArray<FormGroup>;
   authorOfEntry: FormControl<string | null>;
 }

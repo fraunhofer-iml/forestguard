@@ -1,6 +1,6 @@
 import { FarmerDto, PlotOfLandDto, UserDto } from '@forrest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
-import { catchError, EMPTY, Observable } from 'rxjs';
+import { catchError, EMPTY, filter, map, Observable, startWith, switchMap, tap } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FARMER_ID } from '../../../shared/constants';
@@ -18,7 +18,6 @@ import { HarvestService } from './service/harvest.service';
 })
 export class HarvestComponent {
   loading = false;
-  plotsOfLand$: Observable<PlotOfLandDto[]> | undefined;
   users$: Observable<UserDto[]> = this.userService.getUsers();
   farmers$: Observable<FarmerDto[]> = this.companyService.getFarmersByCompanyId(FARMER_ID);
   harvestFormGroup: FormGroup<HarvestForm> = new FormGroup<HarvestForm>({
@@ -30,6 +29,21 @@ export class HarvestComponent {
     plotsOfLand: new FormArray([this.createPlotOfLand()]),
   });
 
+  plotsOfLand$: Observable<PlotOfLandDto[]> = this.harvestFormGroup.controls.processOwner.valueChanges.pipe(
+    filter((farmerId): farmerId is string => !!farmerId),
+    switchMap((farmerId) => this.plotOfLandService.getPlotsOfLandByFarmerId(farmerId)),
+    tap(() => this.plotsOfLand.enable())
+  );
+  filteredPlotsOfLand$: Observable<PlotOfLandDto[]> = this.plotsOfLand$.pipe(
+    switchMap((plotsOfLand) =>
+      this.plotsOfLand.valueChanges.pipe(
+        map((value) => value.map((item: { plotOfLand: PlotOfLandDto | null }) => item.plotOfLand?.id)),
+        startWith([]),
+        map((value) => plotsOfLand.filter((plot) => value && !value.includes(plot.id)))
+      )
+    )
+  );
+
   constructor(
     private userService: UserService,
     private batchService: BatchService,
@@ -38,7 +52,6 @@ export class HarvestComponent {
     private harvestService: HarvestService
   ) {
     this.plotsOfLand.disable();
-    this.getPlotsOfLandByFarmerId();
   }
 
   get plotsOfLand(): FormArray {
@@ -47,22 +60,22 @@ export class HarvestComponent {
 
   createPlotOfLand(): FormGroup {
     return new FormGroup({
-      plotOfLand: new FormControl(null, Validators.required),
+      plotOfLand: new FormControl<PlotOfLandDto | null>(null, Validators.required),
     });
   }
 
-  addPlotOfLand() {
+  addPlotOfLand(): void {
     if (this.harvestFormGroup.get('processOwner')?.value != null) {
       this.plotsOfLand.push(this.createPlotOfLand());
     }
   }
 
-  removePlotOfLand(index: number) {
+  removePlotOfLand(index: number): void {
     this.plotsOfLand.removeAt(index);
   }
 
   submitHarvest(): void {
-    const plotsOfLand = this.plotsOfLand.value.map((item: { plotOfLand: string }) => item.plotOfLand);
+    const plotsOfLand = this.plotsOfLand.value.map((item: { plotOfLand: PlotOfLandDto | null }) => item.plotOfLand?.id);
 
     if (this.harvestFormGroup.valid && this.harvestFormGroup.value.plotsOfLand) {
       this.loading = true;
@@ -93,17 +106,6 @@ export class HarvestComponent {
     this.harvestFormGroup.reset();
     this.harvestFormGroup.patchValue({
       date: new Date(),
-    });
-  }
-
-  private getPlotsOfLandByFarmerId(): void {
-    this.harvestFormGroup.controls.processOwner.valueChanges.subscribe((farmerId) => {
-      if (farmerId) {
-        this.plotsOfLand$ = this.plotOfLandService.getPlotsOfLandByFarmerId(farmerId);
-        this.plotsOfLand$.subscribe(() => {
-          this.plotsOfLand.enable();
-        });
-      }
     });
   }
 }
