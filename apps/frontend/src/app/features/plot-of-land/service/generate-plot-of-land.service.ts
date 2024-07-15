@@ -10,7 +10,7 @@ export class GeneratePlotOfLandService {
       formGroup.value.plotOfLand ?? '',
       formGroup.value.polygondata ?? '',
       0,
-      '',
+      formGroup.value.cultivatedWith ?? '',
       formGroup.value.nationalPlotOfLandId ?? '',
       formGroup.value.localPlotOfLandId ?? ''
     );

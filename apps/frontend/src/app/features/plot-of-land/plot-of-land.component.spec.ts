@@ -44,7 +44,7 @@ describe('PlotOfLandComponent', () => {
     expect(component.plotOfLandFormGroup.contains('processOwner')).toBeTruthy();
     expect(component.plotOfLandFormGroup.contains('region')).toBeTruthy();
     expect(component.plotOfLandFormGroup.contains('plotOfLand')).toBeTruthy();
-    expect(component.plotOfLandFormGroup.contains('sortOfCoffee')).toBeTruthy();
+    expect(component.plotOfLandFormGroup.contains('cultivatedWith')).toBeTruthy();
     expect(component.plotOfLandFormGroup.contains('localPlotOfLandId')).toBeTruthy();
     expect(component.plotOfLandFormGroup.contains('nationalPlotOfLandId')).toBeTruthy();
     expect(component.plotOfLandFormGroup.contains('polygondata')).toBeTruthy();

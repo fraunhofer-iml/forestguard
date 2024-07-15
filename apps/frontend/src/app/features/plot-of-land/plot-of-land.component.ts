@@ -25,7 +25,7 @@ export class PlotOfLandComponent {
     processOwner: new FormControl(null, Validators.required),
     region: new FormControl(null, Validators.required),
     plotOfLand: new FormControl(null, Validators.required),
-    sortOfCoffee: new FormControl(null, Validators.required),
+    cultivatedWith: new FormControl(null, Validators.required),
     localPlotOfLandId: new FormControl(null, Validators.required),
     nationalPlotOfLandId: new FormControl(null, Validators.required),
     polygondata: new FormControl(null, Validators.required),
@@ -54,9 +54,12 @@ export class PlotOfLandComponent {
   }
 
   submitPlotOfLand(): void {
-    if (this.plotOfLandFormGroup.valid) {
+    if (this.plotOfLandFormGroup.valid && this.plotOfLandFormGroup.value.processOwner) {
       this.plotOfLandService
-        .createPlotOfLand(FARMER_ID, this.generatePlotOfLandService.createNewPlotOfLand(this.plotOfLandFormGroup))
+        .createPlotOfLand(
+          this.plotOfLandFormGroup.value.processOwner,
+          this.generatePlotOfLandService.createNewPlotOfLand(this.plotOfLandFormGroup)
+        )
         .pipe()
         .subscribe(() => {
           this.clearInputFields();
