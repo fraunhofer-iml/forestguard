@@ -1,10 +1,9 @@
-import { CultivationDto, FarmerDto, ProofType, UserDto } from '@forrest-guard/api-interfaces';
+import { CultivationDto, FarmerDto, PlotOfLandDto, ProofDto, ProofType, UserDto } from '@forrest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
-import { Observable } from 'rxjs';
+import { combineLatest, mergeMap, Observable, switchMap } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadFormSelectType } from '../../shared/components/upload-form/upload-form-select.type';
-import { FARMER_ID } from '../../shared/constants';
 import { Messages } from '../../shared/messages';
 import { CompanyService } from '../../shared/services/company/company.service';
 import { CultivationService } from '../../shared/services/cultivation/cultivation.service';
@@ -60,7 +59,20 @@ export class PlotOfLandComponent {
           this.plotOfLandFormGroup.value.processOwner,
           this.generatePlotOfLandService.createNewPlotOfLand(this.plotOfLandFormGroup)
         )
-        .pipe()
+        .pipe(
+          mergeMap((plotOfLand: PlotOfLandDto) => {
+            const createProofsObservables: Observable<ProofDto>[] = [];
+            this.uploadSelectOption.forEach((option) => {
+              if (option.file) {
+                const formData = new FormData();
+                formData.append('file', option.file);
+                formData.append('type', option.value);
+                createProofsObservables.push(this.plotOfLandService.createProof(plotOfLand.id, formData));
+              }
+            });
+            return combineLatest(createProofsObservables);
+          })
+        )
         .subscribe(() => {
           this.clearInputFields();
           toast.success(Messages.successPlotOfLand);
