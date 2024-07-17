@@ -32,7 +32,7 @@ export class PlotOfLandComponent {
   uploadSelectOption: UploadFormSelectType[] = [
     {
       value: ProofType.PROOF_OF_FREEDOM,
-      key: 'Proof of freedom',
+      key: 'Proof of freedom from deforestation',
     },
     {
       value: ProofType.PROOF_OF_OWNERSHIP,
