@@ -30,9 +30,7 @@ describe('BatchService', () => {
               findUniqueOrThrow: jest.fn(),
               findMany: jest.fn(),
             },
-            batchRelation: {
-              findMany: jest.fn(),
-            },
+            $queryRaw: jest.fn(),
           },
         },
       ],
@@ -135,16 +133,11 @@ describe('BatchService', () => {
     const testBatchId = 'testBatchId';
     const mockBatches = [mockedPrismaBatchWithRelations1, mockedPrismaBatchWithRelations2];
 
-    jest.spyOn(prisma.batchRelation, 'findMany').mockResolvedValue([]).mockResolvedValueOnce(mockedPrismaBatchRelations);
+    jest.spyOn(prisma, '$queryRaw').mockResolvedValue([]).mockResolvedValueOnce(mockedPrismaBatchRelations);
     jest.spyOn(prisma.batch, 'findMany').mockResolvedValue(mockBatches);
 
     const result = await service.readRelatedBatchesById(testBatchId);
 
-    expect(prisma.batchRelation.findMany).toHaveBeenCalledWith({
-      where: {
-        inId: testBatchId,
-      },
-    });
     expect(result.edges).toStrictEqual(mockedPrismaBatchRelations.map(mapBatchRelationToEdge));
   });
 });

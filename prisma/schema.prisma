@@ -156,22 +156,12 @@ model Batch {
   weight         Int
   active         Boolean
 
-  in  BatchRelation[] @relation("inputs")
-  out BatchRelation[] @relation("outputs")
+  in Batch[] @relation("BatchRelation")
+  out Batch[] @relation("BatchRelation")
 
   recipient   Entity @relation(fields: [recipientId], references: [id])
   recipientId String
 
   processStep   ProcessStep @relation(fields: [processStepId], references: [id])
   processStepId String
-}
-
-model BatchRelation {
-  in   Batch  @relation("inputs", fields: [inId], references: [id])
-  inId String
-
-  out   Batch  @relation("outputs", fields: [outId], references: [id])
-  outId String
-
-  @@id([outId, inId])
 }

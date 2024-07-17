@@ -1,4 +1,4 @@
-import { BatchRelation, Role } from '@prisma/client';
+import { Role } from '@prisma/client';
 import { BatchWithRelations } from '../batch.types';
 import { BatchCombinedCreateDto, BatchCreateDto, ProofType } from '@forrest-guard/api-interfaces';
 
@@ -293,17 +293,17 @@ export const mockedPrismaBatchWithRelations2: BatchWithRelations = {
   },
 };
 
-export const mockedPrismaBatchRelations: BatchRelation[] = [
+export const mockedPrismaBatchRelations = [
   {
-    inId: 'clx4fzcrh00001z7u086f78oj',
-    outId: 'clxa4gnuw00005nam96my7yw8',
+    B: 'clx4fzcrh00001z7u086f78oj',
+    A: 'clxa4gnuw00005nam96my7yw8',
   },
   {
-    inId: 'clx3c5o7i0002127ulhkouwlh',
-    outId: 'clxa4gnuw00005nam96my7yw8',
+    B: 'clx3c5o7i0002127ulhkouwlh',
+    A: 'clxa4gnuw00005nam96my7yw8',
   },
   {
-    inId: 'clx3c4n2p0000127u45e6nlgu',
-    outId: 'clxa4gnuw00005nam96my7yw8',
+    B: 'clx3c4n2p0000127u45e6nlgu',
+    A: 'clxa4gnuw00005nam96my7yw8',
   },
 ];

@@ -16,31 +16,24 @@ export const batchQuery = (batchCreateDto: BatchCreateDto) => ({
 
 export const createBatchQuery = (batchCreateDto: BatchCreateDto) => ({
   ...batchQuery(batchCreateDto),
-  out: {
-    create: relationsPointingToInputBatches(batchCreateDto),
+  in: {
+    connect: batchCreateDto.in.map((batchId) => ({
+          id: batchId,
+    }))
   },
   processStep: {
     create: {
       ...processStepQuery(batchCreateDto),
       farmedLand: batchCreateDto.processStep.harvestedLand
         ? {
-            connect: {
-              id: batchCreateDto.processStep.harvestedLand,
-            },
-          }
+          connect: {
+            id: batchCreateDto.processStep.harvestedLand,
+          },
+        }
         : undefined,
     },
   },
 });
-
-const relationsPointingToInputBatches = (batchCreateDto: BatchCreateDto) =>
-  batchCreateDto.in.map((batchId) => ({
-    in: {
-      connect: {
-        id: batchId,
-      },
-    },
-  }));
 
 export const readBatchByIdQuery = (id: string) => ({
   where: {
