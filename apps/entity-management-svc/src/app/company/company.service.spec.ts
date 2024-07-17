@@ -1,13 +1,15 @@
 import { AmqpException } from '@forrest-guard/amqp';
 import { PrismaService } from '@forrest-guard/database';
+import { HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CompanyMapper } from './company.mapper';
 import { CompanyService } from './company.service';
+import { ADDRESS_MOCK } from './mocked-data/address.mock';
 import { COMPANY_PRISMA_MOCK } from './mocked-data/company.mock';
 
 describe('CompanyService', () => {
-  let service: CompanyService;
-  let prisma: PrismaService;
+  let companyService: CompanyService;
+  let prismaService: PrismaService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -16,32 +18,123 @@ describe('CompanyService', () => {
         {
           provide: PrismaService,
           useValue: {
-            company: {
+            address: {
+              create: jest.fn(),
               findFirst: jest.fn(),
+            },
+            company: {
+              count: jest.fn(),
+              create: jest.fn(),
+              findFirst: jest.fn(),
+            },
+            entity: {
+              create: jest.fn().mockResolvedValue({ id: '1' }),
             },
           },
         },
       ],
     }).compile();
 
-    service = module.get<CompanyService>(CompanyService);
-    prisma = module.get<PrismaService>(PrismaService);
+    companyService = module.get<CompanyService>(CompanyService);
+    prismaService = module.get<PrismaService>(PrismaService);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(companyService).toBeDefined();
+    expect(prismaService).toBeDefined();
   });
 
-  it('should return a valid CompanyDto', async () => {
+  it('should create a company successfully', async () => {
+    const givenDto = {
+      name: 'Acme Corporation',
+      address: ADDRESS_MOCK,
+    };
+
+    jest.spyOn(prismaService.company, 'count').mockResolvedValue(0);
+    jest.spyOn(prismaService.address, 'findFirst').mockResolvedValue(null);
+    jest.spyOn(prismaService.address, 'create').mockResolvedValue({
+      id: '1',
+      street: givenDto.address.street,
+      postalCode: givenDto.address.postalCode,
+      city: givenDto.address.city,
+      state: givenDto.address.state,
+      country: givenDto.address.country,
+    });
+    jest.spyOn(prismaService.entity, 'create').mockResolvedValue({
+      id: '1',
+    });
+    jest.spyOn(prismaService.company, 'create').mockResolvedValue({
+      id: '1',
+      name: givenDto.name,
+      entityId: '1',
+      addressId: '1',
+    });
+
+    const actualResult = await companyService.createCompany(givenDto);
+    expect(actualResult).toBeDefined();
+    expect(prismaService.company.create).toHaveBeenCalledWith({
+      data: {
+        id: '1',
+        name: givenDto.name,
+        entity: {
+          connect: {
+            id: '1',
+          },
+        },
+        address: {
+          connectOrCreate: {
+            create: {
+              street: givenDto.address.street,
+              postalCode: givenDto.address.postalCode,
+              city: givenDto.address.city,
+              state: givenDto.address.state,
+              country: givenDto.address.country,
+            },
+            where: {
+              street_postalCode_city_state_country: {
+                street: givenDto.address.street,
+                postalCode: givenDto.address.postalCode,
+                city: givenDto.address.city,
+                state: givenDto.address.state,
+                country: givenDto.address.country,
+              },
+            },
+          },
+        },
+      },
+      include: {
+        address: true,
+      },
+    });
+  });
+
+  it('should throw an error if company name is not unique', async () => {
+    jest.spyOn(prismaService.company, 'count').mockResolvedValue(1);
+
+    const givenDto = {
+      name: 'Acme Corporation',
+      address: ADDRESS_MOCK,
+    };
+
+    await expect(companyService.createCompany(givenDto)).rejects.toThrow(AmqpException);
+    await expect(companyService.createCompany(givenDto)).rejects.toMatchObject({
+      error: {
+        message: "Company with name 'Acme Corporation' already exists.",
+        status: HttpStatus.CONFLICT,
+      },
+    });
+  });
+
+  it('should fetch a company successfully', async () => {
     const givenCompanyId = COMPANY_PRISMA_MOCK.id;
-    const expectedCompanyDto = CompanyMapper.mapCompanyPrismaToCompanyDto(COMPANY_PRISMA_MOCK);
+    const expectedResult = CompanyMapper.mapCompanyPrismaToCompanyDto(COMPANY_PRISMA_MOCK);
 
-    jest.spyOn(prisma.company, 'findFirst').mockResolvedValue(COMPANY_PRISMA_MOCK);
-    const actualCompanyDto = await service.readCompanyById(givenCompanyId);
+    jest.spyOn(prismaService.company, 'findFirst').mockResolvedValue(COMPANY_PRISMA_MOCK);
+    const actualResult = await companyService.readCompanyById(givenCompanyId);
 
-    expect(actualCompanyDto).toEqual(expectedCompanyDto);
+    expect(actualResult).toEqual(expectedResult);
 
-    expect(prisma.company.findFirst).toHaveBeenCalledWith({
+    expect(prismaService.company.findFirst).toHaveBeenCalledWith({
       include: {
         address: true,
         users: {
@@ -59,12 +152,17 @@ describe('CompanyService', () => {
     });
   });
 
-  it('should throw a AmqpException', async () => {
-    const givenCompanyId = '123';
-    const expectedException = AmqpException;
+  it('should throw an error if no company was found', async () => {
+    const givenCompanyId = '1';
 
-    jest.spyOn(prisma.company, 'findFirst').mockResolvedValue(null);
+    jest.spyOn(prismaService.company, 'findFirst').mockResolvedValue(null);
 
-    await expect(service.readCompanyById(givenCompanyId)).rejects.toThrow(expectedException);
+    await expect(companyService.readCompanyById(givenCompanyId)).rejects.toThrow(AmqpException);
+    await expect(companyService.readCompanyById(givenCompanyId)).rejects.toMatchObject({
+      error: {
+        message: 'No Company found.',
+        status: HttpStatus.NOT_FOUND,
+      },
+    });
   });
 });

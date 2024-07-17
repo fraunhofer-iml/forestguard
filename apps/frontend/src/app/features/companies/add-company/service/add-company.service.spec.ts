@@ -1,0 +1,58 @@
+import { AddressDto, CompanyCreateDto } from '@forrest-guard/api-interfaces';
+import { HttpClient, HttpHandler } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { AddCompanyService } from './add-company.service';
+
+describe('CreateCompanyService', (): void => {
+  let service: AddCompanyService;
+  let formBuilder: FormBuilder;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      providers: [AddCompanyService, HttpClient, HttpHandler],
+      imports: [],
+    }).compileComponents();
+
+    service = TestBed.inject(AddCompanyService);
+    formBuilder = TestBed.inject(FormBuilder);
+  });
+
+  it('should create', (): void => {
+    expect(service).toBeTruthy();
+  });
+
+  it('should create a AddressDto', () => {
+    const formGroup: FormGroup = formBuilder.group({
+      street: 'Example Street',
+      postalCode: '12345',
+      city: 'Example City',
+      state: 'Example State',
+      country: 'Example Country',
+    });
+
+    const result = service.generateAddress(formGroup);
+    const expected: AddressDto = {
+      street: 'Example Street',
+      postalCode: '12345',
+      city: 'Example City',
+      state: 'Example State',
+      country: 'Example Country',
+    };
+    expect(result).toEqual(expected);
+  });
+
+  it('should create a CompanyCreateDto', () => {
+    const formGroup: FormGroup = formBuilder.group({
+      name: ['Example Street'],
+      street: [''],
+      postalCode: [''],
+      city: [''],
+      state: [''],
+      country: [''],
+    });
+    const result = service.generateCompany(formGroup);
+    const expected = new CompanyCreateDto('Example Street', new AddressDto('', '', '', '', ''));
+    expect(result).toEqual(expected);
+  });
+});

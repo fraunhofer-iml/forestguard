@@ -1,5 +1,5 @@
 import { AmqpClientEnum, CompanyMessagePatterns } from '@forrest-guard/amqp';
-import { BatchDto, CompanyDto } from '@forrest-guard/api-interfaces';
+import { BatchDto, CompanyCreateDto, CompanyDto } from '@forrest-guard/api-interfaces';
 import { firstValueFrom } from 'rxjs';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
@@ -10,6 +10,10 @@ export class CompanyService {
     @Inject(AmqpClientEnum.QUEUE_ENTITY_MANAGEMENT) private readonly entityManagementService: ClientProxy,
     @Inject(AmqpClientEnum.QUEUE_PROCESS) private processService: ClientProxy
   ) {}
+
+  createCompany(dto: CompanyCreateDto): Promise<CompanyDto> {
+    return firstValueFrom(this.entityManagementService.send(CompanyMessagePatterns.CREATE, { dto }));
+  }
 
   readCompany(id: string): Promise<CompanyDto> {
     return firstValueFrom(this.entityManagementService.send(CompanyMessagePatterns.READ_BY_ID, { id }));

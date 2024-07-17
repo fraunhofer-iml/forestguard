@@ -20,7 +20,10 @@ export class PrismaErrorsInterceptor implements NestInterceptor {
           .replace(/\n/g, ' ') // Remove new lines
           .replace(/[ \t]+/g, ' ') // Remove multiple spaces
           .replace(/"/g, "'"); // Replace double quotes with single quotes
-        throw new AmqpException(errorMessage, HttpStatus.BAD_REQUEST);
+
+        const errorCode = err?.error?.status ? err.error.status : HttpStatus.BAD_REQUEST;
+
+        throw new AmqpException(errorMessage, errorCode);
       })
     );
   }

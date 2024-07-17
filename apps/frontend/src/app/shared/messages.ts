@@ -1,5 +1,6 @@
 export enum Messages {
   successHarvest = 'Harvest successfully added',
+  successCompany = 'Company successfully added',
   successProcessStep = 'Process step added successfully',
   successPlotOfLand = 'Plot of Land successfully added',
   error = 'Please fill in all required fields',

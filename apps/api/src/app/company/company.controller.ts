@@ -1,4 +1,4 @@
-import { BatchDto, company1Mock, CompanyCreateDto, CompanyDto, farmer1Mock, FarmerDto } from '@forrest-guard/api-interfaces';
+import { BatchDto, CompanyCreateDto, CompanyDto, farmer1Mock, FarmerDto } from '@forrest-guard/api-interfaces';
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CompanyService } from './company.service';
@@ -11,8 +11,8 @@ export class CompanyController {
   @Post()
   @ApiOperation({ description: 'Create a company' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
-  createCompany(@Body() companyCreateDto: CompanyCreateDto): CompanyDto {
-    return company1Mock;
+  createCompany(@Body() dto: CompanyCreateDto): Promise<CompanyDto> {
+    return this.companyService.createCompany(dto);
   }
 
   @Get(':id')

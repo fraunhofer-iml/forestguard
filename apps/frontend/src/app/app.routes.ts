@@ -16,9 +16,13 @@ export const appRoutes: Route[] = [
         loadChildren: () => import('./features/batches/batches.module').then((m) => m.BatchesModule),
       },
       {
+        path: 'companies',
+        loadChildren: () => import('./features/companies/companies.module').then((m) => m.CompaniesModule),
+      },
+      {
         path: 'pols',
-        loadChildren: () => import('./features/plot-of-land/plot-of-land.module').then((m) => m.PlotOfLandModule)
-      }
+        loadChildren: () => import('./features/plot-of-land/plot-of-land.module').then((m) => m.PlotOfLandModule),
+      },
     ],
   },
 ];

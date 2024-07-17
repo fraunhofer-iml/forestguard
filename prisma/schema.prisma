@@ -27,6 +27,8 @@ model Address {
 
   companies Company[]
   users     User[]
+
+  @@unique([street, postalCode, city, state, country])
 }
 
 model Entity {
@@ -43,7 +45,7 @@ model Entity {
 
 model Company {
   id   String @id @default(cuid())
-  name String
+  name String @unique
 
   entity   Entity @relation(fields: [entityId], references: [id])
   entityId String @unique
