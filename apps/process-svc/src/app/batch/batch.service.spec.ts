@@ -1,17 +1,15 @@
+import { BatchDto } from '@forrest-guard/api-interfaces';
 import { PrismaService } from '@forrest-guard/database';
+import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { BatchService } from './batch.service';
 import {
   mockedCombinedBatchDto,
   mockedCreateBatchDto,
-  mockedPrismaBatchRelations,
   mockedPrismaBatchWithRelations1,
   mockedPrismaBatchWithRelations2,
 } from './mocked-data/batch.mock';
-import { Test, TestingModule } from '@nestjs/testing';
-import { BatchService } from './batch.service';
-import { BatchDto } from '@forrest-guard/api-interfaces';
-import { BatchWithRelations } from './batch.types';
-import { mapBatchRelationToEdge } from './batch.mapper';
+import { BatchWithRelations } from './types/batch.types';
 
 describe('BatchService', () => {
   let service: BatchService;
@@ -127,18 +125,6 @@ describe('BatchService', () => {
     expectResultEntitiesToBeDtoUsers(result[0], mockBatches[0]);
     expectResultToBeBatchDto(result[1], mockBatches[1]);
     expectResultEntitiesToBeDtoCompanies(result[1], mockBatches[1]);
-  });
-
-  it('should read all related batches by batch ID', async () => {
-    const testBatchId = 'testBatchId';
-    const mockBatches = [mockedPrismaBatchWithRelations1, mockedPrismaBatchWithRelations2];
-
-    jest.spyOn(prisma, '$queryRaw').mockResolvedValue([]).mockResolvedValueOnce(mockedPrismaBatchRelations);
-    jest.spyOn(prisma.batch, 'findMany').mockResolvedValue(mockBatches);
-
-    const result = await service.readRelatedBatchesById(testBatchId);
-
-    expect(result.edges).toStrictEqual(mockedPrismaBatchRelations.map(mapBatchRelationToEdge));
   });
 });
 

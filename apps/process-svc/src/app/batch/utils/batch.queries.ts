@@ -18,20 +18,36 @@ export const createBatchQuery = (batchCreateDto: BatchCreateDto) => ({
   ...batchQuery(batchCreateDto),
   in: {
     connect: batchCreateDto.in.map((batchId) => ({
-          id: batchId,
-    }))
+      id: batchId,
+    })),
   },
   processStep: {
     create: {
       ...processStepQuery(batchCreateDto),
       farmedLand: batchCreateDto.processStep.harvestedLand
         ? {
-          connect: {
-            id: batchCreateDto.processStep.harvestedLand,
-          },
-        }
+            connect: {
+              id: batchCreateDto.processStep.harvestedLand,
+            },
+          }
         : undefined,
     },
+  },
+});
+
+export const getBatchByIdQuery = (id: string) => ({
+  where: { id },
+  include: {
+    in: true,
+    out: true,
+    processStep: {
+      include: {
+        recordedBy: { include: { user: true, company: true } },
+        executedBy: { include: { user: true, company: true } },
+        process: true,
+      },
+    },
+    recipient: true,
   },
 });
 
@@ -88,6 +104,8 @@ const processStepQuery = (batchCreateDto: BatchCreateDto) => ({
 });
 
 const readBatchIncludeQuery = () => ({
+  in: true,
+  out: true,
   recipient: {
     include: {
       company: {

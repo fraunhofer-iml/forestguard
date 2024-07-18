@@ -1,5 +1,5 @@
+import { mockedPrismaBatchWithRelations1, mockedPrismaBatchWithRelations2 } from '../mocked-data/batch.mock';
 import { mapBatchPrismaToBatchDto } from './batch.mapper';
-import { mockedPrismaBatchWithRelations1, mockedPrismaBatchWithRelations2 } from './mocked-data/batch.mock';
 
 describe('Batch Mapper', () => {
   it('should map BatchWithRelations to BatchDto', () => {

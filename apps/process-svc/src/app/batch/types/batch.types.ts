@@ -25,7 +25,6 @@ export type CompanyWithRelations = Company & {
   address: Address;
 };
 
-
 export type PlotOfLandWithRelations = PlotOfLand & {
   cultivatedWith: Cultivation;
   proofs: Proof[];

@@ -1,21 +1,21 @@
-import { Role } from '@prisma/client';
-import { BatchWithRelations } from '../batch.types';
 import { BatchCombinedCreateDto, BatchCreateDto, ProofType } from '@forrest-guard/api-interfaces';
+import { Batch, Role } from '@prisma/client';
+import { BatchWithRelations } from '../types/batch.types';
 
 export const mockedCreateBatchDto: BatchCreateDto = {
-    idEUInfoSystem: null,
-    in: [],
-    weight: 33,
-    recipient: 'ctest102',
-    processStep: {
-      location: '',
-      date: '2024-05-24T08:28:24Z',
-      process: null,
-      recordedBy: 'ctest102',
-      executedBy: 'ctest101',
-      harvestedLand: 'ctest401',
-    },
-  };
+  idEUInfoSystem: null,
+  in: [],
+  weight: 33,
+  recipient: 'ctest102',
+  processStep: {
+    location: '',
+    date: '2024-05-24T08:28:24Z',
+    process: null,
+    recordedBy: 'ctest102',
+    executedBy: 'ctest101',
+    harvestedLand: 'ctest401',
+  },
+};
 
 export const mockedCombinedBatchDto: BatchCombinedCreateDto = {
   idEUInfoSystem: null,
@@ -291,6 +291,230 @@ export const mockedPrismaBatchWithRelations2: BatchWithRelations = {
       },
     },
   },
+};
+
+export const mockedPrismaBatchWithRelations3: BatchWithRelations = {
+  id: '3',
+  euInfoSystemId: '2',
+  weight: 200,
+  active: false,
+  recipientId: '2',
+  processStepId: '2',
+  processStep: {
+    id: '2',
+    location: 'Location2',
+    date: new Date(),
+    processId: '2',
+    farmedLandId: '2',
+    executedByEntityId: '2',
+    recordedByEntityId: '2',
+    process: {
+      id: '2',
+      name: 'Process2',
+    },
+    farmedLand: {
+      id: '2',
+      country: 'Country2',
+      areaInHA: 200,
+      cultivationId: '2',
+      description: 'Description2',
+      district: 'District2',
+      farmerId: '2',
+      localPlotOfLandId: '2',
+      nationalPlotOfLandId: '2',
+      polygonData: 'PolygonData2',
+      region: 'Region2',
+      cultivatedWith: {
+        id: 'ctest301',
+        type: 'Corn',
+        sort: 'Dent Corn',
+      },
+      proofs: [
+        {
+          documentId: 'DOC123456',
+          type: ProofType.PROOF_OF_FREEDOM,
+          documentRef: 'ORG123456',
+          notice: 'This land is certified organic.',
+          plotOfLandId: 'ctest401',
+        },
+      ],
+    },
+    recordedBy: {
+      id: '2',
+      company: {
+        id: '2',
+        name: 'Company2',
+        entityId: '2',
+        addressId: '2',
+        address: {
+          id: '2',
+          street: 'Street2',
+          city: 'City2',
+          state: 'State2',
+          postalCode: 'PostalCode2',
+          country: 'Country2',
+        },
+      },
+    },
+    executedBy: {
+      id: '1',
+      company: {
+        id: '1',
+        name: 'Company1',
+        entityId: '1',
+        addressId: '1',
+        address: {
+          id: '1',
+          street: 'Street1',
+          city: 'City1',
+          state: 'State1',
+          postalCode: 'PostalCode1',
+          country: 'Country1',
+        },
+      },
+    },
+  },
+  recipient: {
+    id: '2',
+    company: {
+      id: '2',
+      name: 'RecipientCompany',
+      entityId: '2',
+      addressId: '2',
+      address: {
+        id: '2',
+        street: 'Street2',
+        city: 'City2',
+        state: 'State2',
+        postalCode: 'PostalCode2',
+        country: 'Country2',
+      },
+    },
+  },
+};
+
+export const mockedPrismaBatchWithRelations4: BatchWithRelations = {
+  id: '4',
+  euInfoSystemId: '2',
+  weight: 200,
+  active: false,
+  recipientId: '2',
+  processStepId: '2',
+  processStep: {
+    id: '2',
+    location: 'Location2',
+    date: new Date(),
+    processId: '2',
+    farmedLandId: '2',
+    executedByEntityId: '2',
+    recordedByEntityId: '2',
+    process: {
+      id: '2',
+      name: 'Process2',
+    },
+    farmedLand: {
+      id: '2',
+      country: 'Country2',
+      areaInHA: 200,
+      cultivationId: '2',
+      description: 'Description2',
+      district: 'District2',
+      farmerId: '2',
+      localPlotOfLandId: '2',
+      nationalPlotOfLandId: '2',
+      polygonData: 'PolygonData2',
+      region: 'Region2',
+      cultivatedWith: {
+        id: 'ctest301',
+        type: 'Corn',
+        sort: 'Dent Corn',
+      },
+      proofs: [
+        {
+          documentId: 'DOC123456',
+          type: ProofType.PROOF_OF_FREEDOM,
+          documentRef: 'ORG123456',
+          notice: 'This land is certified organic.',
+          plotOfLandId: 'ctest401',
+        },
+      ],
+    },
+    recordedBy: {
+      id: '2',
+      company: {
+        id: '2',
+        name: 'Company2',
+        entityId: '2',
+        addressId: '2',
+        address: {
+          id: '2',
+          street: 'Street2',
+          city: 'City2',
+          state: 'State2',
+          postalCode: 'PostalCode2',
+          country: 'Country2',
+        },
+      },
+    },
+    executedBy: {
+      id: '1',
+      company: {
+        id: '1',
+        name: 'Company1',
+        entityId: '1',
+        addressId: '1',
+        address: {
+          id: '1',
+          street: 'Street1',
+          city: 'City1',
+          state: 'State1',
+          postalCode: 'PostalCode1',
+          country: 'Country1',
+        },
+      },
+    },
+  },
+  recipient: {
+    id: '2',
+    company: {
+      id: '2',
+      name: 'RecipientCompany',
+      entityId: '2',
+      addressId: '2',
+      address: {
+        id: '2',
+        street: 'Street2',
+        city: 'City2',
+        state: 'State2',
+        postalCode: 'PostalCode2',
+        country: 'Country2',
+      },
+    },
+  },
+};
+
+export const mockedPrismaBatch4: Batch & { in: Batch[]; out: Batch[] } = {
+  ...mockedPrismaBatchWithRelations4,
+  in: [],
+  out: [],
+};
+
+export const mockedPrismaBatch3: Batch & { in: Batch[]; out: Batch[] } = {
+  ...mockedPrismaBatchWithRelations3,
+  in: [],
+  out: [],
+};
+
+export const mockedPrismaBatch2: Batch & { in: Batch[]; out: Batch[] } = {
+  ...mockedPrismaBatchWithRelations2,
+  in: [mockedPrismaBatchWithRelations1],
+  out: [mockedPrismaBatch3, mockedPrismaBatch4],
+};
+
+export const mockedPrismaBatch1: Batch & { in: Batch[]; out: Batch[] } = {
+  ...mockedPrismaBatchWithRelations1,
+  in: [],
+  out: [mockedPrismaBatch2],
 };
 
 export const mockedPrismaBatchRelations = [

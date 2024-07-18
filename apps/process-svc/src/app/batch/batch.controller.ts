@@ -3,11 +3,11 @@ import { BatchCombinedCreateDto, BatchCreateDto, BatchDto, ProcessDisplayDto } f
 import { Controller, HttpStatus } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { BatchService } from './batch.service';
+import { RelatedBatchesService } from './related/related-batches.service';
 
 @Controller()
 export class BatchController {
-  constructor(private readonly batchService: BatchService) {
-  }
+  constructor(private readonly batchService: BatchService, private readonly relatedBatchService: RelatedBatchesService) {}
 
   @MessagePattern(BatchMessagePatterns.CREATE_HARVESTS)
   async createHarvests(@Payload() batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
@@ -36,6 +36,6 @@ export class BatchController {
 
   @MessagePattern(BatchMessagePatterns.READ_BY_ID_RELATED)
   async readRelatedBatchesById(@Payload() payload: { id: string }): Promise<ProcessDisplayDto> {
-    return this.batchService.readRelatedBatchesById(payload.id);
+    return this.relatedBatchService.readRelatedBatchesById(payload.id);
   }
 }
