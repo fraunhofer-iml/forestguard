@@ -156,8 +156,8 @@ model Batch {
   weight         Int
   active         Boolean
 
-  in Batch[] @relation("BatchRelation")
-  out Batch[] @relation("BatchRelation")
+  ins Batch[] @relation("BatchRelation")
+  outs Batch[] @relation("BatchRelation")
 
   recipient   Entity @relation(fields: [recipientId], references: [id])
   recipientId String

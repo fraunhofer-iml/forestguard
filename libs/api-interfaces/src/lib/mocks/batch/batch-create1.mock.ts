@@ -3,7 +3,7 @@ import { processStepCreate1Mock } from '../process';
 
 export const batchCreate1Mock: BatchCreateDto = {
   idEUInfoSystem: 'EU Info',
-  in: [
+  ins: [
     '8918e6b7-e288-4f95-bc87-9d8530e66ad1'
   ],
   weight: 0,

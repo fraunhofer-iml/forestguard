@@ -3,19 +3,19 @@ import { Batch, Role } from '@prisma/client';
 import { BatchWithRelations } from '../types/batch.types';
 
 export const mockedCreateBatchDto: BatchCreateDto = {
-  idEUInfoSystem: null,
-  in: [],
-  weight: 33,
-  recipient: 'ctest102',
-  processStep: {
-    location: '',
-    date: '2024-05-24T08:28:24Z',
-    process: null,
-    recordedBy: 'ctest102',
-    executedBy: 'ctest101',
-    harvestedLand: 'ctest401',
-  },
-};
+    idEUInfoSystem: null,
+    ins: [],
+    weight: 33,
+    recipient: 'ctest102',
+    processStep: {
+      location: '',
+      date: '2024-05-24T08:28:24Z',
+      process: null,
+      recordedBy: 'ctest102',
+      executedBy: 'ctest101',
+      harvestedLand: 'ctest401',
+    },
+  };
 
 export const mockedCombinedBatchDto: BatchCombinedCreateDto = {
   idEUInfoSystem: null,
@@ -531,3 +531,21 @@ export const mockedPrismaBatchRelations = [
     A: 'clxa4gnuw00005nam96my7yw8',
   },
 ];
+
+export const mockedExportBatchWithRelations1 = {
+  ...mockedPrismaBatchWithRelations1,
+  ins: [],
+  outs: [mockedPrismaBatchWithRelations2]
+}
+
+export const mockedExportBatchWithRelations2 =     {
+  ...mockedPrismaBatchWithRelations2,
+  ins: [mockedExportBatchWithRelations1],
+  outs: [mockedExportBatchWithRelations1]
+}
+
+export const mockedExportBatchDto = {
+  ...mockedPrismaBatchWithRelations1,
+  ins: [mockedExportBatchWithRelations2],
+  outs: []
+}

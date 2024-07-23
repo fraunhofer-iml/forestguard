@@ -1,15 +1,17 @@
-import { BatchDto } from '@forrest-guard/api-interfaces';
 import { PrismaService } from '@forrest-guard/database';
-import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { BatchService } from './batch.service';
 import {
   mockedCombinedBatchDto,
-  mockedCreateBatchDto,
+  mockedCreateBatchDto, mockedExportBatchDto, mockedPrismaBatchRelations,
   mockedPrismaBatchWithRelations1,
   mockedPrismaBatchWithRelations2,
 } from './mocked-data/batch.mock';
+import { Test, TestingModule } from '@nestjs/testing';
+import { BatchService } from './batch.service';
+import { BatchDto } from '@forrest-guard/api-interfaces';
 import { BatchWithRelations } from './types/batch.types';
+import { mapBatchRelationToEdge } from './utils/batch.mapper';
+import { exportBatchIncludeQuery } from './utils/batch.queries';
 
 describe('BatchService', () => {
   let service: BatchService;
@@ -72,7 +74,7 @@ describe('BatchService', () => {
   it('should create one batch and connect it to an existing one', async () => {
     const mockedCreateBatchDtosWithLinks = [mockedCreateBatchDto].slice();
     const links = ['l1', 'l2', 'l3'];
-    mockedCreateBatchDtosWithLinks[0].in = links;
+    mockedCreateBatchDtosWithLinks[0].ins = links;
 
     jest.spyOn(prisma.batch, 'create').mockImplementation();
     jest.spyOn(prisma.batch, 'updateMany').mockImplementation();
@@ -125,6 +127,49 @@ describe('BatchService', () => {
     expectResultEntitiesToBeDtoUsers(result[0], mockBatches[0]);
     expectResultToBeBatchDto(result[1], mockBatches[1]);
     expectResultEntitiesToBeDtoCompanies(result[1], mockBatches[1]);
+  });
+
+  it('should read all related batches by batch ID', async () => {
+    const testBatchId = 'testBatchId';
+    const mockBatches = [mockedPrismaBatchWithRelations1, mockedPrismaBatchWithRelations2];
+
+    jest.spyOn(prisma, '$queryRaw').mockResolvedValue([]).mockResolvedValueOnce(mockedPrismaBatchRelations);
+    jest.spyOn(prisma.batch, 'findMany').mockResolvedValue(mockBatches);
+
+    const result = await service.readRelatedBatchesById(testBatchId);
+
+    expect(result.edges).toStrictEqual(mockedPrismaBatchRelations.map(mapBatchRelationToEdge));
+  });
+
+  it('should read export data', async () => {
+    const testBatchId = 'testBatchId';
+
+    jest.spyOn(prisma.batch, 'findUniqueOrThrow').mockResolvedValue(mockedExportBatchDto);
+    jest.spyOn(prisma.batch, 'findMany').mockResolvedValue([])
+      .mockResolvedValueOnce([mockedExportBatchDto.ins[0]])
+      .mockResolvedValueOnce([mockedExportBatchDto.ins[0].ins[0]]);
+
+    const result = await service.exportBatch(testBatchId);
+
+    expect(result.rootBatch.ins[0].ins[0].id).toBe(mockedExportBatchDto.ins[0].ins[0].id)
+    expect(prisma.batch.findUniqueOrThrow).toHaveBeenCalledWith({
+      where: {
+        id: testBatchId,
+      },
+      include: exportBatchIncludeQuery(),
+    });
+    expect(prisma.batch.findMany).toHaveBeenCalledWith({
+      where: {
+        id: { in: [mockedExportBatchDto.ins[0].id] },
+      },
+      include: exportBatchIncludeQuery(),
+    });
+    expect(prisma.batch.findMany).toHaveBeenCalledWith({
+      where: {
+        id: { in: [mockedExportBatchDto.ins[0].ins[0].id] },
+      },
+      include: exportBatchIncludeQuery(),
+    });
   });
 });
 

@@ -1,5 +1,11 @@
 import { BatchMessagePatterns, CompanyMessagePatterns } from '@forrest-guard/amqp';
-import { BatchCombinedCreateDto, BatchCreateDto, BatchDto, ProcessDisplayDto } from '@forrest-guard/api-interfaces';
+import {
+  BatchCombinedCreateDto,
+  BatchCreateDto,
+  BatchDto,
+  BatchExportWrapperDto,
+  ProcessDisplayDto,
+} from '@forrest-guard/api-interfaces';
 import { Controller, HttpStatus } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { BatchService } from './batch.service';
@@ -37,5 +43,10 @@ export class BatchController {
   @MessagePattern(BatchMessagePatterns.READ_BY_ID_RELATED)
   async readRelatedBatchesById(@Payload() payload: { id: string }): Promise<ProcessDisplayDto> {
     return this.relatedBatchService.readRelatedBatchesById(payload.id);
+  }
+
+  @MessagePattern(BatchMessagePatterns.READ_EXPORT)
+  async readExportBatch(@Payload() payload: { id: string }): Promise<BatchExportWrapperDto> {
+    return this.batchService.exportBatch(payload.id);
   }
 }

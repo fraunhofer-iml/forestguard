@@ -16,10 +16,10 @@ export const batchQuery = (batchCreateDto: BatchCreateDto) => ({
 
 export const createBatchQuery = (batchCreateDto: BatchCreateDto) => ({
   ...batchQuery(batchCreateDto),
-  in: {
-    connect: batchCreateDto.in.map((batchId) => ({
-      id: batchId,
-    })),
+  ins: {
+    connect: batchCreateDto.ins.map((batchId) => ({
+          id: batchId,
+    }))
   },
   processStep: {
     create: {
@@ -103,9 +103,13 @@ const processStepQuery = (batchCreateDto: BatchCreateDto) => ({
   },
 });
 
+export const exportBatchIncludeQuery = () => ({
+  ...readBatchIncludeQuery(),
+  ins: true,
+  outs: true,
+})
+
 const readBatchIncludeQuery = () => ({
-  in: true,
-  out: true,
   recipient: {
     include: {
       company: {

@@ -20,7 +20,7 @@ describe('BatchService', (): void => {
     batchesCreateMock = [
       {
         idEUInfoSystem: 'EU Info',
-        in: ['string'],
+        ins: ['string'],
         weight: 0,
         recipient: 'string',
         processStep: {
