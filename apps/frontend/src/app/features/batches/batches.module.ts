@@ -1,3 +1,4 @@
+import { UiGraphComponent } from '@forrest-guard/ui-graph';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +13,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { DiagramModule } from '@syncfusion/ej2-angular-diagrams';
 import { BatchService } from '../../shared/services/batch/batch.service';
 import { CompanyService } from '../../shared/services/company/company.service';
 import { SharedModule } from '../../shared/shared.module';
@@ -24,7 +26,14 @@ import { BatchOverviewComponent } from './overview/overview.component';
 import { BatchUpdateComponent } from './update/batch-update.component';
 
 @NgModule({
-  declarations: [BatchOverviewComponent, TypeSafeMatCellDefDirective, BatchDetailsComponent, HarvestComponent, BatchUpdateComponent],
+  declarations: [
+    BatchOverviewComponent,
+    TypeSafeMatCellDefDirective,
+    BatchDetailsComponent,
+    HarvestComponent,
+    BatchUpdateComponent,
+    UiGraphComponent,
+  ],
   imports: [
     CommonModule,
     BatchesRoutingModule,
@@ -44,6 +53,7 @@ import { BatchUpdateComponent } from './update/batch-update.component';
     MatDatepickerModule,
     MatSelectModule,
     MatCheckboxModule,
+    DiagramModule,
   ],
   providers: [
     CompanyService,

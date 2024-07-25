@@ -21,7 +21,8 @@
       "@forrest-guard/configuration": ["libs/configuration/src/index.ts"],
       "@forrest-guard/database": ["libs/database/src/index.ts"],
       "@forrest-guard/file-storage": ["libs/file-storage/src/index.ts"],
-      "@forrest-guard/ui": ["libs/ui/src/index.ts"]
+      "@forrest-guard/ui": ["libs/ui/src/index.ts"],
+      "@forrest-guard/ui-graph": ["libs/ui-graph/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

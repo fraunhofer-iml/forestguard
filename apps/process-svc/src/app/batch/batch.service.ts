@@ -1,14 +1,16 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { PrismaService } from '@forrest-guard/database';
 import {
   BatchCombinedCreateDto,
   BatchCreateDto,
   BatchDto,
-  BatchExportDto, BatchExportWrapperDto,
+  BatchExportDto,
+  BatchExportWrapperDto,
   Edge,
   ProcessDisplayDto,
 } from '@forrest-guard/api-interfaces';
+import { PrismaService } from '@forrest-guard/database';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { Batch, Prisma } from '@prisma/client';
+import { BatchWithInAndOut } from './types/batch.types';
 import {
   mapBatchCombinedToBatchCreateDto,
   mapBatchPrismaToBatchDto,
@@ -19,12 +21,11 @@ import {
 import {
   batchQuery,
   createBatchQuery,
-  getBatchByIdQuery,
+  exportBatchIncludeQuery,
   readBatchByIdQuery,
   readBatchesByIdsQuery,
   readCoffeeBatchesByCompanyIdQuery,
 } from './utils/batch.queries';
-import { exportBatchIncludeQuery } from './utils/batch.queries';
 
 enum SearchDirection {
   PREVIOUS_BATCHES,
@@ -82,8 +83,8 @@ export class BatchService {
     return HttpStatus.CREATED;
   }
 
-  async getBatchById(id: string): Promise<Batch & { in: Batch[]; out: Batch[] }> {
-    return this.prismaService.batch.findUniqueOrThrow(getBatchByIdQuery(id));
+  async getBatchById(id: string): Promise<BatchWithInAndOut> {
+    return this.findRootBatchForExport(id);
   }
 
   async readBatchById(id: string): Promise<BatchDto> {
@@ -107,8 +108,8 @@ export class BatchService {
 
   async exportBatch(id: string): Promise<BatchExportWrapperDto> {
     const rootResultBatch = await this.findRootBatchForExport(id);
-    const inBatchIds = rootResultBatch.ins.map(batch => batch.id);
-    const outBatchIds = rootResultBatch.outs.map(batch => batch.id);
+    const inBatchIds = rootResultBatch.ins.map((batch) => batch.id);
+    const outBatchIds = rootResultBatch.outs.map((batch) => batch.id);
     const rootBatch = mapBatchPrismaToBatchExportDto(rootResultBatch);
     await this.setInBatches(rootBatch, inBatchIds);
     await this.setOutBatches(rootBatch, outBatchIds);
@@ -150,7 +151,7 @@ export class BatchService {
 
   private async mergeIntoOneHarvestBatch(batchCreateDto: BatchCreateDto, batches: Batch[]) {
     const mergeBatchCreateDto = structuredClone(batchCreateDto);
-    mergeBatchCreateDto.ins = batches.map(batch => batch.id);
+    mergeBatchCreateDto.ins = batches.map((batch) => batch.id);
     mergeBatchCreateDto.weight = batches.reduce((total, batch) => total + batch.weight, 0);
     mergeBatchCreateDto.processStep.process = this.MERGE_PROCESS;
     mergeBatchCreateDto.processStep.harvestedLand = undefined;
@@ -230,18 +231,16 @@ export class BatchService {
   }
 
   private addInBatches(parentInBatch: BatchExportDto, inBatches: any[]) {
-    const inBatchesWhichExistInParentBatch = inBatches.filter(batch =>
-      batch.outs.map(batch => batch.id).includes(parentInBatch.id)
-    );
+    const inBatchesWhichExistInParentBatch = inBatches.filter((batch) => batch.outs.map((batch) => batch.id).includes(parentInBatch.id));
     parentInBatch.ins = inBatchesWhichExistInParentBatch.map(mapBatchPrismaToBatchExportDto);
   }
 
   private newInBatchesFrom(parentInBatches: BatchExportDto[]) {
-    return parentInBatches.flatMap(batch => batch.ins);
+    return parentInBatches.flatMap((batch) => batch.ins);
   }
 
   private newInBatchIdsFrom(inBatches: any[]) {
-    return inBatches.flatMap(batch => batch.ins).map(batch => batch.id);
+    return inBatches.flatMap((batch) => batch.ins).map((batch) => batch.id);
   }
 
   private async setOutBatches(rootBatch: BatchExportDto, outBatchIds: string[]) {
@@ -257,18 +256,16 @@ export class BatchService {
   }
 
   private addOutBatches(parentOutBatch: BatchExportDto, outBatches: any[]) {
-    const outBatchesWhichExistInParentBatch = outBatches.filter(batch =>
-      batch.ins.map(batch => batch.id).includes(parentOutBatch.id)
-    );
+    const outBatchesWhichExistInParentBatch = outBatches.filter((batch) => batch.ins.map((batch) => batch.id).includes(parentOutBatch.id));
     parentOutBatch.outs = outBatchesWhichExistInParentBatch.map(mapBatchPrismaToBatchExportDto);
   }
 
   private newOutBatchesFrom(parentOutBatches: BatchExportDto[]) {
-    return parentOutBatches.flatMap(batch => batch.outs);
+    return parentOutBatches.flatMap((batch) => batch.outs);
   }
 
   private newOutBatchIdsFrom(outBatches: any[]) {
-    return outBatches.flatMap(batch => batch.outs).map(batch => batch.id);
+    return outBatches.flatMap((batch) => batch.outs).map((batch) => batch.id);
   }
 
   private findNestedBatchesForExport(batchIds: string[]) {

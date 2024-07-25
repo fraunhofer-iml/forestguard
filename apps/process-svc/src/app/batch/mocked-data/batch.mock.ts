@@ -3,19 +3,19 @@ import { Batch, Role } from '@prisma/client';
 import { BatchWithRelations } from '../types/batch.types';
 
 export const mockedCreateBatchDto: BatchCreateDto = {
-    idEUInfoSystem: null,
-    ins: [],
-    weight: 33,
-    recipient: 'ctest102',
-    processStep: {
-      location: '',
-      date: '2024-05-24T08:28:24Z',
-      process: null,
-      recordedBy: 'ctest102',
-      executedBy: 'ctest101',
-      harvestedLand: 'ctest401',
-    },
-  };
+  idEUInfoSystem: null,
+  ins: [],
+  weight: 33,
+  recipient: 'ctest102',
+  processStep: {
+    location: '',
+    date: '2024-05-24T08:28:24Z',
+    process: null,
+    recordedBy: 'ctest102',
+    executedBy: 'ctest101',
+    harvestedLand: 'ctest401',
+  },
+};
 
 export const mockedCombinedBatchDto: BatchCombinedCreateDto = {
   idEUInfoSystem: null,
@@ -493,28 +493,28 @@ export const mockedPrismaBatchWithRelations4: BatchWithRelations = {
   },
 };
 
-export const mockedPrismaBatch4: Batch & { in: Batch[]; out: Batch[] } = {
+export const mockedPrismaBatch4: Batch & { ins: Batch[]; outs: Batch[] } = {
   ...mockedPrismaBatchWithRelations4,
-  in: [],
-  out: [],
+  ins: [],
+  outs: [],
 };
 
-export const mockedPrismaBatch3: Batch & { in: Batch[]; out: Batch[] } = {
+export const mockedPrismaBatch3: Batch & { ins: Batch[]; outs: Batch[] } = {
   ...mockedPrismaBatchWithRelations3,
-  in: [],
-  out: [],
+  ins: [],
+  outs: [],
 };
 
-export const mockedPrismaBatch2: Batch & { in: Batch[]; out: Batch[] } = {
+export const mockedPrismaBatch2: Batch & { ins: Batch[]; outs: Batch[] } = {
   ...mockedPrismaBatchWithRelations2,
-  in: [mockedPrismaBatchWithRelations1],
-  out: [mockedPrismaBatch3, mockedPrismaBatch4],
+  ins: [mockedPrismaBatchWithRelations1],
+  outs: [mockedPrismaBatch3, mockedPrismaBatch4],
 };
 
-export const mockedPrismaBatch1: Batch & { in: Batch[]; out: Batch[] } = {
+export const mockedPrismaBatch1: Batch & { ins: Batch[]; outs: Batch[] } = {
   ...mockedPrismaBatchWithRelations1,
-  in: [],
-  out: [mockedPrismaBatch2],
+  ins: [],
+  outs: [mockedPrismaBatch2],
 };
 
 export const mockedPrismaBatchRelations = [
@@ -535,17 +535,17 @@ export const mockedPrismaBatchRelations = [
 export const mockedExportBatchWithRelations1 = {
   ...mockedPrismaBatchWithRelations1,
   ins: [],
-  outs: [mockedPrismaBatchWithRelations2]
-}
+  outs: [mockedPrismaBatchWithRelations2],
+};
 
-export const mockedExportBatchWithRelations2 =     {
+export const mockedExportBatchWithRelations2 = {
   ...mockedPrismaBatchWithRelations2,
   ins: [mockedExportBatchWithRelations1],
-  outs: [mockedExportBatchWithRelations1]
-}
+  outs: [mockedExportBatchWithRelations1],
+};
 
 export const mockedExportBatchDto = {
   ...mockedPrismaBatchWithRelations1,
   ins: [mockedExportBatchWithRelations2],
-  outs: []
-}
+  outs: [],
+};

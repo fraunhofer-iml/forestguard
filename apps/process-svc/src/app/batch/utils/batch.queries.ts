@@ -18,8 +18,8 @@ export const createBatchQuery = (batchCreateDto: BatchCreateDto) => ({
   ...batchQuery(batchCreateDto),
   ins: {
     connect: batchCreateDto.ins.map((batchId) => ({
-          id: batchId,
-    }))
+      id: batchId,
+    })),
   },
   processStep: {
     create: {
@@ -32,22 +32,6 @@ export const createBatchQuery = (batchCreateDto: BatchCreateDto) => ({
           }
         : undefined,
     },
-  },
-});
-
-export const getBatchByIdQuery = (id: string) => ({
-  where: { id },
-  include: {
-    in: true,
-    out: true,
-    processStep: {
-      include: {
-        recordedBy: { include: { user: true, company: true } },
-        executedBy: { include: { user: true, company: true } },
-        process: true,
-      },
-    },
-    recipient: true,
   },
 });
 
@@ -107,7 +91,7 @@ export const exportBatchIncludeQuery = () => ({
   ...readBatchIncludeQuery(),
   ins: true,
   outs: true,
-})
+});
 
 const readBatchIncludeQuery = () => ({
   recipient: {
@@ -163,4 +147,6 @@ const readBatchIncludeQuery = () => ({
       },
     },
   },
+  ins: true,
+  outs: true,
 });

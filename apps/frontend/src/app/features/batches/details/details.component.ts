@@ -1,7 +1,7 @@
 import { BatchDto, Edge, ProofDto, ProofType } from '@forrest-guard/api-interfaces';
 import { map, Observable, switchMap } from 'rxjs';
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, HostListener } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
@@ -12,15 +12,42 @@ import { BatchStatusEnum } from './enum/batchStatusEnum';
   templateUrl: './details.component.html',
 })
 export class BatchDetailsComponent {
+  innerWidth = window.innerWidth;
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.innerWidth = window.innerWidth;
+  }
+
   id$ = this.route.params.pipe(map((params) => params['id']));
   batch$: Observable<BatchDto> = this.id$.pipe(switchMap((id) => this.batchesService.getBatchById(id)));
+
+  related$: Observable<{ coffeeBatches: BatchDto[]; edges: Edge[] }> = this.id$.pipe(
+    switchMap((id) => this.batchesService.getRelatedBatches(id)),
+    map(({ data, id }) => {
+      return {
+        coffeeBatches: data.coffeeBatches || [],
+        edges: data.edges || [],
+      };
+    })
+  );
+
+  data$: Observable<{ nodes: any[]; links: any[] }> = this.related$.pipe(
+    map(({ coffeeBatches, edges }) => {
+      const nodes = coffeeBatches.map((b) => ({ id: b.id, name: b.processStep?.process.name, weight: b.weight }));
+      // Filter edges for duplicates
+      edges = edges.filter((edge, index, self) => index === self.findIndex((t) => t.from === edge.from && t.to === edge.to));
+      const links = edges.map((edge) => ({ source: edge.from, target: edge.to, value: 1 }));
+      return { nodes, links };
+    })
+  );
 
   MINIO_URL = environment.MINIO.URL;
 
   getUserOrCompanyName = getUserOrCompanyName;
   ProofType = ProofType;
 
-  constructor(private route: ActivatedRoute, private batchesService: BatchService) {}
+  constructor(private route: ActivatedRoute, private batchesService: BatchService, private router: Router) {}
 
   getProof(type: ProofType, proofs?: ProofDto[]): ProofDto | undefined {
     return proofs?.find((proof) => proof.type === type);
@@ -66,5 +93,9 @@ export class BatchDetailsComponent {
     }
 
     return order.reverse();
+  }
+
+  routeToNode(id: string) {
+    this.router.navigateByUrl(`/batches/${id}`);
   }
 }

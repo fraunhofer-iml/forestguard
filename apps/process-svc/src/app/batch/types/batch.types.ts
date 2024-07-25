@@ -29,3 +29,8 @@ export type PlotOfLandWithRelations = PlotOfLand & {
   cultivatedWith: Cultivation;
   proofs: Proof[];
 };
+
+export type BatchWithInAndOut = BatchWithRelations & {
+  ins: Batch[];
+  outs: Batch[];
+};

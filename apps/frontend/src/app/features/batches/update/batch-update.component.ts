@@ -85,7 +85,7 @@ export class BatchUpdateComponent implements OnInit {
     const createBatchesDto: BatchCreateDto[] = this.outBatches.value.map((batch: { weight: number; recipient: string }) => ({
       weight: batch.weight,
       recipient: batch.recipient,
-      in: this.batchIds,
+      ins: this.batchIds,
       processStep: new ProcessStepCreateDto(
         this.formGroup.value.location,
         this.formGroup.value.date,

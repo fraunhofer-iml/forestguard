@@ -2,11 +2,13 @@
   <a routerLink="/batches" class="font-semibold text-gray-700 hover:underline">Batches</a>
   <span class="material-symbols-outlined text-lg"> chevron_right </span>
   <h1 class="font-medium">{{ id$ | async }}</h1>
-    <p *ngIf="batch$ | async as batch"
-       [ngClass]="batch.active ? 'bg-green-600' : 'bg-gray-400'"
-       class=" ml-auto text-white rounded-full px-4 py-2 mb-4">
-      Status: {{ isBatchActive(batch.active) }}
-    </p>
+  <p
+    *ngIf="batch$ | async as batch"
+    [ngClass]="batch.active ? 'bg-green-600' : 'bg-gray-400'"
+    class="ml-auto text-white rounded-full px-4 py-2 mb-4"
+  >
+    Status: {{ isBatchActive(batch.active) }}
+  </p>
 </header>
 
 <div *ngIf="batch$ | async as batch">
@@ -91,5 +93,9 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="card mt-4">
+    <h1 class="text-lg font-semibold">Dependecy Graph</h1>
+    <lib-ui-graph [data]="data$ | async" [width]="innerWidth - 450" (nodeClick)="routeToNode($event)" [selectedNode]="batch.id" />
   </div>
 </div>

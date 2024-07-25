@@ -1,19 +1,12 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { AmqpClientEnum, BatchMessagePatterns } from '@forrest-guard/amqp';
-import { ClientProxy } from '@nestjs/microservices';
-import {
-  BatchCombinedCreateDto,
-  BatchCreateDto,
-  BatchDto,
-  BatchExportWrapperDto,
-  ProcessDisplayDto,
-} from '@forrest-guard/api-interfaces';
+import { BatchCombinedCreateDto, BatchCreateDto, BatchDto, BatchExportWrapperDto, ProcessDisplayDto } from '@forrest-guard/api-interfaces';
 import { firstValueFrom } from 'rxjs';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class BatchService {
-  constructor(@Inject(AmqpClientEnum.QUEUE_PROCESS) private readonly processService: ClientProxy) {
-  }
+  constructor(@Inject(AmqpClientEnum.QUEUE_PROCESS) private readonly processService: ClientProxy) {}
 
   createHarvests(batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
     return firstValueFrom(this.processService.send(BatchMessagePatterns.CREATE_HARVESTS, batchCreateDtos));
@@ -31,8 +24,12 @@ export class BatchService {
     return firstValueFrom(this.processService.send(BatchMessagePatterns.READ_BY_ID, { id }));
   }
 
-  getRelatedBatches(id: string): Promise<ProcessDisplayDto> {
-    return firstValueFrom(this.processService.send(BatchMessagePatterns.READ_BY_ID_RELATED, { id }));
+  async getRelatedBatches(id: string): Promise<ProcessDisplayDto> {
+    const relatedBatches = await firstValueFrom<ProcessDisplayDto>(
+      this.processService.send(BatchMessagePatterns.READ_BY_ID_RELATED, { id })
+    );
+
+    return relatedBatches;
   }
 
   readExportBatch(id: string): Promise<BatchExportWrapperDto> {
