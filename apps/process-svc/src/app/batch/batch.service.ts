@@ -92,8 +92,8 @@ export class BatchService {
     return mapBatchPrismaToBatchDto(batch);
   }
 
-  async readBatchesByCompanyId(companyId: string): Promise<BatchDto[]> {
-    const batches = await this.prismaService.batch.findMany(readCoffeeBatchesByCompanyIdQuery(companyId));
+  async readBatchesByCompanyId(companyId: string, query: string, sorting: string): Promise<BatchDto[]> {
+    const batches = await this.prismaService.batch.findMany(readCoffeeBatchesByCompanyIdQuery(companyId, query, sorting));
     return batches.map(mapBatchPrismaToBatchDto);
   }
 

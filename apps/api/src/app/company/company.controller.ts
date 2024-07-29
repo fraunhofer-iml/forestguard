@@ -25,9 +25,14 @@ export class CompanyController {
   @Get(':id/batches')
   @ApiOperation({ description: 'Get all coffee batches of the company' })
   @ApiOkResponse({ description: 'Successful request.' })
-  @ApiQuery({ name: 'query', required: false })
-  getBatches(@Param('id') id: string, @Query('query') query?: string): Promise<BatchDto[]> {
-    return this.companyService.readBatchesByCompanyId(id);
+  @ApiQuery({ name: 'query', required: false, example: {active: true} })
+  @ApiQuery({ name: 'sorting', required: false, example: {processStep: {date: 'desc'}} })
+  getBatches(
+    @Param('id') id: string,
+    @Query('query') query = '{active: true}',
+    @Query('sorting') sorting = '{processStep: {date: "desc"}}'
+  ): Promise<BatchDto[]> {
+    return this.companyService.readBatchesByCompanyId(id, query, sorting);
   }
 
   @Get(':id/farmers')

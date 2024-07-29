@@ -1,4 +1,5 @@
 import { BatchCreateDto } from '@forrest-guard/api-interfaces';
+import JSON5 from 'json5';
 
 export const batchQuery = (batchCreateDto: BatchCreateDto) => ({
   euInfoSystemId: batchCreateDto.idEUInfoSystem,
@@ -49,11 +50,12 @@ export const readBatchesByIdsQuery = (ids: string[]) => ({
   include: readBatchIncludeQuery(),
 });
 
-export const readCoffeeBatchesByCompanyIdQuery = (companyId: string) => ({
+export const readCoffeeBatchesByCompanyIdQuery = (companyId: string, query: string, sorting: string) => ({
   where: {
     recipientId: companyId,
-    active: true,
+    ...JSON5.parse(query),
   },
+  orderBy: JSON5.parse(sorting),
   include: readBatchIncludeQuery(),
 });
 

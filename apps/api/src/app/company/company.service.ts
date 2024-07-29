@@ -22,9 +22,11 @@ export class CompanyService {
   /**
    * Reads the batches that belong to a company
    * @param companyId The id of the company
+   * @param query The query to filter output
+   * @param sorting The property to set the sorting
    * @returns The batches that belong to the company
    */
-  readBatchesByCompanyId(companyId: string): Promise<BatchDto[]> {
-    return firstValueFrom(this.processService.send(CompanyMessagePatterns.READ_BATCHES, companyId));
+  readBatchesByCompanyId(companyId: string, query: string, sorting: string): Promise<BatchDto[]> {
+    return firstValueFrom(this.processService.send(CompanyMessagePatterns.READ_BATCHES, { companyId, query, sorting }));
   }
 }

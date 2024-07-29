@@ -121,12 +121,24 @@ describe('BatchService', () => {
 
     jest.spyOn(prisma.batch, 'findMany').mockResolvedValue(mockBatches);
 
-    const result = await service.readBatchesByCompanyId(companyId);
+    const result = await service.readBatchesByCompanyId(companyId, '{}', '{}');
     expect(result).toHaveLength(mockBatches.length);
     expectResultToBeBatchDto(result[0], mockBatches[0]);
     expectResultEntitiesToBeDtoUsers(result[0], mockBatches[0]);
     expectResultToBeBatchDto(result[1], mockBatches[1]);
     expectResultEntitiesToBeDtoCompanies(result[1], mockBatches[1]);
+  });
+
+  it('should throw exception with invalid query JSON', async () => {
+    const expectedException = new Error("JSON5: invalid end of input at 1:2");
+
+    await expect(service.readBatchesByCompanyId('testCompanyId', '{', '{}')).rejects.toThrow(expectedException);
+  });
+
+  it('should throw exception with invalid sorting JSON', async () => {
+    const expectedException = new Error("JSON5: invalid character '}' at 1:1");
+
+    await expect(service.readBatchesByCompanyId('testCompanyId', '{}', '}')).rejects.toThrow(expectedException);
   });
 
   it('should read all related batches by batch ID', async () => {

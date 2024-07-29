@@ -36,8 +36,8 @@ export class BatchController {
   }
 
   @MessagePattern(CompanyMessagePatterns.READ_BATCHES)
-  async readBatchesByCompanyId(@Payload() companyId: string): Promise<BatchDto[]> {
-    return this.batchService.readBatchesByCompanyId(companyId);
+  async readBatchesByCompanyId(@Payload() payload: { companyId: string, query: string, sorting: string }): Promise<BatchDto[]> {
+    return this.batchService.readBatchesByCompanyId(payload.companyId, payload.query, payload.sorting);
   }
 
   @MessagePattern(BatchMessagePatterns.READ_BY_ID_RELATED)
