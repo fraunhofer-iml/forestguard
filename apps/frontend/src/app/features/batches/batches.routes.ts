@@ -5,7 +5,6 @@ import { HarvestComponent } from './harvest/harvest.component';
 import { BatchOverviewComponent } from './overview/overview.component';
 import { BatchUpdateComponent } from './update/batch-update.component';
 
-
 export const batchesRoutes: Route[] = [
   {
     path: '',

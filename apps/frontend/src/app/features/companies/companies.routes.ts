@@ -1,11 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { AddCompanyComponent } from './add-company/add-company.component';
+import { CompanyComponent } from './company/company.component';
 
 export const companiesRoutes: Route[] = [
   {
-    path: '',
+    path: 'add',
     component: AddCompanyComponent,
+  },
+  {
+    path: ':id',
+    component: CompanyComponent,
   },
 ];
 

@@ -25,7 +25,7 @@
         <p class="text-right font-medium">Process Owner</p>
         <p>{{ getUserOrCompanyName(batch.processStep.executedBy) }}</p>
         <p class="text-right font-medium">Recipient</p>
-        <p>{{ getUserOrCompanyName(batch.recipient) }}</p>
+        <p class="cursor-pointer hover:underline text-secondary-500" [routerLink]="['/companies', batch.recipient.id]">{{ getUserOrCompanyName(batch.recipient) }}</p>
         <p class="text-right font-medium">Author of Entry</p>
         <p>{{ getUserOrCompanyName(batch.processStep.recordedBy) }}</p>
       </div>
