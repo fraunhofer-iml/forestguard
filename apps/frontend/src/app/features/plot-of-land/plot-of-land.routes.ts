@@ -1,11 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-import { PlotOfLandComponent } from './plot-of-land.component';
+import { AddPlotOfLandComponent } from './add/add-plot-of-land.component';
+import { PlotOfLandDetailsComponent } from './details/details.component';
 
 export const plotOfLandRoutes: Route[] = [
   {
     path: '',
-    component: PlotOfLandComponent,
+    component: AddPlotOfLandComponent,
+  },
+  {
+    path: ':id',
+    component: PlotOfLandDetailsComponent,
   },
 ];
 

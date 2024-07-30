@@ -1,16 +1,30 @@
 import { ProofCreateDto } from '@forrest-guard/api-interfaces';
 import { PrismaService } from '@forrest-guard/database';
 import { FileStorageService } from '@forrest-guard/file-storage';
-import { Express } from 'express';
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { Proof } from '@prisma/client';
 import 'multer';
+import { AmqpException } from '@forrest-guard/amqp';
 
 @Injectable()
 export class ProofService {
   constructor(private readonly prismaService: PrismaService, private readonly fileStorageService: FileStorageService) {}
 
+  private async verifyUniquenessOfProof(plotOfLandId: string, proofCreateDto: ProofCreateDto): Promise<void> {
+    const numberOfProofs = await this.prismaService.proof.count({
+      where: {
+        type: proofCreateDto.type,
+        plotOfLandId: plotOfLandId,
+      },
+    });
+
+    if (numberOfProofs > 0) {
+      throw new AmqpException(`Proof already exists.`, HttpStatus.CONFLICT);
+    }
+  }
+
   async createProof(plotOfLandId: string, proofCreateDto: ProofCreateDto, file: Express.Multer.File): Promise<Proof> {
+    await this.verifyUniquenessOfProof(plotOfLandId, proofCreateDto);
     const id = crypto.randomUUID();
     const typeEnding = file.originalname.split('.').pop();
     const fileName = `${id}.${typeEnding}`;

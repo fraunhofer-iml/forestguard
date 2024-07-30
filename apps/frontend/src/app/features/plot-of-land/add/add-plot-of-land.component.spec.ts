@@ -3,20 +3,20 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { CompanyService } from '../../shared/services/company/company.service';
-import { CultivationService } from '../../shared/services/cultivation/cultivation.service';
-import { PlotOfLandService } from '../../shared/services/plotOfLand/plotOfLand.service';
-import { UserService } from '../../shared/services/user/user.service';
-import { PlotOfLandComponent } from './plot-of-land.component';
+import { CompanyService } from '../../../shared/services/company/company.service';
+import { CultivationService } from '../../../shared/services/cultivation/cultivation.service';
+import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
+import { UserService } from '../../../shared/services/user/user.service';
+import { AddPlotOfLandComponent } from './add-plot-of-land.component';
 import { GeneratePlotOfLandService } from './service/generate-plot-of-land.service';
 
-describe('PlotOfLandComponent', () => {
-  let component: PlotOfLandComponent;
-  let fixture: ComponentFixture<PlotOfLandComponent>;
+describe('AddPlotOfLandComponent', () => {
+  let component: AddPlotOfLandComponent;
+  let fixture: ComponentFixture<AddPlotOfLandComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PlotOfLandComponent],
+      declarations: [AddPlotOfLandComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
       imports: [MatAutocompleteModule],
       providers: [
@@ -31,7 +31,7 @@ describe('PlotOfLandComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PlotOfLandComponent);
+    fixture = TestBed.createComponent(AddPlotOfLandComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

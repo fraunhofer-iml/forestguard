@@ -1,5 +1,9 @@
 <h1 class="font-semibold text-gray-700 pb-4">Company</h1>
 
+<div class="card mb-4 flex justify-end">
+  <a href="/companies/add" mat-button class="text-end">Add Company</a>
+</div>
+
 <div class="grid md:grid-cols-2 sm:grid-cols-1" *ngIf="company$ | async as company">
   <div class="card grid md:grid-cols-2 md:mr-4 sm:mr-0">
     <span class="border-b-2 py-2 font-medium">Name</span>

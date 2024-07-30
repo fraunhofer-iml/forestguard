@@ -5,6 +5,11 @@ import { CompanyComponent } from './company/company.component';
 
 export const companiesRoutes: Route[] = [
   {
+    path: '',
+    redirectTo: 'id',
+    pathMatch: 'full',
+  },
+  {
     path: 'add',
     component: AddCompanyComponent,
   },

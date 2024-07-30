@@ -1,22 +1,22 @@
 import { CultivationDto, FarmerDto, PlotOfLandDto, ProofDto, ProofType, UserDto } from '@forrest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
-import { combineLatest, mergeMap, Observable, switchMap } from 'rxjs';
+import { combineLatest, mergeMap, Observable } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { UploadFormSelectType } from '../../shared/components/upload-form/upload-form-select.type';
-import { Messages } from '../../shared/messages';
-import { CompanyService } from '../../shared/services/company/company.service';
-import { CultivationService } from '../../shared/services/cultivation/cultivation.service';
-import { PlotOfLandService } from '../../shared/services/plotOfLand/plotOfLand.service';
-import { UserService } from '../../shared/services/user/user.service';
+import { UploadFormSelectType } from '../../../shared/components/upload-form/upload-form-select.type';
+import { Messages } from '../../../shared/messages';
+import { CompanyService } from '../../../shared/services/company/company.service';
+import { CultivationService } from '../../../shared/services/cultivation/cultivation.service';
+import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
+import { UserService } from '../../../shared/services/user/user.service';
 import { PlotOfLandForm } from './model/plot-of-land-form';
 import { GeneratePlotOfLandService } from './service/generate-plot-of-land.service';
 
 @Component({
-  selector: 'app-plot-of-land',
-  templateUrl: './plot-of-land.component.html',
+  selector: 'app-add-pol',
+  templateUrl: './add-plot-of-land.component.html',
 })
-export class PlotOfLandComponent {
+export class AddPlotOfLandComponent {
   users$: Observable<UserDto[]>;
   farmers$: Observable<FarmerDto[]>;
   coffeeOptions$: Observable<CultivationDto[]>;

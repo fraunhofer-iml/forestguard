@@ -7,13 +7,15 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { PlotOfLandService } from '../../shared/services/plotOfLand/plotOfLand.service';
 import { SharedModule } from '../../shared/shared.module';
-import { PlotOfLandComponent } from './plot-of-land.component';
+import { AddPlotOfLandComponent } from './add/add-plot-of-land.component';
+import { GeneratePlotOfLandService } from './add/service/generate-plot-of-land.service';
+import { PlotOfLandDetailsComponent } from './details/details.component';
 import { PlotOfLandRoutingModule } from './plot-of-land.routes';
-import { GeneratePlotOfLandService } from './service/generate-plot-of-land.service';
 
 @NgModule({
-  declarations: [PlotOfLandComponent],
+  declarations: [AddPlotOfLandComponent, PlotOfLandDetailsComponent],
   imports: [
     PlotOfLandRoutingModule,
     CommonModule,
@@ -26,6 +28,6 @@ import { GeneratePlotOfLandService } from './service/generate-plot-of-land.servi
     ReactiveFormsModule,
     MatSelectModule,
   ],
-  providers: [GeneratePlotOfLandService],
+  providers: [GeneratePlotOfLandService, PlotOfLandService],
 })
 export class PlotOfLandModule {}

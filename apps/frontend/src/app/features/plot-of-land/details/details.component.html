@@ -1,0 +1,149 @@
+<header class="font-semibold pb-4 flex flex-row gap-2 text-neutral-300 items-center">
+  <a routerLink="/batches" class="font-semibold text-gray-700 hover:underline">Batches</a>
+  <span class="material-symbols-outlined text-lg"> chevron_right </span>
+  <a *ngIf="batch$ | async as batch" [routerLink]="['/batches', batch.id]" class="font-medium">{{ batch.id }}</a>
+  <span class="material-symbols-outlined text-lg"> chevron_right </span>
+  <h1 class="font-medium">Plot of Land</h1>
+</header>
+
+<div *ngIf="batch$ | async as batch">
+  <div class="card">
+    <div class="items-center justify-between">
+      <div>
+        <span class="text-neutral-500 text-sm">Plot of Land</span>
+        <h2 class="text-lg font-medium">{{ batch.processStep.farmedLand?.description }}</h2>
+      </div>
+
+      <div class="mt-4 grid md:grid-cols-2 sm:grid-cols-1">
+        <div
+          class="flex flex-row select-none w-full"
+          *ngIf="getProof(ProofType.PROOF_OF_FREEDOM, batch.processStep?.farmedLand?.proofs) as proof; else notUploadedProofOfFreedom"
+        >
+          <div class="p-1 h-10 w-10 rounded-full bg-green-600 flex items-center justify-center">
+            <span class="material-symbols-outlined text-white"> done </span>
+          </div>
+          <div class="grid grid-cols-2 mt-2 ml-4">
+            <p class="text-neutral-500">Proof of Freedom from deforestation</p>
+            <div class="flex text-right justify-end">
+              <div class="group relative flex flex-col items-center">
+                <a
+                  class="p-1 material-symbols-outlined hover:bg-gray-200 rounded-full cursor-pointer"
+                  [href]="MINIO_URL + proof.documentRef"
+                >
+                  file_download
+                </a>
+                <span
+                  class="absolute flex flex-col items-center bottom-full mb-2 px-2 py-1 text-xs text-black bg-gray-200 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+                  >Download</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #notUploadedProofOfFreedom>
+          <div class="flex flex-row select-none w-full">
+            <div class="p-1 h-10 w-10 rounded-full bg-orange-500 flex items-center justify-center">
+              <span class="material-symbols-outlined text-white"> warning </span>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-2 mt-2 ml-4">
+              <p class="text-neutral-500">Proof of Freedom from deforestation</p>
+              <div class="flex text-right justify-end">
+                <span class="p-1 material-symbols-outlined text-gray-300 hover:bg-gray-200 rounded-full cursor-not-allowed">
+                  file_download
+                </span>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+
+        <div
+          class="flex flex-row select-none w-full"
+          *ngIf="getProof(ProofType.PROOF_OF_OWNERSHIP, batch.processStep?.farmedLand?.proofs) as proof; else notUploadedProofOfOwnership"
+        >
+          <div class="p-1 h-10 w-10 rounded-full bg-green-600 flex items-center justify-center">
+            <span class="material-symbols-outlined text-white"> done </span>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-2 mt-2 ml-4">
+            <p class="text-neutral-500">Proof of Ownership for plot of land</p>
+            <div class="flex text-right justify-end">
+              <div class="group relative flex flex-col items-center">
+                <a
+                  class="p-1 material-symbols-outlined hover:bg-gray-200 rounded-full cursor-pointer"
+                  [href]="MINIO_URL + proof.documentRef"
+                >
+                  file_download
+                </a>
+                <span
+                  class="absolute flex flex-col items-center bottom-full mb-2 px-2 py-1 text-xs text-black bg-gray-200 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+                  >Download</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #notUploadedProofOfOwnership>
+          <div class="flex flex-row select-none w-full">
+            <div class="p-1 h-10 w-10 rounded-full bg-orange-500 flex items-center justify-center">
+              <span class="material-symbols-outlined text-white"> warning </span>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-2 mt-2 ml-4">
+              <p class="text-neutral-500">Proof of Ownership for plot of land</p>
+              <div class="flex text-right justify-end">
+                <span class="p-1 material-symbols-outlined text-gray-300 hover:bg-gray-200 rounded-full cursor-not-allowed">
+                  file_download
+                </span>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-4 mt-4">
+    <div>
+      <div class="card mb-4">
+        <h1 class="text-lg font-semibold">Details</h1>
+      </div>
+      <div class="card text-neutral-300">
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2">
+          <span class="border-b-2 py-2 font-medium">Country</span>
+          <p class="border-b-2 py-2 text-neutral-500">{{ batch.processStep.farmedLand?.country }}</p>
+          <span class="border-b-2 py-2 font-medium">Region</span>
+          <p class="border-b-2 py-2 text-neutral-500">{{ batch.processStep.farmedLand?.region }}</p>
+          <span class="border-b-2 py-2 font-medium">District</span>
+          <p class="border-b-2 py-2 text-neutral-500">{{ batch.processStep.farmedLand?.district }}</p>
+          <span class="border-b-2 py-2 font-medium">Sort of Coffee</span>
+          <p class="border-b-2 py-2 text-neutral-500">{{ batch.processStep.farmedLand?.cultivatedWith?.sort }}</p>
+          <span class="py-2 font-medium">Farmer</span>
+          <p class="py-2 text-neutral-500">{{ getUserOrCompanyName(batch.processStep.recordedBy) }}</p>
+        </div>
+      </div>
+      <div class="card text-neutral-300 mt-4 !pb-14">
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2">
+          <span class="border-b-2 py-2 font-medium">National Plot of Land Id</span>
+          <p class="border-b-2 py-2 text-neutral-500">{{ batch.processStep.farmedLand?.nationalPlotOfLandId }}</p>
+          <span class="border-b-2 py-2 font-medium">Local Plot of Land Id</span>
+          <p class="border-b-2 py-2 text-neutral-500">{{ batch.processStep.farmedLand?.localPlotOfLandId }}</p>
+          <span class="border-b-2 py-2 font-medium">Polygon Data</span>
+          <p class="border-b-2 py-2 text-neutral-500">{{ batch.processStep.farmedLand?.polygonData }}</p>
+          <span class="py-2 font-medium">Area in HA</span>
+          <p class="py-2 text-neutral-500">{{ batch.processStep.farmedLand?.areaInHA }}</p>
+        </div>
+      </div>
+    </div>
+
+    <app-upload-form
+      [selectOptions]="uploadSelectOption"
+      [title]="'Upload Proofs'"
+      (uploadDocument)="uploadProof($event, batch.processStep.farmedLand?.id)"
+    ></app-upload-form>
+  </div>
+
+  <div class="card mt-4">
+    <div class="inline-flex justify-end gap-4 w-full">
+      <button mat-button [routerLink]="['/batches', batch.id]" class="font-medium">Back</button>
+    </div>
+  </div>
+</div>

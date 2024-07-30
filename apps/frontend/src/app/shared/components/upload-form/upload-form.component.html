@@ -26,7 +26,9 @@
         <input id="dropzone-file" type="file" class="hidden" (change)="onFileSelected($event)" />
       </label>
     </div>
-    <button mat-flat-button class="mt-4" [disabled]="!formGroup.valid" (click)="submitDocument()">Upload</button>
+    <div class="flex items-center justify-center">
+      <button mat-flat-button class="mt-4 text-center" [disabled]="!formGroup.valid" (click)="submitDocument()">Upload</button>
+    </div>
   </form>
 </div>
 <div class="card mt-4">
