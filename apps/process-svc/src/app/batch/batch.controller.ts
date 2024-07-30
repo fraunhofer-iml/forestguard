@@ -8,45 +8,52 @@ import {
 } from '@forrest-guard/api-interfaces';
 import { Controller, HttpStatus } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { BatchService } from './batch.service';
-import { RelatedBatchesService } from './related/related-batches.service';
+import { BatchCreateService } from './create/batch-create.service';
+import { BatchReadRelatedService } from './related/batch-read-related.service';
+import { BatchExportService } from './export/batch-export.service';
+import { BatchReadService } from './read/batch-read.service';
 
 @Controller()
 export class BatchController {
-  constructor(private readonly batchService: BatchService, private readonly relatedBatchService: RelatedBatchesService) {}
+  constructor(
+    private readonly batchCreateService: BatchCreateService,
+    private readonly batchReadService: BatchReadService,
+    private readonly batchReadRelatedService: BatchReadRelatedService,
+    private readonly batchExportService: BatchExportService
+  ) {}
 
   @MessagePattern(BatchMessagePatterns.CREATE_HARVESTS)
   async createHarvests(@Payload() batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
-    return this.batchService.createHarvests(batchCreateDtos);
+    return this.batchCreateService.createHarvests(batchCreateDtos);
   }
 
   @MessagePattern(BatchMessagePatterns.CREATE_COMBINED_HARVESTS)
   async createCombinedHarvests(@Payload() batchCombinedCreateDto: BatchCombinedCreateDto): Promise<HttpStatus> {
-    return this.batchService.createCombinedHarvests(batchCombinedCreateDto);
+    return this.batchCreateService.createCombinedHarvests(batchCombinedCreateDto);
   }
 
   @MessagePattern(BatchMessagePatterns.CREATE)
   async createBatches(@Payload() batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
-    return this.batchService.createBatches(batchCreateDtos);
+    return this.batchCreateService.createBatches(batchCreateDtos);
   }
 
   @MessagePattern(BatchMessagePatterns.READ_BY_ID)
   async readBatchById(@Payload() payload: { id: string }): Promise<BatchDto> {
-    return this.batchService.readBatchById(payload.id);
+    return this.batchReadService.readBatchById(payload.id);
   }
 
   @MessagePattern(CompanyMessagePatterns.READ_BATCHES)
   async readBatchesByCompanyId(@Payload() payload: { companyId: string, query: string, sorting: string }): Promise<BatchDto[]> {
-    return this.batchService.readBatchesByCompanyId(payload.companyId, payload.query, payload.sorting);
+    return this.batchReadService.readBatchesByCompanyId(payload.companyId, payload.query, payload.sorting);
   }
 
   @MessagePattern(BatchMessagePatterns.READ_BY_ID_RELATED)
   async readRelatedBatchesById(@Payload() payload: { id: string }): Promise<ProcessDisplayDto> {
-    return this.relatedBatchService.readRelatedBatchesById(payload.id);
+    return this.batchReadRelatedService.readRelatedBatchesById(payload.id);
   }
 
   @MessagePattern(BatchMessagePatterns.READ_EXPORT)
   async readExportBatch(@Payload() payload: { id: string }): Promise<BatchExportWrapperDto> {
-    return this.batchService.exportBatch(payload.id);
+    return this.batchExportService.exportBatch(payload.id);
   }
 }
