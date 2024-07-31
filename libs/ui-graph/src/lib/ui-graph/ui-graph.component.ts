@@ -75,8 +75,6 @@ export class UiGraphComponent implements OnInit, OnChanges {
 
     this.sankey(this.data);
 
-    console.log(this.data);
-
     this.links
       .attr('fill', 'none')
       .selectAll('path')

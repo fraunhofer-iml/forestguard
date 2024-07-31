@@ -5,4 +5,5 @@ export enum Uris {
   harvestsCombined = '/harvests/combined',
   related = '/related',
   proofs = '/proofs',
+  exportData = '/export',
 }

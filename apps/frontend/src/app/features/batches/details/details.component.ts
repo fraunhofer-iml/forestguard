@@ -1,5 +1,6 @@
 import { BatchDto, Edge, ProofDto, ProofType } from '@forrest-guard/api-interfaces';
-import { map, Observable, switchMap } from 'rxjs';
+import { saveAs } from 'file-saver';
+import { map, Observable, switchMap, take, tap } from 'rxjs';
 import { Component, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
@@ -24,7 +25,7 @@ export class BatchDetailsComponent {
 
   related$: Observable<{ coffeeBatches: BatchDto[]; edges: Edge[] }> = this.id$.pipe(
     switchMap((id) => this.batchesService.getRelatedBatches(id)),
-    map(({ data, id }) => {
+    map(({ data }) => {
       return {
         coffeeBatches: data.coffeeBatches || [],
         edges: data.edges || [],
@@ -55,6 +56,20 @@ export class BatchDetailsComponent {
 
   isBatchActive(active: boolean): string {
     return active ? BatchStatusEnum.active : BatchStatusEnum.inactive;
+  }
+
+  exportBatchInformationAsJson(id: string) {
+    this.batchesService
+      .getExportBatchById(id)
+      .pipe(
+        take(1),
+        tap((batch) => {
+          const jsonString = JSON.stringify(batch, null, 2);
+          const blob = new Blob([jsonString], { type: 'application/json' });
+          saveAs(blob, 'batch.json');
+        })
+      )
+      .subscribe();
   }
 
   /**

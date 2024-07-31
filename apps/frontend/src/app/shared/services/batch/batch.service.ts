@@ -1,4 +1,4 @@
-import { BatchCombinedCreateDto, BatchCreateDto, BatchDto, ProcessDisplayDto, ProcessDto, } from '@forrest-guard/api-interfaces';
+import { BatchCombinedCreateDto, BatchCreateDto, BatchDto, ProcessDisplayDto, ProcessDto } from '@forrest-guard/api-interfaces';
 import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -27,5 +27,9 @@ export class BatchService {
 
   public getRelatedBatches(id: string): Observable<{ data: ProcessDisplayDto; id: string }> {
     return this.httpClient.get<ProcessDisplayDto>(`${environment.BATCHES.URL}/${id}${Uris.related}`).pipe(map((data) => ({ data, id })));
+  }
+
+  public getExportBatchById(id: string): Observable<Blob> {
+    return this.httpClient.get<Blob>(`${environment.BATCHES.URL}/${id}${Uris.exportData}`);
   }
 }

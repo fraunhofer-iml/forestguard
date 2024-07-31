@@ -1,4 +1,5 @@
 import { Edge, ProofDto, ProofType } from '@forrest-guard/api-interfaces';
+import { saveAs } from 'file-saver';
 import { of } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -7,20 +8,29 @@ import { BatchService } from '../../../shared/services/batch/batch.service';
 import { BatchDetailsComponent } from './details.component';
 import { BatchStatusEnum } from './enum/batchStatusEnum';
 
+jest.mock('file-saver', () => ({
+  saveAs: jest.fn(),
+}));
+
 describe('BatchDetailsComponent', () => {
   let component: BatchDetailsComponent;
   let fixture: ComponentFixture<BatchDetailsComponent>;
+  let batchService: jest.Mocked<BatchService>;
 
   beforeEach(async () => {
+    const batchServiceMock: Partial<jest.Mocked<BatchService>> = {
+      getExportBatchById: jest.fn(),
+      createBatches: jest.fn(),
+      createHarvestBatches: jest.fn(),
+    };
+
     await TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
       declarations: [BatchDetailsComponent],
       providers: [
         {
           provide: BatchService,
-          useValue: {
-            getBatchById: jest.fn(),
-          },
+          useValue: batchServiceMock,
         },
         {
           provide: ActivatedRoute,
@@ -33,6 +43,7 @@ describe('BatchDetailsComponent', () => {
 
     fixture = TestBed.createComponent(BatchDetailsComponent);
     component = fixture.componentInstance;
+    batchService = TestBed.inject(BatchService) as jest.Mocked<BatchService>;
   });
 
   it('should create', () => {
@@ -69,6 +80,18 @@ describe('BatchDetailsComponent', () => {
 
     it('should return "inactive" status when active is false', () => {
       expect(component.isBatchActive(false)).toBe(BatchStatusEnum.inactive);
+    });
+
+    it('should download batch information and save it as a JSON file', () => {
+      const mockBatch = { id: 'clz6ku98k0009koqcqv7w2a7b', name: 'Batch' };
+      const id = 'clz6ku98k0009koqcqv7w2a7b';
+      const expectedString = JSON.stringify(mockBatch, null, 2);
+      const blob = new Blob([expectedString], { type: 'application/json' });
+
+      batchService.getExportBatchById.mockReturnValue(of({} as Blob));
+      component.exportBatchInformationAsJson(id);
+
+      expect(saveAs).toHaveBeenCalledWith(blob, 'batch.json');
     });
 
     describe('findOrder', () => {
