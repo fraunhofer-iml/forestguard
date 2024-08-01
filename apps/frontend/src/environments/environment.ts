@@ -1,6 +1,9 @@
+import { version } from 'package.json';
+
 const BASE_URL = 'http://localhost:3000';
 
 export const environment = {
+  VERSION: version,
   production: false,
   AUTH: {
     URL: `${BASE_URL}/auth`,

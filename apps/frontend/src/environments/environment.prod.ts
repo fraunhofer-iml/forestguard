@@ -1,6 +1,9 @@
+import { version } from 'package.json';
+
 const BASE_URL = 'https://fg-api.apps.blockchain-europe.iml.fraunhofer.de';
 
 export const environment = {
+  VERSION: version,
   production: true,
   AUTH: {
     URL: `${BASE_URL}/auth`,
