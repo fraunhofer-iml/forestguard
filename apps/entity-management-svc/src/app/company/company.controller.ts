@@ -17,4 +17,9 @@ export class CompanyController {
   async readCompanyById(@Payload() payload: { id: string }): Promise<CompanyDto> {
     return await this.service.readCompanyById(payload.id);
   }
+
+  @MessagePattern(CompanyMessagePatterns.READ_COMPANIES)
+  async readCompanies(@Payload() payload: { filters: string; sorting: string }): Promise<CompanyDto[]> {
+    return await this.service.readCompanies(payload.filters, payload.sorting);
+  }
 }

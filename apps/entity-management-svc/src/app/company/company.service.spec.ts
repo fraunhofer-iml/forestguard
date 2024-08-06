@@ -4,6 +4,7 @@ import { HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CompanyMapper } from './company.mapper';
 import { CompanyService } from './company.service';
+import { CompanyWithRelations } from './company.types';
 import { ADDRESS_MOCK } from './mocked-data/address.mock';
 import { COMPANY_PRISMA_MOCK } from './mocked-data/company.mock';
 
@@ -26,6 +27,7 @@ describe('CompanyService', () => {
               count: jest.fn(),
               create: jest.fn(),
               findFirst: jest.fn(),
+              findMany: jest.fn(),
             },
             entity: {
               create: jest.fn().mockResolvedValue({ id: '1' }),
@@ -161,6 +163,49 @@ describe('CompanyService', () => {
     await expect(companyService.readCompanyById(givenCompanyId)).rejects.toMatchObject({
       error: {
         message: 'No Company found.',
+        status: HttpStatus.NOT_FOUND,
+      },
+    });
+  });
+
+  it('should fetch all companies without specification of filtering and ordering', async () => {
+    const mockCompanies = [COMPANY_PRISMA_MOCK, { ...COMPANY_PRISMA_MOCK, name: 'foobar' }];
+    const expectedResult = mockCompanies.map((company: CompanyWithRelations) => CompanyMapper.mapCompanyPrismaToCompanyDto(company));
+    const mapCompanySpy = jest.spyOn(CompanyMapper, 'mapCompanyPrismaToCompanyDto');
+
+    jest.spyOn(prismaService.company, 'findMany').mockResolvedValue(mockCompanies);
+    const actualResult = await companyService.readCompanies();
+
+    expect(actualResult).toEqual(expectedResult);
+    expect(mapCompanySpy).toHaveBeenNthCalledWith(1, mockCompanies[0]);
+    expect(mapCompanySpy).toHaveBeenNthCalledWith(2, mockCompanies[1]);
+    expect(prismaService.company.findMany).toHaveBeenCalledWith({
+      include: {
+        address: true,
+        users: {
+          include: {
+            address: true,
+            plotsOfLand: {
+              include: {
+                cultivatedWith: true,
+                proofs: true,
+              },
+            },
+          },
+        },
+      },
+      where: {},
+      orderBy: {},
+    });
+  });
+
+  it('should throw an error if no company was found', async () => {
+    jest.spyOn(prismaService.company, 'findMany').mockResolvedValue(null);
+
+    await expect(companyService.readCompanies()).rejects.toThrow(AmqpException);
+    await expect(companyService.readCompanies()).rejects.toMatchObject({
+      error: {
+        message: 'No companies found.',
         status: HttpStatus.NOT_FOUND,
       },
     });

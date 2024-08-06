@@ -20,6 +20,17 @@ export class CompanyService {
   }
 
   /**
+   * Reads all companies, filters and sorts them.
+   *
+   * @param filters - The property to set the filters.
+   * @param sorting - The property to set the sorting.
+   * @returns The list of companies that satisfy the given filters ordered by the given sorting.
+   */
+  readCompanies(filters: string, sorting: string): Promise<CompanyDto[]> {
+    return firstValueFrom(this.entityManagementService.send(CompanyMessagePatterns.READ_COMPANIES, { filters, sorting }));
+  }
+
+  /**
    * Reads the batches that belong to a company
    * @param companyId The id of the company
    * @param query The query to filter output

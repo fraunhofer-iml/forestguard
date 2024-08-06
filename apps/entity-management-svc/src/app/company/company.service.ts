@@ -1,6 +1,7 @@
 import { AmqpException } from '@forrest-guard/amqp';
 import { CompanyCreateDto, CompanyDto } from '@forrest-guard/api-interfaces';
 import { PrismaService } from '@forrest-guard/database';
+import JSON5 from 'json5';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { CompanyMapper } from './company.mapper';
 import { CompanyWithRelations } from './company.types';
@@ -94,5 +95,40 @@ export class CompanyService {
     }
 
     return CompanyMapper.mapCompanyPrismaToCompanyDto(company);
+  }
+
+  /**
+   * Reads a list of companies from the database based on the provided filters and sorting criteria.
+   *
+   * @param filters - A JSON string representing the filtering criteria to be applied to the companies query.
+   * @param sorting - A JSON string representing the sorting criteria to be applied to the companies query.
+   * @returns A promise that resolves to an array of CompanyDto objects.
+   * @throws AmqpException if no companies are found.
+   */
+  async readCompanies(filters?: string, sorting?: string): Promise<CompanyDto[]> {
+    const companies: CompanyWithRelations[] = await this.prismaService.company.findMany({
+      include: {
+        address: true,
+        users: {
+          include: {
+            address: true,
+            plotsOfLand: {
+              include: {
+                cultivatedWith: true,
+                proofs: true,
+              },
+            },
+          },
+        },
+      },
+      where: JSON5.parse(filters || '{}'),
+      orderBy: JSON5.parse(sorting || '{}'),
+    });
+
+    if (!companies) {
+      throw new AmqpException('No companies found.', HttpStatus.NOT_FOUND);
+    }
+
+    return companies.map((company: CompanyWithRelations) => CompanyMapper.mapCompanyPrismaToCompanyDto(company));
   }
 }
