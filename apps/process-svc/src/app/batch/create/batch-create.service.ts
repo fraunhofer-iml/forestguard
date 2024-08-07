@@ -62,7 +62,7 @@ export class BatchCreateService {
     if (batchCombinedCreateDto.processStep.harvestedLands.length === 0) {
       return 0;
     }
-    return Math.floor(batchCombinedCreateDto.weight / batchCombinedCreateDto.processStep.harvestedLands.length);
+    return batchCombinedCreateDto.weight / batchCombinedCreateDto.processStep.harvestedLands.length;
   }
 
   private async createHarvest(dto: BatchCreateDto): Promise<Batch> {

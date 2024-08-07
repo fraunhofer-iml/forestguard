@@ -153,7 +153,7 @@ model ProcessStep {
 model Batch {
   id             String  @id @default(cuid())
   euInfoSystemId String?
-  weight         Int
+  weight         Float
   active         Boolean
 
   ins Batch[] @relation("BatchRelation")
