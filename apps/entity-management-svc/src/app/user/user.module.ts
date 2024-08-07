@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { Broker } from '@forrest-guard/amqp';
+import { PrismaService } from '@forrest-guard/database';
 
 @Module({
-  imports: [new Broker().getEntityManagementBroker()],
   controllers: [UserController],
-  providers: [UserService]
+  providers: [UserService, PrismaService]
 })
 export class UserModule {}

@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClient, HttpHandler } from "@angular/common/http";
+import { HttpClient, HttpHandler } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { UserService } from './user.service';
-import { UserDto, UserUpdateDto } from '@forrest-guard/api-interfaces';
+import { RoleType, UserDto, UserUpdateDto } from '@forrest-guard/api-interfaces';
 
 describe('UserService', (): void => {
   let service: UserService;
@@ -59,7 +59,7 @@ describe('UserService', (): void => {
       firstName: 'Pascal',
       lastName: 'Lohse',
       email: 'user@example.com',
-      role: 'FARMER',
+      role: RoleType.FARMER,
       mobilePhoneNumber: '+5114841700'
     }
   });

@@ -1,35 +1,39 @@
-import { farmer1Mock, FarmerCreateDto, FarmerDto, user1Mock, UserDto, UserUpdateDto } from '@forrest-guard/api-interfaces';
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { FarmerCreateDto, FarmerDto, UserDto, UserUpdateDto } from '@forrest-guard/api-interfaces';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UserService } from './user.service';
 
 @ApiTags('Users')
 @Controller('users')
 export class UserController {
+  constructor(private userService: UserService) {
+  }
+
   @Get()
   @ApiOperation({ description: 'Get all users' })
   @ApiOkResponse({ description: 'Successful request.' })
-  getUsers(): UserDto[] {
-    return [user1Mock, farmer1Mock];
+  getUsers(): Promise<UserDto[]> {
+    return this.userService.readUsers();
   }
 
-  @Patch()
+  @Post()
   @ApiOperation({ description: 'Create a user object' })
   @ApiOkResponse({ description: 'Successful creation.' })
-  createUser(@Body() userUpdateDto: UserUpdateDto): UserDto {
-    return user1Mock;
+  createUser(@Body() dto: UserUpdateDto): Promise<UserDto> {
+    return this.userService.createUser(dto);
   }
 
   @Get(':id')
   @ApiOperation({ description: 'Get user by ID' })
   @ApiOkResponse({ description: 'Successful request.' })
-  getUser(@Param('id') id: string): UserDto {
-    return user1Mock;
+  getUser(@Param('id') id: string): Promise<UserDto> {
+    return this.userService.readUserById(id);
   }
 
   @Post('farmers')
   @ApiOperation({ description: 'Create a farmer' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
-  createFarmer(@Body() farmerCreateDto: FarmerCreateDto): FarmerDto {
-    return farmer1Mock;
+  createFarmer(@Body() dto: FarmerCreateDto): Promise<FarmerDto> {
+    return this.userService.createFarmer(dto);
   }
 }
