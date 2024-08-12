@@ -1,5 +1,5 @@
-import { AmqpException } from '@forrest-guard/amqp';
-import { CompanyDto } from '@forrest-guard/api-interfaces';
+import { AmqpException } from '@forest-guard/amqp';
+import { CompanyDto } from '@forest-guard/api-interfaces';
 import { CompanyMapper } from './company.mapper';
 import { CompanyWithRelations } from './company.types';
 import { COMPANY_DTO_MOCK, COMPANY_PRISMA_MOCK } from './mocked-data/company.mock';

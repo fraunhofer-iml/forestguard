@@ -1,4 +1,4 @@
-import { Edge, ProofDto, ProofType } from '@forrest-guard/api-interfaces';
+import { Edge, ProofDto, ProofType } from '@forest-guard/api-interfaces';
 import { saveAs } from 'file-saver';
 import { of } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';

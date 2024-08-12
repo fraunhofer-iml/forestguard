@@ -1,4 +1,4 @@
-import { ConfigurationModule, ConfigurationService } from '@forrest-guard/configuration';
+import { ConfigurationModule, ConfigurationService } from '@forest-guard/configuration';
 import { NestMinioModule, NestMinioOptions } from 'nestjs-minio';
 import { Module } from '@nestjs/common';
 import { FileStorageService } from './file-storage.service';

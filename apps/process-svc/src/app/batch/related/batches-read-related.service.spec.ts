@@ -1,12 +1,7 @@
+import { PrismaService } from '@forest-guard/database';
 import { Test, TestingModule } from '@nestjs/testing';
-import {
-  mockedPrismaBatch1,
-  mockedPrismaBatch2,
-  mockedPrismaBatch3,
-  mockedPrismaBatch4,
-} from '../mocked-data/batch.mock';
+import { mockedPrismaBatch1, mockedPrismaBatch2, mockedPrismaBatch3, mockedPrismaBatch4 } from '../mocked-data/batch.mock';
 import { BatchReadRelatedService } from './batch-read-related.service';
-import { PrismaService } from '@forrest-guard/database';
 
 describe('BatchReadRelatedService', () => {
   let service: BatchReadRelatedService;
@@ -43,7 +38,8 @@ describe('BatchReadRelatedService', () => {
       { from: '2', to: '4' },
     ];
 
-    jest.spyOn(prisma.batch, 'findUniqueOrThrow')
+    jest
+      .spyOn(prisma.batch, 'findUniqueOrThrow')
       .mockResolvedValueOnce(mockedPrismaBatch1)
       .mockResolvedValueOnce(mockedPrismaBatch2)
       .mockResolvedValueOnce(mockedPrismaBatch3)

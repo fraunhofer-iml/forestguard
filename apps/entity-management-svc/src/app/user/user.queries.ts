@@ -1,4 +1,4 @@
-import { FarmerCreateDto, RoleType, UserUpdateDto } from '@forrest-guard/api-interfaces';
+import { FarmerCreateDto, RoleType, UserUpdateDto } from '@forest-guard/api-interfaces';
 
 export function userCreate(dto: UserUpdateDto) {
   return {
@@ -63,8 +63,8 @@ export function farmerReadByCompanyId(companyId: string) {
         include: {
           cultivatedWith: true,
           proofs: true,
-        }
-      }
+        },
+      },
     },
   };
 }

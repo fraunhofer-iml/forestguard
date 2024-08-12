@@ -1,13 +1,12 @@
+import { FarmerCreateDto, FarmerDto, UserDto, UserUpdateDto } from '@forest-guard/api-interfaces';
+import { PrismaService } from '@forest-guard/database';
 import { Injectable } from '@nestjs/common';
-import { FarmerCreateDto, FarmerDto, UserDto, UserUpdateDto } from '@forrest-guard/api-interfaces';
-import { PrismaService } from '@forrest-guard/database';
-import * as Queries from './user.queries';
 import * as Mapper from './user.mapper';
+import * as Queries from './user.queries';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prismaService: PrismaService) {
-  }
+  constructor(private readonly prismaService: PrismaService) {}
 
   async createUser(dto: UserUpdateDto): Promise<UserDto> {
     const user = await this.prismaService.user.create(Queries.userCreate(dto));

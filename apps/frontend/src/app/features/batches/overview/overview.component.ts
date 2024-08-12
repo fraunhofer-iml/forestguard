@@ -1,4 +1,4 @@
-import { BatchDto } from '@forrest-guard/api-interfaces';
+import { BatchDto } from '@forest-guard/api-interfaces';
 import { map, Observable } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';

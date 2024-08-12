@@ -1,4 +1,4 @@
-import { BatchDto, Edge, ProofDto, ProofType } from '@forrest-guard/api-interfaces';
+import { BatchDto, Edge, ProofDto, ProofType } from '@forest-guard/api-interfaces';
 import { saveAs } from 'file-saver';
 import { map, Observable, switchMap, take, tap } from 'rxjs';
 import { Component, HostListener } from '@angular/core';
@@ -77,7 +77,7 @@ export class BatchDetailsComponent {
    * @param edges The edges to traverse
    * @param startId The id to start the traversal from
    * @returns The order of the traversal
-   * @deprecated This function is deprecated and will be removed in the future. It is only used for v1 of the Forrest Guard project.
+   * @deprecated This function is deprecated and will be removed in the future. It is only used for v1 of the Forest Guard project.
    */
   findOrder(edges: Edge[] | undefined, startId: string): string[] {
     if (!edges) return [];

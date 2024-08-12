@@ -1,4 +1,4 @@
-import { BatchCreateDto, BatchDto, ProcessDto } from '@forrest-guard/api-interfaces';
+import { BatchCreateDto, BatchDto, ProcessDto } from '@forest-guard/api-interfaces';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';

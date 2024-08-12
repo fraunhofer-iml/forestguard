@@ -1,4 +1,4 @@
-import { BatchDto, CompanyDto } from '@forrest-guard/api-interfaces';
+import { BatchDto, CompanyDto } from '@forest-guard/api-interfaces';
 import { of } from 'rxjs';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';

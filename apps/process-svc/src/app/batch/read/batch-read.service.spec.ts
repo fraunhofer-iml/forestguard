@@ -1,8 +1,8 @@
-import { PrismaService } from '@forrest-guard/database';
+import { BatchDto } from '@forest-guard/api-interfaces';
+import { PrismaService } from '@forest-guard/database';
+import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { mockedPrismaBatchWithRelations1, mockedPrismaBatchWithRelations2 } from '../mocked-data/batch.mock';
-import { Test, TestingModule } from '@nestjs/testing';
-import { BatchDto } from '@forrest-guard/api-interfaces';
 import { BatchWithRelations } from '../types/batch.types';
 import { BatchReadService } from './batch-read.service';
 
@@ -76,11 +76,10 @@ describe('BatchReadService', () => {
   });
 
   it('should throw exception with invalid sorting JSON', async () => {
-    const expectedException = new Error('JSON5: invalid character \'}\' at 1:1');
+    const expectedException = new Error("JSON5: invalid character '}' at 1:1");
 
     await expect(service.readBatchesByCompanyId('testCompanyId', '{}', '}')).rejects.toThrow(expectedException);
   });
-
 });
 
 function expectResultToBeBatchDto(result: BatchDto, mockBatch: BatchWithRelations) {

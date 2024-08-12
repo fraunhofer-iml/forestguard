@@ -1,4 +1,4 @@
-import { BatchDto, ProofDto, ProofType } from '@forrest-guard/api-interfaces';
+import { BatchDto, ProofDto, ProofType } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { catchError, EMPTY, map, Observable, switchMap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';

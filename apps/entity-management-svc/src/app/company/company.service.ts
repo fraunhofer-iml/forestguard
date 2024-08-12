@@ -1,6 +1,6 @@
-import { AmqpException } from '@forrest-guard/amqp';
-import { CompanyCreateDto, CompanyDto } from '@forrest-guard/api-interfaces';
-import { PrismaService } from '@forrest-guard/database';
+import { AmqpException } from '@forest-guard/amqp';
+import { CompanyCreateDto, CompanyDto } from '@forest-guard/api-interfaces';
+import { PrismaService } from '@forest-guard/database';
 import JSON5 from 'json5';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { CompanyMapper } from './company.mapper';

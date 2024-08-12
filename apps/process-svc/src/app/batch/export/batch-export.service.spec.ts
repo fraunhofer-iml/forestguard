@@ -1,8 +1,8 @@
-import { PrismaService } from '@forrest-guard/database';
-import { mockedExportBatchDto } from '../mocked-data/batch.mock';
+import { PrismaService } from '@forest-guard/database';
 import { Test, TestingModule } from '@nestjs/testing';
-import { BatchExportService } from './batch-export.service';
+import { mockedExportBatchDto } from '../mocked-data/batch.mock';
 import { readBatchIncludeQuery } from '../utils/batch.queries';
+import { BatchExportService } from './batch-export.service';
 
 describe('BatchExportService', () => {
   let service: BatchExportService;
@@ -36,7 +36,9 @@ describe('BatchExportService', () => {
     const testBatchId = 'testBatchId';
 
     jest.spyOn(prisma.batch, 'findUniqueOrThrow').mockResolvedValue(mockedExportBatchDto);
-    jest.spyOn(prisma.batch, 'findMany').mockResolvedValue([])
+    jest
+      .spyOn(prisma.batch, 'findMany')
+      .mockResolvedValue([])
       .mockResolvedValueOnce([mockedExportBatchDto.ins[0]])
       .mockResolvedValueOnce([mockedExportBatchDto.ins[0].ins[0]]);
 

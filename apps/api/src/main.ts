@@ -1,4 +1,4 @@
-import { ConfigurationService } from '@forrest-guard/configuration';
+import { ConfigurationService } from '@forest-guard/configuration';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';

@@ -1,11 +1,10 @@
+import { LoginDto, RegistrationDto } from '@forest-guard/api-interfaces';
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { LoginDto, RegistrationDto } from '@forrest-guard/api-interfaces';
 
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthenticationController {
-
   @Post('login')
   @HttpCode(200)
   @ApiOperation({ description: 'Login with email and password.' })

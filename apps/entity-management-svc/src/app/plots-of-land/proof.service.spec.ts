@@ -1,6 +1,6 @@
-import { ProofCreateDto, ProofType } from '@forrest-guard/api-interfaces';
-import { PrismaService } from '@forrest-guard/database';
-import { FileStorageService } from '@forrest-guard/file-storage';
+import { ProofCreateDto, ProofType } from '@forest-guard/api-interfaces';
+import { PrismaService } from '@forest-guard/database';
+import { FileStorageService } from '@forest-guard/file-storage';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PROOF_PRISMA_MOCK } from './mocked-data/proof.mock';
 import { ProofService } from './proof.service';

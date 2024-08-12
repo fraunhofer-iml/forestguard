@@ -1,5 +1,5 @@
-import { AmqpException } from '@forrest-guard/amqp';
-import { PrismaService } from '@forrest-guard/database';
+import { AmqpException } from '@forest-guard/amqp';
+import { PrismaService } from '@forest-guard/database';
 import { HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CompanyMapper } from './company.mapper';

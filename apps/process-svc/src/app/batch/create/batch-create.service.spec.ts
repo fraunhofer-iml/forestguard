@@ -1,10 +1,6 @@
-import { PrismaService } from '@forrest-guard/database';
-import {
-  mockedCombinedBatchDto,
-  mockedCreateBatchDto,
-  mockedPrismaBatchWithRelations1,
-} from '../mocked-data/batch.mock';
+import { PrismaService } from '@forest-guard/database';
 import { Test, TestingModule } from '@nestjs/testing';
+import { mockedCombinedBatchDto, mockedCreateBatchDto, mockedPrismaBatchWithRelations1 } from '../mocked-data/batch.mock';
 import { BatchCreateService } from './batch-create.service';
 
 describe('BatchService', () => {
@@ -84,5 +80,4 @@ describe('BatchService', () => {
     jest.spyOn(prisma.batch, 'create').mockRejectedValue(new Error('Error'));
     await expect(service.createHarvests(mockedCreateBatchDtosWithLinks)).rejects.toThrow();
   });
-
 });

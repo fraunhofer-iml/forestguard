@@ -1,4 +1,4 @@
-import { BatchCreateDto } from '@forrest-guard/api-interfaces';
+import { BatchCreateDto } from '@forest-guard/api-interfaces';
 import JSON5 from 'json5';
 
 export const createOriginBatchQuery = (batchCreateDto: BatchCreateDto) => ({

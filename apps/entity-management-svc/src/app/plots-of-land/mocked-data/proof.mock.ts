@@ -1,4 +1,4 @@
-import { ProofType } from '@forrest-guard/api-interfaces';
+import { ProofType } from '@forest-guard/api-interfaces';
 import { Proof } from '@prisma/client';
 
 const PROOF_PRISMA_MOCK: Proof = {

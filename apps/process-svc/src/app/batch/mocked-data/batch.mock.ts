@@ -1,4 +1,4 @@
-import { BatchCombinedCreateDto, BatchCreateDto, ProofType } from '@forrest-guard/api-interfaces';
+import { BatchCombinedCreateDto, BatchCreateDto, ProofType } from '@forest-guard/api-interfaces';
 import { Batch, Role } from '@prisma/client';
 import { BatchWithRelations } from '../types/batch.types';
 

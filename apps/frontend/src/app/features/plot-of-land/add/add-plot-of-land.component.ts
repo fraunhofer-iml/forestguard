@@ -1,4 +1,4 @@
-import { CultivationDto, FarmerDto, PlotOfLandDto, ProofDto, ProofType, UserDto } from '@forrest-guard/api-interfaces';
+import { CultivationDto, FarmerDto, PlotOfLandDto, ProofDto, ProofType, UserDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { combineLatest, mergeMap, Observable } from 'rxjs';
 import { Component } from '@angular/core';

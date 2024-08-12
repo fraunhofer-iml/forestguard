@@ -1,14 +1,12 @@
-import { BatchDto } from '@forrest-guard/api-interfaces';
-import { PrismaService } from '@forrest-guard/database';
+import { BatchDto } from '@forest-guard/api-interfaces';
+import { PrismaService } from '@forest-guard/database';
 import { Injectable } from '@nestjs/common';
 import { mapBatchPrismaToBatchDto } from '../utils/batch.mapper';
 import { readBatchByIdQuery, readCoffeeBatchesByCompanyIdQuery } from '../utils/batch.queries';
 
-
 @Injectable()
 export class BatchReadService {
-  constructor(private readonly prismaService: PrismaService) {
-  }
+  constructor(private readonly prismaService: PrismaService) {}
 
   async readBatchById(id: string): Promise<BatchDto> {
     const batch = await this.prismaService.batch.findUniqueOrThrow(readBatchByIdQuery(id));

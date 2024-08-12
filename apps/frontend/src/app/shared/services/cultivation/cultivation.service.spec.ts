@@ -1,4 +1,4 @@
-import { CultivationDto } from '@forrest-guard/api-interfaces';
+import { CultivationDto } from '@forest-guard/api-interfaces';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from '../../../../environments/environment';

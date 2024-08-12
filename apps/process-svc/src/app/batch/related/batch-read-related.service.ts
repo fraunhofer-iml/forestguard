@@ -1,14 +1,13 @@
-import { Edge, ProcessDisplayDto } from '@forrest-guard/api-interfaces';
+import { Edge, ProcessDisplayDto } from '@forest-guard/api-interfaces';
+import { PrismaService } from '@forest-guard/database';
 import { Injectable } from '@nestjs/common';
 import { BatchWithInAndOut } from '../types/batch.types';
 import { mapBatchPrismaToBatchDto } from '../utils/batch.mapper';
-import { PrismaService } from '@forrest-guard/database';
 import { readBatchByIdQuery } from '../utils/batch.queries';
 
 @Injectable()
 export class BatchReadRelatedService {
-  constructor(private readonly prismaService: PrismaService) {
-  }
+  constructor(private readonly prismaService: PrismaService) {}
 
   async readRelatedBatchesById(id: string): Promise<ProcessDisplayDto> {
     const batchesMap = new Map<string, BatchWithInAndOut>();

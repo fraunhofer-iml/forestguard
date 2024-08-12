@@ -1,9 +1,8 @@
+import { BatchCombinedCreateDto, ProcessStepWithMultipleHarvestedLandsCreateDto } from '@forest-guard/api-interfaces';
+import { HttpClient, HttpHandler } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { HttpClient, HttpHandler } from "@angular/common/http";
-
-import { HarvestService } from './harvest.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { BatchCombinedCreateDto, ProcessStepWithMultipleHarvestedLandsCreateDto } from '@forrest-guard/api-interfaces';
+import { HarvestService } from './harvest.service';
 
 describe('HarvestService', (): void => {
   let service: HarvestService;
@@ -11,11 +10,7 @@ describe('HarvestService', (): void => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [
-        HarvestService,
-        HttpClient,
-        HttpHandler
-      ],
+      providers: [HarvestService, HttpClient, HttpHandler],
       imports: [],
     }).compileComponents();
 
@@ -74,6 +69,3 @@ describe('HarvestService', (): void => {
     expect(result).toEqual(expected);
   });
 });
-
-
-

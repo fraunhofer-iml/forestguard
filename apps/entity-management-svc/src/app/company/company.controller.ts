@@ -1,5 +1,5 @@
-import { CompanyMessagePatterns } from '@forrest-guard/amqp';
-import { CompanyCreateDto, CompanyDto } from '@forrest-guard/api-interfaces';
+import { CompanyMessagePatterns } from '@forest-guard/amqp';
+import { CompanyCreateDto, CompanyDto } from '@forest-guard/api-interfaces';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { CompanyService } from './company.service';

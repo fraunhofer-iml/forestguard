@@ -1,5 +1,5 @@
-import { CultivationMessagePatterns } from '@forrest-guard/amqp';
-import { CultivationCreateDto, CultivationDto } from '@forrest-guard/api-interfaces';
+import { CultivationMessagePatterns } from '@forest-guard/amqp';
+import { CultivationCreateDto, CultivationDto } from '@forest-guard/api-interfaces';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { CultivationService } from './cultivation.service';

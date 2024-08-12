@@ -1,4 +1,4 @@
-import { ProofDto, ProofType } from '@forrest-guard/api-interfaces';
+import { ProofDto, ProofType } from '@forest-guard/api-interfaces';
 import { of } from 'rxjs';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';

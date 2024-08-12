@@ -1,5 +1,5 @@
-import { PlotOfLandMessagePatterns } from '@forrest-guard/amqp';
-import { PlotOfLandCreateDto, PlotOfLandUpdateDto, ProofCreateDto } from '@forrest-guard/api-interfaces';
+import { PlotOfLandMessagePatterns } from '@forest-guard/amqp';
+import { PlotOfLandCreateDto, PlotOfLandUpdateDto, ProofCreateDto } from '@forest-guard/api-interfaces';
 import { Express } from 'express';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';

@@ -1,5 +1,5 @@
-import { AmqpClientEnum, PrismaErrorsInterceptor } from '@forrest-guard/amqp';
-import { ConfigurationService } from '@forrest-guard/configuration';
+import { AmqpClientEnum, PrismaErrorsInterceptor } from '@forest-guard/amqp';
+import { ConfigurationService } from '@forest-guard/configuration';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';

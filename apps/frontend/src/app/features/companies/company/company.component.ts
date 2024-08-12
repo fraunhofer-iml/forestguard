@@ -1,4 +1,4 @@
-import { CompanyDto, FarmerDto } from '@forrest-guard/api-interfaces';
+import { CompanyDto, FarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { catchError, EMPTY, map, Observable, switchMap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';

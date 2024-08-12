@@ -1,4 +1,4 @@
-import { CompanyDto } from '@forrest-guard/api-interfaces';
+import { CompanyDto } from '@forest-guard/api-interfaces';
 import { CompanyWithRelations } from '../company.types';
 
 const COMPANY_PRISMA_MOCK: CompanyWithRelations = {

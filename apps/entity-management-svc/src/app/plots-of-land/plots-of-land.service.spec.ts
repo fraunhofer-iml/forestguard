@@ -1,5 +1,5 @@
-import { ConfigurationService } from '@forrest-guard/configuration';
-import { PrismaService } from '@forrest-guard/database';
+import { ConfigurationService } from '@forest-guard/configuration';
+import { PrismaService } from '@forest-guard/database';
 import { RpcException } from '@nestjs/microservices';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PlotOfLand } from '@prisma/client';

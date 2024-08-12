@@ -1,17 +1,11 @@
-import { BatchMessagePatterns, CompanyMessagePatterns } from '@forrest-guard/amqp';
-import {
-  BatchCombinedCreateDto,
-  BatchCreateDto,
-  BatchDto,
-  BatchExportWrapperDto,
-  ProcessDisplayDto,
-} from '@forrest-guard/api-interfaces';
+import { BatchMessagePatterns, CompanyMessagePatterns } from '@forest-guard/amqp';
+import { BatchCombinedCreateDto, BatchCreateDto, BatchDto, BatchExportWrapperDto, ProcessDisplayDto } from '@forest-guard/api-interfaces';
 import { Controller, HttpStatus } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { BatchCreateService } from './create/batch-create.service';
-import { BatchReadRelatedService } from './related/batch-read-related.service';
 import { BatchExportService } from './export/batch-export.service';
 import { BatchReadService } from './read/batch-read.service';
+import { BatchReadRelatedService } from './related/batch-read-related.service';
 
 @Controller()
 export class BatchController {
@@ -43,7 +37,7 @@ export class BatchController {
   }
 
   @MessagePattern(CompanyMessagePatterns.READ_BATCHES)
-  async readBatchesByCompanyId(@Payload() payload: { companyId: string, query: string, sorting: string }): Promise<BatchDto[]> {
+  async readBatchesByCompanyId(@Payload() payload: { companyId: string; query: string; sorting: string }): Promise<BatchDto[]> {
     return this.batchReadService.readBatchesByCompanyId(payload.companyId, payload.query, payload.sorting);
   }
 

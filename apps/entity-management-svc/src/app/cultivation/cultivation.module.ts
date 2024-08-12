@@ -1,5 +1,5 @@
-import { ConfigurationModule } from '@forrest-guard/configuration';
-import { PrismaService } from '@forrest-guard/database';
+import { ConfigurationModule } from '@forest-guard/configuration';
+import { PrismaService } from '@forest-guard/database';
 import { Module } from '@nestjs/common';
 import { CultivationController } from './cultivation.controller';
 import { CultivationService } from './cultivation.service';

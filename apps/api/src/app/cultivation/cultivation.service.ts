@@ -1,5 +1,5 @@
-import { AmqpClientEnum, CultivationMessagePatterns } from '@forrest-guard/amqp';
-import { CultivationCreateDto, CultivationDto } from '@forrest-guard/api-interfaces';
+import { AmqpClientEnum, CultivationMessagePatterns } from '@forest-guard/amqp';
+import { CultivationCreateDto, CultivationDto } from '@forest-guard/api-interfaces';
 import { firstValueFrom } from 'rxjs';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';

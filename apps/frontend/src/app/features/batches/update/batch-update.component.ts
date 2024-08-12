@@ -1,4 +1,4 @@
-import { BatchCreateDto, BatchDto, ProcessStepCreateDto } from '@forrest-guard/api-interfaces';
+import { BatchCreateDto, BatchDto, ProcessStepCreateDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { Observable, zip } from 'rxjs';
 import { Component, OnInit } from '@angular/core';

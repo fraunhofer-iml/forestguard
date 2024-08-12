@@ -1,4 +1,4 @@
-import { ProofCreateDto, ProofType } from '@forrest-guard/api-interfaces';
+import { ProofCreateDto, ProofType } from '@forest-guard/api-interfaces';
 import { ApiProperty } from '@nestjs/swagger';
 
 /**

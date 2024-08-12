@@ -1,4 +1,4 @@
-import { ConfigurationService } from '@forrest-guard/configuration';
+import { ConfigurationService } from '@forest-guard/configuration';
 import { Client } from 'minio';
 import { MINIO_CONNECTION } from 'nestjs-minio';
 import { Inject, Injectable } from '@nestjs/common';

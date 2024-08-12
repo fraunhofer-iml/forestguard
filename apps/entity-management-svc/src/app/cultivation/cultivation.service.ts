@@ -1,6 +1,6 @@
-import { CultivationCreateDto, CultivationDto } from '@forrest-guard/api-interfaces';
-import { ConfigurationService } from '@forrest-guard/configuration';
-import { PrismaService } from '@forrest-guard/database';
+import { CultivationCreateDto, CultivationDto } from '@forest-guard/api-interfaces';
+import { ConfigurationService } from '@forest-guard/configuration';
+import { PrismaService } from '@forest-guard/database';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

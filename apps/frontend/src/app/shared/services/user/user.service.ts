@@ -1,20 +1,13 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { FarmerCreateDto, FarmerDto, UserDto, UserUpdateDto } from '@forest-guard/api-interfaces';
 import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import {
-  FarmerCreateDto,
-  FarmerDto,
-  UserDto,
-  UserUpdateDto
-} from '@forrest-guard/api-interfaces';
 import { Uris } from '../../uris';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private httpClient: HttpClient
-) {}
+  constructor(private httpClient: HttpClient) {}
 
   public getUsers(): Observable<UserDto[]> {
     return this.httpClient.get<UserDto[]>(environment.USERS.URL);

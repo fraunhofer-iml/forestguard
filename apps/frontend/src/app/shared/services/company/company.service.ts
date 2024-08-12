@@ -1,4 +1,4 @@
-import { BatchDto, CompanyCreateDto, CompanyDto, FarmerDto } from '@forrest-guard/api-interfaces';
+import { BatchDto, CompanyCreateDto, CompanyDto, FarmerDto } from '@forest-guard/api-interfaces';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';

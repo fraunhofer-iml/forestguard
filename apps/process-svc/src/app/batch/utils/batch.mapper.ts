@@ -1,4 +1,4 @@
-import { BatchCombinedCreateDto, BatchCreateDto, BatchDto, BatchExportDto, Edge } from '@forrest-guard/api-interfaces';
+import { BatchCombinedCreateDto, BatchCreateDto, BatchDto, BatchExportDto, Edge } from '@forest-guard/api-interfaces';
 import { BatchWithRelations } from '../types/batch.types';
 
 export const mapBatchPrismaToBatchDto = (batch: BatchWithRelations): BatchDto => {

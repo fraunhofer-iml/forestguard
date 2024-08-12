@@ -1,10 +1,10 @@
-import { ProofCreateDto } from '@forrest-guard/api-interfaces';
-import { PrismaService } from '@forrest-guard/database';
-import { FileStorageService } from '@forrest-guard/file-storage';
+import { ProofCreateDto } from '@forest-guard/api-interfaces';
+import { PrismaService } from '@forest-guard/database';
+import { FileStorageService } from '@forest-guard/file-storage';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Proof } from '@prisma/client';
 import 'multer';
-import { AmqpException } from '@forrest-guard/amqp';
+import { AmqpException } from '@forest-guard/amqp';
 
 @Injectable()
 export class ProofService {

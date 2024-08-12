@@ -1,4 +1,4 @@
-import { BatchCombinedCreateDto, ProcessStepWithMultipleHarvestedLandsCreateDto } from '@forrest-guard/api-interfaces';
+import { BatchCombinedCreateDto, ProcessStepWithMultipleHarvestedLandsCreateDto } from '@forest-guard/api-interfaces';
 import { FormGroup } from '@angular/forms';
 import { HarvestForm } from '../model/forms';
 

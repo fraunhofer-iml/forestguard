@@ -1,15 +1,13 @@
-import { BatchCombinedCreateDto, BatchCreateDto } from '@forrest-guard/api-interfaces';
-import { PrismaService } from '@forrest-guard/database';
+import { BatchCombinedCreateDto, BatchCreateDto } from '@forest-guard/api-interfaces';
+import { PrismaService } from '@forest-guard/database';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Batch } from '@prisma/client';
 import { mapBatchCombinedToBatchCreateDto } from '../utils/batch.mapper';
-import { createOriginBatchQuery, createBatchQuery } from '../utils/batch.queries';
-
+import { createBatchQuery, createOriginBatchQuery } from '../utils/batch.queries';
 
 @Injectable()
 export class BatchCreateService {
-  constructor(private readonly prismaService: PrismaService) {
-  }
+  constructor(private readonly prismaService: PrismaService) {}
 
   private HARVESTING_PROCESS = 'Harvesting';
   private MERGE_PROCESS = 'Merge';

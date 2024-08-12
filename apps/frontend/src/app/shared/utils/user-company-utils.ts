@@ -1,4 +1,4 @@
-import { CompanyDto, UserDto } from '@forrest-guard/api-interfaces';
+import { CompanyDto, UserDto } from '@forest-guard/api-interfaces';
 
 /**
  * Gets the name of the user or company

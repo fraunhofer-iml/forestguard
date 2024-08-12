@@ -1,6 +1,6 @@
-import { PlotOfLandCreateDto, PlotOfLandUpdateDto } from '@forrest-guard/api-interfaces';
-import { ConfigurationService } from '@forrest-guard/configuration';
-import { PrismaService } from '@forrest-guard/database';
+import { PlotOfLandCreateDto, PlotOfLandUpdateDto } from '@forest-guard/api-interfaces';
+import { ConfigurationService } from '@forest-guard/configuration';
+import { PrismaService } from '@forest-guard/database';
 import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { PlotOfLand } from '@prisma/client';

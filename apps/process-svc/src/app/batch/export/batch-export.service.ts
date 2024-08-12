@@ -1,13 +1,12 @@
-import { BatchExportDto, BatchExportWrapperDto } from '@forrest-guard/api-interfaces';
-import { PrismaService } from '@forrest-guard/database';
+import { BatchExportDto, BatchExportWrapperDto } from '@forest-guard/api-interfaces';
+import { PrismaService } from '@forest-guard/database';
 import { Injectable } from '@nestjs/common';
 import { mapBatchPrismaToBatchExportDto } from '../utils/batch.mapper';
 import { readBatchByIdQuery, readBatchIncludeQuery } from '../utils/batch.queries';
 
 @Injectable()
 export class BatchExportService {
-  constructor(private readonly prismaService: PrismaService) {
-  }
+  constructor(private readonly prismaService: PrismaService) {}
 
   async exportBatch(id: string): Promise<BatchExportWrapperDto> {
     const rootResultBatch = await this.findRootBatchForExport(id);
@@ -20,7 +19,7 @@ export class BatchExportService {
   }
 
   private findRootBatchForExport(id: string) {
-    return this.prismaService.batch.findUniqueOrThrow(readBatchByIdQuery(id))
+    return this.prismaService.batch.findUniqueOrThrow(readBatchByIdQuery(id));
   }
 
   private async setInBatches(rootBatch: BatchExportDto, inBatchIds: string[]) {

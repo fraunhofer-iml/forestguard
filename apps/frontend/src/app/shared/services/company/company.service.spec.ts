@@ -1,10 +1,9 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpClient, HttpHandler } from "@angular/common/http";
+import { CompanyDto, ProcessDisplayDto } from '@forest-guard/api-interfaces';
+import { HttpClient, HttpHandler } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-
-import { CompanyService } from './company.service';
-import { CompanyDto, ProcessDisplayDto } from '@forrest-guard/api-interfaces';
+import { TestBed } from '@angular/core/testing';
 import { Role } from '@prisma/client';
+import { CompanyService } from './company.service';
 
 describe('CompanyService', (): void => {
   let service: CompanyService;
@@ -15,11 +14,7 @@ describe('CompanyService', (): void => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [
-        CompanyService,
-        HttpClient,
-        HttpHandler
-      ],
+      providers: [CompanyService, HttpClient, HttpHandler],
       imports: [HttpClientTestingModule],
     }).compileComponents();
 
@@ -33,10 +28,10 @@ describe('CompanyService', (): void => {
         postalCode: '12345',
         city: 'Example City',
         state: 'Example State',
-        country: 'Example Country'
+        country: 'Example Country',
       },
       employees: [],
-      farmers: []
+      farmers: [],
     };
 
     company = {
@@ -47,10 +42,10 @@ describe('CompanyService', (): void => {
         postalCode: '12345',
         city: 'Example City',
         state: 'Example State',
-        country: 'Example Country'
+        country: 'Example Country',
       },
       employees: [],
-      farmers: []
+      farmers: [],
     };
 
     processDisplay = {
@@ -122,16 +117,16 @@ describe('CompanyService', (): void => {
               role: Role.EMPLOYEE,
               name: 'test',
             },
-          }
-        }
+          },
+        },
       ],
       edges: [
         {
           from: '8918e6b7-e288-4f95-bc87-9d8530e66ad1',
-          to: 'baa546c7-70be-4769-9723-d8e991c09aec'
-        }
-      ]
-    }
+          to: 'baa546c7-70be-4769-9723-d8e991c09aec',
+        },
+      ],
+    };
   });
 
   it('should create', (): void => {
@@ -139,13 +134,13 @@ describe('CompanyService', (): void => {
   });
 
   it('should create a company', () => {
-    service.createCompany(companyCreate).subscribe(res => {
+    service.createCompany(companyCreate).subscribe((res) => {
       expect(res).toEqual(company);
     });
   });
 
   it('should get company by id', () => {
-    service.getCompanyById(companyId).subscribe(res => {
+    service.getCompanyById(companyId).subscribe((res) => {
       expect(res).toEqual(company);
     });
   });
@@ -153,17 +148,14 @@ describe('CompanyService', (): void => {
   it('should get batches by company id with query', () => {
     const query = 'query';
 
-    service.getBatchesOfCompany(companyId, query).subscribe(res => {
+    service.getBatchesOfCompany(companyId, query).subscribe((res) => {
       expect(res).toEqual(processDisplay);
     });
   });
 
   it('should get batches by company id without query', () => {
-    service.getBatchesOfCompany(companyId).subscribe(res => {
+    service.getBatchesOfCompany(companyId).subscribe((res) => {
       expect(res).toEqual(processDisplay);
     });
-  })
+  });
 });
-
-
-

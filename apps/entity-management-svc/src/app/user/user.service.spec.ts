@@ -1,11 +1,11 @@
+import { PrismaService } from '@forest-guard/database';
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from './user.service';
-import { PrismaService } from '@forrest-guard/database';
-import { USER_PRISMA_MOCK } from './mocked-data/user.mock';
 import { FARMER_PRISMA_MOCK } from './mocked-data/farmer.mock';
+import { USER_PRISMA_MOCK } from './mocked-data/user.mock';
 import * as Mapper from './user.mapper';
 import * as Queries from './user.queries';
 import { farmerReadByCompanyId } from './user.queries';
+import { UserService } from './user.service';
 
 describe('UserService', () => {
   let service: UserService;

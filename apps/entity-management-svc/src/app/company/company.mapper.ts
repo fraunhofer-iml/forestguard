@@ -1,5 +1,5 @@
-import { AmqpException } from '@forrest-guard/amqp';
-import { AddressDto, CompanyDto, FarmerDto, PlotOfLandDto, ProofDto, UserDto } from '@forrest-guard/api-interfaces';
+import { AmqpException } from '@forest-guard/amqp';
+import { AddressDto, CompanyDto, FarmerDto, PlotOfLandDto, ProofDto, UserDto } from '@forest-guard/api-interfaces';
 import { HttpStatus } from '@nestjs/common';
 import { Address, Proof } from '@prisma/client';
 import { CompanyWithRelations, PlotOfLandWithRelations, UserWithRelations } from './company.types';

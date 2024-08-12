@@ -1,4 +1,4 @@
-import { AddressDto, CompanyCreateDto } from '@forrest-guard/api-interfaces';
+import { AddressDto, CompanyCreateDto } from '@forest-guard/api-interfaces';
 import { FormGroup } from '@angular/forms';
 import { CompanyForm } from '../model/forms';
 

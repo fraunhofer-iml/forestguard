@@ -1,4 +1,4 @@
-import { UiGraphComponent } from '@forrest-guard/ui-graph';
+import { UiGraphComponent } from '@forest-guard/ui-graph';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';

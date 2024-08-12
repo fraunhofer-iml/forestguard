@@ -1,4 +1,4 @@
-import { CultivationDto } from '@forrest-guard/api-interfaces';
+import { CultivationDto } from '@forest-guard/api-interfaces';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';

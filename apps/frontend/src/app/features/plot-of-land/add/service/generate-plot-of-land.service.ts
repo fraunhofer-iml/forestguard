@@ -1,4 +1,4 @@
-import { PlotOfLandCreateDto } from '@forrest-guard/api-interfaces';
+import { PlotOfLandCreateDto } from '@forest-guard/api-interfaces';
 import { FormGroup } from '@angular/forms';
 
 export class GeneratePlotOfLandService {

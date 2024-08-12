@@ -1,4 +1,4 @@
-import { CompanyDto, farmer1Mock } from '@forrest-guard/api-interfaces';
+import { CompanyDto, farmer1Mock } from '@forest-guard/api-interfaces';
 import { of } from 'rxjs';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';

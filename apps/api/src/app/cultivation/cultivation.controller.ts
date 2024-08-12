@@ -1,4 +1,4 @@
-import { CultivationCreateDto, CultivationDto } from '@forrest-guard/api-interfaces';
+import { CultivationCreateDto, CultivationDto } from '@forest-guard/api-interfaces';
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CultivationService } from './cultivation.service';

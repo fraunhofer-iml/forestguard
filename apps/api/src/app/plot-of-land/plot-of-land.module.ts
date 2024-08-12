@@ -1,4 +1,4 @@
-import { Broker } from '@forrest-guard/amqp';
+import { Broker } from '@forest-guard/amqp';
 import { Module } from '@nestjs/common';
 import { PlotOfLandController } from './plot-of-land.controller';
 import { PlotOfLandService } from './plot-of-land.service';

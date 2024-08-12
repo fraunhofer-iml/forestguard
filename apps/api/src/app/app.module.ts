@@ -1,4 +1,4 @@
-import { ConfigurationModule } from '@forrest-guard/configuration';
+import { ConfigurationModule } from '@forest-guard/configuration';
 import { Module } from '@nestjs/common';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { BatchModule } from './batch/batch.module';
@@ -9,7 +9,16 @@ import { ProcessModule } from './process/process.module';
 import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [ConfigurationModule, AuthenticationModule, BatchModule, CompanyModule, CultivationModule, PlotOfLandModule, ProcessModule, UserModule],
+  imports: [
+    ConfigurationModule,
+    AuthenticationModule,
+    BatchModule,
+    CompanyModule,
+    CultivationModule,
+    PlotOfLandModule,
+    ProcessModule,
+    UserModule,
+  ],
   controllers: [],
   providers: [],
 })

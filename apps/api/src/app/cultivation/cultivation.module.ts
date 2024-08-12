@@ -1,4 +1,4 @@
-import { Broker } from '@forrest-guard/amqp';
+import { Broker } from '@forest-guard/amqp';
 import { Module } from '@nestjs/common';
 import { CultivationController } from './cultivation.controller';
 import { CultivationService } from './cultivation.service';

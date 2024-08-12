@@ -1,5 +1,5 @@
-import { AmqpClientEnum, CompanyMessagePatterns, UserMessagePatterns } from '@forrest-guard/amqp';
-import { BatchDto, CompanyCreateDto, CompanyDto, FarmerDto } from '@forrest-guard/api-interfaces';
+import { AmqpClientEnum, CompanyMessagePatterns, UserMessagePatterns } from '@forest-guard/amqp';
+import { BatchDto, CompanyCreateDto, CompanyDto, FarmerDto } from '@forest-guard/api-interfaces';
 import { firstValueFrom } from 'rxjs';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';

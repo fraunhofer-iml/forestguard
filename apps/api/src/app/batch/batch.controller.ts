@@ -1,19 +1,18 @@
+import { BatchCombinedCreateDto, BatchCreateDto, BatchDto, ProcessDisplayDto } from '@forest-guard/api-interfaces';
 import { Body, Controller, Get, Header, HttpStatus, Param, Post, StreamableFile } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { BatchCombinedCreateDto, BatchCreateDto, BatchDto, ProcessDisplayDto } from '@forrest-guard/api-interfaces';
 import { BatchService } from './batch.service';
 
 @ApiTags('Batches')
 @Controller('batches')
 export class BatchController {
-  constructor(private readonly batchService: BatchService) {
-  }
+  constructor(private readonly batchService: BatchService) {}
 
   @Post()
   @ApiOperation({ description: 'Create coffee batches' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
   createBatches(@Body() batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
-    return this.batchService.createBatches((batchCreateDtos));
+    return this.batchService.createBatches(batchCreateDtos);
   }
 
   @Post('harvests')

@@ -1,13 +1,12 @@
+import { UserMessagePatterns } from '@forest-guard/amqp';
+import { FarmerCreateDto, FarmerDto, UserDto, UserUpdateDto } from '@forest-guard/api-interfaces';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { UserMessagePatterns } from '@forrest-guard/amqp';
-import { FarmerCreateDto, FarmerDto, UserDto, UserUpdateDto } from '@forrest-guard/api-interfaces';
 import { UserService } from './user.service';
 
 @Controller()
 export class UserController {
-  constructor(private readonly service: UserService) {
-  }
+  constructor(private readonly service: UserService) {}
 
   @MessagePattern(UserMessagePatterns.CREATE)
   async createUser(@Payload() payload: { dto: UserUpdateDto }): Promise<UserDto> {

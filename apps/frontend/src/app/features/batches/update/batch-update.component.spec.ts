@@ -1,4 +1,4 @@
-import { BatchDto } from '@forrest-guard/api-interfaces';
+import { BatchDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
