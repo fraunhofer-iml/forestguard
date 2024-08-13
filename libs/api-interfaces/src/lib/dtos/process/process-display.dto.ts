@@ -13,6 +13,7 @@ export class ProcessDisplayDto {
 export class Edge {
   from: string;
   to: string;
+  invalid?: boolean = false;
 
   constructor(from: string, to: string) {
     this.from = from;

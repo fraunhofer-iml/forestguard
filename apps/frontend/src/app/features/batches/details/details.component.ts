@@ -33,6 +33,12 @@ export class BatchDetailsComponent {
     })
   );
 
+  invalidEdges$ = this.related$.pipe(
+    map(({ edges }) => {
+      return edges.filter((edge) => edge.invalid);
+    })
+  );
+
   data$: Observable<{ nodes: any[]; links: any[] }> = this.related$.pipe(
     map(({ coffeeBatches, edges }) => {
       const nodes = coffeeBatches.map((b) => ({ id: b.id, name: b.processStep?.process.name, weight: b.weight }));

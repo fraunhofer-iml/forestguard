@@ -1,4 +1,4 @@
-import { Edge, ProcessDisplayDto } from '@forest-guard/api-interfaces';
+import { BatchDto, Edge, ProcessDisplayDto } from '@forest-guard/api-interfaces';
 import { PrismaService } from '@forest-guard/database';
 import { Injectable } from '@nestjs/common';
 import { BatchWithInAndOut } from '../types/batch.types';
@@ -20,8 +20,20 @@ export class BatchReadRelatedService {
 
     const edges = Array.from(edgeSet).map((edge) => JSON.parse(edge) as Edge);
 
+    const coffeeBatches = Array.from(batchesMap.values()).map(mapBatchPrismaToBatchDto);
+
+    const invalidBatches = coffeeBatches.filter(
+      (batch) => batch.processStep.farmedLand && batch.processStep.farmedLand?.proofs?.length !== 2
+    );
+
+    this.invalidateBatches(
+      coffeeBatches,
+      edges,
+      invalidBatches.map((batch) => batch.id)
+    );
+
     return {
-      coffeeBatches: Array.from(batchesMap.values()).map(mapBatchPrismaToBatchDto),
+      coffeeBatches: coffeeBatches,
       edges: edges,
     };
   }
@@ -65,6 +77,46 @@ export class BatchReadRelatedService {
         await this.traverseBatch(relatedBatch.id, batchesMap, edgeSet, direction);
       }
     }
+  }
+
+  private invalidateBatches(batches: BatchDto[], edges: Edge[], invalidBatchIds: string[]) {
+    const batchMap = new Map<string, BatchDto>();
+    batches.forEach((batch) => batchMap.set(batch.id, batch));
+
+    const adjacentBatches = new Map<string, string[]>();
+    edges.forEach((edge) => {
+      if (!adjacentBatches.has(edge.from)) {
+        adjacentBatches.set(edge.from, []);
+      }
+      adjacentBatches.get(edge.from).push(edge.to);
+    });
+
+    const batchesToInvalidate = new Set<string>();
+
+    function dfs(batchId: string) {
+      if (batchesToInvalidate.has(batchId)) {
+        return;
+      }
+
+      batchesToInvalidate.add(batchId);
+
+      const adjacent = adjacentBatches.get(batchId);
+      if (adjacent) {
+        adjacent.forEach((adj) => {
+          dfs(adj);
+        });
+      }
+    }
+
+    invalidBatchIds.forEach((batchId) => {
+      dfs(batchId);
+    });
+
+    const invalidEdges = edges.filter((edge) => batchesToInvalidate.has(edge.from));
+
+    invalidEdges.forEach((edge) => {
+      edge.invalid = true;
+    });
   }
 
   getBatch(id: string) {

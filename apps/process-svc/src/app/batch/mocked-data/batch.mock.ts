@@ -74,6 +74,13 @@ export const mockedPrismaBatchWithRelations1: BatchWithRelations = {
           notice: 'This land is certified organic.',
           plotOfLandId: 'ctest401',
         },
+        {
+          documentId: 'DOC123456',
+          type: ProofType.PROOF_OF_FREEDOM,
+          documentRef: 'ORG123456',
+          notice: 'This land is certified organic.',
+          plotOfLandId: 'ctest401',
+        },
       ],
     },
     recordedBy: {
@@ -230,6 +237,13 @@ export const mockedPrismaBatchWithRelations2: BatchWithRelations = {
         sort: 'Dent Corn',
       },
       proofs: [
+        {
+          documentId: 'DOC123456',
+          type: ProofType.PROOF_OF_FREEDOM,
+          documentRef: 'ORG123456',
+          notice: 'This land is certified organic.',
+          plotOfLandId: 'ctest401',
+        },
         {
           documentId: 'DOC123456',
           type: ProofType.PROOF_OF_FREEDOM,
@@ -511,7 +525,7 @@ export const mockedPrismaBatch2: Batch & { ins: Batch[]; outs: Batch[] } = {
   outs: [mockedPrismaBatch3, mockedPrismaBatch4],
 };
 
-export const mockedPrismaBatch1: Batch & { ins: Batch[]; outs: Batch[] } = {
+export const mockedPrismaBatch1: BatchWithRelations & { ins: Batch[]; outs: Batch[] } = {
   ...mockedPrismaBatchWithRelations1,
   ins: [],
   outs: [mockedPrismaBatch2],

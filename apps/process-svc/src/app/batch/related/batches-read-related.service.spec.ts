@@ -49,4 +49,27 @@ describe('BatchReadRelatedService', () => {
 
     expect(result.edges).toEqual(resultEdges);
   });
+
+  it('should read all related batches by batch ID and mark as invalid', async () => {
+    const testBatchId = '1';
+    const resultEdges = [
+      { from: '1', to: '2', invalid: true },
+      { from: '2', to: '3', invalid: true },
+      { from: '2', to: '4', invalid: true },
+    ];
+
+    const mockedPrismaBatch1WithoutProofs = mockedPrismaBatch1;
+    mockedPrismaBatch1WithoutProofs.processStep.farmedLand.proofs = [];
+
+    jest
+      .spyOn(prisma.batch, 'findUniqueOrThrow')
+      .mockResolvedValueOnce(mockedPrismaBatch1WithoutProofs)
+      .mockResolvedValueOnce(mockedPrismaBatch2)
+      .mockResolvedValueOnce(mockedPrismaBatch3)
+      .mockResolvedValueOnce(mockedPrismaBatch4);
+
+    const result = await service.readRelatedBatchesById(testBatchId);
+
+    expect(result.edges).toEqual(resultEdges);
+  });
 });

@@ -1,4 +1,5 @@
-import { select as d3_select, zoom as d3_zoom, easeQuadInOut, Selection } from 'd3';
+import { Edge } from '@forrest-guard/api-interfaces';
+import { select as d3_select, zoom as d3_zoom, easeQuadInOut, local, Selection } from 'd3';
 import { sankey as d3_sankey, sankeyLeft as d3_sankeyLeft, sankeyLinkHorizontal as d3_sankeyLinkHorizontal } from 'd3-sankey';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
@@ -11,6 +12,7 @@ export class UiGraphComponent implements OnInit, OnChanges {
   @Input() width = 900;
   @Input() height = 600;
   @Input() selectedNode?: string;
+  @Input() invalidEdges: Edge[] | null = [];
 
   @Output() nodeClick = new EventEmitter<string>();
 
@@ -38,12 +40,19 @@ export class UiGraphComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if ((changes && changes['data'] && !changes['data'].firstChange) || changes['width'] || changes['height'] || changes['selectedNode']) {
+    if (
+      (changes && changes['data'] && !changes['data'].firstChange) ||
+      changes['width'] ||
+      changes['height'] ||
+      changes['selectedNode'] ||
+      changes['invalidEdges']
+    ) {
       this.update();
     }
   }
 
   update(): void {
+    const invalidLinkSet = new Set(this.invalidEdges?.map((edge) => `${edge.from}${edge.to}`));
     if (!this.svg || !this.container || !this.links || !this.nodes || !this.data || !this.margin) {
       return console.error('Missing svg, container, links or nodes');
     }
@@ -78,24 +87,31 @@ export class UiGraphComponent implements OnInit, OnChanges {
     this.links
       .attr('fill', 'none')
       .selectAll('path')
-      .data(this.data.links, (d: any) => d.target.id)
+      .data(this.data.links, (d: any) => `${d.target.id}-${d.source.id}`)
       .join(
         (enter) => {
           return enter
             .append('path')
             .attr('d', d3_sankeyLinkHorizontal())
             .attr('stroke-width', '5')
-            .attr('stroke', '#777771')
+            .attr('stroke', (d) => (invalidLinkSet.has(`${d.source?.id}${d.target?.id}`) ? '#FF0000' : '#777771'))
             .style('opacity', 1)
             .style('mix-blend-mode', 'multiply');
         },
-        (update) => update.transition().duration(300).ease(easeQuadInOut).attr('d', d3_sankeyLinkHorizontal()).attr('stroke-width', '5'),
+        (update) =>
+          update
+            .transition()
+            .duration(300)
+            .ease(easeQuadInOut)
+            .attr('d', d3_sankeyLinkHorizontal())
+            .attr('stroke-width', '5')
+            .attr('stroke', (d) => (invalidLinkSet.has(`${d.source?.id}${d.target?.id}`) ? '#FF0000' : '#777771')),
         (exit) => exit.remove()
       );
 
     this.links
       .selectAll('rect')
-      .data(this.data.links, (d: any) => d.target.id)
+      .data(this.data.links, (d: any) => `${d.target.id}${d.source.id}`)
       .join(
         (enter) =>
           enter
@@ -118,7 +134,7 @@ export class UiGraphComponent implements OnInit, OnChanges {
 
     this.links
       .selectAll('text')
-      .data(this.data.links, (d: any) => d.target.id)
+      .data(this.data.links, (d: any) => `${d.target.id}${d.source.id}`)
       .join(
         (enter) =>
           enter
@@ -146,11 +162,17 @@ export class UiGraphComponent implements OnInit, OnChanges {
         (enter) =>
           enter
             .append('rect')
-            .attr('x', (d) => d.x0)
-            .attr('y', (d) => d.y0 - 75)
-            .attr('height', (d) => d.y1 - d.y0 + 150)
-            .attr('width', (d) => d.x1 - d.x0)
-            .attr('fill', (d) => (d.id === this.selectedNode ? '#bfcbad' : '#777771'))
+            .attr('x', (d) => d.x0 || 0)
+            .attr('y', (d) => d.y0 - 75 || 100)
+            .attr('height', (d) => d.y1 - d.y0 + 150 || 250)
+            .attr('width', (d) => d.x1 - d.x0 || 50)
+            .attr('fill', (d) => {
+              if (d.id === this.invalidEdges?.find((edge) => edge.from === d.id || edge.to === d.id)) {
+                return d.id === this.selectedNode ? '#ff6b6b' : '#FF0000';
+              }
+
+              return d.id === this.selectedNode ? '#bfcbad' : '#777771';
+            })
             .attr('rx', 12)
             .attr('border-radius', '12px')
             .attr('cursor', 'pointer')
@@ -160,11 +182,17 @@ export class UiGraphComponent implements OnInit, OnChanges {
             .transition()
             .duration(300)
             .ease(easeQuadInOut)
-            .attr('x', (d) => d.x0)
-            .attr('y', (d) => d.y0 - 75)
-            .attr('fill', (d) => (d.id === this.selectedNode ? '#bfcbad' : '#777771'))
-            .attr('height', (d) => d.y1 - d.y0 + 150)
-            .attr('width', (d) => d.x1 - d.x0),
+            .attr('x', (d) => d.x0 || 0)
+            .attr('y', (d) => d.y0 - 75 || 0)
+            .attr('fill', (d) => {
+              if (this.invalidEdges && this.invalidEdges.find((edge) => edge.from === d.id || edge.to === d.id)) {
+                return d.id === this.selectedNode ? '#ff6b6b' : '#FF0000';
+              }
+
+              return d.id === this.selectedNode ? '#bfcbad' : '#777771';
+            })
+            .attr('height', (d) => d.y1 - d.y0 + 150 || this.height)
+            .attr('width', (d) => d.x1 - d.x0 || 50),
         (exit) => exit.remove()
       )
       .on('click', (event, data) => this.onMouseEnter(event, data));
@@ -180,13 +208,13 @@ export class UiGraphComponent implements OnInit, OnChanges {
             .attr('fill', (d) => (d.id === this.selectedNode ? '#000' : '#FFF'))
             .attr('font-weight', '500')
             .attr('text-anchor', 'middle')
-            .attr('x', (d) => d.x0 + (d.x1 - d.x0) / 2)
-            .attr('y', (d) => d.y0 + (d.y1 - d.y0) / 2)
+            .attr('x', (d) => d.x0 + (d.x1 - d.x0) / 2 || 0)
+            .attr('y', (d) => d.y0 + (d.y1 - d.y0) / 2 || 25)
             .attr('dy', '0.25em')
             .attr('cursor', 'pointer')
             .attr('transform', (d) => {
-              const x = d.x0 + (d.x1 - d.x0) / 2;
-              const y = d.y0 + (d.y1 - d.y0) / 2;
+              const x = d.x0 + (d.x1 - d.x0) / 2 || 100;
+              const y = d.y0 + (d.y1 - d.y0) / 2 || 100;
               return `rotate(270, ${x}, ${y})`;
             }),
         (update) =>
@@ -196,14 +224,14 @@ export class UiGraphComponent implements OnInit, OnChanges {
             .ease(easeQuadInOut)
             .attr('fill', (d) => (d.id === this.selectedNode ? '#000' : '#FFF'))
             .attr('x', (d) => {
-              return d.x0 + (d.x1 - d.x0) / 2;
+              return d.x0 + (d.x1 - d.x0) / 2 || -this.height / 2;
             })
             .attr('y', (d) => {
-              return d.y0 + (d.y1 - d.y0) / 2;
+              return d.y0 + (d.y1 - d.y0) / 2 || 25;
             })
             .attr('transform', (d) => {
-              const x = d.x0 + (d.x1 - d.x0) / 2;
-              const y = d.y0 + (d.y1 - d.y0) / 2;
+              const x = d.x0 + (d.x1 - d.x0) / 2 || 0;
+              const y = d.y0 + (d.y1 - d.y0) / 2 || 0;
               return `rotate(270, ${x}, ${y})`;
             })
       )
