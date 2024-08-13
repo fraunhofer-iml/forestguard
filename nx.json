@@ -47,6 +47,11 @@
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
+    },
+    "@nx/js:tsc": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
     }
   },
   "generators": {
@@ -70,8 +75,9 @@
     }
   },
   "release": {
-    "projects": ["apps/*"],
+    "projects": ["apps/*", "utm-wgs"],
     "version": {
+      "preVersionCommand": "npx nx run-many -t build",
       "conventionalCommits": true
     }
   }
