@@ -1,8 +1,8 @@
-import { FarmerDto } from '../../dtos';
+import { UserOrFarmerDto } from '../../dtos';
 import { address1Mock } from '../address';
 import { plotOfLand1Mock } from '../plot-of-land';
 
-export const farmer1Mock: FarmerDto = {
+export const farmer1Mock: UserOrFarmerDto = {
   id: 'ctest102',
   employeeId: 'f1',
   firstName: 'Guillermo',

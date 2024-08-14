@@ -1,4 +1,4 @@
-import { CompanyDto, FarmerDto } from '@forest-guard/api-interfaces';
+import { CompanyDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { catchError, EMPTY, map, Observable, switchMap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -37,8 +37,8 @@ export class CompanyComponent {
     'country',
     'plotOfLand',
   ];
-  dataSource: MatTableDataSource<FarmerDto> = new MatTableDataSource<FarmerDto>();
-  farmers$?: Observable<MatTableDataSource<FarmerDto>>;
+  dataSource: MatTableDataSource<UserOrFarmerDto> = new MatTableDataSource<UserOrFarmerDto>();
+  farmers$?: Observable<MatTableDataSource<UserOrFarmerDto>>;
   paginator?: MatPaginator;
   sort?: MatSort;
 
@@ -64,7 +64,7 @@ export class CompanyComponent {
   getFarmers() {
     this.farmers$ = this.company$.pipe(
       map((company) => {
-        this.dataSource = new MatTableDataSource<FarmerDto>(company.farmers ?? []);
+        this.dataSource = new MatTableDataSource<UserOrFarmerDto>(company.farmers ?? []);
         return this.dataSource;
       })
     );

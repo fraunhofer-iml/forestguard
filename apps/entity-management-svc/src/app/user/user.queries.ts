@@ -51,6 +51,23 @@ function address(dto: FarmerCreateDto) {
   };
 }
 
+export function userOrFarmerReadById(id: string) {
+  return {
+    where: {
+      id: id,
+    },
+    include: {
+      address: true,
+      plotsOfLand: {
+        include: {
+          cultivatedWith: true,
+          proofs: true,
+        },
+      },
+    },
+  };
+}
+
 export function farmerReadByCompanyId(companyId: string) {
   return {
     where: {

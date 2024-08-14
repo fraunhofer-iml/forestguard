@@ -1,4 +1,4 @@
-import { FarmerCreateDto, FarmerDto, UserDto, UserUpdateDto } from '@forest-guard/api-interfaces';
+import { FarmerCreateDto, UserDto, UserOrFarmerDto, UserUpdateDto } from '@forest-guard/api-interfaces';
 import { PrismaService } from '@forest-guard/database';
 import { Injectable } from '@nestjs/common';
 import * as Mapper from './user.mapper';
@@ -18,18 +18,18 @@ export class UserService {
     return users.map(Mapper.toUserDto);
   }
 
-  async readUserById(id: string): Promise<UserDto> {
-    const user = await this.prismaService.user.findUniqueOrThrow({ where: { id } });
-    return Mapper.toUserDto(user);
+  async readUserById(id: string): Promise<UserOrFarmerDto> {
+    const user = await this.prismaService.user.findUniqueOrThrow(Queries.userOrFarmerReadById(id));
+    return Mapper.toUserOrFarmerDto(user);
   }
 
-  async createFarmer(dto: FarmerCreateDto): Promise<FarmerDto> {
+  async createFarmer(dto: FarmerCreateDto): Promise<UserOrFarmerDto> {
     const farmer = await this.prismaService.user.create(Queries.farmerCreate(dto));
-    return Mapper.toFarmerDto(farmer);
+    return Mapper.toUserOrFarmerDto(farmer);
   }
 
-  async readFarmersByCompanyId(companyId: string): Promise<FarmerDto[]> {
+  async readFarmersByCompanyId(companyId: string): Promise<UserOrFarmerDto[]> {
     const farmers = await this.prismaService.user.findMany(Queries.farmerReadByCompanyId(companyId));
-    return farmers.map(Mapper.toFarmerDto);
+    return farmers.map(Mapper.toUserOrFarmerDto);
   }
 }

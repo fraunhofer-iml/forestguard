@@ -1,5 +1,5 @@
 import { AmqpException } from '@forest-guard/amqp';
-import { AddressDto, CompanyDto, FarmerDto, PlotOfLandDto, ProofDto, UserDto } from '@forest-guard/api-interfaces';
+import { AddressDto, CompanyDto, PlotOfLandDto, ProofDto, UserDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { HttpStatus } from '@nestjs/common';
 import { Address, Proof } from '@prisma/client';
 import { CompanyWithRelations, PlotOfLandWithRelations, UserWithRelations } from './company.types';
@@ -45,7 +45,7 @@ export class CompanyMapper {
     };
   }
 
-  private static mapFarmerToDto(user: UserWithRelations): FarmerDto {
+  private static mapFarmerToDto(user: UserWithRelations): UserOrFarmerDto {
     const { id, employeeId, firstName, lastName, email, mobilePhoneNumber, role, personalId, address, plotsOfLand } = user;
 
     return {

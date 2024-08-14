@@ -1,14 +1,15 @@
-import { FarmerDto, UserDto } from '@forest-guard/api-interfaces';
+import { UserDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { Address, User } from '@prisma/client';
+import { PlotOfLandWithRelations } from '../company/company.types';
 
 export function toUserDto(user: User): UserDto {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { entityId, companyId, addressId, personalId, ...cleansedUser } = user;
-  return cleansedUser;
+  const { entityId, companyId, addressId, personalId, ...cleanedUser } = user;
+  return cleanedUser;
 }
 
-export function toFarmerDto(farmer: User & { address: Address }): FarmerDto {
+export function toUserOrFarmerDto(user: User & { address: Address; plotsOfLand?: PlotOfLandWithRelations[] }): UserOrFarmerDto {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { entityId, companyId, addressId, ...cleansedFarmer } = farmer;
-  return cleansedFarmer;
+  const { entityId, companyId, addressId, ...cleanedUser } = user;
+  return cleanedUser;
 }

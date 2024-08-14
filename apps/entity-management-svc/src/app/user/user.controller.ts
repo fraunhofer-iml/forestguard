@@ -1,5 +1,5 @@
 import { UserMessagePatterns } from '@forest-guard/amqp';
-import { FarmerCreateDto, FarmerDto, UserDto, UserUpdateDto } from '@forest-guard/api-interfaces';
+import { FarmerCreateDto, UserDto, UserOrFarmerDto, UserUpdateDto } from '@forest-guard/api-interfaces';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { UserService } from './user.service';
@@ -19,17 +19,17 @@ export class UserController {
   }
 
   @MessagePattern(UserMessagePatterns.READ_BY_ID)
-  async readUserById(@Payload() payload: { id: string }): Promise<UserDto> {
+  async readUserById(@Payload() payload: { id: string }): Promise<UserOrFarmerDto> {
     return this.service.readUserById(payload.id);
   }
 
   @MessagePattern(UserMessagePatterns.CREATE_FARMER)
-  async createFarmer(@Payload() payload: { dto: FarmerCreateDto }): Promise<FarmerDto> {
+  async createFarmer(@Payload() payload: { dto: FarmerCreateDto }): Promise<UserOrFarmerDto> {
     return this.service.createFarmer(payload.dto);
   }
 
   @MessagePattern(UserMessagePatterns.READ_FARMER_BY_COMPANY_ID)
-  async readFarmersByCompanyId(@Payload() payload: { companyId: string }): Promise<FarmerDto[]> {
+  async readFarmersByCompanyId(@Payload() payload: { companyId: string }): Promise<UserOrFarmerDto[]> {
     return this.service.readFarmersByCompanyId(payload.companyId);
   }
 }

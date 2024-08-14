@@ -5,3 +5,4 @@ export * from './company-create.dto';
 export * from './farmer.dto';
 export * from './farmer-create.dto';
 export * from './address.dto';
+export * from './user-or-farmer.dto';

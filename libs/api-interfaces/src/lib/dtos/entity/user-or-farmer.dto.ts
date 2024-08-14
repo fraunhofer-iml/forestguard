@@ -2,12 +2,9 @@ import { PlotOfLandDto } from '../plot-of-land';
 import { AddressDto } from './address.dto';
 import { UserDto } from './user.dto';
 
-/**
- * @deprecated Will be removed in favor of UserOrFarmerDto
- */
-export class FarmerDto extends UserDto {
-  personalId: string;
-  address: AddressDto;
+export class UserOrFarmerDto extends UserDto {
+  personalId?: string;
+  address?: AddressDto;
   plotOfLands?: PlotOfLandDto[];
 
   constructor(
@@ -18,8 +15,8 @@ export class FarmerDto extends UserDto {
     email: string,
     role: string,
     mobilePhoneNumber: string,
-    personalId: string,
-    address: AddressDto,
+    personalId?: string,
+    address?: AddressDto,
     plotOfLands?: PlotOfLandDto[]
   ) {
     super(id, employeeId, firstName, lastName, email, role, mobilePhoneNumber);

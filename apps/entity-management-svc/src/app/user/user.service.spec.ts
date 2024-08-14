@@ -66,8 +66,8 @@ describe('UserService', () => {
 
     const response = await service.readUserById(givenUserId);
 
-    expect(response).toEqual(Mapper.toUserDto(USER_PRISMA_MOCK));
-    expect(prisma.user.findUniqueOrThrow).toHaveBeenCalledWith({ where: { id: givenUserId } });
+    expect(response).toEqual(Mapper.toUserOrFarmerDto({ ...USER_PRISMA_MOCK, address: undefined }));
+    expect(prisma.user.findUniqueOrThrow).toHaveBeenCalledWith(Queries.userOrFarmerReadById(givenUserId));
   });
 
   it('should create a farmer', async () => {
@@ -88,7 +88,7 @@ describe('UserService', () => {
 
     const response = await service.createFarmer(givenFarmerDto);
 
-    expect(response).toEqual(Mapper.toFarmerDto(FARMER_PRISMA_MOCK));
+    expect(response).toEqual(Mapper.toUserOrFarmerDto(FARMER_PRISMA_MOCK));
     expect(prisma.user.create).toHaveBeenCalledWith(Queries.farmerCreate(givenFarmerDto));
   });
 
@@ -98,7 +98,7 @@ describe('UserService', () => {
 
     const response = await service.readFarmersByCompanyId(givenCompanyId);
 
-    expect(response).toEqual([FARMER_PRISMA_MOCK].map(Mapper.toFarmerDto));
+    expect(response).toEqual([FARMER_PRISMA_MOCK].map(Mapper.toUserOrFarmerDto));
     expect(prisma.user.findMany).toHaveBeenCalledWith(farmerReadByCompanyId(givenCompanyId));
   });
 });
