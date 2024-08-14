@@ -156,6 +156,43 @@ paths:
           description: Successful creation.
       tags:
         - Companies
+    get:
+      operationId: CompanyController_getCompanies
+      summary: ''
+      description: Get all companies
+      parameters:
+        - name: filters
+          required: false
+          in: query
+          examples:
+            noFilter:
+              value: null
+              description: Apply no filters
+            name:
+              value:
+                name:
+                  contains: foo
+              description: Filter for companies that contain the string "foo"
+          schema:
+            type: string
+        - name: sorting
+          required: false
+          in: query
+          examples:
+            noSorting:
+              value: null
+              description: Apply no specific sorting
+            id:
+              value:
+                id: desc
+              description: Sort by descending company id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful request.
+      tags:
+        - Companies
   /companies/{id}:
     get:
       operationId: CompanyController_getCompany
