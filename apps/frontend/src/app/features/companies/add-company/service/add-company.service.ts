@@ -1,10 +1,10 @@
-import { AddressDto, CompanyCreateDto } from '@forest-guard/api-interfaces';
+import { AddressCreateDto, CompanyCreateDto } from '@forest-guard/api-interfaces';
 import { FormGroup } from '@angular/forms';
 import { CompanyForm } from '../model/forms';
 
 export class AddCompanyService {
-  public generateAddress(formGroup: FormGroup<CompanyForm>): AddressDto {
-    return new AddressDto(
+  public generateAddress(formGroup: FormGroup<CompanyForm>): AddressCreateDto {
+    return new AddressCreateDto(
       formGroup.value.street ?? '',
       formGroup.value.postalCode ?? '',
       formGroup.value.city ?? '',

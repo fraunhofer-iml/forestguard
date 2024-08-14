@@ -18,6 +18,7 @@ const MOCK_BATCH: BatchDto = {
   weight: 100,
   recipient: {
     address: {
+      id: 'test',
       city: 'test',
       country: 'test',
       postalCode: 'test',
@@ -42,6 +43,7 @@ const MOCK_BATCH: BatchDto = {
     },
     executedBy: {
       address: {
+        id: 'test',
         city: 'test',
         country: 'test',
         postalCode: 'test',
@@ -64,6 +66,7 @@ const MOCK_BATCH: BatchDto = {
     },
     recordedBy: {
       address: {
+        id: 'test',
         city: 'test',
         country: 'test',
         postalCode: 'test',
@@ -170,6 +173,7 @@ describe('OverviewComponent', () => {
       name: 'Test Company',
       id: 'test',
       address: {
+        id: 'test',
         city: 'test',
         country: 'test',
         postalCode: 'test',

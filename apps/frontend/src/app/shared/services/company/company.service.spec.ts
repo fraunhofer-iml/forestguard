@@ -1,4 +1,4 @@
-import { CompanyDto, ProcessDisplayDto } from '@forest-guard/api-interfaces';
+import { CompanyCreateDto, CompanyDto, ProcessDisplayDto } from '@forest-guard/api-interfaces';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
@@ -8,7 +8,7 @@ import { CompanyService } from './company.service';
 describe('CompanyService', (): void => {
   let service: CompanyService;
   let companyId: string;
-  let companyCreate: CompanyDto;
+  let companyCreate: CompanyCreateDto;
   let company: CompanyDto;
   let processDisplay: ProcessDisplayDto;
 
@@ -21,7 +21,6 @@ describe('CompanyService', (): void => {
     service = TestBed.inject(CompanyService);
     companyId = '0de044f0-bc57-495f-94c1-12ddb4fd05a1';
     companyCreate = {
-      id: '0de044f0-bc57-495f-94c1-12ddb4fd05a1',
       name: 'Company1',
       address: {
         street: 'Example Street',
@@ -30,14 +29,13 @@ describe('CompanyService', (): void => {
         state: 'Example State',
         country: 'Example Country',
       },
-      employees: [],
-      farmers: [],
     };
 
     company = {
       id: '0de044f0-bc57-495f-94c1-12ddb4fd05a1',
       name: 'Company1',
       address: {
+        id: '29c4fb09-5e9d-46c1-ae24-accfe13570ac',
         street: 'Example Street',
         postalCode: '12345',
         city: 'Example City',
@@ -56,6 +54,7 @@ describe('CompanyService', (): void => {
           weight: 100,
           recipient: {
             address: {
+              id: '29c4fb09-5e9d-46c1-ae24-accfe13570ac',
               city: 'test',
               country: 'test',
               postalCode: 'test',
@@ -80,6 +79,7 @@ describe('CompanyService', (): void => {
             },
             executedBy: {
               address: {
+                id: '29c4fb09-5e9d-46c1-ae24-accfe13570ac',
                 city: 'test',
                 country: 'test',
                 postalCode: 'test',
@@ -102,6 +102,7 @@ describe('CompanyService', (): void => {
             },
             recordedBy: {
               address: {
+                id: '29c4fb09-5e9d-46c1-ae24-accfe13570ac',
                 city: 'test',
                 country: 'test',
                 postalCode: 'test',

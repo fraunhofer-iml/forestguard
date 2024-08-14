@@ -1,4 +1,4 @@
-import { AddressDto, FarmerCreateDto } from '@forest-guard/api-interfaces';
+import { AddressCreateDto, FarmerCreateDto } from '@forest-guard/api-interfaces';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -22,7 +22,7 @@ describe('GenerateUserService', (): void => {
     expect(service).toBeTruthy();
   });
 
-  it('should create a new AddressDto with provided values', () => {
+  it('should create a new AddressCreateDto with provided values', () => {
     const formGroup: FormGroup = formBuilder.group({
       street: ['123 Street'],
       postalCode: ['12345'],
@@ -32,10 +32,10 @@ describe('GenerateUserService', (): void => {
     });
 
     const result = service.generateNewAddress(formGroup);
-    expect(result).toEqual(new AddressDto('123 Street', '12345', 'City', 'State', 'Country'));
+    expect(result).toEqual(new AddressCreateDto('123 Street', '12345', 'City', 'State', 'Country'));
   });
 
-  it('should create a new AddressDto with provided values', () => {
+  it('should create a new AddressCreateDto with provided values', () => {
     const formGroup: FormGroup = formBuilder.group({
       firstName: ['John'],
       lastName: ['Doe'],
@@ -56,7 +56,7 @@ describe('GenerateUserService', (): void => {
         'john.doe@example.com',
         '123',
         '',
-        new AddressDto('123 Street', '12345', 'City', 'State', 'Country')
+        new AddressCreateDto('123 Street', '12345', 'City', 'State', 'Country')
       )
     );
   });

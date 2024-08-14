@@ -1,4 +1,4 @@
-api:run-tests:
+api:run-unit-tests:
   needs: []
   stage: test
   extends: .default
@@ -12,9 +12,38 @@ api:run-tests:
     - merge_requests
     - main
 
+api:run-integration-tests:
+  needs: []
+  stage: test
+  extends: .default
+  services:
+    - name: postgres:16.1
+      alias: postgres
+    - name: rabbitmq:3-alpine
+      alias: rabbitmq
+  variables:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    POSTGRES_DB: forest_guard
+    DATABASE_URL: postgresql://postgres:postgres@postgres:5432/forest_guard?schema=public
+    AMQP_URI: amqp://rabbitmq:5672
+  script:
+    - apk add --no-cache wget ca-certificates
+    - wget https://github.com/jwilder/dockerize/releases/download/v0.8.0/dockerize-alpine-linux-amd64-v0.8.0.tar.gz
+    - tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-v0.8.0.tar.gz
+    - dockerize -wait tcp://postgres:5432 -wait tcp://rabbitmq:5672 -timeout 60s
+    - npx nx serve api &
+    - npx nx serve entity-management-svc &
+    - npx nx serve process-svc &
+    - npx nx test api-e2e
+  only:
+    - merge_requests
+    - main
+
 api:sonarqube-check-mr:
   needs:
-    - api:run-tests
+    - api:run-unit-tests
+    - api:run-integration-tests
   stage: analysis
   image:
     name: sonarsource/sonar-scanner-cli:5.0
@@ -39,7 +68,8 @@ api:sonarqube-check-mr:
 
 api:sonarqube-check-main:
   needs:
-    - api:run-tests
+    - api:run-unit-tests
+    - api:run-integration-tests
   stage: analysis
   image:
     name: sonarsource/sonar-scanner-cli:5.0

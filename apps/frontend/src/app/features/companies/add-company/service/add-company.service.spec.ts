@@ -3,6 +3,7 @@ import { HttpClient, HttpHandler } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AddCompanyService } from './add-company.service';
+import { AddressCreateDto } from 'libs/api-interfaces/src/lib/dtos/entity/address-create.dto';
 
 describe('CreateCompanyService', (): void => {
   let service: AddCompanyService;
@@ -32,7 +33,7 @@ describe('CreateCompanyService', (): void => {
     });
 
     const result = service.generateAddress(formGroup);
-    const expected: AddressDto = {
+    const expected: AddressCreateDto = {
       street: 'Example Street',
       postalCode: '12345',
       city: 'Example City',
@@ -52,7 +53,7 @@ describe('CreateCompanyService', (): void => {
       country: [''],
     });
     const result = service.generateCompany(formGroup);
-    const expected = new CompanyCreateDto('Example Street', new AddressDto('', '', '', '', ''));
+    const expected = new CompanyCreateDto('Example Street', new AddressCreateDto('', '', '', '', ''));
     expect(result).toEqual(expected);
   });
 });

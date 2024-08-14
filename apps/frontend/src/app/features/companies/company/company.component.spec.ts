@@ -12,6 +12,7 @@ const COMPANY_DTO_MOCK: CompanyDto = {
   id: 'ctest103',
   name: 'Acme Corp',
   address: {
+    id: 'ctest201',
     street: '123 Main St',
     postalCode: '62704',
     city: 'Springfield',
@@ -30,6 +31,7 @@ const COMPANY_DTO_MOCK: CompanyDto = {
       role: 'FARMER',
       personalId: 'PID12345678',
       address: {
+        id: 'ctest202',
         street: '456 Elm St',
         postalCode: '46176',
         city: 'Shelbyville',

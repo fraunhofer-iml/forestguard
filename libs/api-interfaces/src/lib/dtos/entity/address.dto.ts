@@ -1,15 +1,10 @@
-export class AddressDto {
-  street: string;
-  postalCode: string;
-  city: string;
-  state: string;
-  country: string;
+import { AddressCreateDto } from './address-create.dto';
 
-  constructor(street: string, postalCode: string, city: string, state: string, country: string) {
-    this.street = street;
-    this.postalCode = postalCode;
-    this.city = city;
-    this.state = state;
-    this.country = country;
+export class AddressDto extends AddressCreateDto {
+  id: string;
+
+  constructor(id: string, street: string, postalCode: string, city: string, state: string, country: string) {
+    super(street, postalCode, city, state, country);
+    this.id = id;
   }
 }

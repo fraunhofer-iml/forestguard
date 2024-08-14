@@ -10,6 +10,7 @@
     "dev": "nx run-many --all --parallel 5 --target serve",
     "test": "nx run-many --all --parallel 5 --target test",
     "test-api": "nx test api",
+    "test-api-e2e": "nx test api-e2e",
     "test-em": "nx test entity-management-svc",
     "test-process": "nx test process-svc",
     "test-frontend": "nx test frontend"

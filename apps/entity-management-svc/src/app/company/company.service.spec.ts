@@ -162,7 +162,7 @@ describe('CompanyService', () => {
     await expect(companyService.readCompanyById(givenCompanyId)).rejects.toThrow(AmqpException);
     await expect(companyService.readCompanyById(givenCompanyId)).rejects.toMatchObject({
       error: {
-        message: 'No Company found.',
+        message: `Company with id '${givenCompanyId}' not found.`,
         status: HttpStatus.NOT_FOUND,
       },
     });

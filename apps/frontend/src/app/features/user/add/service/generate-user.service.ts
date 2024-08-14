@@ -1,4 +1,4 @@
-import { AddressDto, FarmerCreateDto, RoleType, UserUpdateDto } from '@forest-guard/api-interfaces';
+import { AddressCreateDto, FarmerCreateDto, RoleType, UserUpdateDto } from '@forest-guard/api-interfaces';
 import { FormGroup } from '@angular/forms';
 
 export class GenerateUserService {
@@ -24,8 +24,8 @@ export class GenerateUserService {
     );
   }
 
-  generateNewAddress(formGroup: FormGroup): AddressDto {
-    return new AddressDto(
+  generateNewAddress(formGroup: FormGroup): AddressCreateDto {
+    return new AddressCreateDto(
       formGroup.value.street ?? '',
       formGroup.value.postalCode ?? '',
       formGroup.value.city ?? '',
