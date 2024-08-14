@@ -4,6 +4,7 @@ import { combineLatest, mergeMap, Observable } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadFormSelectType } from '../../../shared/components/upload-form/upload-form-select.type';
+import { FARMER_ID } from '../../../shared/constants';
 import { Messages } from '../../../shared/messages';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { CultivationService } from '../../../shared/services/cultivation/cultivation.service';
@@ -47,7 +48,7 @@ export class AddPlotOfLandComponent {
     private cultivationService: CultivationService,
     private generatePlotOfLandService: GeneratePlotOfLandService
   ) {
-    this.farmers$ = this.companyService.getFarmersByCompanyId('id');
+    this.farmers$ = this.companyService.getFarmersByCompanyId(FARMER_ID);
     this.users$ = this.userService.getUsers();
     this.coffeeOptions$ = this.cultivationService.readCultivationsByType('coffee');
   }

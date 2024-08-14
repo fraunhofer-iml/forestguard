@@ -1,0 +1,95 @@
+<header class="font-semibold pb-4 flex flex-row gap-2 text-neutral-300 items-center">
+  <a routerLink="/companies/id" class="font-semibold text-gray-700 hover:underline">Company</a>
+  <span class="material-symbols-outlined text-lg"> chevron_right </span>
+  <h1 class="font-medium">Create User/Farmer</h1>
+</header>
+
+<div class="card grid grid-cols-1 md:grid-cols-2">
+  <h1 class="font-semibold text-gray-700 mt-1">
+    Create {{ selectedRole }}
+  </h1>
+
+  <div class="inline-flex justify-end gap-4 w-full">
+    <span class="text-neutral-500 mt-1 hidden md:inline">Role</span>
+    <label class="relative inline-flex cursor-pointer items-center">
+      <input type="checkbox" class="peer sr-only" />
+      <div
+        class="flex h-8 items-center gap-6 rounded-full bg-primary-400 px-7 after:absolute after:left-1 after:h-6 after:w-20 after:rounded-full after:bg-secondary-800/60 after:text-black after:transition-all peer-checked:after:translate-x-full text-sm text-white w-50"
+      >
+        <span (click)="setSelectedRole(Roles.USER)">User</span>
+        <span class="ml-4" (click)="setSelectedRole(Roles.FARMER)">Farmer</span>
+      </div>
+    </label>
+  </div>
+</div>
+
+<form [formGroup]="userFormGroup" class="grid grid-cols-1 md:grid-cols-2">
+  <div class="card mt-4">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label class="w-full">Company</mat-label>
+      <mat-select formControlName="company" placeholder="Company" class="w-full">
+        <mat-option *ngFor="let company of companies$ | async" [value]="company.id">
+          {{ company.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="flex-none md:flex">
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName" placeholder="First Name" />
+      </mat-form-field>
+
+      <mat-form-field class="w-full md:ml-4" appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName" placeholder="Last Name" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" placeholder="Email" />
+    </mat-form-field>
+
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Phone Number</mat-label>
+      <input matInput formControlName="phoneNumber" placeholder="Phone Number" />
+    </mat-form-field>
+  </div>
+
+  <div class="card md:ml-4 mt-4" *ngIf="selectedRole === Roles.FARMER">
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Street</mat-label>
+      <input matInput formControlName="street" placeholder="Street" />
+    </mat-form-field>
+
+    <div class="flex-none md:flex">
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Postal Code</mat-label>
+        <input matInput formControlName="postalCode" placeholder="Postal Code" />
+      </mat-form-field>
+
+      <mat-form-field class="w-full md:ml-4" appearance="outline">
+        <mat-label>City</mat-label>
+        <input matInput formControlName="city" placeholder="City" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Country</mat-label>
+      <input matInput formControlName="country" placeholder="Country" />
+    </mat-form-field>
+
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>State</mat-label>
+      <input matInput formControlName="state" placeholder="State" />
+    </mat-form-field>
+  </div>
+</form>
+
+<div class="card mt-4">
+  <div class="inline-flex justify-end gap-4 w-full">
+    <button mat-button (click)="clearInputFields()">Clear</button>
+    <button mat-flat-button (click)="submitUserOrFarmer()">Save</button>
+  </div>
+</div>

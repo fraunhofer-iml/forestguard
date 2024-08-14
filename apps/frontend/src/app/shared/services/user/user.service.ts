@@ -18,7 +18,7 @@ export class UserService {
   }
 
   public createUser(user: UserUpdateDto): Observable<UserDto> {
-    return this.httpClient.patch<UserDto>(`${environment.USERS.URL}`, user);
+    return this.httpClient.post<UserDto>(`${environment.USERS.URL}`, user);
   }
 
   public createFarmer(farmer: FarmerCreateDto): Observable<FarmerDto> {

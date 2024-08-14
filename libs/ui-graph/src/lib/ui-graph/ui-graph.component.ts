@@ -1,4 +1,4 @@
-import { Edge } from '@forrest-guard/api-interfaces';
+import { Edge } from '@forest-guard/api-interfaces';
 import { select as d3_select, zoom as d3_zoom, easeQuadInOut, local, Selection } from 'd3';
 import { sankey as d3_sankey, sankeyLeft as d3_sankeyLeft, sankeyLinkHorizontal as d3_sankeyLinkHorizontal } from 'd3-sankey';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';

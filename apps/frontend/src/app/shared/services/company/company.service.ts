@@ -28,4 +28,8 @@ export class CompanyService {
     }
     return this.httpClient.get<BatchDto[]>(`${environment.COMPANIES.URL}/${companyId}${Uris.batches}`, { params });
   }
+
+  public getCompanies(): Observable<CompanyDto[]> {
+    return this.httpClient.get<CompanyDto[]>(`${environment.COMPANIES.URL}`);
+  }
 }

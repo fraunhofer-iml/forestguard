@@ -23,6 +23,10 @@ export const appRoutes: Route[] = [
         path: 'pols',
         loadChildren: () => import('./features/plot-of-land/plot-of-land.module').then((m) => m.PlotOfLandModule),
       },
+      {
+        path: 'users',
+        loadChildren: () => import('./features/user/user.module').then((m) => m.UserModule),
+      },
     ],
   },
 ];

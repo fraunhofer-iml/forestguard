@@ -1,7 +1,8 @@
 <h1 class="font-semibold text-gray-700 pb-4">Company</h1>
 
 <div class="card mb-4 flex justify-end">
-  <a href="/companies/add" mat-button class="text-end">Add Company</a>
+  <a href="/users/add" mat-button class="text-end">Create User/Farmer</a>
+  <a href="/companies/add" mat-button class="ml-2">Add Company</a>
 </div>
 
 <div class="grid md:grid-cols-2 sm:grid-cols-1" *ngIf="company$ | async as company">

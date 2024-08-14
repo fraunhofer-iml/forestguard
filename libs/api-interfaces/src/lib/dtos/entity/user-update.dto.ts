@@ -11,7 +11,7 @@ export class UserUpdateDto {
   mobilePhoneNumber?: string;
   role?: RoleType;
 
-  constructor(employeeId?: string, firstName?: string, lastName?: string, email?: string, mobilePhoneNumber?: string, role?: RoleType) {
+  constructor(firstName?: string, lastName?: string, email?: string, employeeId?: string, mobilePhoneNumber?: string, role?: RoleType) {
     this.employeeId = employeeId;
     this.firstName = firstName;
     this.lastName = lastName;
