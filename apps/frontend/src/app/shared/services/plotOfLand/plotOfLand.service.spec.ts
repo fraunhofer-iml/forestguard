@@ -1,4 +1,4 @@
-import { PlotOfLandCreateDto, PlotOfLandDto, PlotOfLandUpdateDto, ProofDto } from '@forest-guard/api-interfaces';
+import { CoordinateType, PlotOfLandCreateDto, PlotOfLandDto, PlotOfLandUpdateDto, ProofDto, Standard } from '@forest-guard/api-interfaces';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
@@ -26,7 +26,7 @@ describe('PlotOfLandService', (): void => {
       nationalPlotOfLandId: 'n1',
       localPlotOfLandId: 'l1',
       description: 'Lorem ipsum dolor sit amet.',
-      polygonData: '[{ lat: -32.364, lng: 153.207 }]',
+      geoData: { standard: Standard.WGS, coordinateType: CoordinateType.Point, coordinates: [1, 2], zone: 'zone' },
       areaInHA: 1,
       cultivatedWith: 'arabica',
     };
@@ -48,7 +48,7 @@ describe('PlotOfLandService', (): void => {
       nationalPlotOfLandId: 'n1',
       localPlotOfLandId: 'l1',
       description: 'Lorem ipsum dolor sit amet.',
-      polygonData: '[{ lat: -32.364, lng: 153.207 }]',
+      geoData: '[{ lat: -32.364, lng: 153.207 }]',
       areaInHA: 1,
       cultivatedWith: {
         id: '4f7afc7e-2795-4548-bf45-8217a23ef6b2',

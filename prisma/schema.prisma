@@ -89,7 +89,7 @@ model PlotOfLand {
   nationalPlotOfLandId String
   localPlotOfLandId    String
   description          String
-  polygonData          String
+  geoData              String
   areaInHA             Int
 
   cultivatedWith Cultivation @relation(fields: [cultivationId], references: [id])

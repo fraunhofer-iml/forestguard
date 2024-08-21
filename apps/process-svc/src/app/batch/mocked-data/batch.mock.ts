@@ -59,7 +59,7 @@ export const mockedPrismaBatchWithRelations1: BatchWithRelations = {
       farmerId: '1',
       localPlotOfLandId: '1',
       nationalPlotOfLandId: '1',
-      polygonData: 'PolygonData1',
+      geoData: 'geoData1',
       region: 'Region1',
       cultivatedWith: {
         id: 'ctest301',
@@ -229,7 +229,7 @@ export const mockedPrismaBatchWithRelations2: BatchWithRelations = {
       farmerId: '2',
       localPlotOfLandId: '2',
       nationalPlotOfLandId: '2',
-      polygonData: 'PolygonData2',
+      geoData: 'geoData2',
       region: 'Region2',
       cultivatedWith: {
         id: 'ctest301',
@@ -336,7 +336,7 @@ export const mockedPrismaBatchWithRelations3: BatchWithRelations = {
       farmerId: '2',
       localPlotOfLandId: '2',
       nationalPlotOfLandId: '2',
-      polygonData: 'PolygonData2',
+      geoData: 'geoData2',
       region: 'Region2',
       cultivatedWith: {
         id: 'ctest301',
@@ -436,7 +436,7 @@ export const mockedPrismaBatchWithRelations4: BatchWithRelations = {
       farmerId: '2',
       localPlotOfLandId: '2',
       nationalPlotOfLandId: '2',
-      polygonData: 'PolygonData2',
+      geoData: 'GeoData2',
       region: 'Region2',
       cultivatedWith: {
         id: 'ctest301',

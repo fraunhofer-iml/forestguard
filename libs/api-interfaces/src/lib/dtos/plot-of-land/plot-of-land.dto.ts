@@ -9,7 +9,7 @@ export class PlotOfLandDto {
   nationalPlotOfLandId?: string;
   localPlotOfLandId?: string;
   description?: string;
-  polygonData?: string;
+  geoData?: string;
   areaInHA?: number;
   cultivatedWith?: CultivationDto;
   proofs?: ProofDto[];
@@ -22,7 +22,7 @@ export class PlotOfLandDto {
     nationalPlotOfLandId?: string,
     localPlotOfLandId?: string,
     description?: string,
-    polygonData?: string,
+    geoData?: string,
     areaInHA?: number,
     cultivatedWith?: CultivationDto,
     proofs?: ProofDto[]
@@ -34,7 +34,7 @@ export class PlotOfLandDto {
     this.nationalPlotOfLandId = nationalPlotOfLandId;
     this.localPlotOfLandId = localPlotOfLandId;
     this.description = description;
-    this.polygonData = polygonData;
+    this.geoData = geoData;
     this.areaInHA = areaInHA;
     this.cultivatedWith = cultivatedWith;
     this.proofs = proofs;

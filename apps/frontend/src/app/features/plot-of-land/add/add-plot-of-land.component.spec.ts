@@ -47,7 +47,7 @@ describe('AddPlotOfLandComponent', () => {
     expect(component.plotOfLandFormGroup.contains('cultivatedWith')).toBeTruthy();
     expect(component.plotOfLandFormGroup.contains('localPlotOfLandId')).toBeTruthy();
     expect(component.plotOfLandFormGroup.contains('nationalPlotOfLandId')).toBeTruthy();
-    expect(component.plotOfLandFormGroup.contains('polygondata')).toBeTruthy();
+    expect(component.plotOfLandFormGroup.contains('geoData')).toBeTruthy();
   });
 
   it('should have form invalid when empty', () => {

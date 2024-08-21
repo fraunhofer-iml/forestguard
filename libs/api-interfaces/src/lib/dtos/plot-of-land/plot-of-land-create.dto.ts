@@ -1,3 +1,5 @@
+import { GeoDataDto } from './geo-data.dto';
+
 export class PlotOfLandCreateDto {
   country: string;
   region: string;
@@ -5,7 +7,7 @@ export class PlotOfLandCreateDto {
   nationalPlotOfLandId?: string;
   localPlotOfLandId?: string;
   description: string;
-  polygonData: string;
+  geoData: GeoDataDto;
   areaInHA: number;
   cultivatedWith: string;
 
@@ -14,7 +16,7 @@ export class PlotOfLandCreateDto {
     region: string,
     district: string,
     description: string,
-    polygonData: string,
+    geoData: GeoDataDto,
     areaInHA: number,
     cultivatedWith: string,
     nationalPlotOfLandId?: string,
@@ -24,7 +26,7 @@ export class PlotOfLandCreateDto {
     this.region = region;
     this.district = district;
     this.description = description;
-    this.polygonData = polygonData;
+    this.geoData = geoData;
     this.areaInHA = areaInHA;
     this.cultivatedWith = cultivatedWith;
     this.nationalPlotOfLandId = nationalPlotOfLandId;

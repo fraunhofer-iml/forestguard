@@ -59,7 +59,7 @@ const COMPANY_PRISMA_MOCK: CompanyWithRelations = {
           nationalPlotOfLandId: 'US-987654321',
           localPlotOfLandId: 'IN-123456789',
           description: 'A large plot of fertile land in the Midwest.',
-          polygonData: 'POLYGON((...))',
+          geoData: 'POLYGON((...))',
           areaInHA: 100,
           cultivationId: 'ctest301',
           farmerId: 'ctest102',
@@ -128,7 +128,7 @@ const COMPANY_DTO_MOCK: CompanyDto = {
           nationalPlotOfLandId: 'US-987654321',
           localPlotOfLandId: 'IN-123456789',
           description: 'A large plot of fertile land in the Midwest.',
-          polygonData: 'POLYGON((...))',
+          geoData: 'POLYGON((...))',
           areaInHA: 100,
           cultivatedWith: {
             id: 'ctest301',

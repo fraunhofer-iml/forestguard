@@ -28,7 +28,7 @@ export class AddPlotOfLandComponent {
     cultivatedWith: new FormControl(null, Validators.required),
     localPlotOfLandId: new FormControl(null, Validators.required),
     nationalPlotOfLandId: new FormControl(null, Validators.required),
-    polygondata: new FormControl(null, Validators.required),
+    geoData: new FormControl(null, Validators.required),
   });
   uploadSelectOption: UploadFormSelectType[] = [
     {

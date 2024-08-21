@@ -8,7 +8,7 @@ export class GeneratePlotOfLandService {
       formGroup.value.region ?? '',
       '',
       formGroup.value.plotOfLand ?? '',
-      formGroup.value.polygondata ?? '',
+      formGroup.value.geoData ?? '',
       0,
       formGroup.value.cultivatedWith ?? '',
       formGroup.value.nationalPlotOfLandId ?? '',

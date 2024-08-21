@@ -5,3 +5,4 @@ export * from './cultivation.dto';
 export * from './cultivation-create.dto';
 export * from './proof.dto';
 export * from './proof-create.dto';
+export * from './geo-data.dto';

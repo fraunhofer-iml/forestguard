@@ -1,4 +1,4 @@
-import { PlotOfLandCreateDto } from '@forest-guard/api-interfaces';
+import { CoordinateType, PlotOfLandCreateDto, Standard } from '@forest-guard/api-interfaces';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -26,12 +26,24 @@ describe('GeneratePlotOfLandService', (): void => {
     const formGroup: FormGroup = formBuilder.group({
       region: ['region'],
       plotOfLand: ['plot'],
-      polygondata: ['polygon'],
+      geoData: [{ standard: Standard.WGS, coordinateType: CoordinateType.Point, coordinates: [1, 2], zone: 'zone' }],
       nationalPlotOfLandId: ['123'],
       localPlotOfLandId: ['456'],
     });
 
     const result = service.createNewPlotOfLand(formGroup);
-    expect(result).toEqual(new PlotOfLandCreateDto('', 'region', '', 'plot', 'polygon', 0, '', '123', '456'));
+    expect(result).toEqual(
+      new PlotOfLandCreateDto(
+        '',
+        'region',
+        '',
+        'plot',
+        { standard: Standard.WGS, coordinateType: CoordinateType.Point, coordinates: [1, 2], zone: 'zone' },
+        0,
+        '',
+        '123',
+        '456'
+      )
+    );
   });
 });

@@ -10,7 +10,7 @@ export const plotOfLand1Mock: PlotOfLandDto = {
   nationalPlotOfLandId: 'n1',
   localPlotOfLandId: 'l1',
   description: 'Lorem ipsum dolor sit amet.',
-  polygonData: '[{ lat: -32.364, lng: 153.207 }]',
+  geoData: '[{ lat: -32.364, lng: 153.207 }]',
   areaInHA: 1,
   cultivatedWith: cultivation1Mock,
   proofs: [proof1Mock]

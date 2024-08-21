@@ -1,9 +1,9 @@
-import { PlotOfLandCreateDto, PlotOfLandUpdateDto } from '@forest-guard/api-interfaces';
+import { GeoDataDto, PlotOfLandCreateDto, PlotOfLandUpdateDto } from '@forest-guard/api-interfaces';
 import { ConfigurationService } from '@forest-guard/configuration';
 import { PrismaService } from '@forest-guard/database';
 import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
-import { PlotOfLand } from '@prisma/client';
+import { PlotOfLand, User } from '@prisma/client';
 
 @Injectable()
 export class PlotsOfLandService {
@@ -31,17 +31,28 @@ export class PlotsOfLandService {
       throw new RpcException('Sort of Cultivation is required');
     }
 
-    const { areaInHA, country, description, district, polygonData, region, localPlotOfLandId, nationalPlotOfLandId } = plotOfLand;
+    if (!plotOfLand.geoData) {
+      throw new RpcException('GeoData is required');
+    }
+
+    const farmer = await this.prismaService.user.findFirst({ where: { id: farmerId } });
+
+    if (!farmer) {
+      throw new RpcException(`Farmer with id '${farmerId}' not found`);
+    }
+
+    const geoDataEudr = this.createGeoDataEudr(plotOfLand.geoData, farmer);
+
     return this.prismaService.plotOfLand.create({
       data: {
-        areaInHA: areaInHA || 0,
-        country: country || '',
-        description: description || '',
-        district: district || '',
-        polygonData: polygonData || '',
-        region: region || '',
-        localPlotOfLandId: localPlotOfLandId || '',
-        nationalPlotOfLandId: nationalPlotOfLandId || '',
+        areaInHA: plotOfLand.areaInHA,
+        country: plotOfLand.country,
+        description: plotOfLand.description,
+        district: plotOfLand.district,
+        geoData: JSON.stringify(geoDataEudr),
+        region: plotOfLand.region,
+        localPlotOfLandId: plotOfLand.localPlotOfLandId,
+        nationalPlotOfLandId: plotOfLand.nationalPlotOfLandId,
         cultivatedWith: {
           connectOrCreate: {
             where: {
@@ -58,11 +69,43 @@ export class PlotsOfLandService {
         },
         farmer: {
           connect: {
-            id: farmerId,
+            id: farmer.id,
           },
         },
       },
     });
+  }
+
+  createGeoDataEudr(geoDataDto: GeoDataDto, farmerEntity: User) {
+    // TODO-MP: Activate this precondition check after the frontend (FOR-293) is ready
+    /* 
+    if (!geoDataDto.type) {
+      throw new RpcException('GeoData type is required');
+    }
+
+    if (!geoDataDto.coordinates) {
+      throw new RpcException('GeoData coordinates are required');
+    }
+    */
+
+    return {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          geometry: {
+            type: geoDataDto.coordinateType,
+            coordinates: geoDataDto.coordinates,
+          },
+          properties: {
+            ProducerName: farmerEntity.firstName + ' ' + farmerEntity.lastName,
+            ProducerCountry: '',
+            ProductionPlace: '',
+            Area: '',
+          },
+        },
+      ],
+    };
   }
 
   async updatePlotOfLand(id: string, plotOfLand: PlotOfLandUpdateDto): Promise<PlotOfLand> {
