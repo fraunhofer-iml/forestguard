@@ -5,21 +5,23 @@
 </header>
 
 <div class="card grid grid-cols-1 md:grid-cols-2">
-  <h1 class="font-semibold text-gray-700 mt-1">
-    Create {{ selectedRole }}
-  </h1>
-
+  <h1 class="font-semibold text-gray-700 mt-1">Create {{ selectedRole }}</h1>
   <div class="inline-flex justify-end gap-4 w-full">
     <span class="text-neutral-500 mt-1 hidden md:inline">Role</span>
-    <label class="relative inline-flex cursor-pointer items-center">
-      <input type="checkbox" class="peer sr-only" />
-      <div
-        class="flex h-8 items-center gap-6 rounded-full bg-primary-400 px-7 after:absolute after:left-1 after:h-6 after:w-20 after:rounded-full after:bg-secondary-800/60 after:text-black after:transition-all peer-checked:after:translate-x-full text-sm text-white w-50"
-      >
-        <span (click)="setSelectedRole(Roles.USER)">User</span>
-        <span class="ml-4" (click)="setSelectedRole(Roles.FARMER)">Farmer</span>
-      </div>
-    </label>
+    <button
+      [ngClass]="selectedRole === Roles.USER ? 'bg-primary-400 text-white' : 'bg-secondary-800 text-black'"
+      class="h-8 rounded-full px-7 text-sm"
+      (click)="setSelectedRole(Roles.USER)"
+    >
+      User
+    </button>
+    <button
+      [ngClass]="selectedRole === Roles.FARMER ? 'bg-primary-400 text-white' : 'bg-secondary-800 text-black'"
+      class="h-8 rounded-full px-7 text-sm"
+      (click)="setSelectedRole(Roles.FARMER)"
+    >
+      Farmer
+    </button>
   </div>
 </div>
 

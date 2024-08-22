@@ -10,6 +10,7 @@ import { UploadFormSelectType } from './upload-form-select.type';
 export class UploadFormComponent {
   @Input() title?: string;
   @Input() selectOptions?: UploadFormSelectType[];
+  @Input() showUploadedFiles = true;
 
   @Output() uploadDocument = new EventEmitter<{ file: File; documentType: string }>();
 

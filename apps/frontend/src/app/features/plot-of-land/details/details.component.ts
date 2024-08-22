@@ -39,6 +39,10 @@ export class PlotOfLandDetailsComponent {
     return proofs?.find((proof) => proof.type === type);
   }
 
+  hasFileUploaded(type?: string): boolean {
+    return this.uploadSelectOption?.filter((option) => option.value === type && option.file).length > 0;
+  }
+
   uploadProof({ file, documentType }: { file: File; documentType: string }, id: string | undefined): void {
     const option = this.uploadSelectOption.find((option) => option.value === documentType);
 
@@ -57,7 +61,10 @@ export class PlotOfLandDetailsComponent {
             return EMPTY;
           })
         )
-        .subscribe(() => toast.success(Messages.successProof));
+        .subscribe(() => {
+          this.hasFileUploaded(option?.value);
+          toast.success(Messages.successProof);
+        });
     }
   }
 }

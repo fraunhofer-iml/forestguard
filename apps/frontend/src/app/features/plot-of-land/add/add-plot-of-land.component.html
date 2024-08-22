@@ -49,7 +49,11 @@
       </mat-form-field>
     </form>
   </div>
-  <app-upload-form [selectOptions]="uploadSelectOption" [title]="'Upload Proofs'" (uploadDocument)="submitFile($event)"></app-upload-form>
+  <app-upload-form
+    [selectOptions]="uploadSelectOption"
+    [title]="'Upload Proofs'"
+    (uploadDocument)="submitFile($event)"
+  ></app-upload-form>
 </div>
 <div class="card mt-4">
   <div class="inline-flex justify-end gap-4 w-full">

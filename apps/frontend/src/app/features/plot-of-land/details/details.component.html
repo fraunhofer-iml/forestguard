@@ -40,10 +40,19 @@
             </div>
           </div>
         </div>
+
         <ng-template #notUploadedProofOfFreedom>
           <div class="flex flex-row select-none w-full">
-            <div class="p-1 h-10 w-10 rounded-full bg-orange-500 flex items-center justify-center">
-              <span class="material-symbols-outlined text-white"> warning </span>
+            <div
+              class="p-1 h-10 w-10 rounded-full flex items-center justify-center"
+              [ngClass]="{
+                'bg-green-600': hasFileUploaded(ProofType.PROOF_OF_FREEDOM),
+                'bg-orange-500': !hasFileUploaded(ProofType.PROOF_OF_FREEDOM)
+              }"
+            >
+              <span class="material-symbols-outlined text-white"
+                >{{ hasFileUploaded(ProofType.PROOF_OF_FREEDOM) ? 'done' : 'warning' }}
+              </span>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-2 mt-2 ml-4">
               <p class="text-neutral-500">Proof of Freedom from deforestation</p>
@@ -84,8 +93,16 @@
 
         <ng-template #notUploadedProofOfOwnership>
           <div class="flex flex-row select-none w-full">
-            <div class="p-1 h-10 w-10 rounded-full bg-orange-500 flex items-center justify-center">
-              <span class="material-symbols-outlined text-white"> warning </span>
+            <div
+              class="p-1 h-10 w-10 rounded-full flex items-center justify-center"
+              [ngClass]="{
+                'bg-green-600': hasFileUploaded(ProofType.PROOF_OF_OWNERSHIP),
+                'bg-orange-500': !hasFileUploaded(ProofType.PROOF_OF_OWNERSHIP)
+              }"
+            >
+              <span class="material-symbols-outlined text-white"
+                >{{ hasFileUploaded(ProofType.PROOF_OF_OWNERSHIP) ? 'done' : 'warning' }}
+              </span>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-2 mt-2 ml-4">
               <p class="text-neutral-500">Proof of Ownership for plot of land</p>
@@ -137,6 +154,7 @@
     <app-upload-form
       [selectOptions]="uploadSelectOption"
       [title]="'Upload Proofs'"
+      [showUploadedFiles]="false"
       (uploadDocument)="uploadProof($event, batch.processStep.farmedLand?.id)"
     ></app-upload-form>
   </div>
