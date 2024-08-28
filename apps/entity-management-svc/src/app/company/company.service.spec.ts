@@ -72,7 +72,7 @@ describe('CompanyService', () => {
       addressId: '1',
     });
 
-    const actualResult = await companyService.createCompany(givenDto);
+    const actualResult = await companyService.createCompany(givenDto, '1');
     expect(actualResult).toBeDefined();
     expect(prismaService.company.create).toHaveBeenCalledWith({
       data: {
@@ -118,8 +118,8 @@ describe('CompanyService', () => {
       address: ADDRESS_MOCK,
     };
 
-    await expect(companyService.createCompany(givenDto)).rejects.toThrow(AmqpException);
-    await expect(companyService.createCompany(givenDto)).rejects.toMatchObject({
+    await expect(companyService.createCompany(givenDto, '1')).rejects.toThrow(AmqpException);
+    await expect(companyService.createCompany(givenDto, '1')).rejects.toMatchObject({
       error: {
         message: "Company with name 'Acme Corporation' already exists.",
         status: HttpStatus.CONFLICT,
@@ -150,6 +150,9 @@ describe('CompanyService', () => {
             },
           },
         },
+      },
+      where: {
+        entityId: givenCompanyId,
       },
     });
   });

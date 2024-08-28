@@ -1,13 +1,14 @@
 import { AddressCreateDto, FarmerCreateDto, RoleType, UserUpdateDto } from '@forest-guard/api-interfaces';
 import { FormGroup } from '@angular/forms';
+import { UserForm } from '../model/user-form';
 
 export class GenerateUserService {
-  generateNewUser(formGroup: FormGroup): UserUpdateDto {
+  generateNewUser(formGroup: FormGroup<UserForm>): UserUpdateDto {
     return new UserUpdateDto(
       formGroup.value.firstName ?? '',
       formGroup.value.lastName ?? '',
       formGroup.value.email ?? '',
-      formGroup.value.company ?? '',
+      formGroup.value.employeeId ?? '',
       formGroup.value.phoneNumber ?? '',
       RoleType.EMPLOYEE
     );
@@ -18,7 +19,7 @@ export class GenerateUserService {
       formGroup.value.firstName ?? '',
       formGroup.value.lastName ?? '',
       formGroup.value.email ?? '',
-      formGroup.value.company ?? '',
+      formGroup.value.employeeId ?? '',
       formGroup.value.phoneNumber ?? '',
       this.generateNewAddress(formGroup)
     );

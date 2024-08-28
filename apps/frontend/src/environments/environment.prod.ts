@@ -29,4 +29,9 @@ export const environment = {
   MINIO: {
     URL: 'https://minioo.public.apps.blockchain-europe.iml.fraunhofer.de/forest-guard/',
   },
+  KEYCLOAK: {
+    URL: 'https://kc.apps.blockchain-europe.iml.fraunhofer.de',
+    REALM: 'forest-guard',
+    CLIENT_ID: 'frontend',
+  },
 };

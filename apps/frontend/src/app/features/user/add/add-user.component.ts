@@ -18,7 +18,7 @@ export class AddUserComponent {
   selectedRole: string = Roles.USER;
   companies$: Observable<CompanyDto[]> = this.companyService.getCompanies();
   userFormGroup: FormGroup<UserForm> = new FormGroup<UserForm>({
-    company: new FormControl(null, Validators.required),
+    employeeId: new FormControl(null),
     firstName: new FormControl(null, Validators.required),
     lastName: new FormControl(null, Validators.required),
     email: new FormControl(null, Validators.required),
@@ -39,7 +39,7 @@ export class AddUserComponent {
   }
 
   checkUserFieldsValidity(): boolean {
-    const requiredFields = ['company', 'firstName', 'lastName', 'email', 'phoneNumber'];
+    const requiredFields = ['firstName', 'lastName', 'email', 'phoneNumber'];
     return requiredFields.every((field) => this.userFormGroup.get(field)?.valid);
   }
 

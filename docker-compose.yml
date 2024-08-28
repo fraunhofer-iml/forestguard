@@ -60,6 +60,29 @@ services:
     environment:
       RABBITMQ_LOGS: '-error'
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    container_name: keycloak-forest-guard
+    ports:
+      - '8080:8080'
+    command:
+      - start-dev
+      - --import-realm
+    networks:
+      default:
+    environment:
+      KC_HEALTH_ENABLED: 'true'
+      KC_LOG_LEVEL: ERROR
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    volumes:
+      - './keycloak/realm/ForestGuard-realm.json:/opt/keycloak/data/import/realm.json'
+    healthcheck:
+      test: timeout 5s bash -c ':> /dev/tcp/localhost/8080'
+      start_period: 10s
+      interval: 5s
+      retries: 10
+
 networks:
   default:
     name: forest-guard-dev

@@ -12,15 +12,15 @@ export class UserService {
     return firstValueFrom(this.entityManagementService.send(UserMessagePatterns.READ_ALL, {}));
   }
 
-  createUser(dto: UserUpdateDto): Promise<UserDto> {
-    return firstValueFrom(this.entityManagementService.send(UserMessagePatterns.CREATE, { dto }));
+  createUser(payload: { dto: UserUpdateDto; companyId: string }): Promise<UserDto> {
+    return firstValueFrom(this.entityManagementService.send(UserMessagePatterns.CREATE, payload));
   }
 
   readUserById(id: string): Promise<UserDto> {
     return firstValueFrom(this.entityManagementService.send(UserMessagePatterns.READ_BY_ID, { id }));
   }
 
-  createFarmer(dto: FarmerCreateDto): Promise<FarmerDto> {
-    return firstValueFrom(this.entityManagementService.send(UserMessagePatterns.CREATE_FARMER, { dto }));
+  createFarmer(payload: { dto: FarmerCreateDto; companyId: string }): Promise<FarmerDto> {
+    return firstValueFrom(this.entityManagementService.send(UserMessagePatterns.CREATE_FARMER, payload));
   }
 }

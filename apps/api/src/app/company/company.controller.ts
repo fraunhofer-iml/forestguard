@@ -1,6 +1,7 @@
 import { BatchDto, CompanyCreateDto, CompanyDto, FarmerDto } from '@forest-guard/api-interfaces';
+import { AuthenticatedUser } from 'nest-keycloak-connect';
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CompanyService } from './company.service';
 
 @ApiTags('Companies')
@@ -9,13 +10,15 @@ export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Create a company' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
-  createCompany(@Body() dto: CompanyCreateDto): Promise<CompanyDto> {
-    return this.companyService.createCompany(dto);
+  createCompany(@AuthenticatedUser() user, @Body() dto: CompanyCreateDto): Promise<CompanyDto> {
+    return this.companyService.createCompany(dto, user);
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Get company by ID' })
   @ApiOkResponse({ description: 'Successful request.' })
   getCompany(@Param('id') id: string): Promise<CompanyDto> {
@@ -23,6 +26,7 @@ export class CompanyController {
   }
 
   @Get('')
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Get all companies' })
   @ApiOkResponse({ description: 'Successful request.' })
   @ApiQuery({
@@ -46,6 +50,7 @@ export class CompanyController {
   }
 
   @Get(':id/batches')
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Get all coffee batches of the company' })
   @ApiOkResponse({ description: 'Successful request.' })
   @ApiQuery({ name: 'query', required: false, example: { active: true } })
@@ -59,6 +64,7 @@ export class CompanyController {
   }
 
   @Get(':id/farmers')
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Get all farmers related to the company' })
   @ApiOkResponse({ description: 'Successful request.' })
   getFarmers(@Param('id') id: string): Promise<FarmerDto[]> {

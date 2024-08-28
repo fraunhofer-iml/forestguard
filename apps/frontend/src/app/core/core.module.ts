@@ -5,10 +5,12 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { ContentLayoutComponent } from './components/content-layout/content-layout.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { AuthenticationService } from './services/authentication.service';
 
 @NgModule({
   declarations: [SidenavComponent, ContentLayoutComponent],
   imports: [CommonModule, RouterModule, NgOptimizedImage, BrowserAnimationsModule, SharedModule],
   exports: [SidenavComponent, ContentLayoutComponent],
+  providers: [AuthenticationService],
 })
 export class CoreModule {}

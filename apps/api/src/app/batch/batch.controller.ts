@@ -1,6 +1,7 @@
-import { BatchCombinedCreateDto, BatchCreateDto, BatchDto, ProcessDisplayDto } from '@forest-guard/api-interfaces';
+import { BatchCombinedCreateDto, BatchCreateDto, BatchDto, ProcessDisplayDto, TAuthenticatedUser } from '@forest-guard/api-interfaces';
+import { AuthenticatedUser } from 'nest-keycloak-connect';
 import { Body, Controller, Get, Header, HttpStatus, Param, Post, StreamableFile } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BatchService } from './batch.service';
 
 @ApiTags('Batches')
@@ -9,27 +10,34 @@ export class BatchController {
   constructor(private readonly batchService: BatchService) {}
 
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Create coffee batches' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
-  createBatches(@Body() batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
-    return this.batchService.createBatches(batchCreateDtos);
+  createBatches(@Body() batchCreateDtos: BatchCreateDto[], @AuthenticatedUser() user: TAuthenticatedUser): Promise<HttpStatus> {
+    return this.batchService.createBatches({ batchCreateDtos, companyId: user.sub });
   }
 
   @Post('harvests')
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Create harvest batches' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
-  createHarvests(@Body() batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
-    return this.batchService.createHarvests(batchCreateDtos);
+  createHarvests(@Body() batchCreateDtos: BatchCreateDto[], @AuthenticatedUser() user: TAuthenticatedUser): Promise<HttpStatus> {
+    return this.batchService.createHarvests({ batchCreateDtos, companyId: user.sub });
   }
 
   @Post('harvests/combined')
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Create harvest batches to multiple plot of lands' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
-  createCombinedHarvests(@Body() batchCombinedCreateDto: BatchCombinedCreateDto): Promise<HttpStatus> {
-    return this.batchService.createCombinedHarvests(batchCombinedCreateDto);
+  createCombinedHarvests(
+    @Body() batchCombinedCreateDto: BatchCombinedCreateDto,
+    @AuthenticatedUser() user: TAuthenticatedUser
+  ): Promise<HttpStatus> {
+    return this.batchService.createCombinedHarvests({ batchCombinedCreateDto, companyId: user.sub });
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Get coffee batch by ID' })
   @ApiOkResponse({ description: 'Successful request.' })
   getBatch(@Param('id') id: string): Promise<BatchDto> {
@@ -37,6 +45,7 @@ export class BatchController {
   }
 
   @Get(':id/related')
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Get all coffee batches that are related to the coffee batch' })
   @ApiOkResponse({ description: 'Successful request.' })
   getRelatedBatches(@Param('id') id: string): Promise<ProcessDisplayDto> {
@@ -44,6 +53,7 @@ export class BatchController {
   }
 
   @Get(':id/export')
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Export batch file with all batch information and all previous and next batches' })
   @ApiOkResponse({ description: 'Successful request.' })
   @Header('Content-Type', 'application/json')

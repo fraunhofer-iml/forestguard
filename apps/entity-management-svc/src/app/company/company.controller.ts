@@ -9,8 +9,8 @@ export class CompanyController {
   constructor(private readonly service: CompanyService) {}
 
   @MessagePattern(CompanyMessagePatterns.CREATE)
-  async createCompany(@Payload() payload: { dto: CompanyCreateDto }) {
-    return await this.service.createCompany(payload.dto);
+  async createCompany(@Payload() payload: { dto: CompanyCreateDto; keycloakCompanyId: string }) {
+    return await this.service.createCompany(payload.dto, payload.keycloakCompanyId);
   }
 
   @MessagePattern(CompanyMessagePatterns.READ_BY_ID)

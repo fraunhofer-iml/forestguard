@@ -7,5 +7,6 @@ import { CompanyService } from './company.service';
   imports: [new Broker().getEntityManagementBroker(), new Broker().getProcessBroker()],
   controllers: [CompanyController],
   providers: [CompanyService],
+  exports: [CompanyService],
 })
 export class CompanyModule {}

@@ -20,7 +20,7 @@
       <mat-form-field class="w-full mt-4" appearance="outline">
         <mat-label>Recipient</mat-label>
         <mat-select formControlName="recipient" placeholder="Recipient">
-          <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }} </mat-option>
+          <mat-option *ngFor="let company of companies$ | async" [value]="company.id"> {{ company.name }} </mat-option>
         </mat-select>
       </mat-form-field>
 

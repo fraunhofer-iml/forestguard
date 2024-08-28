@@ -6,7 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { COMPANY_ID } from '../../../shared/constants';
+import { AuthenticationService } from '../../../core/services/authentication.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
 
@@ -33,7 +33,7 @@ export class BatchOverviewComponent implements AfterViewInit {
     this.setDataSourceAttributes();
   }
 
-  constructor(private companyService: CompanyService, private router: Router) {}
+  constructor(private companyService: CompanyService, private router: Router, private authenticationService: AuthenticationService) {}
 
   ngAfterViewInit(): void {
     this.getBatches();
@@ -42,14 +42,16 @@ export class BatchOverviewComponent implements AfterViewInit {
   }
 
   getBatches() {
-    this.batches$ = this.companyService.getBatchesOfCompany(COMPANY_ID, '{"active": true}').pipe(
-      map((batches) => {
-        batches.reverse();
-        const dataSource = this.dataSource;
-        dataSource.data = batches;
-        return dataSource;
-      })
-    );
+    this.batches$ = this.companyService
+      .getBatchesOfCompany(this.authenticationService.getCurrentCompanyId() ?? '', '{"active": true}')
+      .pipe(
+        map((batches) => {
+          batches.reverse();
+          const dataSource = this.dataSource;
+          dataSource.data = batches;
+          return dataSource;
+        })
+      );
   }
 
   setDataSourceAttributes() {

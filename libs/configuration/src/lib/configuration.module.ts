@@ -4,7 +4,9 @@ import { ConfigurationService } from './configuration.service';
 import apiConfiguration from './configurations/api.configuration';
 import entityManagementSvcConfiguration from './configurations/entity-management-svc.configuration';
 import generalConfiguration from './configurations/general.configuration';
+import keycloakConfiguration from './configurations/keycloak.configuration';
 import processSvcConfiguration from './configurations/process-svc.configuration';
+import { KeycloakConfigurationService } from './keycloak.configuration.service';
 
 @Module({
   imports: [
@@ -12,11 +14,11 @@ import processSvcConfiguration from './configurations/process-svc.configuration'
       envFilePath: ['../../.env'],
       isGlobal: true,
       cache: true,
-      load: [generalConfiguration, apiConfiguration, processSvcConfiguration, entityManagementSvcConfiguration],
+      load: [generalConfiguration, apiConfiguration, processSvcConfiguration, entityManagementSvcConfiguration, keycloakConfiguration],
     }),
   ],
   controllers: [],
-  providers: [ConfigurationService],
-  exports: [ConfigurationService],
+  providers: [ConfigurationService, KeycloakConfigurationService],
+  exports: [ConfigurationService, KeycloakConfigurationService],
 })
 export class ConfigurationModule {}

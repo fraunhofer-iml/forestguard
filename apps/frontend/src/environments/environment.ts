@@ -29,4 +29,9 @@ export const environment = {
   MINIO: {
     URL: 'http://localhost:9000/forest-guard/',
   },
+  KEYCLOAK: {
+    URL: 'http://localhost:8080',
+    REALM: 'forest-guard',
+    CLIENT_ID: 'frontend',
+  },
 };

@@ -8,8 +8,9 @@ import * as Queries from './user.queries';
 export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async createUser(dto: UserUpdateDto): Promise<UserDto> {
-    const user = await this.prismaService.user.create(Queries.userCreate(dto));
+  async createUser(payload: { dto: UserUpdateDto; companyId: string }): Promise<UserDto> {
+    const user = await this.prismaService.user.create(Queries.userCreate(payload));
+    await this.prismaService.entity.create(Queries.createEntityFromUser(user));
     return Mapper.toUserDto(user);
   }
 
@@ -23,8 +24,9 @@ export class UserService {
     return Mapper.toUserOrFarmerDto(user);
   }
 
-  async createFarmer(dto: FarmerCreateDto): Promise<UserOrFarmerDto> {
-    const farmer = await this.prismaService.user.create(Queries.farmerCreate(dto));
+  async createFarmer(payload: { dto: FarmerCreateDto; companyId: string }): Promise<UserOrFarmerDto> {
+    const farmer = await this.prismaService.user.create(Queries.farmerCreate(payload));
+    await this.prismaService.entity.create(Queries.createEntityFromUser(farmer));
     return Mapper.toUserOrFarmerDto(farmer);
   }
 

@@ -1,5 +1,9 @@
+import { CompanyDto } from '@forest-guard/api-interfaces';
+import { of } from 'rxjs';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
+import { CompanyService } from '../../../shared/services/company/company.service';
+import { AuthenticationService } from '../../services/authentication.service';
 import { SidenavComponent } from './sidenav.component';
 
 describe('SidenavComponent', () => {
@@ -9,6 +13,20 @@ describe('SidenavComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RouterModule.forRoot([])],
+      providers: [
+        {
+          provide: CompanyService,
+          useValue: {
+            getCompanyById: jest.fn().mockReturnValue(of({ name: 'Test Company' } as CompanyDto)),
+          },
+        },
+        {
+          provide: AuthenticationService,
+          useValue: {
+            getCurrentCompanyId: jest.fn().mockReturnValue(''),
+          },
+        },
+      ],
       declarations: [SidenavComponent],
     }).compileComponents();
 

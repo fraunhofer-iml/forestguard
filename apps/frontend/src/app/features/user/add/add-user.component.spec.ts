@@ -71,7 +71,7 @@ describe('AddUserComponent', () => {
 
   it('should reset form fields when clearInputFields is called', () => {
     component.userFormGroup.setValue({
-      company: 'Company A',
+      employeeId: '123',
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
@@ -85,7 +85,7 @@ describe('AddUserComponent', () => {
 
     component.clearInputFields();
     expect(component.userFormGroup.value).toEqual({
-      company: null,
+      employeeId: null,
       firstName: null,
       lastName: null,
       email: null,
@@ -106,7 +106,7 @@ describe('AddUserComponent', () => {
   it('should call generateNewUser and createUser on submitUser when role is USER', () => {
     generateUserServiceMock.generateNewUser.mockReturnValue({} as any);
     component.userFormGroup.setValue({
-      company: 'Company A',
+      employeeId: '123',
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
@@ -127,7 +127,7 @@ describe('AddUserComponent', () => {
   it('should call generateNewFarmer and createFarmer on submitFarmer when role is FARMER', () => {
     generateUserServiceMock.generateNewFarmer.mockReturnValue({} as any);
     component.userFormGroup.setValue({
-      company: 'Company A',
+      employeeId: '123',
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',

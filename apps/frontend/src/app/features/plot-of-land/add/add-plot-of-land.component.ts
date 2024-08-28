@@ -1,10 +1,10 @@
-import { CultivationDto, FarmerDto, PlotOfLandDto, ProofDto, ProofType, UserDto } from '@forest-guard/api-interfaces';
+import { CultivationDto, PlotOfLandDto, ProofDto, ProofType, UserDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { combineLatest, mergeMap, Observable } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthenticationService } from '../../../core/services/authentication.service';
 import { UploadFormSelectType } from '../../../shared/components/upload-form/upload-form-select.type';
-import { FARMER_ID } from '../../../shared/constants';
 import { Messages } from '../../../shared/messages';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { CultivationService } from '../../../shared/services/cultivation/cultivation.service';
@@ -19,7 +19,7 @@ import { GeneratePlotOfLandService } from './service/generate-plot-of-land.servi
 })
 export class AddPlotOfLandComponent {
   users$: Observable<UserDto[]>;
-  farmers$: Observable<FarmerDto[]>;
+  farmers$: Observable<UserOrFarmerDto[]>;
   coffeeOptions$: Observable<CultivationDto[]>;
   plotOfLandFormGroup: FormGroup<PlotOfLandForm> = new FormGroup<PlotOfLandForm>({
     processOwner: new FormControl(null, Validators.required),
@@ -46,9 +46,10 @@ export class AddPlotOfLandComponent {
     private userService: UserService,
     private plotOfLandService: PlotOfLandService,
     private cultivationService: CultivationService,
-    private generatePlotOfLandService: GeneratePlotOfLandService
+    private generatePlotOfLandService: GeneratePlotOfLandService,
+    private authenticationService: AuthenticationService
   ) {
-    this.farmers$ = this.companyService.getFarmersByCompanyId(FARMER_ID);
+    this.farmers$ = this.companyService.getFarmersByCompanyId(this.authenticationService.getCurrentCompanyId() ?? '');
     this.users$ = this.userService.getUsers();
     this.coffeeOptions$ = this.cultivationService.readCultivationsByType('coffee');
   }

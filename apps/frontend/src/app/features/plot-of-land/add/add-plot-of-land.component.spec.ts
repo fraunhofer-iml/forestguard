@@ -1,8 +1,10 @@
+import { KeycloakService } from 'keycloak-angular';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { AuthenticationService } from '../../../core/services/authentication.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { CultivationService } from '../../../shared/services/cultivation/cultivation.service';
 import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
@@ -28,6 +30,12 @@ describe('AddPlotOfLandComponent', () => {
         UserService,
         CultivationService,
         GeneratePlotOfLandService,
+        {
+          provide: AuthenticationService,
+          useValue: {
+            getCurrentCompanyId: jest.fn().mockReturnValue(''),
+          },
+        },
       ],
     }).compileComponents();
 

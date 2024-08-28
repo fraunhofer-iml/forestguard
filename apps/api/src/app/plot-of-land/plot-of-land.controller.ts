@@ -1,11 +1,18 @@
-import { PlotOfLandCreateDto, PlotOfLandDto, PlotOfLandUpdateDto, ProofCreateDto, ProofDto } from '@forest-guard/api-interfaces';
-import { Express } from 'express';
+import {
+  PlotOfLandCreateDto,
+  PlotOfLandDto,
+  PlotOfLandUpdateDto,
+  ProofCreateDto,
+  ProofDto,
+  TAuthenticatedUser,
+} from '@forest-guard/api-interfaces';
 import { Body, Controller, Get, Param, Patch, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import 'multer';
+import { AuthenticatedUser } from 'nest-keycloak-connect';
 import { PlotOfLandService } from './plot-of-land.service';
 import { ProofUploadDto } from './proof-upload.dto';
-import 'multer';
 
 @ApiTags('PlotOfLands')
 @Controller('pols')
@@ -13,6 +20,7 @@ export class PlotOfLandController {
   constructor(private plotOfLandService: PlotOfLandService) {}
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Get all plot of lands of a farmer' })
   @ApiOkResponse({ description: 'Successful request.' })
   getPlotsOfLand(@Query('farmerId') farmerId?: string): Promise<PlotOfLandDto[]> {
@@ -20,13 +28,19 @@ export class PlotOfLandController {
   }
 
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Create a plot of land for a farmer' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
-  createPlotOfLand(@Query('farmerId') farmerId: string, @Body() plotOfLandCreateDto: PlotOfLandCreateDto): Promise<PlotOfLandDto> {
-    return this.plotOfLandService.createPlotOfLand(plotOfLandCreateDto, farmerId);
+  createPlotOfLand(
+    @Query('farmerId') farmerId: string,
+    @Body() plotOfLandCreateDto: PlotOfLandCreateDto,
+    @AuthenticatedUser() user: TAuthenticatedUser
+  ): Promise<PlotOfLandDto> {
+    return this.plotOfLandService.createPlotOfLand({ plotOfLand: plotOfLandCreateDto, farmerId, companyId: user.sub });
   }
 
   @Get(':id')
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Get plot of land by ID' })
   @ApiOkResponse({ description: 'Successful request.' })
   getPlotOfLandById(@Param('id') id: string): Promise<PlotOfLandDto> {
@@ -34,13 +48,15 @@ export class PlotOfLandController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Create or update the seeding for a plot of land' })
   @ApiOkResponse({ description: 'Successful creation.' })
   createOrUpdatePlotOfLand(@Param('id') id: string, @Body() plotOfLandUpdateDto: PlotOfLandUpdateDto): Promise<PlotOfLandDto> {
-    return this.plotOfLandService.updatePlotOfLand(plotOfLandUpdateDto, id);
+    return this.plotOfLandService.updatePlotOfLand({ plotOfLand: plotOfLandUpdateDto, id });
   }
 
   @Post(':id/proofs')
+  @ApiBearerAuth()
   @UseInterceptors(FileInterceptor('file'))
   @ApiOperation({ description: 'Create a proof for a plot of land' })
   @ApiBody({
@@ -54,6 +70,7 @@ export class PlotOfLandController {
   }
 
   @Get(':id/proofs')
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Get all proofs of a plot of land' })
   @ApiOkResponse({ description: 'Successful request.' })
   getProofsByPlotOfLandId(@Param('id') id: string): Promise<ProofDto[]> {

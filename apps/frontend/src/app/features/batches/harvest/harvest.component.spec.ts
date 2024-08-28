@@ -4,6 +4,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
+import { AuthenticationService } from '../../../core/services/authentication.service';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
@@ -28,6 +29,12 @@ describe('HarvestComponent', () => {
       providers: [
         UserService,
         { provide: BatchService, useValue: batchServiceMock },
+        {
+          provide: AuthenticationService,
+          useValue: {
+            getCurrentCompanyId: jest.fn().mockReturnValue(''),
+          },
+        },
         CompanyService,
         PlotOfLandService,
         HarvestService,

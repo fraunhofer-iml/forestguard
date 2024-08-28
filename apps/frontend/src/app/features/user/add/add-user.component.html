@@ -28,12 +28,8 @@
 <form [formGroup]="userFormGroup" class="grid grid-cols-1 md:grid-cols-2">
   <div class="card mt-4">
     <mat-form-field appearance="outline" class="w-full">
-      <mat-label class="w-full">Company</mat-label>
-      <mat-select formControlName="company" placeholder="Company" class="w-full">
-        <mat-option *ngFor="let company of companies$ | async" [value]="company.id">
-          {{ company.name }}
-        </mat-option>
-      </mat-select>
+      <mat-label class="w-full">Employee Identification</mat-label>
+      <input matInput formControlName="employeeId" placeholder="Employee ID" />
     </mat-form-field>
 
     <div class="flex-none md:flex">

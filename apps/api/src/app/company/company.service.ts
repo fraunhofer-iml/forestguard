@@ -11,8 +11,9 @@ export class CompanyService {
     @Inject(AmqpClientEnum.QUEUE_PROCESS) private processService: ClientProxy
   ) {}
 
-  createCompany(dto: CompanyCreateDto): Promise<CompanyDto> {
-    return firstValueFrom(this.entityManagementService.send(CompanyMessagePatterns.CREATE, { dto }));
+  createCompany(dto: CompanyCreateDto, user): Promise<CompanyDto> {
+    const keycloakCompanyId: string = user.sub;
+    return firstValueFrom(this.entityManagementService.send(CompanyMessagePatterns.CREATE, { dto, keycloakCompanyId }));
   }
 
   readCompany(id: string): Promise<CompanyDto> {

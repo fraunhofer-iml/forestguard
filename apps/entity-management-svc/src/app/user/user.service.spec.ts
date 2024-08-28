@@ -24,6 +24,9 @@ describe('UserService', () => {
               findMany: jest.fn(),
               findUniqueOrThrow: jest.fn(),
             },
+            entity: {
+              create: jest.fn(),
+            },
           },
         },
       ],
@@ -45,10 +48,11 @@ describe('UserService', () => {
 
     jest.spyOn(prisma.user, 'create').mockResolvedValue(USER_PRISMA_MOCK);
 
-    const response = await service.createUser(givenUserDto);
+    const response = await service.createUser({ dto: givenUserDto, companyId: 'Test Company ID' });
 
     expect(response).toEqual(Mapper.toUserDto(USER_PRISMA_MOCK));
-    expect(prisma.user.create).toHaveBeenCalledWith(Queries.userCreate(givenUserDto));
+    expect(prisma.user.create).toHaveBeenCalledWith(Queries.userCreate({ dto: givenUserDto, companyId: 'Test Company ID' }));
+    expect(prisma.entity.create).toHaveBeenCalledWith(Queries.createEntityFromUser(USER_PRISMA_MOCK));
   });
 
   it('should read users', async () => {
@@ -86,10 +90,11 @@ describe('UserService', () => {
 
     jest.spyOn(prisma.user, 'create').mockResolvedValue(FARMER_PRISMA_MOCK);
 
-    const response = await service.createFarmer(givenFarmerDto);
+    const response = await service.createFarmer({ dto: givenFarmerDto, companyId: 'Test Company ID' });
 
     expect(response).toEqual(Mapper.toUserOrFarmerDto(FARMER_PRISMA_MOCK));
-    expect(prisma.user.create).toHaveBeenCalledWith(Queries.farmerCreate(givenFarmerDto));
+    expect(prisma.user.create).toHaveBeenCalledWith(Queries.farmerCreate({ dto: givenFarmerDto, companyId: 'Test Company ID' }));
+    expect(prisma.entity.create).toHaveBeenCalledWith(Queries.createEntityFromUser(FARMER_PRISMA_MOCK));
   });
 
   it('should read farmer by company ID', async () => {

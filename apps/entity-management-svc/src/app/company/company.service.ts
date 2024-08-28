@@ -22,11 +22,11 @@ export class CompanyService {
     }
   }
 
-  async createCompany(dto: CompanyCreateDto) {
+  async createCompany(dto: CompanyCreateDto, keycloakCompanyId: string) {
     await this.verifyUniquenessByName(dto.name);
 
     const entity = await this.prismaService.entity.create({
-      data: {},
+      data: { id: keycloakCompanyId },
     });
 
     const { street, postalCode, city, state, country } = dto.address;
@@ -70,10 +70,9 @@ export class CompanyService {
     return companyWithoutIds;
   }
 
-  // We fetch the first company on purpose!
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async readCompanyById(id: string): Promise<CompanyDto> {
     const company: CompanyWithRelations = await this.prismaService.company.findFirst({
+      where: { entityId: id },
       include: {
         address: true,
         users: {

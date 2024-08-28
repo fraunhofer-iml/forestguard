@@ -1,5 +1,5 @@
-import { BatchDto, CompanyCreateDto, CompanyDto, FarmerDto } from '@forest-guard/api-interfaces';
-import { Observable } from 'rxjs';
+import { BatchDto, CompanyCreateDto, CompanyDto, UserDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
+import { map, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
@@ -17,8 +17,12 @@ export class CompanyService {
     return this.httpClient.get<CompanyDto>(`${environment.COMPANIES.URL}/${id}`);
   }
 
-  public getFarmersByCompanyId(id: string): Observable<FarmerDto[]> {
-    return this.httpClient.get<FarmerDto[]>(`${environment.COMPANIES.URL}/${id}${Uris.farmers}`);
+  public getFarmersByCompanyId(id: string): Observable<UserOrFarmerDto[]> {
+    return this.httpClient.get<UserOrFarmerDto[]>(`${environment.COMPANIES.URL}/${id}${Uris.farmers}`);
+  }
+
+  public getEmployeesOfCompany(companyId: string): Observable<UserDto[]> {
+    return this.getCompanyById(companyId).pipe(map((company) => company.employees ?? []));
   }
 
   public getBatchesOfCompany(companyId: string, query?: string): Observable<BatchDto[]> {

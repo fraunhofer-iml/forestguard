@@ -2,13 +2,17 @@ import { AmqpClientEnum, PlotOfLandMessagePatterns } from '@forest-guard/amqp';
 import { PlotOfLandCreateDto, PlotOfLandDto, PlotOfLandUpdateDto, ProofCreateDto, ProofDto } from '@forest-guard/api-interfaces';
 import { Express } from 'express';
 import { firstValueFrom } from 'rxjs';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import 'multer';
+import { CompanyService } from '../company/company.service';
 
 @Injectable()
 export class PlotOfLandService {
-  constructor(@Inject(AmqpClientEnum.QUEUE_ENTITY_MANAGEMENT) private readonly entityManagementService: ClientProxy) {}
+  constructor(
+    @Inject(AmqpClientEnum.QUEUE_ENTITY_MANAGEMENT) private readonly entityManagementService: ClientProxy,
+    private companyService: CompanyService
+  ) {}
 
   readPlotOfLandById(id: string): Promise<PlotOfLandDto> {
     return firstValueFrom(this.entityManagementService.send(PlotOfLandMessagePatterns.READ_BY_ID, { id }));
@@ -18,11 +22,21 @@ export class PlotOfLandService {
     return firstValueFrom(this.entityManagementService.send(PlotOfLandMessagePatterns.READ_ALL, { farmerId }));
   }
 
-  createPlotOfLand(plotOfLand: PlotOfLandCreateDto, farmerId: string): Promise<PlotOfLandDto> {
+  async createPlotOfLand({
+    farmerId,
+    plotOfLand,
+    companyId,
+  }: {
+    plotOfLand: PlotOfLandCreateDto;
+    farmerId: string;
+    companyId: string;
+  }): Promise<PlotOfLandDto> {
+    await this.checkIfFarmerIsPartOfCompany(farmerId, companyId);
+
     return firstValueFrom(this.entityManagementService.send(PlotOfLandMessagePatterns.CREATE, { plotOfLand, farmerId }));
   }
 
-  updatePlotOfLand(plotOfLand: PlotOfLandUpdateDto, id: string): Promise<PlotOfLandDto> {
+  async updatePlotOfLand({ id, plotOfLand }: { plotOfLand: PlotOfLandUpdateDto; id: string }): Promise<PlotOfLandDto> {
     return firstValueFrom(this.entityManagementService.send(PlotOfLandMessagePatterns.UPDATE_BY_ID, { plotOfLand, id }));
   }
 
@@ -34,5 +48,17 @@ export class PlotOfLandService {
 
   readProofsByPlotOfLandId(plotOfLandId: string): Promise<ProofDto[]> {
     return firstValueFrom(this.entityManagementService.send(PlotOfLandMessagePatterns.READ_BY_ID_PROOFS, { plotOfLandId }));
+  }
+
+  private async checkIfFarmerIsPartOfCompany(farmerId: string, companyId: string): Promise<void> {
+    const company = await this.companyService.readCompany(companyId);
+
+    if (!company) {
+      throw new UnauthorizedException();
+    }
+
+    if (!company.farmers.find((c) => c.id === farmerId)) {
+      throw new UnauthorizedException();
+    }
   }
 }

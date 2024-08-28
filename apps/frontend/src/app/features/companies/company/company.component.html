@@ -33,7 +33,7 @@
     <!-- Farmer ID -->
     <ng-container matColumnDef="farmerId" class="headline-text">
       <th mat-header-cell *matHeaderCellDef mat-sort-header="farmerId">Farmer ID</th>
-      <td mat-cell *matCellDef="let farmer">{{ farmer.personalId }}</td>
+      <td mat-cell *matCellDef="let farmer" [routerLink]="'/users/' + farmer.id">{{ farmer.id }}</td>
     </ng-container>
 
     <!-- Name -->

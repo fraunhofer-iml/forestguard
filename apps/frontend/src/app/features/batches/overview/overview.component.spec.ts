@@ -1,16 +1,17 @@
 import { BatchDto, CompanyDto } from '@forest-guard/api-interfaces';
 import { of } from 'rxjs';
+import { SelectionModel } from '@angular/cdk/collections';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { Role } from '@prisma/client';
+import { AuthenticationService } from '../../../core/services/authentication.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { BatchOverviewComponent } from './overview.component';
-import { MatTableDataSource } from '@angular/material/table';
-import { SelectionModel } from '@angular/cdk/collections';
-import { Router } from '@angular/router';
 
 const MOCK_BATCH: BatchDto = {
   id: '',
@@ -100,6 +101,12 @@ describe('OverviewComponent', () => {
           provide: CompanyService,
           useValue: {
             getBatchesOfCompany: jest.fn(),
+          },
+        },
+        {
+          provide: AuthenticationService,
+          useValue: {
+            getCurrentCompanyId: jest.fn().mockReturnValue(''),
           },
         },
         provideHttpClientTesting(),
@@ -221,7 +228,7 @@ describe('OverviewComponent', () => {
   it('should route to add process with selected batch IDs', () => {
     const mockData: BatchDto[] = [MOCK_BATCH];
     const navigateByUrlSpy = jest.spyOn(router, 'navigateByUrl').mockImplementation();
-    const expectedBatchIds = mockData.map(batch => batch.id).join(',');
+    const expectedBatchIds = mockData.map((batch) => batch.id).join(',');
 
     component.dataSource = new MatTableDataSource(mockData);
     component.selection = new SelectionModel<BatchDto>(true, mockData);
@@ -246,7 +253,6 @@ describe('OverviewComponent', () => {
     expect(component.dataSource.paginator).toBeNull();
     expect(component.dataSource.sort).toBeNull();
   });
-
 
   it('should set batches$ correctly when getBatches is called', (done) => {
     jest.spyOn(companyService, 'getBatchesOfCompany').mockReturnValue(of([MOCK_BATCH]));

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
+import { authGuard } from '../../core/guards/auth.guard';
 import { AddCompanyComponent } from './add-company/add-company.component';
 import { CompanyComponent } from './company/company.component';
 
@@ -16,6 +17,7 @@ export const companiesRoutes: Route[] = [
   {
     path: ':id',
     component: CompanyComponent,
+    canActivate: [authGuard],
   },
 ];
 

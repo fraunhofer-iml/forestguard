@@ -9,8 +9,8 @@ export class UserController {
   constructor(private readonly service: UserService) {}
 
   @MessagePattern(UserMessagePatterns.CREATE)
-  async createUser(@Payload() payload: { dto: UserUpdateDto }): Promise<UserDto> {
-    return this.service.createUser(payload.dto);
+  async createUser(@Payload() payload: { dto: UserUpdateDto; companyId: string }): Promise<UserDto> {
+    return this.service.createUser(payload);
   }
 
   @MessagePattern(UserMessagePatterns.READ_ALL)
@@ -24,8 +24,8 @@ export class UserController {
   }
 
   @MessagePattern(UserMessagePatterns.CREATE_FARMER)
-  async createFarmer(@Payload() payload: { dto: FarmerCreateDto }): Promise<UserOrFarmerDto> {
-    return this.service.createFarmer(payload.dto);
+  async createFarmer(@Payload() payload: { dto: FarmerCreateDto; companyId: string }): Promise<UserOrFarmerDto> {
+    return this.service.createFarmer(payload);
   }
 
   @MessagePattern(UserMessagePatterns.READ_FARMER_BY_COMPANY_ID)

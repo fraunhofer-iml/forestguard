@@ -40,7 +40,7 @@ describe('GenerateUserService', (): void => {
       firstName: ['John'],
       lastName: ['Doe'],
       email: ['john.doe@example.com'],
-      company: ['123'],
+      employeeId: ['123'],
       street: ['123 Street'],
       postalCode: ['12345'],
       city: ['City'],

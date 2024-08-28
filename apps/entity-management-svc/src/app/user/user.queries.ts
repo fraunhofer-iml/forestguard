@@ -1,15 +1,16 @@
 import { FarmerCreateDto, RoleType, UserUpdateDto } from '@forest-guard/api-interfaces';
+import { User } from '@prisma/client';
 
-export function userCreate(dto: UserUpdateDto) {
+export function userCreate({ dto, companyId }: { dto: UserUpdateDto; companyId: string }) {
   return {
-    data: user(dto),
+    data: user({ dto, companyId }),
   };
 }
 
-export function farmerCreate(dto: FarmerCreateDto) {
+export function farmerCreate({ dto, companyId }: { dto: FarmerCreateDto; companyId: string }) {
   return {
     data: {
-      ...user(dto),
+      ...user({ dto, companyId }),
       role: RoleType.FARMER,
       address: {
         connectOrCreate: {
@@ -27,13 +28,31 @@ export function farmerCreate(dto: FarmerCreateDto) {
   };
 }
 
-function user(dto: UserUpdateDto) {
+export function createEntityFromUser(user: User) {
+  return {
+    data: {
+      id: user.id,
+      user: {
+        connect: {
+          id: user.id,
+        },
+      },
+    },
+  };
+}
+
+function user({ dto, companyId }: { dto: UserUpdateDto; companyId: string }) {
   return {
     firstName: dto.firstName,
     lastName: dto.lastName,
     email: dto.email,
     mobilePhoneNumber: dto.mobilePhoneNumber,
     role: dto.role,
+    company: {
+      connect: {
+        id: companyId,
+      },
+    },
     entity: {
       create: {},
     },
