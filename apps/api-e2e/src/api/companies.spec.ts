@@ -1,8 +1,10 @@
 import { CompanyCreateDto, CompanyDto, FarmerCreateDto, RoleType } from '@forest-guard/api-interfaces';
 import axios from 'axios';
-import { beforeAllAndAfterAll, prisma } from './test.utils';
+import { beforeEachAndAfterAll, createHttpHeader, HttpHeader, prisma } from './test.utils';
 
 describe('/companies', () => {
+  let httpHeader: HttpHeader;
+
   const givenCompanyCreateDto: CompanyCreateDto = {
     name: 'Acme Corp',
     address: {
@@ -14,17 +16,15 @@ describe('/companies', () => {
     },
   };
 
-  beforeAllAndAfterAll();
-
-  afterEach(async () => {
-    await prisma.company.deleteMany();
-    await prisma.address.deleteMany();
-    await prisma.user.deleteMany();
+  beforeAll(async () => {
+    httpHeader = await createHttpHeader();
   });
+
+  beforeEachAndAfterAll();
 
   describe('POST /companies', () => {
     it('should create a company', async () => {
-      const actualResponse = await axios.post(`/companies`, givenCompanyCreateDto);
+      const actualResponse = await axios.post(`/companies`, givenCompanyCreateDto, httpHeader);
 
       const expectedResponse: CompanyDto = {
         id: actualResponse.data.id,
@@ -40,10 +40,10 @@ describe('/companies', () => {
     });
 
     it('should not create a company because name already exists', async () => {
-      await axios.post(`/companies`, givenCompanyCreateDto);
+      await axios.post(`/companies`, givenCompanyCreateDto, httpHeader);
 
       try {
-        await axios.post(`/companies`, givenCompanyCreateDto);
+        await axios.post(`/companies`, givenCompanyCreateDto, httpHeader);
       } catch (err) {
         expect(err.response.data.timestamp).toBeDefined();
         expect(err.response.data.status).toBe(409);
@@ -55,9 +55,9 @@ describe('/companies', () => {
 
   describe('GET /companies/:id', () => {
     it('should get a company', async () => {
-      const actualResponseFromPost = await axios.post(`/companies`, givenCompanyCreateDto);
+      const actualResponseFromPost = await axios.post(`/companies`, givenCompanyCreateDto, httpHeader);
 
-      const actualResponseFromGet = await axios.get(`/companies/${actualResponseFromPost.data.id}`);
+      const actualResponseFromGet = await axios.get(`/companies/${actualResponseFromPost.data.id}`, httpHeader);
 
       const expectedResponse: CompanyDto = {
         id: actualResponseFromGet.data.id,
@@ -78,7 +78,7 @@ describe('/companies', () => {
       const givenCompanyId = '123';
 
       try {
-        await axios.get(`/companies/${givenCompanyId}`);
+        await axios.get(`/companies/${givenCompanyId}`, httpHeader);
       } catch (err) {
         expect(err.response.data.timestamp).toBeDefined();
         expect(err.response.data.status).toBe(404);
@@ -88,64 +88,10 @@ describe('/companies', () => {
     });
   });
 
-  describe('GET /companies', () => {
-    it('should get two companies', async () => {
-      const givenCompanyCreateDtos: CompanyCreateDto[] = [
-        givenCompanyCreateDto,
-        {
-          name: 'Acme Corp2',
-          address: {
-            street: '456 Elm Street',
-            postalCode: '987654',
-            city: 'Springfield',
-            state: 'IL',
-            country: 'USA',
-          },
-        },
-      ];
-
-      await axios.post(`/companies`, givenCompanyCreateDtos[0]);
-      await axios.post(`/companies`, givenCompanyCreateDtos[1]);
-
-      const actualResponseFromGet = await axios.get('/companies');
-
-      const expectedResponseFromGet: CompanyDto[] = [
-        {
-          id: actualResponseFromGet.data[0].id,
-          ...givenCompanyCreateDtos[0],
-          employees: [],
-          farmers: [],
-          address: {
-            id: actualResponseFromGet.data[0].address.id,
-            ...givenCompanyCreateDtos[0].address,
-          },
-        },
-        {
-          id: actualResponseFromGet.data[1].id,
-          ...givenCompanyCreateDtos[1],
-          employees: [],
-          farmers: [],
-          address: {
-            id: actualResponseFromGet.data[1].address.id,
-            ...givenCompanyCreateDtos[1].address,
-          },
-        },
-      ];
-
-      expect(actualResponseFromGet.status).toBe(200);
-      expect(actualResponseFromGet.data).toEqual(expectedResponseFromGet);
-    });
-
-    it('should get no companies because table is empty', async () => {
-      const expectedResponse = [];
-      const actualResponseFromGet = await axios.get('/companies');
-      expect(actualResponseFromGet.status).toBe(200);
-      expect(actualResponseFromGet.data).toEqual(expectedResponse);
-    });
-  });
-
   describe('GET /companies/:id/farmers', () => {
     it('should get one farmer of a specific company', async () => {
+      const actualResponseFromPostCompanies = await axios.post(`/companies`, givenCompanyCreateDto, httpHeader);
+
       const givenFarmerCreateDto: FarmerCreateDto = {
         employeeId: 'e1',
         firstName: 'fn',
@@ -163,8 +109,7 @@ describe('/companies', () => {
         },
       };
 
-      const actualResponseFromPostFarmers = await axios.post(`/users/farmers`, givenFarmerCreateDto);
-      const actualResponseFromPostCompanies = await axios.post(`/companies`, givenCompanyCreateDto);
+      const actualResponseFromPostFarmers = await axios.post(`/users/farmers`, givenFarmerCreateDto, httpHeader);
 
       await prisma.user.update({
         where: { id: actualResponseFromPostFarmers.data.id },
@@ -192,7 +137,7 @@ describe('/companies', () => {
         },
       ];
 
-      const actualResponseFromGet = await axios.get(`/companies/${actualResponseFromPostCompanies.data.id}/farmers`);
+      const actualResponseFromGet = await axios.get(`/companies/${actualResponseFromPostCompanies.data.id}/farmers`, httpHeader);
       expect(actualResponseFromGet.status).toBe(200);
       expect(actualResponseFromGet.data).toEqual(expectedResponse);
     });

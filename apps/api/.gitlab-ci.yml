@@ -12,7 +12,7 @@ api:run-unit-tests:
     - merge_requests
     - main
 
-.api:run-integration-tests:
+api:run-integration-tests:
   needs: []
   stage: test
   extends: .default
@@ -21,17 +21,31 @@ api:run-unit-tests:
       alias: postgres
     - name: rabbitmq:3-alpine
       alias: rabbitmq
+    - name: quay.io/keycloak/keycloak:24.0
+      alias: keycloak
+      command:
+        - start-dev
   variables:
     POSTGRES_USER: postgres
     POSTGRES_PASSWORD: postgres
     POSTGRES_DB: forest_guard
     DATABASE_URL: postgresql://postgres:postgres@postgres:5432/forest_guard?schema=public
     AMQP_URI: amqp://rabbitmq:5672
+    KEYCLOAK_ADMIN: admin
+    KEYCLOAK_ADMIN_PASSWORD: admin
+    KEYCLOAK_URL: http://keycloak:8080
+    KEYCLOAK_REALM_CONFIG_PATH: ./keycloak/realm/ForestGuard-realm.json
   script:
-    - apk add --no-cache wget ca-certificates
+    - apk add --no-cache wget ca-certificates curl jq
     - wget https://github.com/jwilder/dockerize/releases/download/v0.8.0/dockerize-alpine-linux-amd64-v0.8.0.tar.gz
     - tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-v0.8.0.tar.gz
     - dockerize -wait tcp://postgres:5432 -wait tcp://rabbitmq:5672 -timeout 60s
+    - |
+      echo "Fetching admin JWT from Keycloak..."
+      export TOKEN_RESPONSE=$(curl --request POST --url ${KEYCLOAK_URL}/realms/master/protocol/openid-connect/token --header 'Accept: application/x-www-form-urlencoded' --header 'Content-Type: application/x-www-form-urlencoded' --data grant_type=password --data client_id=admin-cli --data username=${KEYCLOAK_ADMIN} --data password=${KEYCLOAK_ADMIN_PASSWORD})
+      export ADMIN_ACCESS_TOKEN=$(echo $TOKEN_RESPONSE | jq -r .access_token)
+      echo "Importing ForestGuard Keycloak realm configuration..."
+      curl --request POST --url ${KEYCLOAK_URL}/admin/realms --header "Accept: application/x-www-form-urlencoded" --header "Authorization: Bearer ${ADMIN_ACCESS_TOKEN}" --header "Content-Type: application/json" --data-binary @${KEYCLOAK_REALM_CONFIG_PATH}
     - npx nx serve api &
     - npx nx serve entity-management-svc &
     - npx nx serve process-svc &

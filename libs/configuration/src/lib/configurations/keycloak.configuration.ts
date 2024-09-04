@@ -5,6 +5,7 @@ export const KEYCLOAK_IDENTIFIER = 'keycloak';
 export interface KeycloakConfiguration {
   url: string;
   realm: string;
+  tokenUri: string;
   clientId: string;
   clientSecret: string;
   grantType: string;
@@ -15,6 +16,7 @@ export interface KeycloakConfiguration {
 export default registerAs(KEYCLOAK_IDENTIFIER, () => ({
   url: process.env['KEYCLOAK_URL'] || 'http://localhost:8080',
   realm: process.env['KEYCLOAK_REALM'] || 'forest-guard',
+  tokenUri: process.env['KEYCLOAK_TOKEN_URI'] || 'protocol/openid-connect/token',
   clientId: process.env['KEYCLOAK_CLIENT_ID'] || 'api',
   clientSecret: process.env['KEYCLOAK_SECRET'] || 'BBSCFxCigdhm1vXSKetWYhaiJiZ8J0OY',
   username: process.env['KEYCLOAK_USER'] || '',
