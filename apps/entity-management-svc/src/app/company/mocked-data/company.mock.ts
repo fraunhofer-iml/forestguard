@@ -119,7 +119,7 @@ const COMPANY_DTO_MOCK: CompanyDto = {
         state: 'IN',
         country: 'USA',
       },
-      plotOfLands: [
+      plotsOfLand: [
         {
           id: 'ctest401',
           country: 'USA',

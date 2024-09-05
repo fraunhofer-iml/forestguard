@@ -39,7 +39,7 @@
     <!-- Name -->
     <ng-container matColumnDef="name" class="headline-text">
       <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Name</th>
-      <td mat-cell *matCellDef="let farmer">{{ farmer.firstName }} {{ farmer.lastName }}</td>
+      <td mat-cell *matCellDef="let farmer" [routerLink]="['/users', farmer.id]" class="cursor-pointer hover:underline text-secondary-500">{{ farmer.firstName }} {{ farmer.lastName }}</td>
     </ng-container>
 
     <!-- Email -->

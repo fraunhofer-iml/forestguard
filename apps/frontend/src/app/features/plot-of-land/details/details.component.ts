@@ -1,4 +1,4 @@
-import { BatchDto, ProofDto, ProofType } from '@forest-guard/api-interfaces';
+import { PlotOfLandDto, ProofDto, ProofType } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { catchError, EMPTY, map, Observable, switchMap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -7,7 +7,6 @@ import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { UploadFormSelectType } from '../../../shared/components/upload-form/upload-form-select.type';
 import { Messages } from '../../../shared/messages';
-import { BatchService } from '../../../shared/services/batch/batch.service';
 import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
 import { getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
 
@@ -17,10 +16,11 @@ import { getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
 })
 export class PlotOfLandDetailsComponent {
   id$ = this.route.params.pipe(map((params) => params['id']));
-  batch$: Observable<BatchDto> = this.id$.pipe(switchMap((id) => this.batchesService.getBatchById(id)));
+  plotOfLand$: Observable<PlotOfLandDto> = this.id$.pipe(switchMap((id) => this.plotOfLandService.getPlotOfLandById(id)));
   MINIO_URL = environment.MINIO.URL;
   ProofType = ProofType;
   protected readonly getUserOrCompanyName = getUserOrCompanyName;
+  protected readonly window = window;
 
   uploadSelectOption: UploadFormSelectType[] = [
     {
@@ -33,7 +33,7 @@ export class PlotOfLandDetailsComponent {
     },
   ];
 
-  constructor(private route: ActivatedRoute, private batchesService: BatchService, private plotOfLandService: PlotOfLandService) {}
+  constructor(private route: ActivatedRoute, private plotOfLandService: PlotOfLandService) {}
 
   getProof(type: ProofType, proofs?: ProofDto[]): ProofDto | undefined {
     return proofs?.find((proof) => proof.type === type);

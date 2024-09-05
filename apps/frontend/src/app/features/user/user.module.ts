@@ -10,10 +10,11 @@ import { MatSelect } from '@angular/material/select';
 import { SharedModule } from '../../shared/shared.module';
 import { AddUserComponent } from './add/add-user.component';
 import { GenerateUserService } from './add/service/generate-user.service';
+import { FarmerComponent } from './farmer/farmer.component';
 import { UsersRoutingModule } from './user.routes';
 
 @NgModule({
-  declarations: [AddUserComponent],
+  declarations: [AddUserComponent, FarmerComponent],
   imports: [
     UsersRoutingModule,
     SharedModule,

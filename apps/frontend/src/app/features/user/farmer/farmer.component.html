@@ -1,0 +1,61 @@
+<h1 class="font-semibold text-gray-700 pb-4">Farmer</h1>
+<div class="card">
+  <h1 class="text-lg font-semibold">Details</h1>
+</div>
+<div class="grid md:grid-cols-2 sm:grid-cols-1 mt-4" *ngIf="farmer$ | async as farmer">
+  <div class="card md:mr-4 sm:mr-0">
+    <div class="grid grid-cols-2 mb-4">
+      <p class="font-medium">{{ farmer.firstName }} {{ farmer.lastName }}</p>
+      <p class="text-neutral-500 text-xs text-end">ID: {{ farmer.personalId }}</p>
+    </div>
+
+    <div class="flex">
+      <span class="material-symbols-outlined text-neutral-500"> mail </span>
+      <p class="text-neutral-500 font-medium ml-4">{{ farmer.email }}</p>
+    </div>
+
+    <div class="flex">
+      <span class="material-symbols-outlined text-neutral-500"> call </span>
+      <p class="text-neutral-500 font-medium ml-4">{{ farmer.mobilePhoneNumber }}</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 mt-4">
+      <span class="border-b-2 py-2 font-medium">Company</span>
+      <p
+        *ngIf="company$ | async as company"
+        class="py-2 border-b-2 text-secondary-500 cursor-pointer hover:underline"
+        routerLink="/companies/{{ this.authenticationService.getCurrentCompanyId() }}"
+      >
+        {{ company.name }}
+      </p>
+      <span class="py-2 font-medium md:border-none sm:border-b-2">Plot of Land</span>
+      <div>
+        <p
+          class="py-2 text-secondary-500 cursor-pointer hover:underline"
+          *ngFor="let plotOfLand of farmer?.plotsOfLand"
+          [routerLink]="['/pols', plotOfLand.id]"
+        >
+          {{ plotOfLand.description }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="card grid md:grid-cols-2 md:mt-0 sm:mt-4">
+    <span class="border-b-2 py-2 font-medium">Street</span>
+    <p class="border-b-2 py-2 text-neutral-500">{{ farmer.address?.street }}</p>
+    <span class="border-b-2 font-medium py-2">Postal Code</span>
+    <p class="border-b-2 py-2 text-neutral-500">{{ farmer.address?.postalCode }}</p>
+    <span class="border-b-2 font-medium py-2">City</span>
+    <p class="border-b-2 py-2 text-neutral-500">{{ farmer.address?.city }}</p>
+    <span class="border-b-2 py-2 font-medium">State</span>
+    <p class="border-b-2 py-2 text-neutral-500">{{ farmer.address?.state }}</p>
+    <span class="font-medium py-2 md:border-none sm:border-b-2">Country</span>
+    <p class="text-neutral-500 py-2">{{ farmer.address?.country }}</p>
+  </div>
+</div>
+
+<div class="card mt-4">
+  <div class="inline-flex justify-end gap-4 w-full">
+    <button mat-button (click)="window.history.back()" class="font-medium">Back</button>
+  </div>
+</div>

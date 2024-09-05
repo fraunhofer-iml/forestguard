@@ -58,7 +58,7 @@ export class CompanyMapper {
       role,
       personalId,
       address: address ? this.mapAddressToDto(address) : null,
-      plotOfLands: plotsOfLand ? plotsOfLand.map((plotOfLand: PlotOfLandWithRelations) => this.mapPlotOfLandToDto(plotOfLand)) : [],
+      plotsOfLand: plotsOfLand ? plotsOfLand.map((plotOfLand: PlotOfLandWithRelations) => this.mapPlotOfLandToDto(plotOfLand)) : [],
     };
   }
 

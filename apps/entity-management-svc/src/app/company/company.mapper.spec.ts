@@ -51,20 +51,20 @@ describe('CompanyMapper', () => {
   it('should return an empty array for plotOfLands when plotsOfLand is null', () => {
     givenCompanyPrisma.users[1].plotsOfLand = null;
 
-    expectedCompanyDto.farmers[0].plotOfLands = [];
+    expectedCompanyDto.farmers[0].plotsOfLand = [];
 
     const actualCompanyDto = CompanyMapper.mapCompanyPrismaToCompanyDto(givenCompanyPrisma);
     expect(actualCompanyDto).toEqual(expectedCompanyDto);
-    expect(actualCompanyDto.farmers[0].plotOfLands).toHaveLength(0);
+    expect(actualCompanyDto.farmers[0].plotsOfLand).toHaveLength(0);
   });
 
   it('should return an empty array for proofs when proofs is null', () => {
     givenCompanyPrisma.users[1].plotsOfLand[0].proofs = null;
 
-    expectedCompanyDto.farmers[0].plotOfLands[0].proofs = [];
+    expectedCompanyDto.farmers[0].plotsOfLand[0].proofs = [];
 
     const actualCompanyDto = CompanyMapper.mapCompanyPrismaToCompanyDto(givenCompanyPrisma);
     expect(actualCompanyDto).toEqual(expectedCompanyDto);
-    expect(actualCompanyDto.farmers[0].plotOfLands[0].proofs).toHaveLength(0);
+    expect(actualCompanyDto.farmers[0].plotsOfLand[0].proofs).toHaveLength(0);
   });
 });

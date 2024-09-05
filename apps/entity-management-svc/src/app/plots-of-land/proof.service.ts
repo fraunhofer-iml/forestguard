@@ -1,8 +1,7 @@
-import { ProofCreateDto } from '@forest-guard/api-interfaces';
+import { ProofCreateDto, ProofDto } from '@forest-guard/api-interfaces';
 import { PrismaService } from '@forest-guard/database';
 import { FileStorageService } from '@forest-guard/file-storage';
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { Proof } from '@prisma/client';
 import 'multer';
 import { AmqpException } from '@forest-guard/amqp';
 
@@ -23,7 +22,7 @@ export class ProofService {
     }
   }
 
-  async createProof(plotOfLandId: string, proofCreateDto: ProofCreateDto, file: Express.Multer.File): Promise<Proof> {
+  async createProof(plotOfLandId: string, proofCreateDto: ProofCreateDto, file: Express.Multer.File): Promise<ProofDto> {
     await this.verifyUniquenessOfProof(plotOfLandId, proofCreateDto);
     const id = crypto.randomUUID();
     const typeEnding = file.originalname.split('.').pop();
@@ -44,7 +43,7 @@ export class ProofService {
     });
   }
 
-  async readProofsByPlotOfLandId(plotOfLandId: string): Promise<Proof[]> {
+  async readProofsByPlotOfLandId(plotOfLandId: string): Promise<ProofDto[]> {
     const proofs = await this.prismaService.proof.findMany({
       where: {
         plotOfLandId,

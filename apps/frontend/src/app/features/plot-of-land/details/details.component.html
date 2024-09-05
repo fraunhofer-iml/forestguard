@@ -1,23 +1,17 @@
-<header class="font-semibold pb-4 flex flex-row gap-2 text-neutral-300 items-center">
-  <a routerLink="/batches" class="font-semibold text-gray-700 hover:underline">Batches</a>
-  <span class="material-symbols-outlined text-lg"> chevron_right </span>
-  <a *ngIf="batch$ | async as batch" [routerLink]="['/batches', batch.id]" class="font-medium">{{ batch.id }}</a>
-  <span class="material-symbols-outlined text-lg"> chevron_right </span>
-  <h1 class="font-medium">Plot of Land</h1>
-</header>
+<h1 class="font-semibold text-gray-700 pb-4">Plot of Land</h1>
 
-<div *ngIf="batch$ | async as batch">
+<div *ngIf="plotOfLand$ | async as plotOfLand">
   <div class="card">
     <div class="items-center justify-between">
       <div>
         <span class="text-neutral-500 text-sm">Plot of Land</span>
-        <h2 class="text-lg font-medium">{{ batch.processStep.farmedLand?.description }}</h2>
+        <h2 class="text-lg font-medium">{{ plotOfLand.description }}</h2>
       </div>
 
       <div class="mt-4 grid md:grid-cols-2 sm:grid-cols-1">
         <div
           class="flex flex-row select-none w-full"
-          *ngIf="getProof(ProofType.PROOF_OF_FREEDOM, batch.processStep?.farmedLand?.proofs) as proof; else notUploadedProofOfFreedom"
+          *ngIf="getProof(ProofType.PROOF_OF_FREEDOM, plotOfLand.proofs) as proof; else notUploadedProofOfFreedom"
         >
           <div class="p-1 h-10 w-10 rounded-full bg-green-600 flex items-center justify-center">
             <span class="material-symbols-outlined text-white"> done </span>
@@ -67,7 +61,7 @@
 
         <div
           class="flex flex-row select-none w-full"
-          *ngIf="getProof(ProofType.PROOF_OF_OWNERSHIP, batch.processStep?.farmedLand?.proofs) as proof; else notUploadedProofOfOwnership"
+          *ngIf="getProof(ProofType.PROOF_OF_OWNERSHIP, plotOfLand.proofs) as proof; else notUploadedProofOfOwnership"
         >
           <div class="p-1 h-10 w-10 rounded-full bg-green-600 flex items-center justify-center">
             <span class="material-symbols-outlined text-white"> done </span>
@@ -126,27 +120,29 @@
       <div class="card text-neutral-300">
         <div class="mt-8 grid grid-cols-1 md:grid-cols-2">
           <span class="border-b-2 py-2 font-medium">Country</span>
-          <p class="border-b-2 py-2 text-neutral-500">{{ batch.processStep.farmedLand?.country }}</p>
+          <p class="border-b-2 py-2 text-neutral-500">{{ plotOfLand.country }}</p>
           <span class="border-b-2 py-2 font-medium">Region</span>
-          <p class="border-b-2 py-2 text-neutral-500">{{ batch.processStep.farmedLand?.region }}</p>
+          <p class="border-b-2 py-2 text-neutral-500">{{ plotOfLand.region }}</p>
           <span class="border-b-2 py-2 font-medium">District</span>
-          <p class="border-b-2 py-2 text-neutral-500">{{ batch.processStep.farmedLand?.district }}</p>
+          <p class="border-b-2 py-2 text-neutral-500">{{ plotOfLand.district }}</p>
           <span class="border-b-2 py-2 font-medium">Sort of Coffee</span>
-          <p class="border-b-2 py-2 text-neutral-500">{{ batch.processStep.farmedLand?.cultivatedWith?.sort }}</p>
+          <p class="border-b-2 py-2 text-neutral-500">{{ plotOfLand.cultivatedWith?.sort }}</p>
           <span class="py-2 font-medium">Farmer</span>
-          <p class="py-2 text-neutral-500">{{ getUserOrCompanyName(batch.processStep.recordedBy) }}</p>
+          <p class="py-2 text-secondary-500 cursor-pointer hover:underline" [routerLink]="['/users', plotOfLand.farmer?.id]">
+            {{ getUserOrCompanyName(plotOfLand.farmer) }}
+          </p>
         </div>
       </div>
       <div class="card text-neutral-300 mt-4 !pb-14">
         <div class="mt-8 grid grid-cols-1 md:grid-cols-2">
           <span class="border-b-2 py-2 font-medium">National Plot of Land Id</span>
-          <p class="border-b-2 py-2 text-neutral-500">{{ batch.processStep.farmedLand?.nationalPlotOfLandId }}</p>
+          <p class="border-b-2 py-2 text-neutral-500">{{ plotOfLand.nationalPlotOfLandId }}</p>
           <span class="border-b-2 py-2 font-medium">Local Plot of Land Id</span>
-          <p class="border-b-2 py-2 text-neutral-500">{{ batch.processStep.farmedLand?.localPlotOfLandId }}</p>
+          <p class="border-b-2 py-2 text-neutral-500">{{ plotOfLand.localPlotOfLandId }}</p>
           <span class="border-b-2 py-2 font-medium">Polygon Data</span>
-          <p class="border-b-2 py-2 text-neutral-500">{{ batch.processStep.farmedLand?.geoData }}</p>
+          <p class="border-b-2 py-2 text-neutral-500">{{ plotOfLand.geoData }}</p>
           <span class="py-2 font-medium">Area in HA</span>
-          <p class="py-2 text-neutral-500">{{ batch.processStep.farmedLand?.areaInHA }}</p>
+          <p class="py-2 text-neutral-500">{{ plotOfLand.areaInHA }}</p>
         </div>
       </div>
     </div>
@@ -155,13 +151,13 @@
       [selectOptions]="uploadSelectOption"
       [title]="'Upload Proofs'"
       [showUploadedFiles]="false"
-      (uploadDocument)="uploadProof($event, batch.processStep.farmedLand?.id)"
+      (uploadDocument)="uploadProof($event, plotOfLand.id)"
     ></app-upload-form>
   </div>
 
   <div class="card mt-4">
     <div class="inline-flex justify-end gap-4 w-full">
-      <button mat-button [routerLink]="['/batches', batch.id]" class="font-medium">Back</button>
+      <button mat-button (click)="window.history.back()" class="font-medium">Back</button>
     </div>
   </div>
 </div>

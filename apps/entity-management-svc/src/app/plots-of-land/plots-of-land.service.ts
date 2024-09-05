@@ -1,9 +1,9 @@
-import { GeoDataDto, PlotOfLandCreateDto, PlotOfLandUpdateDto } from '@forest-guard/api-interfaces';
+import { GeoDataDto, PlotOfLandCreateDto, PlotOfLandDto, PlotOfLandUpdateDto } from '@forest-guard/api-interfaces';
 import { ConfigurationService } from '@forest-guard/configuration';
 import { PrismaService } from '@forest-guard/database';
 import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
-import { PlotOfLand, User } from '@prisma/client';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class PlotsOfLandService {
@@ -14,7 +14,7 @@ export class PlotsOfLandService {
     this.cultivationType = generalConfiguration.cultivationType;
   }
 
-  async readPlotsOfLand(farmerId?: string | undefined): Promise<PlotOfLand[]> {
+  async readPlotsOfLand(farmerId?: string | undefined): Promise<PlotOfLandDto[]> {
     return await this.prismaService.plotOfLand.findMany({
       where: {
         farmerId: farmerId ? farmerId : undefined,
@@ -22,11 +22,18 @@ export class PlotsOfLandService {
     });
   }
 
-  async readPlotOfLandById(id: string): Promise<PlotOfLand> {
-    return this.prismaService.plotOfLand.findUnique({ where: { id } });
+  async readPlotOfLandById(id: string): Promise<PlotOfLandDto> {
+    return this.prismaService.plotOfLand.findUnique({
+      where: { id },
+      include: {
+        cultivatedWith: true,
+        farmer: true,
+        proofs: true,
+      },
+    });
   }
 
-  async createPlotOfLand(plotOfLand: PlotOfLandCreateDto, farmerId: string): Promise<PlotOfLand> {
+  async createPlotOfLand(plotOfLand: PlotOfLandCreateDto, farmerId: string): Promise<PlotOfLandDto> {
     if (!plotOfLand.cultivatedWith) {
       throw new RpcException('Sort of Cultivation is required');
     }
@@ -78,7 +85,7 @@ export class PlotsOfLandService {
 
   createGeoDataEudr(geoDataDto: GeoDataDto, farmerEntity: User) {
     // TODO-MP: Activate this precondition check after the frontend (FOR-293) is ready
-    /* 
+    /*
     if (!geoDataDto.type) {
       throw new RpcException('GeoData type is required');
     }
@@ -108,7 +115,7 @@ export class PlotsOfLandService {
     };
   }
 
-  async updatePlotOfLand(id: string, plotOfLand: PlotOfLandUpdateDto): Promise<PlotOfLand> {
+  async updatePlotOfLand(id: string, plotOfLand: PlotOfLandUpdateDto): Promise<PlotOfLandDto> {
     const { cultivatedWith } = plotOfLand;
     return this.prismaService.plotOfLand.update({
       where: { id },
@@ -122,7 +129,7 @@ export class PlotsOfLandService {
     });
   }
 
-  async deletePlotOfLand(id: string): Promise<PlotOfLand> {
+  async deletePlotOfLand(id: string): Promise<PlotOfLandDto> {
     return this.prismaService.plotOfLand.delete({ where: { id } });
   }
 }

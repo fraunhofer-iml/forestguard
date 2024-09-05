@@ -12,5 +12,5 @@ export const farmer1Mock: UserOrFarmerDto = {
   mobilePhoneNumber: '+5114841701',
   personalId: 'pf1',
   address: address1Mock,
-  plotOfLands: [plotOfLand1Mock],
+  plotsOfLand: [plotOfLand1Mock],
 };

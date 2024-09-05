@@ -1,3 +1,4 @@
+import { UserOrFarmerDto } from '../entity';
 import { CultivationDto } from './cultivation.dto';
 import { ProofDto } from './proof.dto';
 
@@ -12,6 +13,7 @@ export class PlotOfLandDto {
   geoData?: string;
   areaInHA?: number;
   cultivatedWith?: CultivationDto;
+  farmer?: UserOrFarmerDto;
   proofs?: ProofDto[];
 
   constructor(

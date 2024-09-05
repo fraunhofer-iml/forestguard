@@ -64,6 +64,11 @@ describe('PlotsOfLandService', () => {
       where: {
         id: givenPlotOfLandId,
       },
+      include: {
+        cultivatedWith: true,
+        farmer: true,
+        proofs: true,
+      },
     });
   });
 

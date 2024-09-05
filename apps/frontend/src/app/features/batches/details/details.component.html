@@ -39,7 +39,7 @@
         <span class="border-b-2 py-2 font-medium">Plot of Land</span>
         <p
           class="border-b-2 py-2 cursor-pointer text-neutral-500 hover:underline hover:text-secondary-500"
-          [routerLink]="['/pols', batch.id]"
+          [routerLink]="['/pols', batch.processStep.farmedLand.id]"
         >
           {{ batch.processStep.farmedLand.description }}
         </p>

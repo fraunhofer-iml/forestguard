@@ -1,4 +1,4 @@
-import { FarmerCreateDto, FarmerDto, UserDto, UserUpdateDto } from '@forest-guard/api-interfaces';
+import { FarmerCreateDto, FarmerDto, UserDto, UserOrFarmerDto, UserUpdateDto } from '@forest-guard/api-interfaces';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -13,8 +13,8 @@ export class UserService {
     return this.httpClient.get<UserDto[]>(environment.USERS.URL);
   }
 
-  public getUserById(id: string): Observable<UserDto> {
-    return this.httpClient.get<UserDto>(`${environment.USERS.URL}/${id}`);
+  public getUserById(id: string): Observable<UserOrFarmerDto> {
+    return this.httpClient.get<UserOrFarmerDto>(`${environment.USERS.URL}/${id}`);
   }
 
   public createUser(user: UserUpdateDto): Observable<UserDto> {
