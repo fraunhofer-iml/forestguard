@@ -1,6 +1,6 @@
 import { CompanyCreateDto, CompanyDto, FarmerCreateDto, RoleType } from '@forest-guard/api-interfaces';
 import axios from 'axios';
-import { beforeEachAndAfterAll, createHttpHeader, HttpHeader, prisma } from './test.utils';
+import { beforeEachAndAfterAll, createHttpHeader, HttpHeader, prisma } from './test-utils/test.utils';
 
 describe('/companies', () => {
   let httpHeader: HttpHeader;

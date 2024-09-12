@@ -1,10 +1,11 @@
-import { beforeEachAndAfterAll, createHttpHeader, HttpHeader } from '../../test.utils';
+import { beforeEachAndAfterAll, createHttpHeader, HttpHeader } from '../../test-utils/test.utils';
 import axios from 'axios';
-import { prepareBatchCreationWithPlotOfLand } from '../batches.spec.utils';
-import { batchNotFoundMessage, ensureException } from '../assertion.utils';
-import { prepareTree } from './batches-history.spec.utils';
-import { ensureExport, ensureRelatedBatches } from './assertion-history.utils';
+import { prepareBatchCreationWithPlotOfLand } from '../../test-utils/batches/batches.spec.utils';
+import { batchNotFoundMessage } from '../../assertions/batches/assertion.utils';
+import { prepareTree } from '../../test-utils/batches/batches-history/batches-history.spec.utils';
+import { ensureExport, ensureRelatedBatches } from '../../assertions/batches/batches-history/assertion-history.utils';
 import { BatchCreateDto } from '@forest-guard/api-interfaces';
+import { ensureException } from '../../assertions/assertion.utils';
 
 describe('/batches', () => {
 

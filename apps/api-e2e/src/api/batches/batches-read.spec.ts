@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { beforeEachAndAfterAll, createHttpHeader, HttpHeader, prisma } from '../test.utils';
-import { ensureException, ensureBatch, batchNotFoundMessage } from './assertion.utils';
-import { prepareBatchCreation } from './batches.spec.utils';
+import { beforeEachAndAfterAll, createHttpHeader, HttpHeader, prisma } from '../test-utils/test.utils';
+import { ensureBatch, batchNotFoundMessage } from '../assertions/batches/assertion.utils';
+import { prepareBatchCreation } from '../test-utils/batches/batches.spec.utils';
+import { ensureException } from '../assertions/assertion.utils';
 
 describe('/batches-read', () => {
 

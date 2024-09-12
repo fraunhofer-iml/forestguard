@@ -1,4 +1,4 @@
-import { BatchDto, CompanyCreateDto, CompanyDto, FarmerDto } from '@forest-guard/api-interfaces';
+import { BatchDto, CompanyCreateDto, CompanyDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { AuthenticatedUser } from 'nest-keycloak-connect';
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
@@ -7,7 +7,8 @@ import { CompanyService } from './company.service';
 @ApiTags('Companies')
 @Controller('companies')
 export class CompanyController {
-  constructor(private readonly companyService: CompanyService) {}
+  constructor(private readonly companyService: CompanyService) {
+  }
 
   @Post()
   @ApiBearerAuth()
@@ -58,7 +59,7 @@ export class CompanyController {
   getBatches(
     @Param('id') id: string,
     @Query('query') query = '{active: true}',
-    @Query('sorting') sorting = '{processStep: {date: "desc"}}'
+    @Query('sorting') sorting = '{processStep: {date: "desc"}}',
   ): Promise<BatchDto[]> {
     return this.companyService.readBatchesByCompanyId(id, query, sorting);
   }
@@ -67,7 +68,7 @@ export class CompanyController {
   @ApiBearerAuth()
   @ApiOperation({ description: 'Get all farmers related to the company' })
   @ApiOkResponse({ description: 'Successful request.' })
-  getFarmers(@Param('id') id: string): Promise<FarmerDto[]> {
+  getFarmers(@Param('id') id: string): Promise<UserOrFarmerDto[]> {
     return this.companyService.readFarmersByCompanyId(id);
   }
 }

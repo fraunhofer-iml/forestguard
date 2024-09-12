@@ -1,15 +1,15 @@
 import axios from 'axios';
-import { beforeEachAndAfterAll, createHttpHeader, HttpHeader } from '../test.utils';
-import { ensureResponseBatch, ensureResponseBatchWithProcess } from './assertion.utils';
+import { beforeEachAndAfterAll, createHttpHeader, HttpHeader } from '../test-utils/test.utils';
+import { ensureResponseBatch, ensureResponseBatchWithProcess } from '../assertions/batches/assertion.utils';
 import {
   prepareBatchCreationWithPlotOfLand,
   prepareTwoPlotOfLandsCreation,
   prepareXPlotOfLandsCreation,
-  Process,
 
-} from './batches.spec.utils';
+} from '../test-utils/batches/batches.spec.utils';
 import { HttpStatus } from '@nestjs/common';
 import { BatchCreateDto } from '@forest-guard/api-interfaces';
+import { Process } from '../test-utils/arrange-utils';
 
 describe('/batches-create', () => {
 

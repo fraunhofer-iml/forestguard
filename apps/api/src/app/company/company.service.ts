@@ -1,5 +1,5 @@
 import { AmqpClientEnum, CompanyMessagePatterns, UserMessagePatterns } from '@forest-guard/amqp';
-import { BatchDto, CompanyCreateDto, CompanyDto, FarmerDto } from '@forest-guard/api-interfaces';
+import { BatchDto, CompanyCreateDto, CompanyDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { firstValueFrom } from 'rxjs';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
@@ -8,8 +8,9 @@ import { ClientProxy } from '@nestjs/microservices';
 export class CompanyService {
   constructor(
     @Inject(AmqpClientEnum.QUEUE_ENTITY_MANAGEMENT) private readonly entityManagementService: ClientProxy,
-    @Inject(AmqpClientEnum.QUEUE_PROCESS) private processService: ClientProxy
-  ) {}
+    @Inject(AmqpClientEnum.QUEUE_PROCESS) private processService: ClientProxy,
+  ) {
+  }
 
   createCompany(dto: CompanyCreateDto, user): Promise<CompanyDto> {
     const keycloakCompanyId: string = user.sub;
@@ -28,7 +29,10 @@ export class CompanyService {
    * @returns The list of companies that satisfy the given filters ordered by the given sorting.
    */
   readCompanies(filters: string, sorting: string): Promise<CompanyDto[]> {
-    return firstValueFrom(this.entityManagementService.send(CompanyMessagePatterns.READ_COMPANIES, { filters, sorting }));
+    return firstValueFrom(this.entityManagementService.send(CompanyMessagePatterns.READ_COMPANIES, {
+      filters,
+      sorting,
+    }));
   }
 
   /**
@@ -42,7 +46,7 @@ export class CompanyService {
     return firstValueFrom(this.processService.send(CompanyMessagePatterns.READ_BATCHES, { companyId, query, sorting }));
   }
 
-  readFarmersByCompanyId(companyId: string): Promise<FarmerDto[]> {
+  readFarmersByCompanyId(companyId: string): Promise<UserOrFarmerDto[]> {
     return firstValueFrom(this.entityManagementService.send(UserMessagePatterns.READ_FARMER_BY_COMPANY_ID, { companyId }));
   }
 }
