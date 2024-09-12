@@ -28,8 +28,8 @@ export class BatchService {
       throw new UnauthorizedException();
     }
 
-    if (!company.employees.find((c) => c.id === batchCombinedCreateDto.processStep.recordedBy)) {
-      throw new BadRequestException('Recorded by is not an employee of the company');
+    if (![...company.employees, ...company.farmers].find((c) => c.id === batchCombinedCreateDto.processStep.recordedBy)) {
+      throw new BadRequestException('Recorded by is not part of the company');
     }
 
     return firstValueFrom(this.processService.send(BatchMessagePatterns.CREATE_COMBINED_HARVESTS, batchCombinedCreateDto));
@@ -64,7 +64,7 @@ export class BatchService {
       throw new UnauthorizedException();
     }
 
-    if (batchCreateDtos.every((batch) => company.employees.find((c) => c.id === batch.processStep.recordedBy))) {
+    if (!batchCreateDtos.every((batch) => company.employees.find((c) => c.id === batch.processStep.recordedBy))) {
       throw new BadRequestException('Recorded by is not an employee of the company');
     }
   }

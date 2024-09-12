@@ -1,39 +1,55 @@
-import { BatchCombinedCreateDto, BatchCreateDto, BatchDto, ProcessDisplayDto, TAuthenticatedUser } from '@forest-guard/api-interfaces';
+import {
+  BatchCombinedCreateDto,
+  BatchCreateDto,
+  BatchDto,
+  ProcessDisplayDto,
+  TAuthenticatedUser,
+} from '@forest-guard/api-interfaces';
 import { AuthenticatedUser } from 'nest-keycloak-connect';
-import { Body, Controller, Get, Header, HttpStatus, Param, Post, StreamableFile } from '@nestjs/common';
+import { Body, Controller, Get, Header, Param, Post, Res, StreamableFile } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BatchService } from './batch.service';
+import { Response } from 'express';
 
 @ApiTags('Batches')
 @Controller('batches')
 export class BatchController {
-  constructor(private readonly batchService: BatchService) {}
+  constructor(private readonly batchService: BatchService) {
+  }
 
   @Post()
-  @ApiBearerAuth()
   @ApiOperation({ description: 'Create coffee batches' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
-  createBatches(@Body() batchCreateDtos: BatchCreateDto[], @AuthenticatedUser() user: TAuthenticatedUser): Promise<HttpStatus> {
-    return this.batchService.createBatches({ batchCreateDtos, companyId: user.sub });
+  async createBatches(
+    @Body() batchCreateDtos: BatchCreateDto[],
+    @AuthenticatedUser() user: TAuthenticatedUser,
+    @Res() res: Response
+  ) {
+    res.sendStatus(await this.batchService.createBatches({ batchCreateDtos, companyId: user.sub }));
   }
 
   @Post('harvests')
   @ApiBearerAuth()
   @ApiOperation({ description: 'Create harvest batches' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
-  createHarvests(@Body() batchCreateDtos: BatchCreateDto[], @AuthenticatedUser() user: TAuthenticatedUser): Promise<HttpStatus> {
-    return this.batchService.createHarvests({ batchCreateDtos, companyId: user.sub });
+  async createHarvests(
+    @Body() batchCreateDtos: BatchCreateDto[],
+    @AuthenticatedUser() user: TAuthenticatedUser,
+    @Res() res: Response
+  ) {
+    res.sendStatus(await this.batchService.createHarvests({ batchCreateDtos, companyId: user.sub }));
   }
 
   @Post('harvests/combined')
   @ApiBearerAuth()
   @ApiOperation({ description: 'Create harvest batches to multiple plot of lands' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
-  createCombinedHarvests(
+  async createCombinedHarvests(
     @Body() batchCombinedCreateDto: BatchCombinedCreateDto,
-    @AuthenticatedUser() user: TAuthenticatedUser
-  ): Promise<HttpStatus> {
-    return this.batchService.createCombinedHarvests({ batchCombinedCreateDto, companyId: user.sub });
+    @AuthenticatedUser() user: TAuthenticatedUser,
+    @Res() res: Response,
+  ) {
+    res.sendStatus(await this.batchService.createCombinedHarvests({ batchCombinedCreateDto, companyId: user.sub }));
   }
 
   @Get(':id')

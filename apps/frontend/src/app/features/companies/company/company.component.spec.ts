@@ -9,7 +9,7 @@ import { CompanyService } from '../../../shared/services/company/company.service
 import { CompanyComponent } from './company.component';
 
 const COMPANY_DTO_MOCK: CompanyDto = {
-  id: 'ctest103',
+  id: 'c1c1f27f-75c9-45f8-98f6-cff1357561e1',
   name: 'Acme Corp',
   address: {
     id: 'ctest201',

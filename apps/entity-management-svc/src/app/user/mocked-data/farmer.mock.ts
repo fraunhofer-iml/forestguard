@@ -9,7 +9,7 @@ const FARMER_PRISMA_MOCK: User & { address: Address } = {
   role: 'FARMER',
   employeeId: 'EID23456789',
   entityId: 'ctest102',
-  companyId: 'ctest103',
+  companyId: 'c1c1f27f-75c9-45f8-98f6-cff1357561e1',
   addressId: null,
   address: null,
   personalId: 'pf1',

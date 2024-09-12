@@ -9,7 +9,7 @@ const USER_PRISMA_MOCK: User = {
   role: 'EMPLOYEE',
   employeeId: 'EID12345678',
   entityId: 'ctest101',
-  companyId: 'ctest103',
+  companyId: 'c1c1f27f-75c9-45f8-98f6-cff1357561e1',
   addressId: null,
   personalId: null,
 };

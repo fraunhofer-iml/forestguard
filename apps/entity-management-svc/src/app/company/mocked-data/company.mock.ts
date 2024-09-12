@@ -2,9 +2,9 @@ import { CompanyDto } from '@forest-guard/api-interfaces';
 import { CompanyWithRelations } from '../company.types';
 
 const COMPANY_PRISMA_MOCK: CompanyWithRelations = {
-  id: 'ctest103',
+  id: 'c1c1f27f-75c9-45f8-98f6-cff1357561e1',
   name: 'Acme Corp',
-  entityId: 'ctest103',
+  entityId: 'c1c1f27f-75c9-45f8-98f6-cff1357561e1',
   addressId: 'ctest201',
   address: {
     id: 'ctest201',
@@ -23,7 +23,7 @@ const COMPANY_PRISMA_MOCK: CompanyWithRelations = {
       mobilePhoneNumber: '555-987-6543',
       role: 'EMPLOYEE',
       entityId: 'ctest101',
-      companyId: 'ctest103',
+      companyId: 'c1c1f27f-75c9-45f8-98f6-cff1357561e1',
       employeeId: 'EID12345678',
       addressId: null,
       personalId: null,
@@ -38,7 +38,7 @@ const COMPANY_PRISMA_MOCK: CompanyWithRelations = {
       mobilePhoneNumber: '555-123-4567',
       role: 'FARMER',
       entityId: 'ctest102',
-      companyId: 'ctest103',
+      companyId: 'c1c1f27f-75c9-45f8-98f6-cff1357561e1',
       employeeId: 'EID23456789',
       addressId: 'ctest202',
       personalId: 'PID12345678',
@@ -80,7 +80,7 @@ const COMPANY_PRISMA_MOCK: CompanyWithRelations = {
 };
 
 const COMPANY_DTO_MOCK: CompanyDto = {
-  id: 'ctest103',
+  id: 'c1c1f27f-75c9-45f8-98f6-cff1357561e1',
   name: 'Acme Corp',
   address: {
     id: 'ctest201',

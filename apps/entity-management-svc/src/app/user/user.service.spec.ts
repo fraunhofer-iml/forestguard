@@ -46,16 +46,18 @@ describe('UserService', () => {
       lastName: 'Test lastName',
     };
 
+    jest.spyOn(prisma.entity, 'create').mockResolvedValue({id: FARMER_PRISMA_MOCK.id});
     jest.spyOn(prisma.user, 'create').mockResolvedValue(USER_PRISMA_MOCK);
 
     const response = await service.createUser({ dto: givenUserDto, companyId: 'Test Company ID' });
 
     expect(response).toEqual(Mapper.toUserDto(USER_PRISMA_MOCK));
-    expect(prisma.user.create).toHaveBeenCalledWith(Queries.userCreate({ dto: givenUserDto, companyId: 'Test Company ID' }));
-    expect(prisma.entity.create).toHaveBeenCalledWith(Queries.createEntityFromUser(USER_PRISMA_MOCK));
+    expect(prisma.entity.create).toHaveBeenCalledWith({data: {}});
+    expect(prisma.user.create).toHaveBeenCalledWith(Queries.userCreate({ dto: givenUserDto, entityId: FARMER_PRISMA_MOCK.id, companyId: 'Test Company ID' }));
   });
 
   it('should read users', async () => {
+
     jest.spyOn(prisma.user, 'findMany').mockResolvedValue([USER_PRISMA_MOCK, FARMER_PRISMA_MOCK]);
 
     const response = await service.readUsers();
@@ -88,13 +90,14 @@ describe('UserService', () => {
       },
     };
 
+    jest.spyOn(prisma.entity, 'create').mockResolvedValue({id: FARMER_PRISMA_MOCK.id});
     jest.spyOn(prisma.user, 'create').mockResolvedValue(FARMER_PRISMA_MOCK);
 
     const response = await service.createFarmer({ dto: givenFarmerDto, companyId: 'Test Company ID' });
 
     expect(response).toEqual(Mapper.toUserOrFarmerDto(FARMER_PRISMA_MOCK));
-    expect(prisma.user.create).toHaveBeenCalledWith(Queries.farmerCreate({ dto: givenFarmerDto, companyId: 'Test Company ID' }));
-    expect(prisma.entity.create).toHaveBeenCalledWith(Queries.createEntityFromUser(FARMER_PRISMA_MOCK));
+    expect(prisma.entity.create).toHaveBeenCalledWith({data: {}});
+    expect(prisma.user.create).toHaveBeenCalledWith(Queries.farmerCreate({ dto: givenFarmerDto, entityId: FARMER_PRISMA_MOCK.id, companyId: 'Test Company ID' }));
   });
 
   it('should read farmer by company ID', async () => {

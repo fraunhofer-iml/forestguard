@@ -9,8 +9,8 @@ export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async createUser(payload: { dto: UserUpdateDto; companyId: string }): Promise<UserDto> {
-    const user = await this.prismaService.user.create(Queries.userCreate(payload));
-    await this.prismaService.entity.create(Queries.createEntityFromUser(user));
+    const entity = await this.prismaService.entity.create({data: {}});
+    const user = await this.prismaService.user.create(Queries.userCreate({ dto: payload.dto, entityId: entity.id, companyId: payload.companyId }));
     return Mapper.toUserDto(user);
   }
 
@@ -25,8 +25,8 @@ export class UserService {
   }
 
   async createFarmer(payload: { dto: FarmerCreateDto; companyId: string }): Promise<UserOrFarmerDto> {
-    const farmer = await this.prismaService.user.create(Queries.farmerCreate(payload));
-    await this.prismaService.entity.create(Queries.createEntityFromUser(farmer));
+    const entity = await this.prismaService.entity.create({data: {}});
+    const farmer = await this.prismaService.user.create(Queries.farmerCreate({ dto: payload.dto, entityId: entity.id, companyId: payload.companyId }));
     return Mapper.toUserOrFarmerDto(farmer);
   }
 
