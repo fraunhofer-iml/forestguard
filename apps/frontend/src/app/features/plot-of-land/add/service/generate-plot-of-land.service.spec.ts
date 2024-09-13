@@ -1,7 +1,7 @@
-import { CoordinateType, PlotOfLandCreateDto, Standard } from '@forest-guard/api-interfaces';
+import { CoordinateType, GeoDataDto, PlotOfLandCreateDto, Standard } from '@forest-guard/api-interfaces';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GeneratePlotOfLandService } from './generate-plot-of-land.service';
 
 describe('GeneratePlotOfLandService', (): void => {
@@ -22,27 +22,44 @@ describe('GeneratePlotOfLandService', (): void => {
     expect(service).toBeTruthy();
   });
 
-  it('should create a new PlotOfLandCreateDto with provided values', () => {
+  it('should create a new Geo Data with provided values', () => {
     const formGroup: FormGroup = formBuilder.group({
-      region: ['region'],
-      plotOfLand: ['plot'],
-      geoData: [{ standard: Standard.WGS, coordinateType: CoordinateType.Point, coordinates: [1, 2], zone: 'zone' }],
-      nationalPlotOfLandId: ['123'],
-      localPlotOfLandId: ['456'],
+      geoDataStandard: new FormControl(Standard.UTM),
+      geoDataType: new FormControl(CoordinateType.MultiPoint),
+      geoDataCoordinate: new FormControl([-105.02986587151608, 40.622831213346714]),
+      geoDataZone: new FormControl('456'),
+    });
+
+    const result = service.createGeoData(formGroup);
+    expect(result).toEqual(new GeoDataDto(Standard.UTM, CoordinateType.MultiPoint, [-105.02986587151608, 40.622831213346714], '456'));
+  });
+
+  it('should create PlotOfLandCreateDto with provided values', () => {
+    const formGroup = new FormGroup({
+      region: new FormControl('Germany'),
+      plotOfLand: new FormControl('Coffee Field'),
+      geoDataStandard: new FormControl(Standard.UTM),
+      geoDataType: new FormControl(CoordinateType.MultiPoint),
+      geoDataCoordinate: new FormControl([-105.02986587151608, 40.622831213346714]),
+      geoDataZone: new FormControl(null),
+      cultivatedWith: new FormControl('arabica'),
+      nationalPlotOfLandId: new FormControl('456'),
+      localPlotOfLandId: new FormControl('123'),
     });
 
     const result = service.createNewPlotOfLand(formGroup);
+
     expect(result).toEqual(
       new PlotOfLandCreateDto(
         '',
-        'region',
+        'Germany',
         '',
-        'plot',
-        { standard: Standard.WGS, coordinateType: CoordinateType.Point, coordinates: [1, 2], zone: 'zone' },
+        'Coffee Field',
+        new GeoDataDto(Standard.UTM, CoordinateType.MultiPoint, [-105.02986587151608, 40.622831213346714], ''),
         0,
-        '',
-        '123',
-        '456'
+        'arabica',
+        '456',
+        '123'
       )
     );
   });

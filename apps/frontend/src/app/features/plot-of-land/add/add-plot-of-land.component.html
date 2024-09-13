@@ -2,8 +2,8 @@
   <h1 class="font-medium">Add Plot of Land</h1>
 </header>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-  <div class="card">
-    <form [formGroup]="plotOfLandFormGroup">
+  <form [formGroup]="plotOfLandFormGroup">
+    <div class="card">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label class="w-full">Farmer</mat-label>
         <mat-select formControlName="processOwner" placeholder="Farmer" class="w-full !border-none">
@@ -32,28 +32,76 @@
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
+      <div class="flex">
+        <mat-form-field class="w-full mr-4" appearance="outline">
+          <mat-label>Local Plot of Land ID</mat-label>
+          <input matInput formControlName="localPlotOfLandId" placeholder="Local Plot of Land ID" />
+        </mat-form-field>
 
-      <mat-form-field class="w-full" appearance="outline">
-        <mat-label>Local Plot of Land ID</mat-label>
-        <input matInput formControlName="localPlotOfLandId" placeholder="Local Plot of Land ID" />
-      </mat-form-field>
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>National Plot of Land ID</mat-label>
+          <input matInput formControlName="nationalPlotOfLandId" placeholder="National Plot of Land ID" />
+        </mat-form-field>
+      </div>
+    </div>
 
-      <mat-form-field class="w-full" appearance="outline">
-        <mat-label>National Plot of Land ID</mat-label>
-        <input matInput formControlName="nationalPlotOfLandId" placeholder="National Plot of Land ID" />
-      </mat-form-field>
+    <div class="card mt-4">
+      <div class="grid grid-cols-2 items-center mb-2 gap-10">
+        <h1 class="font-semibold text-gray-700">Geo Data</h1>
 
-      <mat-form-field class="w-full" appearance="outline">
-        <mat-label>GeoData</mat-label>
-        <input matInput formControlName="geoData" placeholder="Geodata" />
-      </mat-form-field>
-    </form>
-  </div>
-  <app-upload-form
-    [selectOptions]="uploadSelectOption"
-    [title]="'Upload Proofs'"
-    (uploadDocument)="submitFile($event)"
-  ></app-upload-form>
+        <div class="inline-flex justify-end gap-4 w-full">
+          <button mat-button (click)="toggleImportGeoData()">Import</button>
+        </div>
+      </div>
+
+      <div *ngIf="isImportGeoDataVisible" class="space-y-4 p-4 bg-gray-100 rounded-lg">
+        <textarea
+          formControlName="geoDataInput"
+          placeholder="Please enter the Geo Data as a JSON file here."
+          class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-700"
+        ></textarea>
+
+        <div class="inline-flex justify-end gap-4 w-full">
+          <button mat-button (click)="toggleImportGeoData()">Back</button>
+          <button mat-flat-button (click)="saveGeoData()">Save</button>
+        </div>
+      </div>
+
+      <div *ngIf="!isImportGeoDataVisible">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label class="w-full">Standard</mat-label>
+          <mat-select formControlName="geoDataStandard" placeholder="Standard" class="w-full !border-none">
+            <mat-option *ngFor="let standard of getGeoDataStandards()" [value]="standard">
+              {{ standard }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <ng-container *ngIf="valueChangesOfGeoDataStandard$ | async as value"></ng-container>
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>Zone</mat-label>
+          <input matInput formControlName="geoDataZone" placeholder="Zone" />
+        </mat-form-field>
+
+        <div class="flex">
+          <mat-form-field appearance="outline" class="w-full mr-4">
+            <mat-label class="w-full">Type</mat-label>
+            <mat-select formControlName="geoDataType" placeholder="Type" class="w-full !border-none">
+              <mat-option *ngFor="let type of getGeoDataCoordinateTypes()" [value]="type">
+                {{ type }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Coordinate</mat-label>
+            <input matInput formControlName="geoDataCoordinate" placeholder="Coordinate" />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <app-upload-form [selectOptions]="uploadSelectOption" [title]="'Upload Proofs'" (uploadDocument)="submitFile($event)"></app-upload-form>
 </div>
 <div class="card mt-4">
   <div class="inline-flex justify-end gap-4 w-full">

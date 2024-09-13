@@ -1,6 +1,15 @@
-import { CultivationDto, PlotOfLandDto, ProofDto, ProofType, UserDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
+import {
+  CoordinateType,
+  CultivationDto,
+  PlotOfLandDto,
+  ProofDto,
+  ProofType,
+  Standard,
+  UserDto,
+  UserOrFarmerDto,
+} from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
-import { combineLatest, mergeMap, Observable } from 'rxjs';
+import { combineLatest, mergeMap, Observable, tap } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../../core/services/authentication.service';
@@ -10,6 +19,7 @@ import { CompanyService } from '../../../shared/services/company/company.service
 import { CultivationService } from '../../../shared/services/cultivation/cultivation.service';
 import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
 import { UserService } from '../../../shared/services/user/user.service';
+import { JsonData } from './model/json-data';
 import { PlotOfLandForm } from './model/plot-of-land-form';
 import { GeneratePlotOfLandService } from './service/generate-plot-of-land.service';
 
@@ -18,6 +28,8 @@ import { GeneratePlotOfLandService } from './service/generate-plot-of-land.servi
   templateUrl: './add-plot-of-land.component.html',
 })
 export class AddPlotOfLandComponent {
+  isImportGeoDataVisible = false;
+  valueChangesOfGeoDataStandard$: Observable<string | null> | undefined;
   users$: Observable<UserDto[]>;
   farmers$: Observable<UserOrFarmerDto[]>;
   coffeeOptions$: Observable<CultivationDto[]>;
@@ -28,7 +40,11 @@ export class AddPlotOfLandComponent {
     cultivatedWith: new FormControl(null, Validators.required),
     localPlotOfLandId: new FormControl(null, Validators.required),
     nationalPlotOfLandId: new FormControl(null, Validators.required),
-    geoData: new FormControl(null, Validators.required),
+    geoDataInput: new FormControl(null),
+    geoDataStandard: new FormControl(null, Validators.required),
+    geoDataZone: new FormControl({ value: null, disabled: true }),
+    geoDataType: new FormControl(null, Validators.required),
+    geoDataCoordinate: new FormControl(null, Validators.required),
   });
   uploadSelectOption: UploadFormSelectType[] = [
     {
@@ -41,6 +57,14 @@ export class AddPlotOfLandComponent {
     },
   ];
 
+  getGeoDataStandards() {
+    return Object.values(Standard);
+  }
+
+  getGeoDataCoordinateTypes() {
+    return Object.values(CoordinateType);
+  }
+
   constructor(
     private companyService: CompanyService,
     private userService: UserService,
@@ -52,6 +76,11 @@ export class AddPlotOfLandComponent {
     this.farmers$ = this.companyService.getFarmersByCompanyId(this.authenticationService.getCurrentCompanyId() ?? '');
     this.users$ = this.userService.getUsers();
     this.coffeeOptions$ = this.cultivationService.readCultivationsByType('coffee');
+    this.enableFieldsByValueChange();
+  }
+
+  toggleImportGeoData() {
+    this.isImportGeoDataVisible = !this.isImportGeoDataVisible;
   }
 
   submitPlotOfLand(): void {
@@ -96,5 +125,39 @@ export class AddPlotOfLandComponent {
 
     if (!option) return;
     option.file = file;
+  }
+
+  saveGeoData(): void {
+    let jsonData: JsonData;
+
+    try {
+      jsonData = JSON.parse(this.plotOfLandFormGroup.get('geoDataInput')?.value || '');
+    } catch (error) {
+      toast.error(Messages.invalidGeoData);
+      return;
+    }
+
+    if (jsonData && jsonData.geometry && jsonData.geometry.coordinates && Array.isArray(jsonData.geometry.coordinates[0])) {
+      this.plotOfLandFormGroup.patchValue({
+        geoDataStandard: Standard.WGS,
+        geoDataCoordinate: JSON.stringify(jsonData.geometry.coordinates[0]),
+        geoDataType: jsonData.geometry.type,
+      });
+      this.isImportGeoDataVisible = false;
+    } else {
+      toast.error(Messages.invalidGeoData);
+    }
+  }
+
+  private enableFieldsByValueChange(): void {
+    this.valueChangesOfGeoDataStandard$ = this.plotOfLandFormGroup.controls.geoDataStandard.valueChanges.pipe(
+      tap((geoDataStandard) => {
+        if (geoDataStandard === 'UTM') {
+          this.plotOfLandFormGroup.get('geoDataZone')?.enable();
+        } else {
+          this.plotOfLandFormGroup.get('geoDataZone')?.disable();
+        }
+      })
+    );
   }
 }

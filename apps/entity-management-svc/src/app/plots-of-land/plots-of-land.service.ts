@@ -84,16 +84,13 @@ export class PlotsOfLandService {
   }
 
   createGeoDataEudr(geoDataDto: GeoDataDto, farmerEntity: User) {
-    // TODO-MP: Activate this precondition check after the frontend (FOR-293) is ready
-    /*
-    if (!geoDataDto.type) {
+    if (!geoDataDto.coordinateType) {
       throw new RpcException('GeoData type is required');
     }
 
     if (!geoDataDto.coordinates) {
       throw new RpcException('GeoData coordinates are required');
     }
-    */
 
     return {
       type: 'FeatureCollection',

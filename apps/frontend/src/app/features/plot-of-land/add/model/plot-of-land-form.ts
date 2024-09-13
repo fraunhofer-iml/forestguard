@@ -7,5 +7,9 @@ export interface PlotOfLandForm {
   cultivatedWith: FormControl<string | null>;
   localPlotOfLandId: FormControl<string | null>;
   nationalPlotOfLandId: FormControl<string | null>;
-  geoData: FormControl<string | null>;
+  geoDataInput: FormControl<string | null>;
+  geoDataStandard: FormControl<string | null>;
+  geoDataZone: FormControl<string | null>;
+  geoDataType: FormControl<string | null>;
+  geoDataCoordinate: FormControl<string | null>;
 }
