@@ -1,30 +1,19 @@
-import {
-  BatchCombinedCreateDto,
-  BatchCreateDto,
-  BatchDto,
-  ProcessDisplayDto,
-  TAuthenticatedUser,
-} from '@forest-guard/api-interfaces';
+import { BatchCombinedCreateDto, BatchCreateDto, BatchDto, ProcessDisplayDto, TAuthenticatedUser } from '@forest-guard/api-interfaces';
+import { Response } from 'express';
 import { AuthenticatedUser } from 'nest-keycloak-connect';
 import { Body, Controller, Get, Header, Param, Post, Res, StreamableFile } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BatchService } from './batch.service';
-import { Response } from 'express';
 
 @ApiTags('Batches')
 @Controller('batches')
 export class BatchController {
-  constructor(private readonly batchService: BatchService) {
-  }
+  constructor(private readonly batchService: BatchService) {}
 
   @Post()
   @ApiOperation({ description: 'Create coffee batches' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
-  async createBatches(
-    @Body() batchCreateDtos: BatchCreateDto[],
-    @AuthenticatedUser() user: TAuthenticatedUser,
-    @Res() res: Response
-  ) {
+  async createBatches(@Body() batchCreateDtos: BatchCreateDto[], @AuthenticatedUser() user: TAuthenticatedUser, @Res() res: Response) {
     res.sendStatus(await this.batchService.createBatches({ batchCreateDtos, companyId: user.sub }));
   }
 
@@ -32,11 +21,7 @@ export class BatchController {
   @ApiBearerAuth()
   @ApiOperation({ description: 'Create harvest batches' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
-  async createHarvests(
-    @Body() batchCreateDtos: BatchCreateDto[],
-    @AuthenticatedUser() user: TAuthenticatedUser,
-    @Res() res: Response
-  ) {
+  async createHarvests(@Body() batchCreateDtos: BatchCreateDto[], @AuthenticatedUser() user: TAuthenticatedUser, @Res() res: Response) {
     res.sendStatus(await this.batchService.createHarvests({ batchCreateDtos, companyId: user.sub }));
   }
 
@@ -47,7 +32,7 @@ export class BatchController {
   async createCombinedHarvests(
     @Body() batchCombinedCreateDto: BatchCombinedCreateDto,
     @AuthenticatedUser() user: TAuthenticatedUser,
-    @Res() res: Response,
+    @Res() res: Response
   ) {
     res.sendStatus(await this.batchService.createCombinedHarvests({ batchCombinedCreateDto, companyId: user.sub }));
   }

@@ -18,6 +18,9 @@ describe('BatchService', () => {
               create: jest.fn(),
               updateMany: jest.fn(),
             },
+            processStep: {
+              create: jest.fn(),
+            },
           },
         },
       ],
@@ -65,6 +68,7 @@ describe('BatchService', () => {
 
     jest.spyOn(prisma.batch, 'create').mockImplementation();
     jest.spyOn(prisma.batch, 'updateMany').mockImplementation();
+    jest.spyOn(prisma.processStep, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1.processStep);
     await service.createBatches(mockedCreateBatchDtosWithLinks);
 
     expect(prisma.batch.create).toHaveBeenCalledTimes(mockedCreateBatchDtosWithLinks.length);

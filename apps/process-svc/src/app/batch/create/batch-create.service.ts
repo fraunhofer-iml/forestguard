@@ -3,7 +3,7 @@ import { PrismaService } from '@forest-guard/database';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Batch } from '@prisma/client';
 import { mapBatchCombinedToBatchCreateDto } from '../utils/batch.mapper';
-import { createBatchQuery, createOriginBatchQuery } from '../utils/batch.queries';
+import { createBatchQuery, createOriginBatchQuery, processStepQuery } from '../utils/batch.queries';
 
 @Injectable()
 export class BatchCreateService {
@@ -50,8 +50,13 @@ export class BatchCreateService {
     if (batchCreateDtos.length === 0) {
       return HttpStatus.NO_CONTENT;
     }
+
+    const processStep = await this.prismaService.processStep.create({
+      data: processStepQuery(batchCreateDtos[0].processStep),
+    });
+
     for (const dto of batchCreateDtos) {
-      await this.createBatch(dto);
+      await this.createBatch(dto, processStep.id);
     }
     return HttpStatus.CREATED;
   }
@@ -78,9 +83,9 @@ export class BatchCreateService {
     await this.createBatch(mergeBatchCreateDto);
   }
 
-  private async createBatch(dto: BatchCreateDto): Promise<Batch> {
+  private async createBatch(dto: BatchCreateDto, existingProcessStepId?: string): Promise<Batch> {
     const batch = await this.prismaService.batch.create({
-      data: createBatchQuery(dto),
+      data: createBatchQuery(dto, existingProcessStepId),
     });
     await this.setBatchesInactive(dto);
     return batch;

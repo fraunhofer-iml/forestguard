@@ -6,6 +6,7 @@ import { BatchModule } from './batch/batch.module';
 import { CompanyModule } from './company/company.module';
 import { CultivationModule } from './cultivation/cultivation.module';
 import { PlotOfLandModule } from './plot-of-land/plot-of-land.module';
+import { ProcessStepModule } from './process-step/process-step.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -16,6 +17,7 @@ import { UserModule } from './user/user.module';
     CultivationModule,
     PlotOfLandModule,
     UserModule,
+    ProcessStepModule,
     KeycloakConnectModule.registerAsync({
       useExisting: KeycloakConfigurationService,
       imports: [ConfigurationModule],

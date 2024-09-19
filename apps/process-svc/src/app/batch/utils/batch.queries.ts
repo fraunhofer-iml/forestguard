@@ -1,4 +1,4 @@
-import { BatchCreateDto } from '@forest-guard/api-interfaces';
+import { BatchCreateDto, ProcessStepCreateDto } from '@forest-guard/api-interfaces';
 import JSON5 from 'json5';
 
 export const createOriginBatchQuery = (batchCreateDto: BatchCreateDto) => ({
@@ -11,11 +11,11 @@ export const createOriginBatchQuery = (batchCreateDto: BatchCreateDto) => ({
     },
   },
   processStep: {
-    create: processStepQuery(batchCreateDto),
+    create: processStepQuery(batchCreateDto.processStep),
   },
 });
 
-export const createBatchQuery = (batchCreateDto: BatchCreateDto) => ({
+export const createBatchQuery = (batchCreateDto: BatchCreateDto, existingProcessStepId = '') => ({
   ...createOriginBatchQuery(batchCreateDto),
   ins: {
     connect: batchCreateDto.ins.map((batchId) => ({
@@ -23,47 +23,47 @@ export const createBatchQuery = (batchCreateDto: BatchCreateDto) => ({
     })),
   },
   processStep: {
-    create: {
-      ...processStepQuery(batchCreateDto),
-      farmedLand: batchCreateDto.processStep.harvestedLand
-        ? {
-            connect: {
-              id: batchCreateDto.processStep.harvestedLand,
-            },
-          }
-        : undefined,
+    connectOrCreate: {
+      where: {
+        id: existingProcessStepId,
+      },
+      create: {
+        ...processStepQuery(batchCreateDto.processStep),
+      },
     },
   },
 });
 
-const processStepQuery = (batchCreateDto: BatchCreateDto) => ({
-  location: batchCreateDto.processStep.location,
-  date: batchCreateDto.processStep.date,
+export const processStepQuery = (processStep: ProcessStepCreateDto) => ({
+  location: processStep.location,
+  date: processStep.date,
   process: {
     connectOrCreate: {
       create: {
-        name: batchCreateDto.processStep.process,
+        name: processStep.process,
       },
       where: {
-        name: batchCreateDto.processStep.process,
+        name: processStep.process,
       },
     },
   },
   recordedBy: {
     connect: {
-      id: batchCreateDto.processStep.recordedBy,
+      id: processStep.recordedBy,
     },
   },
   executedBy: {
     connect: {
-      id: batchCreateDto.processStep.executedBy,
+      id: processStep.executedBy,
     },
   },
-  farmedLand: {
-    connect: {
-      id: batchCreateDto.processStep.harvestedLand,
-    },
-  },
+  farmedLand: processStep.harvestedLand
+    ? {
+        connect: {
+          id: processStep.harvestedLand,
+        },
+      }
+    : undefined,
 });
 
 export const readBatchByIdQuery = (id: string) => ({
