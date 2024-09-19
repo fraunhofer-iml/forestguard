@@ -12,7 +12,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const timestamp = new Date().toISOString();
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
-    let message: string | object = 'Unknown error occurred';
+    let message: string | object;
     let requestDetails: RequestDetails;
 
     if (exception instanceof HttpException) {
@@ -26,6 +26,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
         url: `${request.protocol}://${request.hostname}:${request.socket.localPort}${request.url}`,
         body: request.body,
       };
+    } else {
+      message = JSON.stringify(exception);
     }
 
     const errorResponse = {

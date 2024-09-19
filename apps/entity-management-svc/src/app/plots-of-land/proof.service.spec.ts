@@ -72,7 +72,7 @@ describe('ProofService', () => {
     jest.spyOn(fileStorageService, 'uploadFile').mockResolvedValue(null);
     jest.spyOn(prismaService.proof, 'create').mockResolvedValue(expectedResult);
     jest.spyOn(prismaService.proof, 'count').mockResolvedValue(0);
-    jest.spyOn(crypto, 'randomUUID').mockReturnValue('1-1-1-1-1');
+    jest.spyOn(proofService, 'getRandomUUID').mockReturnValue('1-1-1-1-1');
 
     const actualResult = await proofService.createProof(givenPlotOfLandId, givenDto, givenFile);
 
