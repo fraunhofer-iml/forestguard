@@ -1,7 +1,8 @@
 import { BatchDto, Edge, ProofDto, ProofType } from '@forest-guard/api-interfaces';
+import { UiGraphComponent } from '@forest-guard/ui-graph';
 import { saveAs } from 'file-saver';
 import { map, Observable, switchMap, take, tap } from 'rxjs';
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { BatchService } from '../../../shared/services/batch/batch.service';
@@ -13,6 +14,9 @@ import { BatchStatusEnum } from './enum/batchStatusEnum';
   templateUrl: './details.component.html',
 })
 export class BatchDetailsComponent {
+  @ViewChild('dependencyGraph')
+  dependencyGraphComponent!: UiGraphComponent;
+
   innerWidth = window.innerWidth;
 
   @HostListener('window:resize', ['$event'])
@@ -118,5 +122,26 @@ export class BatchDetailsComponent {
 
   routeToNode(id: string) {
     this.router.navigateByUrl(`/batches/${id}`);
+  }
+
+  centerDependencyGraph() {
+    if (this.dependencyGraphComponent?.centerGraph) {
+      this.dependencyGraphComponent.centerGraph();
+    }
+  }
+
+  focusOnCurrentBatch() {
+    if (this.dependencyGraphComponent?.focusOnCurrentBatch) {
+      this.dependencyGraphComponent.focusOnCurrentBatch(1.5);
+    }
+  }
+
+  downloadGraph(batchId: string) {
+    const svgData = document.getElementById('dependencyGraphSvg');
+    const currentTime = new Date().toLocaleString();
+
+    if (this.dependencyGraphComponent?.saveGraphAsSvg && svgData) {
+      this.dependencyGraphComponent.saveGraphAsSvg(svgData, 'Batch_' + batchId + '_dependency-graph_' + currentTime + '.svg');
+    }
   }
 }
