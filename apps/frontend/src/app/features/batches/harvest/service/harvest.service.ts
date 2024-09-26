@@ -7,9 +7,9 @@ export class HarvestService {
     return new ProcessStepWithMultipleHarvestedLandsCreateDto(
       '',
       formGroup.value.date?.toISOString() ?? '',
-      formGroup.value.authorOfEntry ?? '',
+      formGroup.value.processOwner ?? '',
       plotsOfLand ?? [],
-      formGroup.value.processOwner ?? ''
+      formGroup.value.authorOfEntry ?? ''
     );
   }
 

@@ -8,7 +8,6 @@ import { Messages } from '../../../shared/messages';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
-import { UserService } from '../../../shared/services/user/user.service';
 import { HarvestForm } from './model/forms';
 import { HarvestService } from './service/harvest.service';
 
@@ -49,7 +48,6 @@ export class HarvestComponent {
   );
 
   constructor(
-    private userService: UserService,
     private batchService: BatchService,
     private plotOfLandService: PlotOfLandService,
     private companyService: CompanyService,

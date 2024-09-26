@@ -6,9 +6,9 @@
       <input matInput placeholder="Search" #input (keyup)="applyFilter($event)" />
     </mat-form-field>
     <div class="flex flex-row gap-4 items-center">
-      <a href="/batches/harvest" mat-button class="w-full text-nowrap">Add Harvest</a>
+      <a routerLink="{{ Uris.addHarvest }}" mat-button class="w-full text-nowrap">Add Harvest</a>
       <button
-        href="/batches/update"
+        routerLink="{{ Uris.batchesUpdate }}"
         mat-flat-button
         class="w-full text-nowrap"
         [disabled]="!selection.hasValue()"

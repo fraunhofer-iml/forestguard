@@ -22,15 +22,17 @@
       <input matInput formControlName="processName" placeholder="Process" />
     </mat-form-field>
     <mat-form-field class="w-full" appearance="outline">
-      <mat-label>Author of Entry</mat-label>
-      <mat-select formControlName="recordedBy" placeholder="Author">
-        <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }} </mat-option>
+      <mat-label>Process Owner</mat-label>
+      <mat-select formControlName="executedBy" placeholder="Process Owner">
+        <mat-option *ngFor="let farmer of farmers$ | async" [value]="farmer.id">
+          {{ farmer.lastName }}, {{ farmer.firstName }}
+        </mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field class="w-full" appearance="outline">
-      <mat-label>Process Owner</mat-label>
-      <mat-select formControlName="executedBy" placeholder="Process Owner">
-        <mat-option *ngFor="let farmer of users$ | async" [value]="farmer.id"> {{ farmer.lastName }}, {{ farmer.firstName }} </mat-option>
+      <mat-label>Author of Entry</mat-label>
+      <mat-select formControlName="recordedBy" placeholder="Author">
+        <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }} </mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field class="w-full" appearance="outline" *ngIf="batchIds.length === 0">
@@ -72,7 +74,7 @@
             <mat-form-field class="w-full" appearance="outline">
               <mat-label>Recipient</mat-label>
               <mat-select formControlName="recipient" id="{{ 'recipient' + i }}" placeholder="Recipient">
-                <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }} </mat-option>
+                <mat-option *ngFor="let company of companies$ | async" [value]="company.id"> {{ company.name }} </mat-option>
               </mat-select>
             </mat-form-field>
           </div>

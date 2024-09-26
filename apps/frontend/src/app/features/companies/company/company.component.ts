@@ -8,6 +8,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { CompanyService } from '../../../shared/services/company/company.service';
+import { Uris } from '../../../shared/uris';
 
 @Component({
   selector: 'app-company',
@@ -26,7 +27,7 @@ export class CompanyComponent {
     )
   );
   displayedColumnsOfBatches: string[] = [
-    'farmerId',
+    'employeeId',
     'name',
     'email',
     'mobilePhoneNumber',
@@ -41,6 +42,8 @@ export class CompanyComponent {
   farmers$?: Observable<MatTableDataSource<UserOrFarmerDto>>;
   paginator?: MatPaginator;
   sort?: MatSort;
+
+  protected readonly Uris = Uris;
 
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;

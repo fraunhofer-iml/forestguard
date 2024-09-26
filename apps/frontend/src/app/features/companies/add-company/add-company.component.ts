@@ -3,6 +3,7 @@ import { catchError, EMPTY } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthenticationService } from '../../../core/services/authentication.service';
 import { Messages } from '../../../shared/messages';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { CompanyForm } from './model/forms';
@@ -23,13 +24,16 @@ export class AddCompanyComponent {
     city: new FormControl('', Validators.required),
   });
 
-  constructor(private companyService: CompanyService, private createCompanyService: AddCompanyService) {}
+  constructor(
+    public authenticationService: AuthenticationService,
+    private companyService: CompanyService,
+    private createCompanyService: AddCompanyService
+  ) {}
 
   submitCompany() {
     if (!this.companyFormGroup.valid) {
       this.companyFormGroup.markAllAsTouched();
       toast.error(Messages.error);
-      return;
     } else {
       this.loading = true;
       const newCompany = this.companyService.createCompany(this.createCompanyService.generateCompany(this.companyFormGroup));

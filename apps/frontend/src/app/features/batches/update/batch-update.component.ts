@@ -1,18 +1,18 @@
-import { BatchCreateDto, BatchDto, ProcessStepCreateDto } from '@forest-guard/api-interfaces';
+import { BatchCreateDto, BatchDto, CompanyDto, ProcessStepCreateDto, UserDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { Observable, zip } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService } from '../../../core/services/authentication.service';
 import { Messages } from '../../../shared/messages';
 import { BatchService } from '../../../shared/services/batch/batch.service';
-import { UserService } from '../../../shared/services/user/user.service';
+import { CompanyService } from '../../../shared/services/company/company.service';
 import { Uris } from '../../../shared/uris';
 
 @Component({
   selector: 'app-batch-update',
   templateUrl: './batch-update.component.html',
-  styleUrl: './batch-update.component.scss',
 })
 export class BatchUpdateComponent implements OnInit {
   batchIds: string[] = this.route.snapshot.queryParams['batchIds']?.split(',') || [];
@@ -35,14 +35,20 @@ export class BatchUpdateComponent implements OnInit {
     outBatches: new FormArray([this.createBatch()]),
   });
 
-  users$ = this.userService.getUsers();
+  companies$: Observable<CompanyDto[]> = this.companyService.getCompanies();
+  farmers$: Observable<UserOrFarmerDto[]> = this.companyService.getFarmersByCompanyId(
+    this.authenticationService.getCurrentCompanyId() ?? ''
+  );
+
+  users$: Observable<UserDto[]> = this.companyService.getEmployeesOfCompany(this.authenticationService.getCurrentCompanyId() ?? '');
   batches$ = new Observable<BatchDto[]>();
 
   constructor(
     private route: ActivatedRoute,
-    private userService: UserService,
     private router: Router,
-    private batchService: BatchService
+    private batchService: BatchService,
+    private companyService: CompanyService,
+    private authenticationService: AuthenticationService
   ) {}
 
   get outBatches(): FormArray {

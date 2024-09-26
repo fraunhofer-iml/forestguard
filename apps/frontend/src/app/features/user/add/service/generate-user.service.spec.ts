@@ -1,4 +1,4 @@
-import { AddressCreateDto, FarmerCreateDto } from '@forest-guard/api-interfaces';
+import { AddressCreateDto, FarmerCreateDto, RoleType, UserUpdateDto } from '@forest-guard/api-interfaces';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -20,6 +20,20 @@ describe('GenerateUserService', (): void => {
 
   it('should create', (): void => {
     expect(service).toBeTruthy();
+  });
+
+  it('should create a new User with provided values', () => {
+    const formGroup: FormGroup = formBuilder.group({
+      firstName: ['John'],
+      lastName: ['Doe'],
+      email: ['john@gmail.com'],
+      employeeId: ['123'],
+      number: [''],
+      role: [RoleType.EMPLOYEE],
+    });
+
+    const result = service.generateNewUser(formGroup);
+    expect(result).toEqual(new UserUpdateDto('John', 'Doe', 'john@gmail.com', '123', '', RoleType.EMPLOYEE));
   });
 
   it('should create a new AddressCreateDto with provided values', () => {

@@ -6,6 +6,7 @@ import { Component, HostListener, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { BatchService } from '../../../shared/services/batch/batch.service';
+import { Uris } from '../../../shared/uris';
 import { getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
 import { BatchStatusEnum } from './enum/batchStatusEnum';
 
@@ -18,6 +19,7 @@ export class BatchDetailsComponent {
   dependencyGraphComponent!: UiGraphComponent;
 
   innerWidth = window.innerWidth;
+  protected readonly Uris = Uris;
 
   @HostListener('window:resize', ['$event'])
   onResize() {
@@ -107,14 +109,14 @@ export class BatchDetailsComponent {
     // Traverse forwards from the startId
     while (current) {
       order.push(current);
-      current = fromMap.get(current) || '';
+      current = fromMap.get(current) ?? '';
     }
 
     // Traverse backwards from the startId
     current = toMap.get(startId);
     while (current) {
       order.unshift(current);
-      current = toMap.get(current) || '';
+      current = toMap.get(current) ?? '';
     }
 
     return order.reverse();

@@ -36,8 +36,8 @@ describe('HarvestService', (): void => {
     const expected: ProcessStepWithMultipleHarvestedLandsCreateDto = {
       location: '',
       date: '2023-01-01T00:00:00.000Z',
-      recordedBy: 'McFarland, Guillermo',
-      executedBy: 'Smith, Jane',
+      executedBy: 'McFarland, Guillermo',
+      recordedBy: 'Smith, Jane',
       harvestedLands: plotsOfLand,
     };
 
@@ -61,8 +61,8 @@ describe('HarvestService', (): void => {
       processStep: {
         location: '',
         date: '2023-01-01T00:00:00.000Z',
-        recordedBy: 'McFarland, Guillermo',
-        executedBy: 'Smith, Jane',
+        recordedBy: 'Smith, Jane',
+        executedBy: 'McFarland, Guillermo',
         harvestedLands: plotsOfLand,
       },
     };

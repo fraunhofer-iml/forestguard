@@ -9,4 +9,5 @@ export enum Messages {
   error = 'Please fill in all required fields',
   errorCreateHarvest = 'Creation of harvest batches failed.',
   invalidGeoData = 'Invalid JSON format.',
+  errorCompany = 'Please add a company before proceeding',
 }

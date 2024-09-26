@@ -5,6 +5,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { AuthenticationService } from '../../../core/services/authentication.service';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { UserService } from '../../../shared/services/user/user.service';
@@ -30,6 +31,12 @@ describe('BatchUpdateComponent', () => {
                 batchIds: '0de044f0-bc57-495f-94c1-493085934ß5' + '0de044f0-bc57-495f-94c1-12ddb4fd05a1',
               },
             },
+          },
+        },
+        {
+          provide: AuthenticationService,
+          useValue: {
+            getCurrentCompanyId: jest.fn().mockReturnValue(''),
           },
         },
         UserService,

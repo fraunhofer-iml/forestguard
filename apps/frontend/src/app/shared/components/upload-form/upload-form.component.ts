@@ -5,7 +5,6 @@ import { UploadFormSelectType } from './upload-form-select.type';
 @Component({
   selector: 'app-upload-form',
   templateUrl: './upload-form.component.html',
-  styleUrl: './upload-form.component.css',
 })
 export class UploadFormComponent {
   @Input() title?: string;
@@ -22,7 +21,7 @@ export class UploadFormComponent {
   });
 
   lengthOfUploadedFiles(): number {
-    return this.selectOptions?.filter((option) => option.file).length || 0;
+    return this.selectOptions?.filter((option) => option.file).length ?? 0;
   }
 
   onFileSelected(event: Event): void {

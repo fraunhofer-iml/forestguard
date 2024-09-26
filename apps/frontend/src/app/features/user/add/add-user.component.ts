@@ -1,10 +1,8 @@
-import { CompanyDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
-import { Observable } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthenticationService } from '../../../core/services/authentication.service';
 import { Messages } from '../../../shared/messages';
-import { CompanyService } from '../../../shared/services/company/company.service';
 import { UserService } from '../../../shared/services/user/user.service';
 import { Roles } from './enum/roles';
 import { UserForm } from './model/user-form';
@@ -16,7 +14,6 @@ import { GenerateUserService } from './service/generate-user.service';
 })
 export class AddUserComponent {
   selectedRole: string = Roles.USER;
-  companies$: Observable<CompanyDto[]> = this.companyService.getCompanies();
   userFormGroup: FormGroup<UserForm> = new FormGroup<UserForm>({
     employeeId: new FormControl(null),
     firstName: new FormControl(null, Validators.required),
@@ -32,7 +29,11 @@ export class AddUserComponent {
 
   protected readonly Roles = Roles;
 
-  constructor(private userService: UserService, private companyService: CompanyService, private generateUserService: GenerateUserService) {}
+  constructor(
+    public authenticationService: AuthenticationService,
+    private userService: UserService,
+    private generateUserService: GenerateUserService
+  ) {}
 
   setSelectedRole(role: string): void {
     this.selectedRole = role;

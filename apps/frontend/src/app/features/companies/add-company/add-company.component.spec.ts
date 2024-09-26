@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpHandler } from '@angular/common/http
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { Messages } from '../../../shared/messages';
+import { AuthenticationService } from '../../../core/services/authentication.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { AddCompanyComponent } from './add-company.component';
 import { AddCompanyService } from './service/add-company.service';
@@ -30,6 +30,12 @@ describe('AddCompanyComponent', () => {
       providers: [
         { provide: CompanyService, useValue: companyServiceMock },
         { provide: AddCompanyService, useValue: createCompanyServiceMock },
+        {
+          provide: AuthenticationService,
+          useValue: {
+            getCurrentCompanyId: jest.fn().mockReturnValue(''),
+          },
+        },
         HttpClient,
         HttpHandler,
         FormBuilder,

@@ -1,8 +1,8 @@
 <h1 class="font-semibold text-gray-700 pb-4">Company</h1>
 
 <div class="card mb-4 flex justify-end">
-  <a href="/users/add" mat-button class="text-end">Create User/Farmer</a>
-  <a href="/companies/add" mat-button class="ml-2">Add Company</a>
+  <a routerLink="{{ Uris.addUser }}" mat-button class="text-end">Create User/Farmer</a>
+  <a routerLink="{{ Uris.addCompany }}" mat-button class="ml-2">Add Company</a>
 </div>
 
 <div class="grid md:grid-cols-2 sm:grid-cols-1" *ngIf="company$ | async as company">
@@ -30,10 +30,10 @@
 
 <div class="card mt-4 overflow-x-auto">
   <table mat-table *ngIf="farmers$ | async as farmers" [dataSource]="farmers" matSort>
-    <!-- Farmer ID -->
-    <ng-container matColumnDef="farmerId" class="headline-text">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header="farmerId">Farmer ID</th>
-      <td mat-cell *matCellDef="let farmer">{{ farmer.id }}</td>
+    <!-- Farmer Local ID -->
+    <ng-container matColumnDef="employeeId" class="headline-text">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="employeeId">Local Farmer ID</th>
+      <td mat-cell *matCellDef="let farmer">{{ farmer.employeeId }}</td>
     </ng-container>
 
     <!-- Name -->
@@ -93,6 +93,7 @@
         </div>
       </td>
     </ng-container>
+
 
     <tr mat-header-row *matHeaderRowDef="displayedColumnsOfBatches"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumnsOfBatches"></tr>

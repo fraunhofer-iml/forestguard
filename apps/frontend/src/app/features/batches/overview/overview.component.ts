@@ -8,6 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../core/services/authentication.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
+import { Uris } from '../../../shared/uris';
 import { getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
 
 @Component({
@@ -22,6 +23,7 @@ export class BatchOverviewComponent implements AfterViewInit {
   sort?: MatSort;
   batches$?: Observable<MatTableDataSource<BatchDto>>;
   getUserOrCompanyName = getUserOrCompanyName;
+  protected readonly Uris = Uris;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     this.sort = ms;

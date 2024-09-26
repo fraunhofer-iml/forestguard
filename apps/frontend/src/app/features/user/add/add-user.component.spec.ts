@@ -4,6 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { AuthenticationService } from '../../../core/services/authentication.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { UserService } from '../../../shared/services/user/user.service';
 import { AddUserComponent } from './add-user.component';
@@ -47,6 +48,12 @@ describe('AddUserComponent', () => {
         { provide: UserService, useValue: userServiceMock },
         { provide: CompanyService, useValue: companyServiceMock },
         { provide: GenerateUserService, useValue: generateUserServiceMock },
+        {
+          provide: AuthenticationService,
+          useValue: {
+            getCurrentCompanyId: jest.fn().mockReturnValue(''),
+          },
+        },
       ],
     }).compileComponents();
 
@@ -150,9 +157,5 @@ describe('AddUserComponent', () => {
     component.userFormGroup.controls.email.setValue(null);
     component.submitUserOrFarmer();
     expect(toast.error).toHaveBeenCalledWith(expect.any(String));
-  });
-
-  it('should get companies on initialization', () => {
-    expect(companyServiceMock.getCompanies).toHaveBeenCalled();
   });
 });

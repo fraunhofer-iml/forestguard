@@ -1,8 +1,7 @@
-import { CompanyCreateDto, CompanyDto, ProcessDisplayDto } from '@forest-guard/api-interfaces';
+import { CompanyCreateDto, CompanyDto, ProcessDisplayDto, RoleType } from '@forest-guard/api-interfaces';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { Role } from '@prisma/client';
 import { CompanyService } from './company.service';
 
 describe('CompanyService', (): void => {
@@ -67,7 +66,7 @@ describe('CompanyService', (): void => {
             id: 'test',
             lastName: 'test',
             mobilePhoneNumber: 'test',
-            role: Role.EMPLOYEE,
+            role: RoleType.EMPLOYEE,
             name: 'test',
           },
           processStep: {
@@ -92,7 +91,7 @@ describe('CompanyService', (): void => {
               id: 'test',
               lastName: 'test',
               mobilePhoneNumber: 'test',
-              role: Role.EMPLOYEE,
+              role: RoleType.EMPLOYEE,
               name: 'test',
             },
             location: 'test',
@@ -115,7 +114,7 @@ describe('CompanyService', (): void => {
               id: 'test',
               lastName: 'test',
               mobilePhoneNumber: 'test',
-              role: Role.EMPLOYEE,
+              role: RoleType.EMPLOYEE,
               name: 'test',
             },
           },

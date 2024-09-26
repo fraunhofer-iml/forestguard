@@ -1,4 +1,4 @@
-import { BatchDto, CompanyDto } from '@forest-guard/api-interfaces';
+import { BatchDto, CompanyDto, RoleType } from '@forest-guard/api-interfaces';
 import { of } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -8,7 +8,6 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { Role } from '@prisma/client';
 import { AuthenticationService } from '../../../core/services/authentication.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { BatchOverviewComponent } from './overview.component';
@@ -32,7 +31,7 @@ const MOCK_BATCH: BatchDto = {
     id: 'test',
     lastName: 'test',
     mobilePhoneNumber: 'test',
-    role: Role.EMPLOYEE,
+    role: RoleType.EMPLOYEE,
     name: 'test',
   },
   processStep: {
@@ -57,7 +56,7 @@ const MOCK_BATCH: BatchDto = {
       id: 'test',
       lastName: 'test',
       mobilePhoneNumber: 'test',
-      role: Role.EMPLOYEE,
+      role: RoleType.EMPLOYEE,
       name: 'test',
     },
     location: 'test',
@@ -80,7 +79,7 @@ const MOCK_BATCH: BatchDto = {
       id: 'test',
       lastName: 'test',
       mobilePhoneNumber: 'test',
-      role: Role.EMPLOYEE,
+      role: RoleType.EMPLOYEE,
       name: 'test',
     },
   },
@@ -173,7 +172,7 @@ describe('OverviewComponent', () => {
       id: 'test',
       lastName: 'Doe',
       mobilePhoneNumber: 'test',
-      role: Role.EMPLOYEE,
+      role: RoleType.EMPLOYEE,
       name: 'test',
     };
     const company: CompanyDto = {

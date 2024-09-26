@@ -1,9 +1,8 @@
-import { AddressDto, CompanyCreateDto } from '@forest-guard/api-interfaces';
+import { AddressCreateDto, CompanyCreateDto } from '@forest-guard/api-interfaces';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AddCompanyService } from './add-company.service';
-import { AddressCreateDto } from 'libs/api-interfaces/src/lib/dtos/entity/address-create.dto';
 
 describe('CreateCompanyService', (): void => {
   let service: AddCompanyService;

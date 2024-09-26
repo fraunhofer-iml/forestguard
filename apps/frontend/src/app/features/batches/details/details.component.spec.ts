@@ -1,4 +1,4 @@
-import { Edge, ProofDto, ProofType } from '@forest-guard/api-interfaces';
+import { BatchDto, Edge, ProofDto, ProofType } from '@forest-guard/api-interfaces';
 import { saveAs } from 'file-saver';
 import { of } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -22,6 +22,12 @@ describe('BatchDetailsComponent', () => {
       getExportBatchById: jest.fn(),
       createBatches: jest.fn(),
       createHarvestBatches: jest.fn(),
+      getRelatedBatches: jest.fn().mockReturnValue(
+        of({
+          coffeeBatches: [], // oder mit einem Beispielobjekt
+          edges: [],
+        })
+      ),
     };
 
     await TestBed.configureTestingModule({
@@ -126,6 +132,23 @@ describe('BatchDetailsComponent', () => {
         const result = component.findOrder(edges, 'E');
         expect(result).toEqual(['F', 'E']);
       });
+    });
+  });
+
+  it('should handle related$ data correctly', (done) => {
+    const mockData = {
+      data: {
+        coffeeBatches: [],
+        edges: [],
+      },
+      id: '123',
+    };
+
+    batchService.getRelatedBatches.mockReturnValue(of(mockData));
+    component.related$.subscribe((data) => {
+      expect(data.coffeeBatches).toEqual(mockData.data.coffeeBatches);
+      expect(data.edges).toEqual(mockData.data.edges);
+      done();
     });
   });
 });

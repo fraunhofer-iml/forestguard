@@ -3,7 +3,9 @@ import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
+import { Messages } from '../../shared/messages';
 import { CompanyService } from '../../shared/services/company/company.service';
+import { Uris } from '../../shared/uris';
 import { AuthenticationService } from '../services/authentication.service';
 
 export const authGuard: CanActivateFn = async (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
@@ -13,7 +15,7 @@ export const authGuard: CanActivateFn = async (route: ActivatedRouteSnapshot, st
 
   const keycloakCompanyId = authenticationService.getCurrentCompanyId();
 
-  const isCompanyAddUrl = state.url.includes('/companies/add');
+  const isCompanyAddUrl = state.url.includes(Uris.addCompany);
   if (isCompanyAddUrl) {
     return true;
   }
@@ -36,8 +38,8 @@ async function validateCompanyExistence(companyId: string, companyService: Compa
 
 function handleCompanyError(error: any, router: Router): boolean {
   if (error instanceof HttpErrorResponse && error.status === 404) {
-    router.navigate(['/companies/add']);
-    toast.error('Please add a company before proceeding');
+    router.navigate([Uris.addCompany]);
+    toast.error(Messages.errorCompany);
   }
   return false;
 }
