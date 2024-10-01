@@ -1,39 +1,5 @@
 openapi: 3.0.0
 paths:
-  /auth/login:
-    post:
-      operationId: AuthenticationController_login
-      summary: ''
-      description: Login with email and password.
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginDto'
-      responses:
-        '200':
-          description: Successful login.
-      tags:
-        - Authentication
-  /auth/register:
-    post:
-      operationId: AuthenticationController_register
-      summary: ''
-      description: Register with email and password.
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegistrationDto'
-      responses:
-        '201':
-          description: Successful registration.
-      tags:
-        - Authentication
   /batches:
     post:
       operationId: BatchController_createBatches
@@ -72,6 +38,8 @@ paths:
           description: Successful creation.
       tags:
         - Batches
+      security:
+        - bearer: []
   /batches/harvests/combined:
     post:
       operationId: BatchController_createCombinedHarvests
@@ -89,6 +57,8 @@ paths:
           description: Successful creation.
       tags:
         - Batches
+      security:
+        - bearer: []
   /batches/{id}:
     get:
       operationId: BatchController_getBatch
@@ -105,6 +75,8 @@ paths:
           description: Successful request.
       tags:
         - Batches
+      security:
+        - bearer: []
   /batches/{id}/related:
     get:
       operationId: BatchController_getRelatedBatches
@@ -121,6 +93,8 @@ paths:
           description: Successful request.
       tags:
         - Batches
+      security:
+        - bearer: []
   /batches/{id}/export:
     get:
       operationId: BatchController_getExportBatch
@@ -139,6 +113,8 @@ paths:
           description: Successful request.
       tags:
         - Batches
+      security:
+        - bearer: []
   /companies:
     post:
       operationId: CompanyController_createCompany
@@ -156,6 +132,8 @@ paths:
           description: Successful creation.
       tags:
         - Companies
+      security:
+        - bearer: []
     get:
       operationId: CompanyController_getCompanies
       summary: ''
@@ -193,6 +171,8 @@ paths:
           description: Successful request.
       tags:
         - Companies
+      security:
+        - bearer: []
   /companies/{id}:
     get:
       operationId: CompanyController_getCompany
@@ -209,6 +189,8 @@ paths:
           description: Successful request.
       tags:
         - Companies
+      security:
+        - bearer: []
   /companies/{id}/batches:
     get:
       operationId: CompanyController_getBatches
@@ -238,6 +220,8 @@ paths:
           description: Successful request.
       tags:
         - Companies
+      security:
+        - bearer: []
   /companies/{id}/farmers:
     get:
       operationId: CompanyController_getFarmers
@@ -254,6 +238,8 @@ paths:
           description: Successful request.
       tags:
         - Companies
+      security:
+        - bearer: []
   /cultivations:
     post:
       operationId: CultivationController_createCultivation
@@ -271,6 +257,8 @@ paths:
           description: Successful creation.
       tags:
         - Cultivations
+      security:
+        - bearer: []
     get:
       operationId: CultivationController_getCultivationsByType
       summary: ''
@@ -286,6 +274,8 @@ paths:
           description: Successful request.
       tags:
         - Cultivations
+      security:
+        - bearer: []
   /cultivations/types:
     get:
       operationId: CultivationController_getCultivationTypes
@@ -297,6 +287,8 @@ paths:
           description: Successful request.
       tags:
         - Cultivations
+      security:
+        - bearer: []
   /pols:
     get:
       operationId: PlotOfLandController_getPlotsOfLand
@@ -313,6 +305,8 @@ paths:
           description: Successful request.
       tags:
         - PlotOfLands
+      security:
+        - bearer: []
     post:
       operationId: PlotOfLandController_createPlotOfLand
       summary: ''
@@ -334,6 +328,8 @@ paths:
           description: Successful creation.
       tags:
         - PlotOfLands
+      security:
+        - bearer: []
   /pols/{id}:
     get:
       operationId: PlotOfLandController_getPlotOfLandById
@@ -350,6 +346,8 @@ paths:
           description: Successful request.
       tags:
         - PlotOfLands
+      security:
+        - bearer: []
     patch:
       operationId: PlotOfLandController_createOrUpdatePlotOfLand
       summary: ''
@@ -371,6 +369,8 @@ paths:
           description: Successful creation.
       tags:
         - PlotOfLands
+      security:
+        - bearer: []
   /pols/{id}/proofs:
     post:
       operationId: PlotOfLandController_postProof
@@ -396,6 +396,8 @@ paths:
           description: Successful creation.
       tags:
         - PlotOfLands
+      security:
+        - bearer: []
     get:
       operationId: PlotOfLandController_getProofsByPlotOfLandId
       summary: ''
@@ -411,33 +413,8 @@ paths:
           description: Successful request.
       tags:
         - PlotOfLands
-  /processes:
-    get:
-      operationId: ProcessController_getProcesses
-      summary: ''
-      description: Get all processes
-      parameters: []
-      responses:
-        '200':
-          description: Successful request.
-      tags:
-        - Processes
-    post:
-      operationId: ProcessController_createProcess
-      summary: ''
-      description: Create a process
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProcessCreateDto'
-      responses:
-        '201':
-          description: Successful creation.
-      tags:
-        - Processes
+      security:
+        - bearer: []
   /users:
     get:
       operationId: UserController_getUsers
@@ -449,6 +426,8 @@ paths:
           description: Successful request.
       tags:
         - Users
+      security:
+        - bearer: []
     post:
       operationId: UserController_createUser
       summary: ''
@@ -465,6 +444,8 @@ paths:
           description: Successful creation.
       tags:
         - Users
+      security:
+        - bearer: []
   /users/{id}:
     get:
       operationId: UserController_getUser
@@ -481,6 +462,8 @@ paths:
           description: Successful request.
       tags:
         - Users
+      security:
+        - bearer: []
   /users/farmers:
     post:
       operationId: UserController_createFarmer
@@ -498,6 +481,130 @@ paths:
           description: Successful creation.
       tags:
         - Users
+      security:
+        - bearer: []
+  /users/{id}/docs:
+    post:
+      operationId: UserController_addDocToFarmer
+      summary: ''
+      description: Create a document for a farmer
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The id of the farmer
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  description: The description of the document
+                file:
+                  type: string
+                  format: binary
+                  description: The document to upload
+      responses:
+        '201':
+          description: ''
+      tags:
+        - Users
+      security:
+        - bearer: []
+  /users/{id}/docs/{docRef}:
+    patch:
+      operationId: UserController_updateFarmerDoc
+      summary: ''
+      description: Create a document for a farmer
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The id of the farmer
+          schema:
+            type: string
+        - name: docRef
+          required: true
+          in: path
+          description: The reference of the document
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  description: The description of the document
+                file:
+                  type: string
+                  format: binary
+                  description: The document to upload
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Users
+      security:
+        - bearer: []
+    delete:
+      operationId: UserController_deleteFarmerDoc
+      summary: ''
+      description: Delete a farmer document
+      parameters:
+        - name: docRef
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Users
+      security:
+        - bearer: []
+  /process-steps/{id}/docs:
+    post:
+      operationId: ProcessStepController_addDocToProcessStep
+      summary: ''
+      description: Create a document for process steps
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The id of the process step
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  description: The description of the document
+                file:
+                  type: string
+                  format: binary
+                  description: The document to upload
+      responses:
+        '201':
+          description: ''
+      tags:
+        - Process Steps
+      security:
+        - bearer: []
 info:
   title: ForestGuard API
   description: ''
@@ -506,13 +613,12 @@ info:
 tags: []
 servers: []
 components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
   schemas:
-    LoginDto:
-      type: object
-      properties: {}
-    RegistrationDto:
-      type: object
-      properties: {}
     BatchCombinedCreateDto:
       type: object
       properties: {}
@@ -539,9 +645,6 @@ components:
       required:
         - type
         - file
-    ProcessCreateDto:
-      type: object
-      properties: {}
     UserUpdateDto:
       type: object
       properties: {}

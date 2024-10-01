@@ -2,35 +2,60 @@ import { PrismaService } from '@forest-guard/database';
 import { FileStorageService } from '@forest-guard/file-storage';
 import { Injectable } from '@nestjs/common';
 import { Document } from '@prisma/client';
+import { createFarmerDocQuery, createProcessDocQuery } from './documents.queries';
 
 @Injectable()
 export class DocumentsService {
   constructor(private readonly prismaService: PrismaService, private readonly fileStorageService: FileStorageService) {}
 
   async addDocumentToProcessStep({
-    file,
     processStepId,
     description,
+    file
   }: {
-    file: Express.Multer.File;
     processStepId: string;
     description: string;
+    file: Express.Multer.File;
   }): Promise<Document> {
-    const id = crypto.randomUUID();
-    const typeEnding = file.originalname.split('.').pop();
-    const fileName = `process-step/${id}.${typeEnding}`;
-    await this.fileStorageService.uploadFile(fileName, Buffer.from(file.buffer));
+    const fileName = await this.fileStorageService.uploadFileWithDeepPath(file, `process-step`, processStepId);
+    return this.prismaService.document.create(createProcessDocQuery(description, fileName, processStepId));
+  }
 
-    return await this.prismaService.document.create({
-      data: {
-        description: description,
-        documentRef: fileName,
-        processStep: {
-          connect: {
-            id: processStepId,
-          },
-        },
-      },
+  async addFarmerDoc({
+    farmerId,
+    description,
+    file
+  }: {
+    farmerId: string;
+    description: string;
+    file: Express.Multer.File;
+  }): Promise<Document> {
+    const fileName = await this.fileStorageService.uploadFileWithDeepPath(file, `user`, farmerId);
+    return this.prismaService.document.create(createFarmerDocQuery(description, fileName, farmerId));
+  }
+
+  async updateFarmerDoc({
+    farmerId,
+    documentRef,
+    description,
+    file
+  }: {
+    farmerId: string;
+    documentRef: string;
+    description: string;
+    file: Express.Multer.File;
+  }): Promise<Document> {
+    await this.fileStorageService.uploadFile(documentRef, Buffer.from(file.buffer));
+    return this.prismaService.document.update({
+      where: { documentRef: documentRef },
+      ...createFarmerDocQuery(description, documentRef, farmerId),
+    });
+  }
+
+  async deleteFarmerDoc(documentRef: string): Promise<Document> {
+    await this.fileStorageService.deleteFile(documentRef);
+    return this.prismaService.document.delete({
+      where: { documentRef: documentRef }
     });
   }
 }

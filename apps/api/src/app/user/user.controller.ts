@@ -6,9 +6,19 @@ import {
   UserUpdateDto,
 } from '@forest-guard/api-interfaces';
 import { AuthenticatedUser } from 'nest-keycloak-connect';
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation, ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserService } from './user.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Document } from '@prisma/client';
 
 @ApiTags('Users')
 @Controller('users')
@@ -46,5 +56,76 @@ export class UserController {
   @ApiCreatedResponse({ description: 'Successful creation.' })
   createFarmer(@Body() dto: FarmerCreateDto, @AuthenticatedUser() user: TAuthenticatedUser): Promise<UserOrFarmerDto> {
     return this.userService.createFarmer({ dto, companyId: user.sub });
+  }
+
+  @Post(':id/docs')
+  @ApiBearerAuth()
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ description: 'Create a document for a farmer' })
+  @ApiParam({ name: 'id', description: 'The id of the farmer' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        description: {
+          type: 'string',
+          description: 'The description of the document',
+        },
+        file: {
+          type: 'string',
+          format: 'binary',
+          description: 'The document to upload',
+        },
+      },
+    },
+  })
+  @ApiConsumes('multipart/form-data')
+  addDocToFarmer(
+    @Param('id') farmerId: string,
+    @Body() { description }: { description: string },
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<Document> {
+    return this.userService.addFarmerDoc({ farmerId, description, file });
+  }
+
+  @Patch(':id/docs/:docRef')
+  @ApiBearerAuth()
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ description: 'Create a document for a farmer' })
+  @ApiParam({ name: 'id', description: 'The id of the farmer' })
+  @ApiParam({ name: 'docRef', description: 'The reference of the document' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        description: {
+          type: 'string',
+          description: 'The description of the document',
+        },
+        file: {
+          type: 'string',
+          format: 'binary',
+          description: 'The document to upload',
+        },
+      },
+    },
+  })
+  @ApiConsumes('multipart/form-data')
+  updateFarmerDoc(
+    @Param('id') farmerId: string,
+    @Param('docRef') documentRef: string,
+    @Body() { description }: { description: string },
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<Document> {
+    return this.userService.updateFarmerDoc({ farmerId, documentRef, description, file });
+  }
+
+  @Delete(':id/docs/:docRef')
+  @ApiBearerAuth()
+  @ApiOperation({ description: 'Delete a farmer document' })
+  deleteFarmerDoc(
+    @Param('docRef') documentRef: string,
+  ): Promise<Document> {
+    return this.userService.deleteFarmerDoc(documentRef);
   }
 }

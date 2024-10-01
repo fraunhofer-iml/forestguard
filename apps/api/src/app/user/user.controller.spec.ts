@@ -12,7 +12,12 @@ describe('UserController', () => {
         {
           provide: UserService,
           useValue: {
-            createPlotOfLand: jest.fn().mockImplementation((dto) => Promise.resolve(dto)),
+            readUsers: jest.fn().mockImplementation((dto) => Promise.resolve(dto)),
+            createUser: jest.fn().mockImplementation((dto) => Promise.resolve(dto)),
+            readUserById: jest.fn().mockImplementation((dto) => Promise.resolve(dto)),
+            createFarmer: jest.fn().mockImplementation((dto) => Promise.resolve(dto)),
+            addDocToFarmer: jest.fn().mockImplementation((dto) => Promise.resolve(dto)),
+            deleteFarmerDoc: jest.fn().mockImplementation((dto) => Promise.resolve(dto)),
           },
         },
       ],

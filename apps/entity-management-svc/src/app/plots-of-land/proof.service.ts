@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto';
 import { ProofCreateDto, ProofDto } from '@forest-guard/api-interfaces';
 import { PrismaService } from '@forest-guard/database';
 import { FileStorageService } from '@forest-guard/file-storage';
@@ -25,9 +24,7 @@ export class ProofService {
 
   async createProof(plotOfLandId: string, proofCreateDto: ProofCreateDto, file: Express.Multer.File): Promise<ProofDto> {
     await this.verifyUniquenessOfProof(plotOfLandId, proofCreateDto);
-    const typeEnding = file.originalname.split('.').pop();
-    const fileName = `${this.getRandomUUID()}.${typeEnding}`;
-    await this.fileStorageService.uploadFile(fileName, Buffer.from(file.buffer));
+    const fileName = await this.fileStorageService.uploadFileWithDeepPath(file, 'plot-of-land', plotOfLandId);
 
     return this.prismaService.proof.create({
       data: {
@@ -44,20 +41,10 @@ export class ProofService {
   }
 
   async readProofsByPlotOfLandId(plotOfLandId: string): Promise<ProofDto[]> {
-    const proofs = await this.prismaService.proof.findMany({
+    return this.prismaService.proof.findMany({
       where: {
         plotOfLandId,
       },
     });
-
-    return proofs.map((proof) => ({
-      ...proof,
-      documentRef: `${this.fileStorageService.fileStorageUrl}/${proof.documentRef}`,
-    }));
-  }
-
-  // Outsourced only for unit tests
-  getRandomUUID() {
-    return randomUUID();
   }
 }

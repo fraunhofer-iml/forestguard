@@ -1,6 +1,5 @@
 import { AmqpClientEnum, PlotOfLandMessagePatterns } from '@forest-guard/amqp';
 import { PlotOfLandCreateDto, PlotOfLandDto, PlotOfLandUpdateDto, ProofCreateDto, ProofDto } from '@forest-guard/api-interfaces';
-import { Express } from 'express';
 import { firstValueFrom } from 'rxjs';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';

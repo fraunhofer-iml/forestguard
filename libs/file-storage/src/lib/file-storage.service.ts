@@ -2,6 +2,8 @@ import { ConfigurationService } from '@forest-guard/configuration';
 import { Client } from 'minio';
 import { MINIO_CONNECTION } from 'nestjs-minio';
 import { Inject, Injectable } from '@nestjs/common';
+import 'multer';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class FileStorageService {
@@ -20,11 +22,22 @@ export class FileStorageService {
     this.bucketName = generalConfiguration.minio.bucketName;
   }
 
+  async uploadFileWithDeepPath(file: Express.Multer.File, entityPath: string, entityId: string) {
+    const typeEnding = file.originalname.split('.').pop();
+    const fileName = `${entityPath}/${entityId}/${randomUUID()}.${typeEnding}`;
+    await this.uploadFile(fileName, Buffer.from(file.buffer));
+    return fileName;
+  }
+
   uploadFile(fileName: string, file: Buffer) {
     return this.client.putObject(this.bucketName, fileName, file);
   }
 
   downloadFile(fileName: string) {
     return this.client.getObject(this.bucketName, fileName);
+  }
+
+  deleteFile(fileName: string) {
+    return this.client.removeObject(this.bucketName, fileName);
   }
 }

@@ -6,8 +6,6 @@ import { PROOF_PRISMA_MOCK } from './mocked-data/proof.mock';
 import { ProofService } from './proof.service';
 
 describe('ProofService', () => {
-  const FILE_STORAGE_URL = 'http://dummy-file-storage:1337/my-bucket-name';
-
   let proofService: ProofService;
   let prismaService: PrismaService;
   let fileStorageService: FileStorageService;
@@ -30,8 +28,7 @@ describe('ProofService', () => {
         {
           provide: FileStorageService,
           useValue: {
-            uploadFile: jest.fn(),
-            fileStorageUrl: FILE_STORAGE_URL,
+            uploadFileWithDeepPath: jest.fn(),
           },
         },
       ],
@@ -69,14 +66,13 @@ describe('ProofService', () => {
     };
     const expectedResult = PROOF_PRISMA_MOCK;
 
-    jest.spyOn(fileStorageService, 'uploadFile').mockResolvedValue(null);
+    jest.spyOn(fileStorageService, 'uploadFileWithDeepPath').mockResolvedValue(givenFile.originalname);
     jest.spyOn(prismaService.proof, 'create').mockResolvedValue(expectedResult);
     jest.spyOn(prismaService.proof, 'count').mockResolvedValue(0);
-    jest.spyOn(proofService, 'getRandomUUID').mockReturnValue('1-1-1-1-1');
 
     const actualResult = await proofService.createProof(givenPlotOfLandId, givenDto, givenFile);
 
-    expect(fileStorageService.uploadFile).toHaveBeenCalledWith(givenFile.originalname, Buffer.from(givenFile.buffer));
+    expect(fileStorageService.uploadFileWithDeepPath).toHaveBeenCalledWith(givenFile, 'plot-of-land', givenPlotOfLandId);
 
     expect(prismaService.proof.create).toHaveBeenCalledWith({
       data: {
@@ -108,11 +104,6 @@ describe('ProofService', () => {
       },
     });
 
-    expect(actualResult).toEqual(
-      expectedResult.map((proof) => ({
-        ...proof,
-        documentRef: `${FILE_STORAGE_URL}/${proof.documentRef}`,
-      }))
-    );
+    expect(actualResult).toEqual(expectedResult);
   });
 });

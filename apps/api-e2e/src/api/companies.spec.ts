@@ -134,6 +134,7 @@ describe('/companies', () => {
             ...givenFarmerCreateDto.address,
           },
           plotsOfLand: [],
+          documents: [],
         },
       ];
 

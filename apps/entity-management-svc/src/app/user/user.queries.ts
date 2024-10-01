@@ -68,15 +68,7 @@ export function userOrFarmerReadById(id: string) {
     where: {
       id: id,
     },
-    include: {
-      address: true,
-      plotsOfLand: {
-        include: {
-          cultivatedWith: true,
-          proofs: true,
-        },
-      },
-    },
+    include: farmerIncludeProperties(),
   };
 }
 
@@ -86,14 +78,19 @@ export function farmerReadByCompanyId(companyId: string) {
       role: RoleType.FARMER,
       companyId: companyId,
     },
-    include: {
-      address: true,
-      plotsOfLand: {
-        include: {
-          cultivatedWith: true,
-          proofs: true,
-        },
+    include: farmerIncludeProperties(),
+  };
+}
+
+function farmerIncludeProperties() {
+  return {
+    address: true,
+    plotsOfLand: {
+      include: {
+        cultivatedWith: true,
+        proofs: true,
       },
     },
+    documents: true,
   };
 }

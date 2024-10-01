@@ -8,7 +8,7 @@ import { Document } from '@prisma/client';
 export class ProcessStepService {
   constructor(@Inject(AmqpClientEnum.QUEUE_ENTITY_MANAGEMENT) private readonly entityManagementService: ClientProxy) {}
 
-  addDocToProcessStep(payload: { file: Express.Multer.File; processStepId: string; description: string }): Promise<Document> {
+  addDocToProcessStep(payload: { processStepId: string; description: string; file: Express.Multer.File }): Promise<Document> {
     return firstValueFrom(this.entityManagementService.send(DocumentsMessagePatterns.ADD_PROCESS_STEP, payload));
   }
 }

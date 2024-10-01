@@ -79,6 +79,8 @@ model User {
   personalId String?
 
   plotsOfLand PlotOfLand[]
+
+  documents Document[]
 }
 
 model PlotOfLand {
@@ -171,8 +173,11 @@ model Batch {
 model Document {
   id          String @id @default(cuid())
   description String
-  documentRef String
+  documentRef String @unique
 
   processStep   ProcessStep? @relation(fields: [processStepId], references: [id])
   processStepId String?
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId String?
 }
