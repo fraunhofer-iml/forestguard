@@ -49,6 +49,7 @@ export const mockedPrismaBatchWithRelations1: BatchWithRelations = {
       id: '1',
       name: 'Process1',
     },
+    documents: [],
     farmedLand: {
       id: '1',
       country: 'Country1',
@@ -219,6 +220,7 @@ export const mockedPrismaBatchWithRelations2: BatchWithRelations = {
       id: '2',
       name: 'Process2',
     },
+    documents: [],
     farmedLand: {
       id: '2',
       country: 'Country2',
@@ -326,6 +328,7 @@ export const mockedPrismaBatchWithRelations3: BatchWithRelations = {
       id: '2',
       name: 'Process2',
     },
+    documents: [],
     farmedLand: {
       id: '2',
       country: 'Country2',
@@ -426,6 +429,7 @@ export const mockedPrismaBatchWithRelations4: BatchWithRelations = {
       id: '2',
       name: 'Process2',
     },
+    documents: [],
     farmedLand: {
       id: '2',
       country: 'Country2',

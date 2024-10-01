@@ -8,6 +8,7 @@ export const mapBatchPrismaToBatchDto = (batch: BatchWithRelations): BatchDto =>
       ...batch.processStep,
       recordedBy: batch.processStep.recordedBy.user ?? batch.processStep.recordedBy.company,
       executedBy: batch.processStep.executedBy.user ?? batch.processStep.executedBy.company,
+      documents: batch.processStep.documents
     },
     recipient: {
       ...(batch.recipient.user ?? batch.recipient.company),

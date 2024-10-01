@@ -22,5 +22,18 @@
     "employeeId": "EID23456789",
     "addressId": "ctest202",
     "personalId": "PID12345678"
+  },
+  {
+    "id": "ctest103",
+    "firstName": "Alex",
+    "lastName": "Taylor",
+    "email": "alexander.johnson@acme.com",
+    "mobilePhoneNumber": "555-123-4321",
+    "role": "EMPLOYEE",
+    "entityId": "ctest103",
+    "companyId": "1bd6751f-4007-4168-b252-81c970a45af6",
+    "employeeId": "EID34567890",
+    "addressId": "ctest202",
+    "personalId": "PID12345678"
   }
 ]

@@ -1,9 +1,10 @@
-import { BatchCombinedCreateDto, BatchCreateDto } from '@forest-guard/api-interfaces';
+import { BatchCombinedCreateDto, BatchCreateDto, ProcessStepIdResponse } from '@forest-guard/api-interfaces';
 import { PrismaService } from '@forest-guard/database';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Batch } from '@prisma/client';
 import { mapBatchCombinedToBatchCreateDto } from '../utils/batch.mapper';
 import { createBatchQuery, createOriginBatchQuery, processStepQuery } from '../utils/batch.queries';
+import { AmqpException } from '@forest-guard/amqp';
 
 @Injectable()
 export class BatchCreateService {
@@ -12,25 +13,35 @@ export class BatchCreateService {
   private HARVESTING_PROCESS = 'Harvesting';
   private MERGE_PROCESS = 'Merge';
 
-  async createHarvests(batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
+  private NO_CONTENT_MESSAGE = 'There is no input content to create';
+
+  async createHarvests(batchCreateDtos: BatchCreateDto[]): Promise<ProcessStepIdResponse> {
     if (batchCreateDtos.length === 0) {
-      return HttpStatus.NO_CONTENT;
+      throw new AmqpException(this.NO_CONTENT_MESSAGE, HttpStatus.NO_CONTENT);
     }
+
     const batches: Batch[] = [];
     for (const dto of batchCreateDtos) {
       dto.processStep.process = this.HARVESTING_PROCESS;
       batches.push(await this.createHarvest(dto));
     }
+    let processStepId = batches[0].processStepId;
+
     if (batchCreateDtos.length > 1) {
-      await this.mergeIntoOneHarvestBatch(batchCreateDtos[0], batches); // all batches are identical
+      const mergedHarvestBatch = await this.mergeIntoOneHarvestBatch(batchCreateDtos[0], batches); // all batches are identical
+      processStepId = mergedHarvestBatch.processStepId;
     }
-    return HttpStatus.CREATED;
+
+    return {
+      processStepId: processStepId
+    };
   }
 
-  async createCombinedHarvests(batchCombinedCreateDto: BatchCombinedCreateDto): Promise<HttpStatus> {
+  async createCombinedHarvests(batchCombinedCreateDto: BatchCombinedCreateDto): Promise<ProcessStepIdResponse> {
     if (batchCombinedCreateDto.processStep.harvestedLands.length === 0) {
-      return HttpStatus.NO_CONTENT;
+      throw new AmqpException(this.NO_CONTENT_MESSAGE, HttpStatus.NO_CONTENT);
     }
+
     const dividedWeight = this.calculateDividedWeight(batchCombinedCreateDto);
     const batches: Batch[] = [];
     for (const harvestedLand of batchCombinedCreateDto.processStep.harvestedLands) {
@@ -38,17 +49,24 @@ export class BatchCreateService {
       batchCreateDto.weight = dividedWeight;
       batchCreateDto.processStep.process = this.HARVESTING_PROCESS;
       batchCreateDto.processStep.harvestedLand = harvestedLand;
-      batches.push(await this.createHarvest(batchCreateDto));
+      const harvestBatch = await this.createHarvest(batchCreateDto);
+      batches.push(harvestBatch);
     }
+    let processStepId = batches[0].processStepId;
+
     if (batchCombinedCreateDto.processStep.harvestedLands.length > 1) {
-      await this.mergeIntoOneHarvestBatch(mapBatchCombinedToBatchCreateDto(batchCombinedCreateDto), batches);
+      const mergedHarvestBatch = await this.mergeIntoOneHarvestBatch(mapBatchCombinedToBatchCreateDto(batchCombinedCreateDto), batches);
+      processStepId = mergedHarvestBatch.processStepId;
     }
-    return HttpStatus.CREATED;
+
+    return {
+      processStepId: processStepId
+    };
   }
 
-  async createBatches(batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
+  async createBatches(batchCreateDtos: BatchCreateDto[]): Promise<ProcessStepIdResponse> {
     if (batchCreateDtos.length === 0) {
-      return HttpStatus.NO_CONTENT;
+      throw new AmqpException(this.NO_CONTENT_MESSAGE, HttpStatus.NO_CONTENT);
     }
 
     const processStep = await this.prismaService.processStep.create({
@@ -58,7 +76,10 @@ export class BatchCreateService {
     for (const dto of batchCreateDtos) {
       await this.createBatch(dto, processStep.id);
     }
-    return HttpStatus.CREATED;
+
+    return {
+      processStepId: processStep.id
+    };
   }
 
   private calculateDividedWeight(batchCombinedCreateDto: BatchCombinedCreateDto) {
@@ -74,13 +95,13 @@ export class BatchCreateService {
     });
   }
 
-  private async mergeIntoOneHarvestBatch(batchCreateDto: BatchCreateDto, batches: Batch[]) {
+  private async mergeIntoOneHarvestBatch(batchCreateDto: BatchCreateDto, batches: Batch[]): Promise<Batch> {
     const mergeBatchCreateDto = structuredClone(batchCreateDto);
     mergeBatchCreateDto.ins = batches.map((batch) => batch.id);
     mergeBatchCreateDto.weight = batches.reduce((total, batch) => total + batch.weight, 0);
     mergeBatchCreateDto.processStep.process = this.MERGE_PROCESS;
     mergeBatchCreateDto.processStep.harvestedLand = undefined;
-    await this.createBatch(mergeBatchCreateDto);
+    return this.createBatch(mergeBatchCreateDto);
   }
 
   private async createBatch(dto: BatchCreateDto, existingProcessStepId?: string): Promise<Batch> {

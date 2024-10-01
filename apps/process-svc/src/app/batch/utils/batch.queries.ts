@@ -128,6 +128,7 @@ export const readBatchIncludeQuery = () => ({
           },
         },
       },
+      documents: true,
       farmedLand: {
         include: {
           cultivatedWith: true,

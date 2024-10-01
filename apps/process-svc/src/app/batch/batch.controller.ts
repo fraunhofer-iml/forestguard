@@ -1,6 +1,13 @@
 import { BatchMessagePatterns, CompanyMessagePatterns } from '@forest-guard/amqp';
-import { BatchCombinedCreateDto, BatchCreateDto, BatchDto, BatchExportWrapperDto, ProcessDisplayDto } from '@forest-guard/api-interfaces';
-import { Controller, HttpStatus } from '@nestjs/common';
+import {
+  BatchCombinedCreateDto,
+  BatchCreateDto,
+  BatchDto,
+  BatchExportWrapperDto,
+  ProcessDisplayDto,
+  ProcessStepIdResponse,
+} from '@forest-guard/api-interfaces';
+import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { BatchCreateService } from './create/batch-create.service';
 import { BatchExportService } from './export/batch-export.service';
@@ -17,17 +24,17 @@ export class BatchController {
   ) {}
 
   @MessagePattern(BatchMessagePatterns.CREATE_HARVESTS)
-  async createHarvests(@Payload() batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
+  async createHarvests(@Payload() batchCreateDtos: BatchCreateDto[]): Promise<ProcessStepIdResponse> {
     return this.batchCreateService.createHarvests(batchCreateDtos);
   }
 
   @MessagePattern(BatchMessagePatterns.CREATE_COMBINED_HARVESTS)
-  async createCombinedHarvests(@Payload() batchCombinedCreateDto: BatchCombinedCreateDto): Promise<HttpStatus> {
+  async createCombinedHarvests(@Payload() batchCombinedCreateDto: BatchCombinedCreateDto): Promise<ProcessStepIdResponse> {
     return this.batchCreateService.createCombinedHarvests(batchCombinedCreateDto);
   }
 
   @MessagePattern(BatchMessagePatterns.CREATE)
-  async createBatches(@Payload() batchCreateDtos: BatchCreateDto[]): Promise<HttpStatus> {
+  async createBatches(@Payload() batchCreateDtos: BatchCreateDto[]): Promise<ProcessStepIdResponse> {
     return this.batchCreateService.createBatches(batchCreateDtos);
   }
 

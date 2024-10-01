@@ -19,6 +19,8 @@ paths:
           description: Successful creation.
       tags:
         - Batches
+      security:
+        - bearer: []
   /batches/harvests:
     post:
       operationId: BatchController_createHarvests

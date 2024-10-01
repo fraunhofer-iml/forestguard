@@ -1,4 +1,4 @@
-import { Address, Batch, Company, Cultivation, Entity, PlotOfLand, Process, ProcessStep, Proof, User } from '@prisma/client';
+import { Address, Batch, Company, Cultivation, Document, Entity, PlotOfLand, Process, ProcessStep, Proof, User } from '@prisma/client';
 
 export type BatchWithRelations = Batch & {
   recipient: EntityWithRelations;
@@ -9,6 +9,7 @@ export type ProcessStepWithRelations = ProcessStep & {
   process: Process;
   recordedBy: EntityWithRelations;
   executedBy: EntityWithRelations;
+  documents: Document[];
   farmedLand: PlotOfLandWithRelations;
 };
 

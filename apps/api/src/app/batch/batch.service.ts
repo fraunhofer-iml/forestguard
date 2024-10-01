@@ -1,7 +1,14 @@
 import { AmqpClientEnum, BatchMessagePatterns } from '@forest-guard/amqp';
-import { BatchCombinedCreateDto, BatchCreateDto, BatchDto, BatchExportWrapperDto, ProcessDisplayDto } from '@forest-guard/api-interfaces';
+import {
+  BatchCombinedCreateDto,
+  BatchCreateDto,
+  BatchDto,
+  BatchExportWrapperDto,
+  ProcessDisplayDto,
+  ProcessStepIdResponse,
+} from '@forest-guard/api-interfaces';
 import { firstValueFrom } from 'rxjs';
-import { BadRequestException, HttpStatus, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { CompanyService } from '../company/company.service';
 
@@ -9,7 +16,7 @@ import { CompanyService } from '../company/company.service';
 export class BatchService {
   constructor(@Inject(AmqpClientEnum.QUEUE_PROCESS) private readonly processService: ClientProxy, private companyService: CompanyService) {}
 
-  async createHarvests({ batchCreateDtos, companyId }: { batchCreateDtos: BatchCreateDto[]; companyId: string }): Promise<HttpStatus> {
+  async createHarvests({ batchCreateDtos, companyId }: { batchCreateDtos: BatchCreateDto[]; companyId: string }): Promise<ProcessStepIdResponse> {
     await this.checkRecordedBy(companyId, batchCreateDtos);
 
     return firstValueFrom(this.processService.send(BatchMessagePatterns.CREATE_HARVESTS, batchCreateDtos));
@@ -21,7 +28,7 @@ export class BatchService {
   }: {
     batchCombinedCreateDto: BatchCombinedCreateDto;
     companyId: string;
-  }): Promise<HttpStatus> {
+  }): Promise<ProcessStepIdResponse> {
     const company = await this.companyService.readCompany(companyId);
 
     if (!company) {
@@ -35,7 +42,7 @@ export class BatchService {
     return firstValueFrom(this.processService.send(BatchMessagePatterns.CREATE_COMBINED_HARVESTS, batchCombinedCreateDto));
   }
 
-  async createBatches({ batchCreateDtos, companyId }: { batchCreateDtos: BatchCreateDto[]; companyId: string }): Promise<HttpStatus> {
+  async createBatches({ batchCreateDtos, companyId }: { batchCreateDtos: BatchCreateDto[]; companyId: string }): Promise<ProcessStepIdResponse> {
     await this.checkRecordedBy(companyId, batchCreateDtos);
 
     return firstValueFrom(this.processService.send(BatchMessagePatterns.CREATE, batchCreateDtos));
@@ -46,11 +53,9 @@ export class BatchService {
   }
 
   async getRelatedBatches(id: string): Promise<ProcessDisplayDto> {
-    const relatedBatches = await firstValueFrom<ProcessDisplayDto>(
+    return await firstValueFrom<ProcessDisplayDto>(
       this.processService.send(BatchMessagePatterns.READ_BY_ID_RELATED, { id })
     );
-
-    return relatedBatches;
   }
 
   readExportBatch(id: string): Promise<BatchExportWrapperDto> {
