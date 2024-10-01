@@ -12,6 +12,7 @@ import { toast } from 'ngx-sonner';
 import { combineLatest, mergeMap, Observable, tap } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../core/services/authentication.service';
 import { UploadFormSelectType } from '../../../shared/components/upload-form/upload-form-select.type';
 import { Messages } from '../../../shared/messages';
@@ -71,7 +72,8 @@ export class AddPlotOfLandComponent {
     private plotOfLandService: PlotOfLandService,
     private cultivationService: CultivationService,
     private generatePlotOfLandService: GeneratePlotOfLandService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private router: Router
   ) {
     this.farmers$ = this.companyService.getFarmersByCompanyId(this.authenticationService.getCurrentCompanyId() ?? '');
     this.users$ = this.userService.getUsers();
@@ -84,6 +86,7 @@ export class AddPlotOfLandComponent {
   }
 
   submitPlotOfLand(): void {
+    let plotOfLandId: string;
     if (this.plotOfLandFormGroup.valid && this.plotOfLandFormGroup.value.processOwner) {
       this.plotOfLandService
         .createPlotOfLand(
@@ -93,6 +96,7 @@ export class AddPlotOfLandComponent {
         .pipe(
           mergeMap((plotOfLand: PlotOfLandDto) => {
             const createProofsObservables: Observable<ProofDto>[] = [];
+            plotOfLandId = plotOfLand.id;
             this.uploadSelectOption.forEach((option) => {
               if (option.file) {
                 const formData = new FormData();
@@ -101,14 +105,15 @@ export class AddPlotOfLandComponent {
                 createProofsObservables.push(this.plotOfLandService.createProof(plotOfLand.id, formData));
               }
             });
+            this.router.navigate(['/pols', plotOfLand.id]);
             return combineLatest(createProofsObservables);
           })
         )
         .subscribe(() => {
-          this.clearInputFields();
-          toast.success(Messages.successPlotOfLand);
           this.uploadSelectOption.forEach((option) => {
             option.file = undefined;
+            this.router.navigate(['/pols', plotOfLandId]);
+            location.reload();
           });
         });
     } else {
