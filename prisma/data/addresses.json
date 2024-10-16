@@ -14,5 +14,45 @@
     "state": "IN",
     "postalCode": "46176",
     "country": "USA"
+  },
+  {
+    "id": "cooperative_address",
+    "street": "4969 Libero. Avenue",
+    "city": "Memphis",
+    "state": "TN",
+    "postalCode": "571450",
+    "country": "USA"
+  },
+  {
+    "id": "exporter_address",
+    "street": "308-6941 Consectetuer St.",
+    "city": "Omaha",
+    "state": "NE",
+    "postalCode": "8119",
+    "country": "USA"
+  },
+  {
+    "id": "importer_address",
+    "street": "2772 Sed St.",
+    "city": "Waterbury",
+    "state": "CT",
+    "postalCode": "99776",
+    "country": "USA"
+  },
+  {
+    "id": "roaster_address",
+    "street": "406-4669 Hymenaeos. Rd.",
+    "city": "Columbus",
+    "state": "OH",
+    "postalCode": "80291",
+    "country": "USA"
+  },
+  {
+    "id": "trader_address",
+    "street": "470-935 Nisi Av.",
+    "city": "Carson City",
+    "state": "NV",
+    "postalCode": "48376",
+    "country": "USA"
   }
 ]

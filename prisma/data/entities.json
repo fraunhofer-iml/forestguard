@@ -9,9 +9,39 @@
     "id": "ctest103"
   },
   {
+    "id": "cooperative_address"
+  },
+  {
+    "id": "exporter_address"
+  },
+  {
+    "id": "importer_address"
+  },
+  {
+    "id": "roaster_address"
+  },
+  {
+    "id": "trader_address"
+  },
+  {
     "id": "c1c1f27f-75c9-45f8-98f6-cff1357561e1"
   },
   {
     "id": "1bd6751f-4007-4168-b252-81c970a45af6"
+  },
+  {
+    "id": "858c2ddf-f27c-4381-b2b6-3e97d0aec564"
+  },
+  {
+    "id": "daa8a435-b0e0-46ef-a95f-080a6cb98d31"
+  },
+  {
+    "id": "ec7f6d11-4319-4ea3-8d8c-2dbba2a1d47e"
+  },
+  {
+    "id": "acb15a08-fd28-42b5-b6c3-c7463f2a4705"
+  },
+  {
+    "id": "0bc9f319-4e75-437f-8117-da681244f6cb"
   }
 ]

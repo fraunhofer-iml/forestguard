@@ -10,5 +10,35 @@
     "name": "Acme Corp 2",
     "entityId": "1bd6751f-4007-4168-b252-81c970a45af6",
     "addressId": "ctest201"
+  },
+  {
+    "id": "858c2ddf-f27c-4381-b2b6-3e97d0aec564",
+    "name": "Cooperative",
+    "entityId": "858c2ddf-f27c-4381-b2b6-3e97d0aec564",
+    "addressId": "cooperative_address"
+  },
+  {
+    "id": "daa8a435-b0e0-46ef-a95f-080a6cb98d31",
+    "name": "Exporter",
+    "entityId": "daa8a435-b0e0-46ef-a95f-080a6cb98d31",
+    "addressId": "exporter_address"
+  },
+  {
+    "id": "ec7f6d11-4319-4ea3-8d8c-2dbba2a1d47e",
+    "name": "Importer",
+    "entityId": "ec7f6d11-4319-4ea3-8d8c-2dbba2a1d47e",
+    "addressId": "importer_address"
+  },
+  {
+    "id": "acb15a08-fd28-42b5-b6c3-c7463f2a4705",
+    "name": "Roaster",
+    "entityId": "acb15a08-fd28-42b5-b6c3-c7463f2a4705",
+    "addressId": "roaster_address"
+  },
+  {
+    "id": "0bc9f319-4e75-437f-8117-da681244f6cb",
+    "name": "Trader",
+    "entityId": "0bc9f319-4e75-437f-8117-da681244f6cb",
+    "addressId": "trader_address"
   }
 ]
