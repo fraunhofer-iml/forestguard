@@ -1,19 +1,20 @@
+import { AmqpException } from '@forest-guard/amqp';
 import { BatchCombinedCreateDto, BatchCreateDto, ProcessStepIdResponse } from '@forest-guard/api-interfaces';
 import { PrismaService } from '@forest-guard/database';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Batch } from '@prisma/client';
 import { mapBatchCombinedToBatchCreateDto } from '../utils/batch.mapper';
 import { createBatchQuery, createOriginBatchQuery, processStepQuery } from '../utils/batch.queries';
-import { AmqpException } from '@forest-guard/amqp';
 
 @Injectable()
 export class BatchCreateService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  private HARVESTING_PROCESS = 'Harvesting';
-  private MERGE_PROCESS = 'Merge';
+  private readonly HARVESTING_PROCESS = 'Harvesting';
+  private readonly MERGE_PROCESS = 'Merge';
+  private readonly DEFAULT_LOCATION = 'Field';
 
-  private NO_CONTENT_MESSAGE = 'There is no input content to create';
+  private readonly NO_CONTENT_MESSAGE = 'There is no input content to create';
 
   async createHarvests(batchCreateDtos: BatchCreateDto[]): Promise<ProcessStepIdResponse> {
     if (batchCreateDtos.length === 0) {
@@ -23,6 +24,7 @@ export class BatchCreateService {
     const batches: Batch[] = [];
     for (const dto of batchCreateDtos) {
       dto.processStep.process = this.HARVESTING_PROCESS;
+      dto.processStep.location = dto.processStep.location || this.DEFAULT_LOCATION;
       batches.push(await this.createHarvest(dto));
     }
     let processStepId = batches[0].processStepId;
@@ -33,7 +35,7 @@ export class BatchCreateService {
     }
 
     return {
-      processStepId: processStepId
+      processStepId: processStepId,
     };
   }
 
@@ -48,6 +50,7 @@ export class BatchCreateService {
       const batchCreateDto = mapBatchCombinedToBatchCreateDto(batchCombinedCreateDto);
       batchCreateDto.weight = dividedWeight;
       batchCreateDto.processStep.process = this.HARVESTING_PROCESS;
+      batchCreateDto.processStep.location = batchCreateDto.processStep.location || this.DEFAULT_LOCATION;
       batchCreateDto.processStep.harvestedLand = harvestedLand;
       const harvestBatch = await this.createHarvest(batchCreateDto);
       batches.push(harvestBatch);
@@ -60,7 +63,7 @@ export class BatchCreateService {
     }
 
     return {
-      processStepId: processStepId
+      processStepId: processStepId,
     };
   }
 
@@ -78,7 +81,7 @@ export class BatchCreateService {
     }
 
     return {
-      processStepId: processStep.id
+      processStepId: processStep.id,
     };
   }
 
