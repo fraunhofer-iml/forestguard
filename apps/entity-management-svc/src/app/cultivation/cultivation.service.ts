@@ -5,22 +5,23 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class CultivationService {
-  private readonly cultivationType: string;
+  private readonly cultivationCommodity: string;
 
   constructor(private readonly prismaService: PrismaService, private readonly configurationService: ConfigurationService) {
-    this.cultivationType = this.configurationService.getEntityManagementConfiguration().cultivationType;
+    this.cultivationCommodity = this.configurationService.getEntityManagementConfiguration().cultivationCommodity;
   }
 
   async createCultivation(dto: CultivationCreateDto): Promise<CultivationDto> {
     return this.prismaService.cultivation.create({
       data: {
-        type: this.cultivationType,
+        commodity: this.cultivationCommodity,
         sort: dto.sort,
+        quality: dto.quality,
       },
     });
   }
 
-  async readCultivationsByType(type: string): Promise<CultivationDto[]> {
-    return this.prismaService.cultivation.findMany({ where: { type } });
+  async readCultivationsByCommodity(commodity: string): Promise<CultivationDto[]> {
+    return this.prismaService.cultivation.findMany({ where: { commodity } });
   }
 }

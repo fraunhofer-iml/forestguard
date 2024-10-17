@@ -51,6 +51,7 @@ export const givenFarmer: FarmerCreateDto = {
     city: 'Springfield',
     state: 'IL',
     country: 'USA',
+    additionalInformation: 'good to know',
   },
 };
 export const givenCompanyCreateDto: CompanyCreateDto = {
@@ -61,11 +62,13 @@ export const givenCompanyCreateDto: CompanyCreateDto = {
     city: 'Springfield',
     state: 'IL',
     country: 'USA',
+    additionalInformation: 'good to know',
   },
 };
 export const givenPlotOfLand: PlotOfLandCreateDto = {
   country: 'Peru',
   region: 'Ucayali',
+  province: 'A',
   district: 'Coronel Portillo',
   nationalPlotOfLandId: 'n1',
   localPlotOfLandId: 'l1',
@@ -77,7 +80,8 @@ export const givenPlotOfLand: PlotOfLandCreateDto = {
     zone: '',
   },
   areaInHA: 1,
-  cultivatedWith: 'arabica',
+  cultivationSort: 'arabica',
+  cultivationQuality: 'Ecol',
 };
 
 export async function prepareCompany() {

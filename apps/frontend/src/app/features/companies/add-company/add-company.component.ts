@@ -22,6 +22,7 @@ export class AddCompanyComponent {
     street: new FormControl('', Validators.required),
     postalCode: new FormControl('', Validators.required),
     city: new FormControl('', Validators.required),
+    additionalInformation: new FormControl('', Validators.required),
   });
 
   constructor(

@@ -18,12 +18,13 @@ enum ProofType {
 }
 
 model Address {
-  id         String @id @default(cuid())
-  street     String
-  city       String
-  state      String
-  postalCode String
-  country    String
+  id                    String @id @default(cuid())
+  street                String
+  city                  String
+  state                 String
+  postalCode            String
+  country               String
+  additionalInformation String
 
   companies Company[]
   users     User[]
@@ -87,6 +88,7 @@ model PlotOfLand {
   id                   String @id @default(cuid())
   country              String
   region               String
+  province             String
   district             String
   nationalPlotOfLandId String
   localPlotOfLandId    String
@@ -107,12 +109,13 @@ model PlotOfLand {
 
 model Cultivation {
   id   String @id @default(cuid())
-  type String
+  commodity String
   sort String
+  quality String
 
   plotsOfLand PlotOfLand[]
 
-  @@unique([type, sort])
+  @@unique([commodity, sort])
 }
 
 model Proof {

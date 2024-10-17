@@ -87,6 +87,7 @@ describe('UserService', () => {
         city: 'Example City',
         state: 'Example State',
         country: 'Example Country',
+        additionalInformation: 'good to know',
       },
     };
 

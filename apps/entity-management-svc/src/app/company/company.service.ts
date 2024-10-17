@@ -29,7 +29,7 @@ export class CompanyService {
       data: { id: keycloakCompanyId },
     });
 
-    const { street, postalCode, city, state, country } = dto.address;
+    const { street, postalCode, city, state, country, additionalInformation } = dto.address;
     const company = await this.prismaService.company.create({
       data: {
         id: entity.id,
@@ -47,6 +47,7 @@ export class CompanyService {
               city,
               state,
               country,
+              additionalInformation,
             },
             where: {
               street_postalCode_city_state_country: {

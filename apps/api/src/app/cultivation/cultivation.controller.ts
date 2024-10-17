@@ -20,16 +20,16 @@ export class CultivationController {
   @ApiBearerAuth()
   @ApiOperation({ description: 'Get all cultivations' })
   @ApiOkResponse({ description: 'Successful request.' })
-  @ApiQuery({ name: 'type', required: true })
-  getCultivationsByType(@Query('type') type: string): Promise<CultivationDto[]> {
-    return this.cultivationService.readCultivationsByType(type);
+  @ApiQuery({ name: 'commodity', required: true })
+  getCultivationsByCommodity(@Query('commodity') commodity: string): Promise<CultivationDto[]> {
+    return this.cultivationService.readCultivationsByCommodity(commodity);
   }
 
-  @Get('types')
+  @Get('commodities')
   @ApiBearerAuth()
-  @ApiOperation({ description: 'Get all cultivation types' })
+  @ApiOperation({ description: 'Get all cultivation commodities' })
   @ApiOkResponse({ description: 'Successful request.' })
-  getCultivationTypes(): string[] {
+  getCultivationCommodities(): string[] {
     return ['coffee'];
   }
 }

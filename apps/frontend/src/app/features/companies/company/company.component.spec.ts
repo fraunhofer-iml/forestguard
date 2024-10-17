@@ -18,6 +18,7 @@ const COMPANY_DTO_MOCK: CompanyDto = {
     city: 'Springfield',
     state: 'IL',
     country: 'USA',
+    additionalInformation: 'good to know',
   },
   employees: [],
   farmers: [
@@ -37,6 +38,7 @@ const COMPANY_DTO_MOCK: CompanyDto = {
         city: 'Shelbyville',
         state: 'IN',
         country: 'USA',
+        additionalInformation: 'good to know',
       },
       plotsOfLand: [],
     },

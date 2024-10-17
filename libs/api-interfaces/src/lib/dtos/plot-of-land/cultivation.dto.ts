@@ -1,5 +1,6 @@
 export interface CultivationDto {
   id: string;
-  type: string;
+  commodity: string;
   sort: string;
+  quality: string;
 }

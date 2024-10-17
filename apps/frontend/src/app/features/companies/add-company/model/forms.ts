@@ -7,4 +7,5 @@ export interface CompanyForm {
   street: FormControl<string | null>;
   postalCode: FormControl<string | null>;
   city: FormControl<string | null>;
+  additionalInformation: FormControl<string | null>;
 }

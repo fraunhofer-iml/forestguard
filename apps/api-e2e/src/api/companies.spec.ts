@@ -13,6 +13,7 @@ describe('/companies', () => {
       city: 'Springfield',
       state: 'IL',
       country: 'USA',
+      additionalInformation: 'good to know',
     },
   };
 
@@ -106,6 +107,7 @@ describe('/companies', () => {
           city: 'c1',
           state: 'S1',
           country: 'C1',
+          additionalInformation: 'good to know',
         },
       };
 

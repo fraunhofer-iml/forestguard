@@ -43,10 +43,11 @@ describe('GenerateUserService', (): void => {
       city: ['City'],
       state: ['State'],
       country: ['Country'],
+      additionalInformation: ['AdditionalInformation'],
     });
 
     const result = service.generateNewAddress(formGroup);
-    expect(result).toEqual(new AddressCreateDto('123 Street', '12345', 'City', 'State', 'Country'));
+    expect(result).toEqual(new AddressCreateDto('123 Street', '12345', 'City', 'State', 'Country', 'AdditionalInformation'));
   });
 
   it('should create a new AddressCreateDto with provided values', () => {
@@ -60,6 +61,7 @@ describe('GenerateUserService', (): void => {
       city: ['City'],
       state: ['State'],
       country: ['Country'],
+      additionalInformation: ['AdditionalInformation'],
     });
 
     const result = service.generateNewFarmer(formGroup);
@@ -70,7 +72,7 @@ describe('GenerateUserService', (): void => {
         'john.doe@example.com',
         '123',
         '',
-        new AddressCreateDto('123 Street', '12345', 'City', 'State', 'Country')
+        new AddressCreateDto('123 Street', '12345', 'City', 'State', 'Country', 'AdditionalInformation')
       )
     );
   });

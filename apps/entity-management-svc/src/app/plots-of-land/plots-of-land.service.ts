@@ -7,11 +7,11 @@ import { User } from '@prisma/client';
 
 @Injectable()
 export class PlotsOfLandService {
-  private readonly cultivationType: string;
+  private readonly cultivationCommodity: string;
 
   constructor(private readonly prismaService: PrismaService, private readonly configurationService: ConfigurationService) {
     const generalConfiguration = this.configurationService.getEntityManagementConfiguration();
-    this.cultivationType = generalConfiguration.cultivationType;
+    this.cultivationCommodity = generalConfiguration.cultivationCommodity;
   }
 
   async readPlotsOfLand(farmerId?: string | undefined): Promise<PlotOfLandDto[]> {
@@ -34,7 +34,7 @@ export class PlotsOfLandService {
   }
 
   async createPlotOfLand(plotOfLand: PlotOfLandCreateDto, farmerId: string): Promise<PlotOfLandDto> {
-    if (!plotOfLand.cultivatedWith) {
+    if (!plotOfLand.cultivationSort) {
       throw new RpcException('Sort of Cultivation is required');
     }
 
@@ -58,19 +58,21 @@ export class PlotsOfLandService {
         district: plotOfLand.district,
         geoData: JSON.stringify(geoDataEudr),
         region: plotOfLand.region,
+        province: plotOfLand.province,
         localPlotOfLandId: plotOfLand.localPlotOfLandId,
         nationalPlotOfLandId: plotOfLand.nationalPlotOfLandId,
         cultivatedWith: {
           connectOrCreate: {
             where: {
-              type_sort: {
-                type: this.cultivationType,
-                sort: plotOfLand.cultivatedWith.toLowerCase(),
+              commodity_sort: {
+                commodity: this.cultivationCommodity,
+                sort: plotOfLand.cultivationSort.toLowerCase(),
               },
             },
             create: {
-              type: this.cultivationType,
-              sort: plotOfLand.cultivatedWith.toLowerCase(),
+              commodity: this.cultivationCommodity,
+              sort: plotOfLand.cultivationSort.toLowerCase(),
+              quality: plotOfLand.cultivationQuality.toLowerCase(),
             },
           },
         },

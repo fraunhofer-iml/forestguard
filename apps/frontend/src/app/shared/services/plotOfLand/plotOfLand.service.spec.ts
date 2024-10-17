@@ -22,13 +22,15 @@ describe('PlotOfLandService', (): void => {
     plotOfLandCreateMock = {
       country: 'Peru',
       region: 'Ucayali',
+      province: 'Province A',
       district: 'Coronel Portillo',
       nationalPlotOfLandId: 'n1',
       localPlotOfLandId: 'l1',
       description: 'Lorem ipsum dolor sit amet.',
       geoData: { standard: Standard.WGS, coordinateType: CoordinateType.Point, coordinates: [1, 2], zone: 'zone' },
       areaInHA: 1,
-      cultivatedWith: 'arabica',
+      cultivationSort: 'arabica',
+      cultivationQuality: 'ecol',
     };
 
     proofsMock = [
@@ -52,8 +54,9 @@ describe('PlotOfLandService', (): void => {
       areaInHA: 1,
       cultivatedWith: {
         id: '4f7afc7e-2795-4548-bf45-8217a23ef6b2',
-        type: 'coffee',
+        commodity: 'coffee',
         sort: 'arabica',
+        quality: 'ecol',
       },
       proofs: [
         {
@@ -112,7 +115,7 @@ describe('PlotOfLandService', (): void => {
 
   it('should update a plotOfLand', () => {
     const id = '53252ae9-fb8e-4a19-8f03-ed6ed5977501';
-    service.updatePlotOfLand(id, plotOfLandCreateMock).subscribe((res) => {
+    service.updatePlotOfLand(id, { cultivatedWith: '1'}).subscribe((res) => {
       expect(res).toEqual(plotOfLandUpdateMock);
     });
   });

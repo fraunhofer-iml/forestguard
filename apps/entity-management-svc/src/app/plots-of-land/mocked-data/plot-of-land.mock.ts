@@ -30,6 +30,7 @@ const expectedPlotOfLandDto: PlotOfLand = {
   district: 'District',
   geoData: undefined, // will be set in beforeEach
   region: 'Region',
+  province: 'Province',
   localPlotOfLandId: 'Local',
   nationalPlotOfLandId: 'National',
   cultivationId: '1',

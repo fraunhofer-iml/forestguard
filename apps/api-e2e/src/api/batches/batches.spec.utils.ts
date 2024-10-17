@@ -86,7 +86,7 @@ const plotOfLand: PlotOfLandCreateDto = {
     zone: '',
   },
   areaInHA: 1,
-  cultivatedWith: 'arabica',
+  cultivationSort: 'arabica',
 };
 
 export async function prepareBatchCreationWithPlotOfLand(): Promise<BatchCreateDto> {

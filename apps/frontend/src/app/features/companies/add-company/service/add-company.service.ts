@@ -9,7 +9,8 @@ export class AddCompanyService {
       formGroup.value.postalCode ?? '',
       formGroup.value.city ?? '',
       formGroup.value.state ?? '',
-      formGroup.value.country ?? ''
+      formGroup.value.country ?? '',
+      formGroup.value.additionalInformation ?? ''
     );
   }
 

@@ -63,6 +63,7 @@ describe('AddCompanyComponent', () => {
       street: ['Example Street', []],
       postalCode: ['Example PostalCode', []],
       city: ['Example City', []],
+      additionalInformation: ['Example AdditionalInformation', []]
     });
 
     createCompanyService.generateCompany = jest.fn().mockReturnValue(of({ name: 'Example Name' }));
@@ -78,6 +79,7 @@ describe('AddCompanyComponent', () => {
       postalCode: null,
       state: null,
       street: null,
+      additionalInformation: null,
     });
   });
 

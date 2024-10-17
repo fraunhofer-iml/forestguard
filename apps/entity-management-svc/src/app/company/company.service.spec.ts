@@ -61,6 +61,7 @@ describe('CompanyService', () => {
       city: givenDto.address.city,
       state: givenDto.address.state,
       country: givenDto.address.country,
+      additionalInformation: givenDto.address.additionalInformation,
     });
     jest.spyOn(prismaService.entity, 'create').mockResolvedValue({
       id: '1',
@@ -91,6 +92,7 @@ describe('CompanyService', () => {
               city: givenDto.address.city,
               state: givenDto.address.state,
               country: givenDto.address.country,
+              additionalInformation: givenDto.address.additionalInformation,
             },
             where: {
               street_postalCode_city_state_country: {

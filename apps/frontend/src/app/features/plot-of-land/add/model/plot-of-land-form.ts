@@ -4,7 +4,7 @@ export interface PlotOfLandForm {
   processOwner: FormControl<string | null>;
   region: FormControl<string | null>;
   plotOfLand: FormControl<string | null>;
-  cultivatedWith: FormControl<string | null>;
+  cultivationSort: FormControl<string | null>;
   localPlotOfLandId: FormControl<string | null>;
   nationalPlotOfLandId: FormControl<string | null>;
   geoDataInput: FormControl<string | null>;

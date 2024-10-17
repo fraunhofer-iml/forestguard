@@ -26,9 +26,9 @@ export class CompanyMapper {
   }
 
   private static mapAddressToDto(address: Address): AddressDto {
-    const { id, street, postalCode, city, state, country } = address;
+    const { id, street, postalCode, city, state, country, additionalInformation } = address;
 
-    return { id, street, postalCode, city, state, country };
+    return { id, street, postalCode, city, state, country, additionalInformation };
   }
 
   private static mapEmployeeToDto(user: UserWithRelations): UserDto {

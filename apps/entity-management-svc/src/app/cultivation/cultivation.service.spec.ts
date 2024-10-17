@@ -24,7 +24,7 @@ describe('CultivationService', () => {
         {
           provide: ConfigurationService,
           useValue: {
-            getEntityManagementConfiguration: jest.fn().mockReturnValue({ cultivationType: 'coffee' }),
+            getEntityManagementConfiguration: jest.fn().mockReturnValue({ cultivationCommodity: 'coffee' }),
           },
         },
       ],
@@ -41,33 +41,34 @@ describe('CultivationService', () => {
   describe('createCultivation', () => {
     it('should return a CultivationDto', async () => {
       const givenSort = 'Arabica';
+      const givenQuality = 'Ecol';
 
-      const expectedCultivation: CultivationDto = { id: '1', type: 'coffee', sort: givenSort };
+      const expectedCultivation: CultivationDto = { id: '1', commodity: 'coffee', sort: givenSort, quality: givenQuality };
       jest.spyOn(prismaService.cultivation, 'create').mockResolvedValue(expectedCultivation);
 
-      const actualCultivation = await cultivationService.createCultivation({ sort: givenSort });
+      const actualCultivation = await cultivationService.createCultivation({ sort: givenSort, quality: givenQuality });
 
       expect(actualCultivation).toEqual(expectedCultivation);
       expect(prismaService.cultivation.create).toHaveBeenCalledWith({
-        data: { type: 'coffee', sort: givenSort },
+        data: { commodity: 'coffee', sort: givenSort, quality: givenQuality },
       });
     });
   });
 
-  describe('readCultivationsByType', () => {
+  describe('readCultivationsByCommodity', () => {
     it('should return an array of CultivationDto', async () => {
       const givenType = 'coffee';
       const expectedCultivations: CultivationDto[] = [
-        { id: '1', type: givenType, sort: 'Arabica' },
-        { id: '2', type: givenType, sort: 'Robusta' },
+        { id: '1', commodity: givenType, sort: 'Arabica', quality: 'Ecol' },
+        { id: '2', commodity: givenType, sort: 'Robusta', quality: 'Ecol' },
       ];
       jest.spyOn(prismaService.cultivation, 'findMany').mockResolvedValue(expectedCultivations);
 
-      const result = await cultivationService.readCultivationsByType(givenType);
+      const result = await cultivationService.readCultivationsByCommodity(givenType);
 
       expect(result).toEqual(expectedCultivations);
       expect(prismaService.cultivation.findMany).toHaveBeenCalledWith({
-        where: { type: givenType },
+        where: { commodity: givenType },
       });
     });
   });

@@ -13,8 +13,8 @@ export class CultivationController {
     return this.cultivationService.createCultivation(payload.dto);
   }
 
-  @MessagePattern(CultivationMessagePatterns.READ_ALL_BY_TYPE)
-  async readCultivationByType(@Payload() payload: { type: string }): Promise<CultivationDto[]> {
-    return this.cultivationService.readCultivationsByType(payload.type);
+  @MessagePattern(CultivationMessagePatterns.READ_ALL_BY_COMMODITY)
+  async readCultivationByCommodity(@Payload() payload: { commodity: string }): Promise<CultivationDto[]> {
+    return this.cultivationService.readCultivationsByCommodity(payload.commodity);
   }
 }

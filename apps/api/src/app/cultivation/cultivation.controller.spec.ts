@@ -13,7 +13,7 @@ describe('CultivationController', () => {
         {
           provide: CultivationService,
           useValue: {
-            readCultivationsByType: jest.fn().mockImplementation((type) => Promise.resolve({ type })),
+            readCultivationsByCommodity: jest.fn().mockImplementation((type) => Promise.resolve({ type })),
           },
         },
       ],

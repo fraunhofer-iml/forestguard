@@ -12,7 +12,7 @@ export class CultivationService {
     return firstValueFrom(this.entityManagementService.send(CultivationMessagePatterns.CREATE, { dto }));
   }
 
-  readCultivationsByType(type: string): Promise<CultivationDto[]> {
-    return firstValueFrom(this.entityManagementService.send(CultivationMessagePatterns.READ_ALL_BY_TYPE, { type }));
+  readCultivationsByCommodity(commodity: string): Promise<CultivationDto[]> {
+    return firstValueFrom(this.entityManagementService.send(CultivationMessagePatterns.READ_ALL_BY_COMMODITY, { commodity }));
   }
 }

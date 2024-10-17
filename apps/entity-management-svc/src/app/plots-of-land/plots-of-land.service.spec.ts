@@ -36,7 +36,7 @@ describe('PlotsOfLandService', () => {
         {
           provide: ConfigurationService,
           useValue: {
-            getEntityManagementConfiguration: jest.fn().mockReturnValue({ cultivationType: 'coffee' }),
+            getEntityManagementConfiguration: jest.fn().mockReturnValue({ cultivationCommodity: 'coffee' }),
           },
         },
       ],
@@ -88,15 +88,20 @@ describe('PlotsOfLandService', () => {
       district: 'District',
       geoData: givenGeoDataDto,
       region: 'Region',
+      province: 'Province',
       localPlotOfLandId: 'Local',
       nationalPlotOfLandId: 'National',
-      cultivatedWith: 'coffee',
     };
+    const cultivationSort = 'coffee'
+    const cultivationQuality = 'ecol';
 
     jest.spyOn(prisma.user, 'findFirst').mockResolvedValue(givenUser);
     jest.spyOn(prisma.plotOfLand, 'create').mockResolvedValue(expectedPlotOfLandDto);
 
-    const actualPlotOfLandDto = await service.createPlotOfLand(givenPlotOfLandCreateDto, givenUser.id);
+    const actualPlotOfLandDto = await service.createPlotOfLand(
+      { ...givenPlotOfLandCreateDto, cultivationSort, cultivationQuality },
+      givenUser.id
+    );
     expect(actualPlotOfLandDto).toEqual(expectedPlotOfLandDto);
     expect(prisma.plotOfLand.create).toHaveBeenCalledWith({
       data: {
@@ -105,14 +110,15 @@ describe('PlotsOfLandService', () => {
         cultivatedWith: {
           connectOrCreate: {
             where: {
-              type_sort: {
-                type: 'coffee',
-                sort: givenPlotOfLandCreateDto.cultivatedWith.toLowerCase(),
+              commodity_sort: {
+                commodity: 'coffee',
+                sort: cultivationSort.toLowerCase(),
               },
             },
             create: {
-              type: 'coffee',
-              sort: givenPlotOfLandCreateDto.cultivatedWith.toLowerCase(),
+              commodity: 'coffee',
+              sort: cultivationSort.toLowerCase(),
+              quality: cultivationQuality,
             },
           },
         },
@@ -133,15 +139,20 @@ describe('PlotsOfLandService', () => {
       district: 'District',
       geoData: givenGeoDataDto,
       region: 'Region',
+      province: 'Province',
       localPlotOfLandId: 'Local',
       nationalPlotOfLandId: 'National',
-      cultivatedWith: 'Robusta',
     };
+    const cultivationSort = 'Robusta';
+    const cultivationQuality = 'c2';
 
     jest.spyOn(prisma.user, 'findFirst').mockResolvedValue(givenUser);
     jest.spyOn(prisma.plotOfLand, 'create').mockResolvedValue(expectedPlotOfLandDto);
 
-    const actualPlotOfLandDto = await service.createPlotOfLand(givenPlotOfLandCreateDto, givenUser.id);
+    const actualPlotOfLandDto = await service.createPlotOfLand(
+      { ...givenPlotOfLandCreateDto, cultivationSort, cultivationQuality },
+      givenUser.id
+    );
     expect(actualPlotOfLandDto).toEqual(expectedPlotOfLandDto);
     expect(prisma.plotOfLand.create).toHaveBeenCalledWith({
       data: {
@@ -150,14 +161,15 @@ describe('PlotsOfLandService', () => {
         cultivatedWith: {
           connectOrCreate: {
             where: {
-              type_sort: {
-                type: 'coffee',
-                sort: givenPlotOfLandCreateDto.cultivatedWith.toLowerCase(),
+              commodity_sort: {
+                commodity: 'coffee',
+                sort: cultivationSort.toLowerCase(),
               },
             },
             create: {
-              type: 'coffee',
-              sort: givenPlotOfLandCreateDto.cultivatedWith.toLowerCase(),
+              commodity: 'coffee',
+              sort: cultivationSort.toLowerCase(),
+              quality :cultivationQuality,
             },
           },
         },
@@ -262,7 +274,9 @@ describe('PlotsOfLandService', () => {
       district: 'District',
       geoData: geoData,
       region: 'Region',
-      cultivatedWith: 'Arabica',
+      province: 'Province',
+      cultivationSort: 'Arabica',
+      cultivationQuality: 'Ecol',
     };
 
     jest.spyOn(prisma.user, 'findFirst').mockResolvedValue(givenUser);
@@ -284,9 +298,11 @@ describe('PlotsOfLandService', () => {
       district: 'District',
       geoData: geoData,
       region: 'Region',
+      province: 'Province',
       localPlotOfLandId: 'Local',
       nationalPlotOfLandId: 'National',
-      cultivatedWith: '1',
+      cultivationSort: '1',
+      cultivationQuality: 'Ecol',
     };
 
     jest.spyOn(prisma.user, 'findFirst').mockResolvedValue(givenUser);
@@ -302,7 +318,7 @@ describe('PlotsOfLandService', () => {
     await expect(service.updatePlotOfLand('1', givenPlotOfLandUpdateDto)).resolves.toEqual(undefined);
   });
 
-  it('should throw an error when trying to create a PlotOfLandDto with undefined cultivatedWith', async () => {
+  it('should throw an error when trying to create a PlotOfLandDto with undefined cultivationSort', async () => {
     const geoData = new GeoDataDto(Standard.WGS, CoordinateType.Point, [10.0, 11.2]);
     const givenPlotOfLandCreateDto = {
       areaInHA: 1,
@@ -311,9 +327,11 @@ describe('PlotsOfLandService', () => {
       district: 'District',
       geoData: geoData,
       region: 'Region',
+      province: 'Province',
       localPlotOfLandId: 'Local',
       nationalPlotOfLandId: 'National',
-      cultivatedWith: undefined,
+      cultivationSort: undefined,
+      cultivationQuality: 'Ecol',
     };
 
     const expectedException = new RpcException('Sort of Cultivation is required');
@@ -328,9 +346,11 @@ describe('PlotsOfLandService', () => {
       district: 'District',
       geoData: undefined,
       region: 'Region',
+      province: 'Province',
       localPlotOfLandId: 'Local',
       nationalPlotOfLandId: 'National',
-      cultivatedWith: 'coffee',
+      cultivationSort: 'coffee',
+      cultivationQuality: 'Ecol',
     };
     const expectedException = new RpcException('GeoData is required');
 
@@ -347,9 +367,11 @@ describe('PlotsOfLandService', () => {
       district: 'District',
       geoData: geoData,
       region: 'Region',
+      province: 'Province',
       localPlotOfLandId: 'Local',
       nationalPlotOfLandId: 'National',
-      cultivatedWith: 'coffee',
+      cultivationSort: 'coffee',
+      cultivationQuality: 'Ecol',
     };
     const expectedException = new RpcException(`Farmer with id 'unknown' not found`);
 

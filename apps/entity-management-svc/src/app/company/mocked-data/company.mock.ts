@@ -13,6 +13,7 @@ const COMPANY_PRISMA_MOCK: CompanyWithRelations = {
     state: 'IL',
     postalCode: '62704',
     country: 'USA',
+    additionalInformation: 'good to know',
   },
   users: [
     {
@@ -49,12 +50,14 @@ const COMPANY_PRISMA_MOCK: CompanyWithRelations = {
         state: 'IN',
         postalCode: '46176',
         country: 'USA',
+        additionalInformation: 'good to know',
       },
       plotsOfLand: [
         {
           id: 'ctest401',
           country: 'USA',
           region: 'Midwest',
+          province: 'Province1',
           district: 'District 9',
           nationalPlotOfLandId: 'US-987654321',
           localPlotOfLandId: 'IN-123456789',
@@ -63,7 +66,12 @@ const COMPANY_PRISMA_MOCK: CompanyWithRelations = {
           areaInHA: 100,
           cultivationId: 'ctest301',
           farmerId: 'ctest102',
-          cultivatedWith: { id: 'ctest301', type: 'Corn', sort: 'Dent Corn' },
+          cultivatedWith: {
+            id: 'ctest301',
+            commodity: 'Corn',
+            sort: 'Dent Corn',
+            quality: 'Ecol',
+          },
           proofs: [
             {
               documentId: 'DOC123456',
@@ -89,6 +97,7 @@ const COMPANY_DTO_MOCK: CompanyDto = {
     city: 'Springfield',
     state: 'IL',
     country: 'USA',
+    additionalInformation: 'good to know',
   },
   employees: [
     {
@@ -118,6 +127,7 @@ const COMPANY_DTO_MOCK: CompanyDto = {
         city: 'Shelbyville',
         state: 'IN',
         country: 'USA',
+        additionalInformation: 'good to know',
       },
       plotsOfLand: [
         {
@@ -132,8 +142,9 @@ const COMPANY_DTO_MOCK: CompanyDto = {
           areaInHA: 100,
           cultivatedWith: {
             id: 'ctest301',
-            type: 'Corn',
+            commodity: 'Corn',
             sort: 'Dent Corn',
+            quality: 'Ecol',
           },
           proofs: [
             {

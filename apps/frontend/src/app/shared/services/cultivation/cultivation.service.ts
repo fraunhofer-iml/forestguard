@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
 export class CultivationService {
   constructor(private httpClient: HttpClient) {}
 
-  readCultivationsByType(type: string): Observable<CultivationDto[]> {
-    return this.httpClient.get<CultivationDto[]>(`${environment.CULTIVATIONS.URL}?type=${type}`);
+  readCultivationsByCommodity(type: string): Observable<CultivationDto[]> {
+    return this.httpClient.get<CultivationDto[]>(`${environment.CULTIVATIONS.URL}?commodity=${type}`);
   }
 }

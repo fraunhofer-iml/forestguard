@@ -5,7 +5,8 @@
     "city": "Springfield",
     "state": "IL",
     "postalCode": "62704",
-    "country": "USA"
+    "country": "USA",
+    "additionalInformation": "good to know"
   },
   {
     "id": "ctest202",
@@ -13,7 +14,8 @@
     "city": "Shelbyville",
     "state": "IN",
     "postalCode": "46176",
-    "country": "USA"
+    "country": "USA",
+    "additionalInformation": "good to know"
   },
   {
     "id": "cooperative_address",
@@ -21,7 +23,8 @@
     "city": "Memphis",
     "state": "TN",
     "postalCode": "571450",
-    "country": "USA"
+    "country": "USA",
+    "additionalInformation": "good to know"
   },
   {
     "id": "exporter_address",
@@ -29,7 +32,8 @@
     "city": "Omaha",
     "state": "NE",
     "postalCode": "8119",
-    "country": "USA"
+    "country": "USA",
+    "additionalInformation": "good to know"
   },
   {
     "id": "importer_address",
@@ -37,7 +41,8 @@
     "city": "Waterbury",
     "state": "CT",
     "postalCode": "99776",
-    "country": "USA"
+    "country": "USA",
+    "additionalInformation": "good to know"
   },
   {
     "id": "roaster_address",
@@ -45,7 +50,8 @@
     "city": "Columbus",
     "state": "OH",
     "postalCode": "80291",
-    "country": "USA"
+    "country": "USA",
+    "additionalInformation": "good to know"
   },
   {
     "id": "trader_address",
@@ -53,6 +59,7 @@
     "city": "Carson City",
     "state": "NV",
     "postalCode": "48376",
-    "country": "USA"
+    "country": "USA",
+    "additionalInformation": "good to know"
   }
 ]

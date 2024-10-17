@@ -15,6 +15,7 @@ describe('/pols', () => {
   const givenPlotOfLandCreateDto: PlotOfLandCreateDto = {
     country: 'Peru',
     region: 'Ucayali',
+    province: 'A',
     district: 'Coronel Portillo',
     nationalPlotOfLandId: 'n1',
     localPlotOfLandId: 'l1',
@@ -26,7 +27,8 @@ describe('/pols', () => {
       zone: '',
     },
     areaInHA: 1,
-    cultivatedWith: 'arabica',
+    cultivationSort: 'arabica',
+    cultivationQuality: 'Ecol',
   };
 
   const companyCreate = {
@@ -37,6 +39,7 @@ describe('/pols', () => {
       city: 'Springfield',
       state: 'IL',
       country: 'USA',
+      additionalInformation: 'good t know',
     },
   };
 
@@ -63,6 +66,7 @@ describe('/pols', () => {
       city: 'Springfield',
       state: 'IL',
       country: 'USA',
+      additionalInformation: 'good t know',
     },
   };
 
@@ -84,6 +88,7 @@ describe('/pols', () => {
         id: actualResponse.data.id,
         country: givenPlotOfLandCreateDto.country,
         region: givenPlotOfLandCreateDto.region,
+        province: givenPlotOfLandCreateDto.province,
         district: givenPlotOfLandCreateDto.district,
         nationalPlotOfLandId: givenPlotOfLandCreateDto.nationalPlotOfLandId,
         localPlotOfLandId: givenPlotOfLandCreateDto.localPlotOfLandId,
@@ -100,26 +105,26 @@ describe('/pols', () => {
 
     it('should throw an exception for missing cultivatedWith', async () => {
       const errorPlotOfLandCreateDto = structuredClone(givenPlotOfLandCreateDto);
-      errorPlotOfLandCreateDto.cultivatedWith = null;
-  
+      errorPlotOfLandCreateDto.cultivationSort = null;
+
       await axios.post(
         `/companies`,
         companyCreate,
         httpHeader
       );
-  
+
       await axios.post(
         `/users`,
         userCreate,
         httpHeader
       );
-  
+
       const farmer = await axios.post(
         `/users/farmers`,
         farmerCreate,
         httpHeader
       );
-      
+
       await expect(
         axios.post(`/pols?farmerId=${farmer.data.id}`, errorPlotOfLandCreateDto, httpHeader)
       ).rejects.toMatchObject({
@@ -220,7 +225,7 @@ describe('/pols', () => {
 
   describe('PATCH /plot-of-lands/id', () => {
     it('should update a plotOfLand', async () => {
-      const cultivationCreate: CultivationCreateDto = new CultivationCreateDto('mocca');
+      const cultivationCreate: CultivationCreateDto = new CultivationCreateDto('mocca', 'Ecol');
       await axios.post(`/companies`, companyCreate, httpHeader);
       await axios.post(`/users`, userCreate, httpHeader);
       const farmer = await axios.post(`/users/farmers`, farmerCreate, httpHeader);
@@ -234,6 +239,7 @@ describe('/pols', () => {
       const expectedResponse = {
         id: actualResponse.data.id,
         country: givenPlotOfLandCreateDto.country,
+        province: givenPlotOfLandCreateDto.province,
         region: givenPlotOfLandCreateDto.region,
         district: givenPlotOfLandCreateDto.district,
         nationalPlotOfLandId: givenPlotOfLandCreateDto.nationalPlotOfLandId,

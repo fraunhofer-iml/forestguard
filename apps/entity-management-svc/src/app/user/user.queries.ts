@@ -17,7 +17,7 @@ export function farmerCreate({ dto, entityId, companyId }: {
       role: RoleType.FARMER,
       address: {
         connectOrCreate: {
-          create: address(dto),
+          create: { ...address(dto), additionalInformation: dto.address.additionalInformation },
           where: {
             street_postalCode_city_state_country: address(dto),
           },

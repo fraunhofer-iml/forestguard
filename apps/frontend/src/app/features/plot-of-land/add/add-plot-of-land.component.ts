@@ -39,7 +39,7 @@ export class AddPlotOfLandComponent {
     processOwner: new FormControl(null, Validators.required),
     region: new FormControl(null, Validators.required),
     plotOfLand: new FormControl(null, Validators.required),
-    cultivatedWith: new FormControl(null, Validators.required),
+    cultivationSort: new FormControl(null, Validators.required),
     localPlotOfLandId: new FormControl(null, Validators.required),
     nationalPlotOfLandId: new FormControl(null, Validators.required),
     geoDataInput: new FormControl(null),
@@ -78,7 +78,7 @@ export class AddPlotOfLandComponent {
   ) {
     this.farmers$ = this.companyService.getFarmersByCompanyId(this.authenticationService.getCurrentCompanyId() ?? '');
     this.users$ = this.userService.getUsers();
-    this.coffeeOptions$ = this.cultivationService.readCultivationsByType('coffee');
+    this.coffeeOptions$ = this.cultivationService.readCultivationsByCommodity('coffee');
     this.enableFieldsByValueChange();
   }
 

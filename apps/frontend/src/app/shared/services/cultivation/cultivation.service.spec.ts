@@ -25,35 +25,35 @@ describe('CultivationService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should call readCultivationsByType and return an array of CultivationDto', () => {
+  it('should call readCultivationsBycCommodity and return an array of CultivationDto', () => {
     const dummyCultivations: CultivationDto[] = [
-      { id: '1', type: 'coffe', sort: 'arabica' },
-      { id: '2', type: 'coffe', sort: 'robusta' },
+      { id: '1', commodity: 'coffee', sort: 'arabica', quality: 'ecol' },
+      { id: '2', commodity: 'coffee', sort: 'robusta', quality: 'ecol' },
     ];
-    const type = 'coffee';
+    const commodity = 'coffee';
 
-    service.readCultivationsByType(type).subscribe((cultivations) => {
+    service.readCultivationsByCommodity(commodity).subscribe((cultivations) => {
       expect(cultivations.length).toBe(2);
       expect(cultivations).toEqual(dummyCultivations);
     });
 
-    const req = httpMock.expectOne(`${environment.CULTIVATIONS.URL}?type=${type}`);
+    const req = httpMock.expectOne(`${environment.CULTIVATIONS.URL}?commodity=${commodity}`);
     expect(req.request.method).toBe('GET');
     req.flush(dummyCultivations);
   });
 
-  it('should handle error when readCultivationsByType fails', () => {
-    const type = 'coffee';
+  it('should handle error when readCultivationsByCommodity fails', () => {
+    const commodity = 'coffee';
     const errorMessage = 'Error loading cultivations';
 
-    service.readCultivationsByType(type).subscribe(
+    service.readCultivationsByCommodity(commodity).subscribe(
       () => fail('should have failed with the network error'),
       (error: string) => {
         expect(error).toContain(errorMessage);
       }
     );
 
-    const req = httpMock.expectOne(`${environment.CULTIVATIONS.URL}?type=${type}`);
+    const req = httpMock.expectOne(`${environment.CULTIVATIONS.URL}?commodity=${commodity}`);
     req.flush(errorMessage, { status: 500, statusText: 'Server Error' });
   });
 });

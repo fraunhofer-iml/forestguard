@@ -4,6 +4,7 @@ const ADDRESS_MOCK = {
   city: 'Metropolis',
   state: 'NY',
   country: 'USA',
+  additionalInformation: 'good to know',
 };
 
 export { ADDRESS_MOCK };

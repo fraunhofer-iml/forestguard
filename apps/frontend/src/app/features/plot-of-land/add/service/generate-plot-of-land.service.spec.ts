@@ -42,7 +42,7 @@ describe('GeneratePlotOfLandService', (): void => {
       geoDataType: new FormControl(CoordinateType.MultiPoint),
       geoDataCoordinate: new FormControl([-105.02986587151608, 40.622831213346714]),
       geoDataZone: new FormControl(null),
-      cultivatedWith: new FormControl('arabica'),
+      cultivationSort: new FormControl('arabica'),
       nationalPlotOfLandId: new FormControl('456'),
       localPlotOfLandId: new FormControl('123'),
     });
@@ -54,10 +54,12 @@ describe('GeneratePlotOfLandService', (): void => {
         '',
         'Germany',
         '',
+        '',
         'Coffee Field',
         new GeoDataDto(Standard.UTM, CoordinateType.MultiPoint, [-105.02986587151608, 40.622831213346714], ''),
         0,
         'arabica',
+        '',
         '456',
         '123'
       )

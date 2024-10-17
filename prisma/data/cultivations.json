@@ -1,17 +1,20 @@
 [
   {
     "id": "ctest301",
-    "type": "Corn",
-    "sort": "Dent Corn"
+    "commodity": "Corn",
+    "sort": "Dent Corn",
+    "quality": "Ecol"
   },
   {
     "id": "ctest302",
-    "type": "Coffee",
-    "sort": "Arabica"
+    "commodity": "Coffee",
+    "sort": "Arabica",
+    "quality": "C2"
   },
   {
     "id": "ctest303",
-    "type": "Coffee",
-    "sort": "Canephora (Robusta)"
+    "commodity": "Coffee",
+    "sort": "Canephora (Robusta)",
+    "quality": "C1"
   }
 ]

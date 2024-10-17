@@ -7,4 +7,5 @@ export const address1Mock: AddressDto = {
   city: 'Example City',
   state: 'Example State',
   country: 'Example Country',
+  additionalInformation: 'Good to know',
 };

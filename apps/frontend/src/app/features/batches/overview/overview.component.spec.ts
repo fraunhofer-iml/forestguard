@@ -24,6 +24,7 @@ const MOCK_BATCH: BatchDto = {
       postalCode: 'test',
       state: 'test',
       street: 'test',
+      additionalInformation: 'test',
     },
     email: 'test',
     employeeId: 'test',
@@ -49,6 +50,7 @@ const MOCK_BATCH: BatchDto = {
         postalCode: 'test',
         state: 'test',
         street: 'test',
+        additionalInformation: 'test',
       },
       email: 'test',
       employeeId: 'test',
@@ -72,6 +74,7 @@ const MOCK_BATCH: BatchDto = {
         postalCode: 'test',
         state: 'test',
         street: 'test',
+        additionalInformation: 'test',
       },
       email: 'test',
       employeeId: 'test',
@@ -185,6 +188,7 @@ describe('OverviewComponent', () => {
         postalCode: 'test',
         state: 'test',
         street: 'test',
+        additionalInformation: 'test',
       },
     };
     expect(component.getUserOrCompanyName(user)).toEqual('John Doe');

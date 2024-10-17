@@ -16,10 +16,12 @@ export class GeneratePlotOfLandService {
       '',
       formGroup.value.region ?? '',
       '',
+      '',
       formGroup.value.plotOfLand ?? '',
       this.createGeoData(formGroup),
       0,
-      formGroup.value.cultivatedWith ?? '',
+      formGroup.value.cultivationSort ?? '',
+      formGroup.value.cultivationQuality ?? '',
       formGroup.value.nationalPlotOfLandId ?? '',
       formGroup.value.localPlotOfLandId ?? ''
     );

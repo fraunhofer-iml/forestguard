@@ -29,6 +29,7 @@ describe('CreateCompanyService', (): void => {
       city: 'Example City',
       state: 'Example State',
       country: 'Example Country',
+      additionalInformation: 'Example AdditionalInformation',
     });
 
     const result = service.generateAddress(formGroup);
@@ -38,6 +39,7 @@ describe('CreateCompanyService', (): void => {
       city: 'Example City',
       state: 'Example State',
       country: 'Example Country',
+      additionalInformation: 'Example AdditionalInformation',
     };
     expect(result).toEqual(expected);
   });
@@ -52,7 +54,7 @@ describe('CreateCompanyService', (): void => {
       country: [''],
     });
     const result = service.generateCompany(formGroup);
-    const expected = new CompanyCreateDto('Example Street', new AddressCreateDto('', '', '', '', ''));
+    const expected = new CompanyCreateDto('Example Street', new AddressCreateDto('', '', '', '', '', ''));
     expect(result).toEqual(expected);
   });
 });

@@ -3,6 +3,7 @@
     "id": "ctest401",
     "country": "USA",
     "region": "Midwest",
+    "province": "Upper Fields",
     "district": "District 9",
     "nationalPlotOfLandId": "US-987654321",
     "localPlotOfLandId": "IN-123456789",

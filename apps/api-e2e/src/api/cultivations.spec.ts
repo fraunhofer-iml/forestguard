@@ -5,13 +5,14 @@ import { beforeEachAndAfterAll, createHttpHeader, HttpHeader, prisma } from './t
 
 dotenv.config();
 
-const cultivationType = process.env.CULTIVATION_TYPE;
+const cultivationCommodity = process.env.CULTIVATION_COMMODITY;
 
 describe('/cultivations', () => {
   let httpHeader: HttpHeader;
 
   const givenCultivationCreateDto: CultivationCreateDto = {
     sort: 'Arabica',
+    quality: 'Ecol',
   };
 
   beforeAll(async () => {
@@ -30,8 +31,9 @@ describe('/cultivations', () => {
 
       const expectedResponse: CultivationDto = {
         id: actualResponse.data.id,
-        type: cultivationType,
+        commodity: cultivationCommodity,
         sort: givenCultivationCreateDto.sort,
+        quality: givenCultivationCreateDto.quality,
       };
 
       expect(actualResponse.status).toBe(201);
@@ -45,6 +47,7 @@ describe('/cultivations', () => {
 
       const givenCultivationCreateDto2: CultivationCreateDto = {
         sort: 'Robusta',
+        quality: 'Ecol',
       };
       await axios.post(`/cultivations`, givenCultivationCreateDto2, httpHeader);
 
@@ -53,13 +56,15 @@ describe('/cultivations', () => {
       const expectedResponseFromGet: CultivationDto[] = [
         {
           id: actualResponseFromGet.data[0].id,
-          type: cultivationType,
+          commodity: cultivationCommodity,
           sort: givenCultivationCreateDto.sort,
+          quality: givenCultivationCreateDto.quality,
         },
         {
           id: actualResponseFromGet.data[1].id,
-          type: cultivationType,
+          commodity: cultivationCommodity,
           sort: givenCultivationCreateDto2.sort,
+          quality: givenCultivationCreateDto.quality,
         },
       ];
 
@@ -75,10 +80,10 @@ describe('/cultivations', () => {
     });
   });
 
-  describe('GET/cultivations/types', () => {
-    it('should get the declared types', async () => {
-      const expectedResponse = [cultivationType];
-      const actualResponseFromGet = await axios.get('/cultivations/types', httpHeader);
+  describe('GET/cultivations/commodities', () => {
+    it('should get the declared commodities', async () => {
+      const expectedResponse = [cultivationCommodity];
+      const actualResponseFromGet = await axios.get('/cultivations/commodities', httpHeader);
       expect(actualResponseFromGet.status).toBe(200);
       expect(actualResponseFromGet.data).toEqual(expectedResponse);
     });
