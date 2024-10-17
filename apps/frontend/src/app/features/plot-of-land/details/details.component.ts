@@ -1,4 +1,4 @@
-import { PlotOfLandDto, ProofDto, ProofType } from '@forest-guard/api-interfaces';
+import { FGFile, PlotOfLandDto, ProofDto, ProofType } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { catchError, EMPTY, map, Observable, switchMap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -33,7 +33,10 @@ export class PlotOfLandDetailsComponent {
     },
   ];
 
-  constructor(private route: ActivatedRoute, private plotOfLandService: PlotOfLandService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private plotOfLandService: PlotOfLandService
+  ) {}
 
   getProof(type: ProofType, proofs?: ProofDto[]): ProofDto | undefined {
     return proofs?.find((proof) => proof.type === type);
@@ -43,7 +46,7 @@ export class PlotOfLandDetailsComponent {
     return this.uploadSelectOption?.filter((option) => option.value === type && option.file).length > 0;
   }
 
-  uploadProof({ file, documentType }: { file: File; documentType: string }, id: string | undefined): void {
+  uploadProof({ file, documentType }: FGFile, id: string | undefined): void {
     const option = this.uploadSelectOption.find((option) => option.value === documentType);
 
     if (!option) return;

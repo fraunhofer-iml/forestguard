@@ -12,4 +12,5 @@ export enum Uris {
   companies = '/companies',
   addCompany = '/companies/add',
   addHarvest = '/batches/harvest',
+  document = '/docs',
 }

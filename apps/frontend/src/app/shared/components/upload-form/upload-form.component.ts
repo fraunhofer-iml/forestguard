@@ -8,20 +8,27 @@ import { UploadFormSelectType } from './upload-form-select.type';
 })
 export class UploadFormComponent {
   @Input() title?: string;
+  @Input() buttonText = 'Add file';
+  @Input() buttonTooltip = 'Add file to upload at save';
   @Input() selectOptions?: UploadFormSelectType[];
   @Input() showUploadedFiles = true;
+  @Input() showDescriptionField = false;
+  @Input() uploadedFiles: { file: File; documentType?: string }[] = [];
+  @Input() uploadedFilesPosition: 'bottom' | 'right' = 'bottom';
 
-  @Output() uploadDocument = new EventEmitter<{ file: File; documentType: string }>();
+  @Output() uploadDocument = new EventEmitter<{ file: File; documentType?: string }>();
+  @Output() removeDocument = new EventEmitter<{ file: File; documentType?: string }>();
 
   file: File | null = null;
 
   formGroup: FormGroup = new FormGroup({
-    documentType: new FormControl(null, Validators.required),
+    documentType: new FormControl(null),
     file: new FormControl(null, Validators.required),
+    description: new FormControl(null),
   });
 
   lengthOfUploadedFiles(): number {
-    return this.selectOptions?.filter((option) => option.file).length ?? 0;
+    return this.selectOptions?.filter((option) => option.file).length ?? this.uploadedFiles.length;
   }
 
   onFileSelected(event: Event): void {
@@ -36,7 +43,10 @@ export class UploadFormComponent {
 
   submitDocument(): void {
     if (this.formGroup.valid) {
-      this.uploadDocument.emit({ file: this.formGroup.value.file, documentType: this.formGroup.value.documentType });
+      this.uploadDocument.emit({
+        file: this.formGroup.value.file,
+        documentType: this.formGroup.value.documentType ?? this.formGroup.value.description,
+      });
       this.formGroup.reset();
     }
   }

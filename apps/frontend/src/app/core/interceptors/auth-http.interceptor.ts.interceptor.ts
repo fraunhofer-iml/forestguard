@@ -8,17 +8,10 @@ export const authHttpInterceptor: HttpInterceptorFn = (req, next) => {
 
   const reqHeaders = {
     setHeaders: {
-      'Content-Type': 'application/json; charset=utf-8',
       Accept: 'application/json',
       Authorization: `Bearer ${authenticationService.getCurrentJwt()}`,
     },
   };
-
-  if (req.url.includes(Uris.proofs) && req.method === 'POST') {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    delete reqHeaders.setHeaders['Content-Type'];
-  }
 
   req = req.clone(reqHeaders);
 

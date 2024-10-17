@@ -1,6 +1,9 @@
+import { FGFile, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
+import { merge } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../core/services/authentication.service';
 import { Messages } from '../../../shared/messages';
 import { UserService } from '../../../shared/services/user/user.service';
@@ -27,12 +30,15 @@ export class AddUserComponent {
     state: new FormControl(null, Validators.required),
   });
 
+  uploadedFiles: { file: File; documentType?: string }[] = [];
+
   protected readonly Roles = Roles;
 
   constructor(
     public authenticationService: AuthenticationService,
     private userService: UserService,
-    private generateUserService: GenerateUserService
+    private generateUserService: GenerateUserService,
+    private router: Router
   ) {}
 
   setSelectedRole(role: string): void {
@@ -59,14 +65,40 @@ export class AddUserComponent {
     this.userService.createUser(this.generateUserService.generateNewUser(this.userFormGroup)).subscribe(() => {
       this.clearInputFields();
       toast.success(Messages.successUser);
+      this.router.navigate(['/companies', this.authenticationService.getCurrentCompanyId()]);
     });
   }
 
   submitFarmer(): void {
-    this.userService.createFarmer(this.generateUserService.generateNewFarmer(this.userFormGroup)).subscribe(() => {
-      this.clearInputFields();
-      toast.success(Messages.successFarmer);
-    });
+    this.userService
+      .createFarmer(this.generateUserService.generateNewFarmer(this.userFormGroup))
+      .subscribe((createdFarmer: UserOrFarmerDto) => {
+        if (this.uploadedFiles.length === 0) {
+          this.clearInputFields();
+          toast.success(Messages.successFarmer);
+          this.router.navigate(['/users', createdFarmer.id]);
+        }
+
+        const fileUploads = this.uploadedFiles.map((uploadedFile) => {
+          return this.userService.addDocumentToUser(createdFarmer.id, uploadedFile.file, uploadedFile.documentType ?? '');
+        });
+
+        merge(...fileUploads).subscribe(() => {
+          this.clearInputFields();
+          toast.success(Messages.successFarmer);
+          this.router.navigate(['/users', createdFarmer.id]);
+        });
+      });
+  }
+
+  submitFile({ file, documentType }: FGFile): void {
+    this.uploadedFiles.push({ file, documentType });
+  }
+
+  removeFile({ file, documentType }: FGFile): void {
+    this.uploadedFiles = this.uploadedFiles.filter(
+      (uploadedFile) => uploadedFile.file !== file && uploadedFile.documentType !== documentType
+    );
   }
 
   clearInputFields(): void {

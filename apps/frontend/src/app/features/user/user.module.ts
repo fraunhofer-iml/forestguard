@@ -7,6 +7,7 @@ import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { SharedModule } from '../../shared/shared.module';
 import { AddUserComponent } from './add/add-user.component';
 import { GenerateUserService } from './add/service/generate-user.service';
@@ -23,6 +24,7 @@ import { UsersRoutingModule } from './user.routes';
     MatInput,
     MatLabel,
     ReactiveFormsModule,
+    MatTooltipModule,
     MatButtonToggle,
     MatButtonToggleGroup,
     NgIf,

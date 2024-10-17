@@ -1,6 +1,7 @@
 import {
   CoordinateType,
   CultivationDto,
+  FGFile,
   PlotOfLandDto,
   ProofDto,
   ProofType,
@@ -125,7 +126,7 @@ export class AddPlotOfLandComponent {
     this.plotOfLandFormGroup.reset();
   }
 
-  submitFile({ file, documentType }: { file: File; documentType: string }): void {
+  submitFile({ file, documentType }: FGFile): void {
     const option = this.uploadSelectOption.find((option) => option.value === documentType);
 
     if (!option) return;

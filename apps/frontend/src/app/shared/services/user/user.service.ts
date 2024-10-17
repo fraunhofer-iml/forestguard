@@ -24,4 +24,15 @@ export class UserService {
   public createFarmer(farmer: FarmerCreateDto): Observable<FarmerDto> {
     return this.httpClient.post<FarmerDto>(`${environment.USERS.URL}${Uris.farmers}`, farmer);
   }
+
+  public addDocumentToUser(userId: string, file: File, description: string) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('description', description);
+    return this.httpClient.post<Document>(`${environment.USERS.URL}/${userId}${Uris.document}`, formData);
+  }
+
+  public deleteDocumentById(userId: string, documentId: string) {
+    return this.httpClient.delete(`${environment.USERS.URL}/${userId}${Uris.document}/${encodeURIComponent(documentId)}`);
+  }
 }

@@ -27,7 +27,7 @@
   </div>
 </div>
 
-<form [formGroup]="userFormGroup" class="grid grid-cols-1 md:grid-cols-2">
+<form [formGroup]="userFormGroup" class="grid grid-cols-1 md:grid-cols-2 gap-4">
   <div class="card mt-4">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label class="w-full">Employee Identification</mat-label>
@@ -57,7 +57,7 @@
     </mat-form-field>
   </div>
 
-  <div class="card md:ml-4 mt-4" *ngIf="selectedRole === Roles.FARMER">
+  <div class="card mt-4" *ngIf="selectedRole === Roles.FARMER">
     <mat-form-field class="w-full" appearance="outline">
       <mat-label>Street</mat-label>
       <input matInput formControlName="street" placeholder="Street" />
@@ -85,6 +85,19 @@
       <input matInput formControlName="state" placeholder="State" />
     </mat-form-field>
   </div>
+
+  @if (selectedRole === Roles.FARMER) {
+    <div class="col-span-2">
+      <app-upload-form
+        [title]="'Upload Documents'"
+        [showDescriptionField]="true"
+        [uploadedFiles]="uploadedFiles"
+        [uploadedFilesPosition]="'right'"
+        (uploadDocument)="submitFile($event)"
+        (removeDocument)="removeFile($event)"
+      ></app-upload-form>
+    </div>
+  }
 </form>
 
 <div class="card mt-4">

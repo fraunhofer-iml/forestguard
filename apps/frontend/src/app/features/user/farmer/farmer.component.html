@@ -2,8 +2,10 @@
 <div class="card">
   <h1 class="text-lg font-semibold">Details</h1>
 </div>
-<div class="grid md:grid-cols-2 sm:grid-cols-1 mt-4" *ngIf="farmer$ | async as farmer">
-  <div class="card md:mr-4 sm:mr-0">
+<div class="grid md:grid-cols-2 sm:grid-cols-1 mt-4 gap-4" *ngIf="farmer$ | async as farmer">
+  <div class="card">
+    <h1 class="text-lg font-semibold col-span-2">General Information</h1>
+
     <div class="grid grid-cols-2 mb-4">
       <p class="font-medium">{{ farmer.firstName }} {{ farmer.lastName }}</p>
       <p class="text-neutral-500 text-xs text-end">ID: {{ farmer.personalId }}</p>
@@ -40,7 +42,8 @@
       </div>
     </div>
   </div>
-  <div class="card grid md:grid-cols-2 md:mt-0 sm:mt-4">
+  <div class="card grid grid-cols-2">
+    <h1 class="text-lg font-semibold col-span-2">Address Information</h1>
     <span class="border-b-2 py-2 font-medium">Street</span>
     <p class="border-b-2 py-2 text-neutral-500">{{ farmer.address?.street }}</p>
     <span class="border-b-2 font-medium py-2">Postal Code</span>
@@ -51,6 +54,48 @@
     <p class="border-b-2 py-2 text-neutral-500">{{ farmer.address?.state }}</p>
     <span class="font-medium py-2 md:border-none sm:border-b-2">Country</span>
     <p class="text-neutral-500 py-2">{{ farmer.address?.country }}</p>
+  </div>
+  <div class="card">
+    <h1 class="text-lg font-semibold">Documents</h1>
+    @if (!farmer.documents || farmer.documents.length === 0) {
+      <p>No documents uploaded yet.</p>
+    }
+
+    @for (document of farmer.documents; track $index) {
+      <div class="flex w-full justify-between items-center border-b-2">
+        <div class="font-medium">
+          {{ document.description.length > 0 ? document.description : 'No custom description provided (ID: ' + document.id + ')' }}
+        </div>
+        <div class="text-neutral-500 flex items-center gap-2">
+          <a
+            [href]="MINIO_URL + document.documentRef"
+            target="_blank"
+            class="p-1 material-symbols-outlined hover:bg-gray-200 rounded-full cursor-pointer"
+            matTooltip="Download document"
+          >
+            <span class="material-symbols-outlined"> download </span>
+          </a>
+          <span
+            class="p-1 material-symbols-outlined hover:bg-red-200 rounded-full cursor-pointer"
+            (click)="deleteDocument(document)"
+            matTooltip="Delete document"
+          >
+            delete
+          </span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div>
+    <app-upload-form
+      [title]="'Upload Documents'"
+      [showDescriptionField]="true"
+      [showUploadedFiles]="false"
+      [buttonText]="'Upload '"
+      [buttonTooltip]="'Uploads the document directly to the farmer'"
+      (uploadDocument)="submitFile({ fgFile: $event, farmerId: farmer.id })"
+    ></app-upload-form>
   </div>
 </div>
 
