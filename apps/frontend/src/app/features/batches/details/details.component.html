@@ -3,7 +3,13 @@
   <span class="material-symbols-outlined text-lg"> chevron_right </span>
   <h1 class="font-medium">{{ id$ | async }}</h1>
   <div class="ml-auto flex" *ngIf="batch$ | async as batch">
-    <p class="rounded-full cursor-pointer bg-secondary-800 px-4 py-2 mb-4 mr-4" (click)="exportBatchInformationAsJson(batch.id)">Report</p>
+    <p
+      class="rounded-full cursor-pointer bg-secondary-800 px-4 py-2 mb-4 mr-4"
+      (click)="exportBatchInformationAsJson(batch.id)"
+      matTooltip="Download a detailed report on the selected coffee batch and its history (predecessor and successor)."
+    >
+      Download Report
+    </p>
     <p [ngClass]="batch.active ? 'bg-green-600' : 'bg-gray-500'" class="text-white rounded-full px-4 py-2 mb-4">
       Status: {{ isBatchActive(batch.active) }}
     </p>

@@ -13,6 +13,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { DiagramModule } from '@syncfusion/ej2-angular-diagrams';
 import { BatchService } from '../../shared/services/batch/batch.service';
 import { CompanyService } from '../../shared/services/company/company.service';
@@ -53,6 +54,7 @@ import { BatchUpdateComponent } from './update/batch-update.component';
     MatDatepickerModule,
     MatSelectModule,
     MatCheckboxModule,
+    MatTooltipModule,
     DiagramModule,
   ],
   providers: [
