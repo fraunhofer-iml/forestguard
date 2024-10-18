@@ -49,11 +49,15 @@
     <h1 class="text-lg font-semibold">Input Batches</h1>
     <p>Input Weight: {{ calculateTotalWeightOfBatches(batches) }}</p>
     <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-      <div class="border border-gray-300 p-4 rounded-xl" *ngFor="let batch of batches">
+      <a
+        class="border border-gray-300 hover:bg-neutral-800/50 p-4 rounded-xl cursor-pointer"
+        [routerLink]="['/batches', batch.id]"
+        *ngFor="let batch of batches"
+      >
         <h2 class="font-medium text-sm">{{ batch.id }}</h2>
         <p class="text-sm text-neutral-500 mt-2">Weight [kg]: {{ batch.weight }}</p>
         <p class="text-sm text-neutral-500">Last process: {{ batch.processStep.process.name }}</p>
-      </div>
+      </a>
     </div>
   </div>
   <div class="card">
