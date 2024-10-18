@@ -1,6 +1,6 @@
-import { BatchCreateDto, BatchDto, CompanyDto, ProcessStepCreateDto, UserDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
+import { BatchCreateDto, BatchDto, CompanyDto, FGFile, ProcessStepCreateDto, UserDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
-import { Observable, zip } from 'rxjs';
+import { merge, Observable, zip } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,6 +8,7 @@ import { AuthenticationService } from '../../../core/services/authentication.ser
 import { Messages } from '../../../shared/messages';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
+import { ProcessStepService } from '../../../shared/services/process-step/process.step.service';
 import { Uris } from '../../../shared/uris';
 
 @Component({
@@ -16,6 +17,7 @@ import { Uris } from '../../../shared/uris';
 })
 export class BatchUpdateComponent implements OnInit {
   batchIds: string[] = this.route.snapshot.queryParams['batchIds']?.split(',') || [];
+  uploadedFiles: FGFile[] = [];
   formGroup: FormGroup = new FormGroup({
     location: new FormControl(null, Validators.required),
     date: new FormControl(new Date(), Validators.required),
@@ -49,7 +51,8 @@ export class BatchUpdateComponent implements OnInit {
     private router: Router,
     private batchService: BatchService,
     private companyService: CompanyService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private processStepService: ProcessStepService
   ) {}
 
   get outBatches(): FormArray {
@@ -80,6 +83,16 @@ export class BatchUpdateComponent implements OnInit {
     });
   }
 
+  submitFile({ file, documentType }: FGFile): void {
+    this.uploadedFiles.push({ file, documentType });
+  }
+
+  removeFile({ file, documentType }: FGFile): void {
+    this.uploadedFiles = this.uploadedFiles.filter(
+      (uploadedFile: FGFile) => uploadedFile.file !== file && uploadedFile.documentType !== documentType
+    );
+  }
+
   submit(): void {
     this.formGroup.markAllAsTouched();
     this.outputBatchForm.markAllAsTouched();
@@ -104,7 +117,13 @@ export class BatchUpdateComponent implements OnInit {
       ),
     }));
 
-    this.batchService.createBatches(createBatchesDto).subscribe(() => {
+    this.batchService.createBatches(createBatchesDto).subscribe((processStep) => {
+      if (this.uploadedFiles.length > 0) {
+        const fileUploads: Observable<Document>[] = this.uploadedFiles.map((uploadedFile: FGFile) => {
+          return this.processStepService.addDocToProcessStep(processStep.processStepId, uploadedFile.file, uploadedFile.documentType ?? '');
+        });
+        merge(...fileUploads).subscribe();
+      }
       toast.success(Messages.successProcessStep);
       this.router.navigateByUrl(Uris.batches);
     });

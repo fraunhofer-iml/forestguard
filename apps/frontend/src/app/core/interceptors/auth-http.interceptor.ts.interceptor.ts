@@ -1,6 +1,5 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Uris } from '../../shared/uris';
 import { AuthenticationService } from '../services/authentication.service';
 
 export const authHttpInterceptor: HttpInterceptorFn = (req, next) => {

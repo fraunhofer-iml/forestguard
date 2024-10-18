@@ -26,6 +26,9 @@ export const environment = {
   USERS: {
     URL: `${BASE_URL}/users`,
   },
+  PROCESSSTEPS: {
+    URL: `${BASE_URL}/process-steps`,
+  },
   MINIO: {
     URL: 'http://localhost:9000/forest-guard/',
   },

@@ -44,6 +44,17 @@
   </form>
 </div>
 
+<div class="mt-4">
+  <app-upload-form
+    [title]="'Upload Documents'"
+    [showDescriptionField]="true"
+    [uploadedFiles]="uploadedFiles"
+    [uploadedFilesPosition]="'right'"
+    (uploadDocument)="submitFile($event)"
+    (removeDocument)="removeFile($event)"
+  ></app-upload-form>
+</div>
+
 <div class="grid grid-cols-1 md:grid-cols-2 mt-4 gap-4 text-neutral-300">
   <div class="card" *ngIf="batches$ | async as batches">
     <h1 class="text-lg font-semibold">Input Batches</h1>
@@ -60,6 +71,7 @@
       </a>
     </div>
   </div>
+
   <div class="card">
     <h1 class="text-lg font-semibold">Output Batches</h1>
     <p>Output Weight: {{ getOutputWeight() }}</p>

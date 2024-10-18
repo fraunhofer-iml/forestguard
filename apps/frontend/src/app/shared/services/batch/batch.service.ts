@@ -9,8 +9,8 @@ import { Uris } from '../../uris';
 export class BatchService {
   constructor(private httpClient: HttpClient) {}
 
-  public createBatches(batches: BatchCreateDto[]): Observable<ProcessDto> {
-    return this.httpClient.post<ProcessDto>(environment.BATCHES.URL, batches);
+  public createBatches(batches: BatchCreateDto[]): Observable<{ processStepId: string }> {
+    return this.httpClient.post<{ processStepId: string }>(environment.BATCHES.URL, batches);
   }
 
   public createHarvestBatches(harvests: BatchCreateDto[]): Observable<ProcessDto> {

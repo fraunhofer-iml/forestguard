@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../../../core/services/authentication.service';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
+import { ProcessStepService } from '../../../shared/services/process-step/process.step.service';
 import { UserService } from '../../../shared/services/user/user.service';
 import { BatchUpdateComponent } from './batch-update.component';
 
@@ -42,6 +43,7 @@ describe('BatchUpdateComponent', () => {
         UserService,
         CompanyService,
         BatchService,
+        ProcessStepService,
         HttpClient,
         HttpHandler,
       ],

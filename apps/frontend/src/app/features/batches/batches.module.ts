@@ -8,6 +8,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerInput, MatDatepickerModule, MatDatepickerToggle } from '@angular/material/datepicker';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
@@ -17,6 +18,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DiagramModule } from '@syncfusion/ej2-angular-diagrams';
 import { BatchService } from '../../shared/services/batch/batch.service';
 import { CompanyService } from '../../shared/services/company/company.service';
+import { ProcessStepService } from '../../shared/services/process-step/process.step.service';
 import { SharedModule } from '../../shared/shared.module';
 import { TypeSafeMatCellDefDirective } from '../../shared/utils/typesafe-matcell.definition';
 import { BatchesRoutingModule } from './batches.routes';
@@ -56,12 +58,14 @@ import { BatchUpdateComponent } from './update/batch-update.component';
     MatCheckboxModule,
     MatTooltipModule,
     DiagramModule,
+    MatIcon,
   ],
   providers: [
     CompanyService,
     BatchService,
     MatDatepickerModule,
     HarvestService,
+    ProcessStepService,
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: {

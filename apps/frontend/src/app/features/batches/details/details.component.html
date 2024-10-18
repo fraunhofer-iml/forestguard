@@ -112,6 +112,32 @@
       </div>
     </div>
   </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" *ngIf="batch.processStep.documents?.length">
+    <div class="card text-neutral-300">
+      <h1 class="text-lg font-semibold mb-2">Documents</h1>
+      <div *ngFor="let document of batch.processStep.documents">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center w-full justify-center border-b-2">
+          <div class="font-medium">
+            {{ document.description.length > 0 ? document.description : 'No custom description provided.' }}
+          </div>
+          <div class="space-x-4 flex flex-row select-none w-full justify-end">
+            <div class="p-1 h-10 w-10 rounded-full hover:bg-gray-200 flex items-center justify-center space-x-4 flex-row select-none">
+              <a
+                 [href]="MINIO_URL + document.documentRef"
+                 target="_blank"
+                 class="p-1 material-symbols-outlined hover:bg-gray-200 rounded-full cursor-pointer"
+                 matTooltip="Download document"
+              >
+                <span class="material-symbols-outlined"> download </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="card mt-4">
     <h1 class="text-lg font-semibold">Dependency Graph</h1>
     <lib-ui-graph
