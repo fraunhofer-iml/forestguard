@@ -1,7 +1,9 @@
 import {
   BatchCombinedCreateDto,
-  BatchCreateDto, CompanyCreateDto,
-  CoordinateType, FarmerCreateDto,
+  BatchCreateDto,
+  CompanyCreateDto,
+  CoordinateType,
+  FarmerCreateDto,
   PlotOfLandCreateDto,
   ProcessStepWithMultipleHarvestedLandsCreateDto,
   RoleType,
@@ -13,7 +15,7 @@ import { createHttpHeader } from '../test.utils';
 
 export enum Process {
   HARVESTING = 'Harvesting',
-  MERGE = 'Merge'
+  MERGE = 'Merge',
 }
 
 // Marker to identify batches in a complex batch tree
@@ -22,7 +24,7 @@ export const marker2 = 'marker2';
 export const marker3 = 'marker3';
 
 const givenBatchCreateDto: BatchCreateDto = {
-  idEUInfoSystem: null,
+  euInfoSystemId: null,
   ins: [],
   weight: 33,
   recipient: undefined,
@@ -58,7 +60,7 @@ const farmer: FarmerCreateDto = {
     city: 'Springfield',
     state: 'IL',
     country: 'USA',
-  }
+  },
 };
 
 const companyCreateDto: CompanyCreateDto = {
@@ -91,7 +93,7 @@ const plotOfLand: PlotOfLandCreateDto = {
 
 export async function prepareBatchCreationWithPlotOfLand(): Promise<BatchCreateDto> {
   const batchCreateDto = await prepareBatchCreation();
-  return  preparePlotOfLandCreation(batchCreateDto);
+  return preparePlotOfLandCreation(batchCreateDto);
 }
 
 export async function prepareBatchCreation(): Promise<BatchCreateDto> {
@@ -122,7 +124,7 @@ export async function prepareXPlotOfLandsCreation(batchCreateDto: BatchCreateDto
       [],
       batchCreateDto.processStep.recordedBy
     ),
-    batchCreateDto.idEUInfoSystem
+    batchCreateDto.euInfoSystemId
   );
   if (x !== 0) {
     const plotOfLandResponse = await axios.post(`/pols?farmerId=${batchCreateDto.recipient}`, plotOfLand, await createHttpHeader());

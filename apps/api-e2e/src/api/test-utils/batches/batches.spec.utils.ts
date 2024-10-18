@@ -1,15 +1,11 @@
-import {
-  BatchCombinedCreateDto,
-  BatchCreateDto,
-  ProcessStepWithMultipleHarvestedLandsCreateDto,
-} from '@forest-guard/api-interfaces';
+import { BatchCombinedCreateDto, BatchCreateDto, ProcessStepWithMultipleHarvestedLandsCreateDto } from '@forest-guard/api-interfaces';
 import axios from 'axios';
-import { createHttpHeader } from '../test.utils';
 import { givenBatchCreateDto, givenPlotOfLand, prepareCompany, prepareFarmer, prepareUser } from '../arrange-utils';
+import { createHttpHeader } from '../test.utils';
 
 export async function prepareBatchCreationWithPlotOfLand(): Promise<BatchCreateDto> {
   const batchCreateDto = await prepareBatchCreation();
-  return  preparePlotOfLandCreation(batchCreateDto);
+  return preparePlotOfLandCreation(batchCreateDto);
 }
 
 export async function prepareBatchCreation(): Promise<BatchCreateDto> {
@@ -40,7 +36,7 @@ export async function prepareXPlotOfLandsCreation(batchCreateDto: BatchCreateDto
       [],
       batchCreateDto.processStep.recordedBy
     ),
-    batchCreateDto.idEUInfoSystem
+    batchCreateDto.euInfoSystemId
   );
   if (x !== 0) {
     const plotOfLandResponse = await axios.post(`/pols?farmerId=${batchCreateDto.recipient}`, givenPlotOfLand, await createHttpHeader());

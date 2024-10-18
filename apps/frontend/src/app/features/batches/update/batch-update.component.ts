@@ -29,6 +29,7 @@ export class BatchUpdateComponent implements OnInit {
     recordedBy: new FormControl(null, Validators.required),
     executedBy: new FormControl(null, Validators.required),
     plotOfLand: new FormControl(null),
+    euInfoSystemId: new FormControl(null),
   });
 
   outputBatchForm: FormGroup = new FormGroup({
@@ -92,6 +93,7 @@ export class BatchUpdateComponent implements OnInit {
       weight: batch.weight,
       recipient: batch.recipient,
       ins: this.batchIds,
+      euInfoSystemId: this.formGroup.value.euInfoSystemId,
       processStep: new ProcessStepCreateDto(
         this.formGroup.value.location,
         this.formGroup.value.date,

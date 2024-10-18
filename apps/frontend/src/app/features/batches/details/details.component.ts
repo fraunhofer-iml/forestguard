@@ -1,7 +1,7 @@
 import { BatchDto, Edge, ProofDto, ProofType } from '@forest-guard/api-interfaces';
 import { UiGraphComponent } from '@forest-guard/ui-graph';
 import { saveAs } from 'file-saver';
-import { map, Observable, switchMap, take, tap } from 'rxjs';
+import { map, Observable, pipe, switchMap, take, tap } from 'rxjs';
 import { Component, HostListener, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
@@ -45,6 +45,13 @@ export class BatchDetailsComponent {
     })
   );
 
+  nodesWithEuInfoSystemId$ = this.related$.pipe(
+    map(({ coffeeBatches }) => {
+      return coffeeBatches.filter((batch) => batch.euInfoSystemId);
+    }),
+    map((batches) => batches.map((batch) => batch.id))
+  );
+
   data$: Observable<{ nodes: any[]; links: any[] }> = this.related$.pipe(
     map(({ coffeeBatches, edges }) => {
       const nodes = coffeeBatches.map((b) => ({ id: b.id, name: b.processStep?.process.name, weight: b.weight }));
@@ -60,7 +67,11 @@ export class BatchDetailsComponent {
   getUserOrCompanyName = getUserOrCompanyName;
   ProofType = ProofType;
 
-  constructor(private route: ActivatedRoute, private batchesService: BatchService, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private batchesService: BatchService,
+    private router: Router
+  ) {}
 
   getProof(type: ProofType, proofs?: ProofDto[]): ProofDto | undefined {
     return proofs?.find((proof) => proof.type === type);

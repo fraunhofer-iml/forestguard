@@ -2,7 +2,7 @@ import { BatchCreateDto, ProcessStepCreateDto } from '@forest-guard/api-interfac
 import JSON5 from 'json5';
 
 export const createOriginBatchQuery = (batchCreateDto: BatchCreateDto) => ({
-  euInfoSystemId: batchCreateDto.idEUInfoSystem,
+  euInfoSystemId: batchCreateDto.euInfoSystemId,
   weight: batchCreateDto.weight,
   active: true,
   recipient: {

@@ -19,7 +19,7 @@ describe('BatchService', (): void => {
     service = TestBed.inject(BatchService);
     batchesCreateMock = [
       {
-        idEUInfoSystem: 'EU Info',
+        euInfoSystemId: 'EU Info',
         ins: ['string'],
         weight: 0,
         recipient: 'string',
@@ -41,7 +41,7 @@ describe('BatchService', (): void => {
 
     batchMock = {
       id: '8918e6b7-e288-4f95-bc87-9d8530e66ad1',
-      idEUInfoSystem: 'EU Info',
+      euInfoSystemId: 'EU Info',
       weight: 0,
       active: true,
       recipient: {

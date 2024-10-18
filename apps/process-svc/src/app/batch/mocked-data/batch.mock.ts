@@ -3,7 +3,7 @@ import { Batch, Role } from '@prisma/client';
 import { BatchWithRelations } from '../types/batch.types';
 
 export const mockedCreateBatchDto: BatchCreateDto = {
-  idEUInfoSystem: null,
+  euInfoSystemId: null,
   ins: [],
   weight: 33,
   recipient: 'ctest102',
@@ -18,7 +18,7 @@ export const mockedCreateBatchDto: BatchCreateDto = {
 };
 
 export const mockedCombinedBatchDto: BatchCombinedCreateDto = {
-  idEUInfoSystem: null,
+  euInfoSystemId: null,
   weight: 33,
   recipient: 'ctest102',
   processStep: {

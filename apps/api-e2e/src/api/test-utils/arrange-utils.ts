@@ -13,11 +13,11 @@ import { createHttpHeader } from './test.utils';
 
 export enum Process {
   HARVESTING = 'Harvesting',
-  MERGE = 'Merge'
+  MERGE = 'Merge',
 }
 
 export const givenBatchCreateDto: BatchCreateDto = {
-  idEUInfoSystem: null,
+  euInfoSystemId: null,
   ins: [],
   weight: 33,
   recipient: undefined,

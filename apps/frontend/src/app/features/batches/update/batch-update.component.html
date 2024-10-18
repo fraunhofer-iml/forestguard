@@ -24,9 +24,7 @@
     <mat-form-field class="w-full" appearance="outline">
       <mat-label>Process Owner</mat-label>
       <mat-select formControlName="executedBy" placeholder="Process Owner">
-        <mat-option *ngFor="let farmer of farmers$ | async" [value]="farmer.id">
-          {{ farmer.lastName }}, {{ farmer.firstName }}
-        </mat-option>
+        <mat-option *ngFor="let farmer of farmers$ | async" [value]="farmer.id"> {{ farmer.lastName }}, {{ farmer.firstName }} </mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field class="w-full" appearance="outline">
@@ -38,6 +36,10 @@
     <mat-form-field class="w-full" appearance="outline" *ngIf="batchIds.length === 0">
       <mat-label>Farmed Land</mat-label>
       <input matInput formControlName="plotOfLand" placeholder="Process" />
+    </mat-form-field>
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>EU Info System ID</mat-label>
+      <input matInput formControlName="euInfoSystemId" placeholder="ID12345" />
     </mat-form-field>
   </form>
 </div>
