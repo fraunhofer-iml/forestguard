@@ -7,13 +7,7 @@
     </mat-form-field>
     <div class="flex flex-row gap-4 items-center">
       <a routerLink="{{ Uris.addHarvest }}" mat-button class="w-full text-nowrap">Add Harvest</a>
-      <button
-        routerLink="{{ Uris.batchesUpdate }}"
-        mat-flat-button
-        class="w-full text-nowrap"
-        [disabled]="!selection.hasValue()"
-        (click)="routeToAddProcess()"
-      >
+      <button mat-flat-button class="w-full text-nowrap" [disabled]="!selection.hasValue()" (click)="routeToAddProcess()">
         Add Process
       </button>
     </div>

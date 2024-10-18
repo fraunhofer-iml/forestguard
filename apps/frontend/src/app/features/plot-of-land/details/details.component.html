@@ -41,7 +41,7 @@
               class="p-1 h-10 w-10 rounded-full flex items-center justify-center"
               [ngClass]="{
                 'bg-green-600': hasFileUploaded(ProofType.PROOF_OF_FREEDOM),
-                'bg-orange-500': !hasFileUploaded(ProofType.PROOF_OF_FREEDOM)
+                'bg-orange-500': !hasFileUploaded(ProofType.PROOF_OF_FREEDOM),
               }"
             >
               <span class="material-symbols-outlined text-white"
@@ -91,7 +91,7 @@
               class="p-1 h-10 w-10 rounded-full flex items-center justify-center"
               [ngClass]="{
                 'bg-green-600': hasFileUploaded(ProofType.PROOF_OF_OWNERSHIP),
-                'bg-orange-500': !hasFileUploaded(ProofType.PROOF_OF_OWNERSHIP)
+                'bg-orange-500': !hasFileUploaded(ProofType.PROOF_OF_OWNERSHIP),
               }"
             >
               <span class="material-symbols-outlined text-white"
@@ -128,9 +128,9 @@
           <span class="border-b-2 py-2 font-medium">Sort of Coffee</span>
           <p class="border-b-2 py-2 text-neutral-500">{{ plotOfLand.cultivatedWith?.sort }}</p>
           <span class="py-2 font-medium">Farmer</span>
-          <p class="py-2 text-secondary-500 cursor-pointer hover:underline" [routerLink]="['/users', plotOfLand.farmer?.id]">
+          <a class="py-2 text-secondary-500 cursor-pointer hover:underline" [routerLink]="['/users', plotOfLand.farmer?.id]">
             {{ getUserOrCompanyName(plotOfLand.farmer) }}
-          </p>
+          </a>
         </div>
       </div>
       <div class="card text-neutral-300 mt-4 !pb-14">

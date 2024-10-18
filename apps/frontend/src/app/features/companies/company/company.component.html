@@ -39,7 +39,9 @@
     <!-- Name -->
     <ng-container matColumnDef="name" class="headline-text">
       <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Name</th>
-      <td mat-cell *matCellDef="let farmer" [routerLink]="['/users', farmer.id]" class="cursor-pointer hover:underline text-secondary-500">{{ farmer.firstName }} {{ farmer.lastName }}</td>
+      <td mat-cell *matCellDef="let farmer" class="cursor-pointer hover:underline text-secondary-500">
+        <a [routerLink]="['/users', farmer.id]">{{ farmer.firstName }} {{ farmer.lastName }}</a>
+      </td>
     </ng-container>
 
     <!-- Email -->
@@ -88,12 +90,15 @@
     <ng-container matColumnDef="plotOfLand">
       <th mat-header-cell *matHeaderCellDef mat-sort-header="plotOfLand">Plot of Land</th>
       <td mat-cell *matCellDef="let farmer">
-        <div *ngFor="let plotsOfLand of farmer.plotsOfLand" [routerLink]="['/pols', plotsOfLand.id]" class="cursor-pointer hover:underline text-secondary-500">
+        <a
+          *ngFor="let plotsOfLand of farmer.plotsOfLand"
+          [routerLink]="['/pols', plotsOfLand.id]"
+          class="cursor-pointer hover:underline text-secondary-500"
+        >
           {{ plotsOfLand.description }}
-        </div>
+        </a>
       </td>
     </ng-container>
-
 
     <tr mat-header-row *matHeaderRowDef="displayedColumnsOfBatches"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumnsOfBatches"></tr>

@@ -28,15 +28,15 @@
         <p class="text-right font-medium">Process Date</p>
         <p>{{ batch.processStep.date | date }}</p>
         <p class="text-right font-medium">Process Owner</p>
-        <p class="cursor-pointer hover:underline text-secondary-500" [routerLink]="[Uris.users, batch.processStep.executedBy.id]">
+        <a class="cursor-pointer hover:underline text-secondary-500" [routerLink]="[Uris.users, batch.processStep.executedBy.id]">
           {{ getUserOrCompanyName(batch.processStep.executedBy) }}
-        </p>
+        </a>
         <p class="text-right font-medium">Location</p>
         <p>{{ batch.processStep.location }}</p>
         <p class="text-right font-medium">Recipient</p>
-        <p class="cursor-pointer hover:underline text-secondary-500" [routerLink]="[Uris.companies, batch.recipient.id]">
+        <a class="cursor-pointer hover:underline text-secondary-500" [routerLink]="[Uris.companies, batch.recipient.id]">
           {{ getUserOrCompanyName(batch.recipient) }}
-        </p>
+        </a>
         <p class="text-right font-medium">Author of Entry</p>
         <p>{{ getUserOrCompanyName(batch.processStep.recordedBy) }}</p>
         <p class="text-right font-medium">EU System Info ID</p>
@@ -49,12 +49,12 @@
       <h1 class="text-lg font-semibold">{{ batch.processStep.process.name }} Details</h1>
       <div class="mt-8 grid grid-cols-1 md:grid-cols-2">
         <span class="border-b-2 py-2 font-medium">Plot of Land</span>
-        <p
+        <a
           class="border-b-2 py-2 cursor-pointer text-neutral-500 hover:underline hover:text-secondary-500"
           [routerLink]="['/pols', batch.processStep.farmedLand.id]"
         >
           {{ batch.processStep.farmedLand.description }}
-        </p>
+        </a>
         <span class="py-2 font-medium">Sort of Coffee</span>
         <p class="py-2 text-neutral-500">{{ batch.processStep.farmedLand.cultivatedWith?.sort }}</p>
       </div>

@@ -23,22 +23,22 @@
 
     <div class="grid md:grid-cols-2 mt-4">
       <span class="border-b-2 py-2 font-medium">Company</span>
-      <p
+      <a
         *ngIf="company$ | async as company"
         class="py-2 border-b-2 text-secondary-500 cursor-pointer hover:underline"
         routerLink="/companies/{{ this.authenticationService.getCurrentCompanyId() }}"
       >
         {{ company.name }}
-      </p>
+      </a>
       <span class="py-2 font-medium md:border-none sm:border-b-2">Plot of Land</span>
       <div>
-        <p
+        <a
           class="py-2 text-secondary-500 cursor-pointer hover:underline"
           *ngFor="let plotOfLand of farmer?.plotsOfLand"
           [routerLink]="['/pols', plotOfLand.id]"
         >
           {{ plotOfLand.description }}
-        </p>
+        </a>
       </div>
     </div>
   </div>
