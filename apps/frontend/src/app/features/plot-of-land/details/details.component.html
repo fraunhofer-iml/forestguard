@@ -147,14 +147,19 @@
       </div>
     </div>
 
-    <app-upload-form
-      [selectOptions]="uploadSelectOption"
-      [title]="'Upload Proofs'"
-      [showUploadedFiles]="false"
-      (uploadDocument)="uploadProof($event, plotOfLand.id)"
-    ></app-upload-form>
-  </div>
+    <div *ngIf="(plotOfLand.proofs?.length ?? 0) < 2; else uploadedProofs">
+      <app-upload-form
+        [selectOptions]="uploadSelectOption"
+        [title]="'Upload Proofs'"
+        [showUploadedFiles]="false"
+        (uploadDocument)="uploadProof($event, plotOfLand.id)"
+      ></app-upload-form>
+    </div>
 
+    <ng-template #uploadedProofs>
+      <div class="card self-start">Proof of Freedom from deforestation and Proof of Ownership have been uploaded.</div>
+    </ng-template>
+  </div>
   <div class="card mt-4">
     <div class="inline-flex justify-end gap-4 w-full">
       <button mat-button (click)="window.history.back()" class="font-medium">Back</button>

@@ -1,6 +1,6 @@
-import { FGFile, PlotOfLandDto, ProofDto, ProofType } from '@forest-guard/api-interfaces';
+import { FGFile, ProofDto, ProofType } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
-import { catchError, EMPTY, map, Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, EMPTY, map, switchMap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -16,7 +16,12 @@ import { getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
 })
 export class PlotOfLandDetailsComponent {
   id$ = this.route.params.pipe(map((params) => params['id']));
-  plotOfLand$: Observable<PlotOfLandDto> = this.id$.pipe(switchMap((id) => this.plotOfLandService.getPlotOfLandById(id)));
+  reload$ = new BehaviorSubject(undefined);
+  plotOfLand$ = this.reload$.pipe(
+    switchMap(() => this.id$),
+    switchMap((id) => this.plotOfLandService.getPlotOfLandById(id))
+  );
+
   MINIO_URL = environment.MINIO.URL;
   ProofType = ProofType;
   protected readonly getUserOrCompanyName = getUserOrCompanyName;
@@ -65,6 +70,7 @@ export class PlotOfLandDetailsComponent {
           })
         )
         .subscribe(() => {
+          this.reload$.next(undefined);
           this.hasFileUploaded(option?.value);
           toast.success(Messages.successProof);
         });
