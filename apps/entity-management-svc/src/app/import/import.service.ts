@@ -1,4 +1,5 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import 'multer';
 import {
   FarmerAndPlotOfLand,
   ImportResponseDto,

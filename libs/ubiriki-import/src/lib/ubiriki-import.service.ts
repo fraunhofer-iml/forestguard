@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import 'multer';
 import { ImportDto, MasterDataImportService } from '@forest-guard/api-interfaces';
 
 @Injectable()
