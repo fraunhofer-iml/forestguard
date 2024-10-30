@@ -8,5 +8,6 @@ import { CompanyService } from './company.service';
   imports: [ConfigurationModule],
   controllers: [CompanyController],
   providers: [CompanyService, PrismaService],
+  exports: [CompanyService],
 })
 export class CompanyModule {}

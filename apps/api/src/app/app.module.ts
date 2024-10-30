@@ -8,6 +8,7 @@ import { CultivationModule } from './cultivation/cultivation.module';
 import { PlotOfLandModule } from './plot-of-land/plot-of-land.module';
 import { ProcessStepModule } from './process-step/process-step.module';
 import { UserModule } from './user/user.module';
+import { ImportModule } from './import/import.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UserModule } from './user/user.module';
     PlotOfLandModule,
     UserModule,
     ProcessStepModule,
+    ImportModule,
     KeycloakConnectModule.registerAsync({
       useExisting: KeycloakConfigurationService,
       imports: [ConfigurationModule],

@@ -21,6 +21,7 @@
       "@forest-guard/configuration": ["libs/configuration/src/index.ts"],
       "@forest-guard/database": ["libs/database/src/index.ts"],
       "@forest-guard/file-storage": ["libs/file-storage/src/index.ts"],
+      "@forest-guard/ubiriki-import": ["libs/ubiriki-import/src/index.ts"],
       "@forest-guard/ui": ["libs/ui/src/index.ts"],
       "@forest-guard/ui-graph": ["libs/ui-graph/src/index.ts"],
       "@forest-guard/util": ["libs/util/src/index.ts"],

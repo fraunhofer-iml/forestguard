@@ -1,4 +1,4 @@
-import { AmqpClientEnum, DocumentsMessagePatterns, UserMessagePatterns } from '@forest-guard/amqp';
+import { AmqpClientEnum, DocumentMessagePatterns, UserMessagePatterns } from '@forest-guard/amqp';
 import { FarmerCreateDto, UserDto, UserOrFarmerDto, UserUpdateDto } from '@forest-guard/api-interfaces';
 import { firstValueFrom } from 'rxjs';
 import { Inject, Injectable } from '@nestjs/common';
@@ -27,14 +27,14 @@ export class UserService {
   }
 
   addFarmerDoc(payload: { farmerId: string; description: string; file: Express.Multer.File }): Promise<Document> {
-    return firstValueFrom(this.entityManagementService.send(DocumentsMessagePatterns.ADD_FARMER, payload));
+    return firstValueFrom(this.entityManagementService.send(DocumentMessagePatterns.ADD_FARMER, payload));
   }
 
   updateFarmerDoc(payload: { farmerId: string; documentRef: string; description: string; file: Express.Multer.File }): Promise<Document> {
-    return firstValueFrom(this.entityManagementService.send(DocumentsMessagePatterns.UPDATE_FARMER, payload));
+    return firstValueFrom(this.entityManagementService.send(DocumentMessagePatterns.UPDATE_FARMER, payload));
   }
 
   deleteFarmerDoc(documentRef: string): Promise<Document> {
-    return firstValueFrom(this.entityManagementService.send(DocumentsMessagePatterns.DELETE_FARMER, documentRef));
+    return firstValueFrom(this.entityManagementService.send(DocumentMessagePatterns.DELETE_FARMER, documentRef));
   }
 }

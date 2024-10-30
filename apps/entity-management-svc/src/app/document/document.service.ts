@@ -2,10 +2,10 @@ import { PrismaService } from '@forest-guard/database';
 import { FileStorageService } from '@forest-guard/file-storage';
 import { Injectable } from '@nestjs/common';
 import { Document } from '@prisma/client';
-import { createFarmerDocQuery, createProcessDocQuery } from './documents.queries';
+import { createFarmerDocQuery, createProcessDocQuery } from './document.queries';
 
 @Injectable()
-export class DocumentsService {
+export class DocumentService {
   constructor(private readonly prismaService: PrismaService, private readonly fileStorageService: FileStorageService) {}
 
   async addDocumentToProcessStep({

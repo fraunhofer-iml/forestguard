@@ -72,7 +72,7 @@ export class CompanyService {
   }
 
   async readCompanyById(id: string): Promise<CompanyDto> {
-    const company: CompanyWithRelations = await this.prismaService.company.findFirst({
+    const company: CompanyWithRelations = await this.prismaService.company.findUniqueOrThrow({
       where: { entityId: id },
       include: {
         address: true,
@@ -89,10 +89,6 @@ export class CompanyService {
         },
       },
     });
-
-    if (!company) {
-      throw new AmqpException(`Company with id '${id}' not found.`, HttpStatus.NOT_FOUND);
-    }
 
     return CompanyMapper.mapCompanyPrismaToCompanyDto(company);
   }

@@ -82,8 +82,8 @@ describe('/companies', () => {
         await axios.get(`/companies/${givenCompanyId}`, httpHeader);
       } catch (err) {
         expect(err.response.data.timestamp).toBeDefined();
-        expect(err.response.data.status).toBe(404);
-        expect(err.response.data.message).toBe(`Company with id '${givenCompanyId}' not found.`);
+        expect(err.response.data.status).toBe(400);
+        expect(err.response.data.message).toBe(`No Company found`);
         expect(err.response.data.requestDetails).toBeDefined();
       }
     });

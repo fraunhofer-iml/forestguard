@@ -10,5 +10,6 @@ import { ProofService } from './proof.service';
   imports: [ConfigurationModule, FileStorageModule],
   providers: [PlotsOfLandService, ProofService, PrismaService],
   controllers: [PlotsOfLandController],
+  exports: [PlotsOfLandService],
 })
 export class PlotsOfLandModule {}
