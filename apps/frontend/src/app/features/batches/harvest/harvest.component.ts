@@ -1,6 +1,6 @@
 import { CompanyDto, PlotOfLandDto, UserDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
-import { catchError, EMPTY, filter, map, Observable, startWith, switchMap, tap } from 'rxjs';
+import { catchError, EMPTY, filter, map, Observable, shareReplay, startWith, switchMap, tap } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../../core/services/authentication.service';
@@ -19,10 +19,9 @@ export class HarvestComponent {
   companyId = this.authenticationService.getCurrentCompanyId() ?? '';
   loading = false;
   companies$: Observable<CompanyDto[]> = this.companyService.getCompanies();
-  users$: Observable<UserDto[]> = this.companyService.getEmployeesOfCompany(this.companyId);
-  farmers$: Observable<UserOrFarmerDto[]> = this.companyService.getFarmersByCompanyId(
-    this.authenticationService.getCurrentCompanyId() ?? ''
-  );
+  users$: Observable<UserDto[]> = this.companies$.pipe(map((companies) => companies.flatMap((company) => company.employees ?? [])));
+  farmers$: Observable<UserOrFarmerDto[]> = this.companies$.pipe(map((companies) => companies.flatMap((company) => company.farmers ?? [])));
+
   harvestFormGroup: FormGroup<HarvestForm> = new FormGroup<HarvestForm>({
     processOwner: new FormControl(null, Validators.required),
     recipient: new FormControl(null, Validators.required),
@@ -35,7 +34,8 @@ export class HarvestComponent {
   plotsOfLand$: Observable<PlotOfLandDto[]> = this.harvestFormGroup.controls.processOwner.valueChanges.pipe(
     filter((farmerId): farmerId is string => !!farmerId),
     switchMap((farmerId) => this.plotOfLandService.getPlotsOfLandByFarmerId(farmerId)),
-    tap(() => this.plotsOfLand.enable())
+    tap(() => this.plotsOfLand.enable()),
+    shareReplay(1)
   );
   filteredPlotsOfLand$: Observable<PlotOfLandDto[]> = this.plotsOfLand$.pipe(
     switchMap((plotsOfLand) =>

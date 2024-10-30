@@ -1,6 +1,6 @@
 import { BatchCreateDto, BatchDto, CompanyDto, FGFile, ProcessStepCreateDto, UserDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
-import { merge, Observable, zip } from 'rxjs';
+import { filter, map, merge, Observable, zip } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -39,11 +39,8 @@ export class BatchUpdateComponent implements OnInit {
   });
 
   companies$: Observable<CompanyDto[]> = this.companyService.getCompanies();
-  farmers$: Observable<UserOrFarmerDto[]> = this.companyService.getFarmersByCompanyId(
-    this.authenticationService.getCurrentCompanyId() ?? ''
-  );
-
-  users$: Observable<UserDto[]> = this.companyService.getEmployeesOfCompany(this.authenticationService.getCurrentCompanyId() ?? '');
+  users$: Observable<UserDto[]> = this.currentCompany.pipe(map((company) => company.employees ?? []));
+  farmers$: Observable<UserOrFarmerDto[]> = this.currentCompany.pipe(map((company) => company.farmers ?? []));
   batches$ = new Observable<BatchDto[]>();
 
   constructor(
@@ -57,6 +54,13 @@ export class BatchUpdateComponent implements OnInit {
 
   get outBatches(): FormArray {
     return this.outputBatchForm.get('outBatches') as FormArray;
+  }
+
+  get currentCompany(): Observable<CompanyDto> {
+    return this.companies$.pipe(
+      map((companies) => companies.find((company) => company.id === this.authenticationService.getCurrentCompanyId())),
+      filter((company): company is CompanyDto => !!company)
+    );
   }
 
   ngOnInit(): void {

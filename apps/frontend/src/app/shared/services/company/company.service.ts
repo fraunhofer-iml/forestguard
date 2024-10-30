@@ -1,5 +1,5 @@
 import { BatchDto, CompanyCreateDto, CompanyDto, UserDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
-import { map, Observable } from 'rxjs';
+import { map, Observable, shareReplay } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
@@ -14,7 +14,7 @@ export class CompanyService {
   }
 
   public getCompanyById(id: string): Observable<CompanyDto> {
-    return this.httpClient.get<CompanyDto>(`${environment.COMPANIES.URL}/${id}`);
+    return this.httpClient.get<CompanyDto>(`${environment.COMPANIES.URL}/${id}`).pipe(shareReplay(1));
   }
 
   public getFarmersByCompanyId(id: string): Observable<UserOrFarmerDto[]> {
@@ -34,6 +34,6 @@ export class CompanyService {
   }
 
   public getCompanies(): Observable<CompanyDto[]> {
-    return this.httpClient.get<CompanyDto[]>(`${environment.COMPANIES.URL}`);
+    return this.httpClient.get<CompanyDto[]>(`${environment.COMPANIES.URL}`).pipe(shareReplay(1));
   }
 }
