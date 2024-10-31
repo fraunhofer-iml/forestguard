@@ -84,6 +84,11 @@
       <mat-label>State</mat-label>
       <input matInput formControlName="state" placeholder="State" />
     </mat-form-field>
+
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Additional Information</mat-label>
+      <input matInput formControlName="additionalInformation" placeholder="Additional Information" />
+    </mat-form-field>
   </div>
 
   @if (selectedRole === Roles.FARMER) {

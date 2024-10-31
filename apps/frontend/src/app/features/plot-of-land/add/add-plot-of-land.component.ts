@@ -40,6 +40,7 @@ export class AddPlotOfLandComponent {
     region: new FormControl(null, Validators.required),
     plotOfLand: new FormControl(null, Validators.required),
     cultivationSort: new FormControl(null, Validators.required),
+    cultivationQuality: new FormControl(null),
     localPlotOfLandId: new FormControl(null, Validators.required),
     nationalPlotOfLandId: new FormControl(null, Validators.required),
     geoDataInput: new FormControl(null),

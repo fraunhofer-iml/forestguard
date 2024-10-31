@@ -28,6 +28,7 @@ export class AddUserComponent {
     city: new FormControl(null, Validators.required),
     country: new FormControl(null, Validators.required),
     state: new FormControl(null, Validators.required),
+    additionalInformation: new FormControl(''),
   });
 
   uploadedFiles: { file: File; documentType?: string }[] = [];

@@ -5,6 +5,7 @@ export interface PlotOfLandForm {
   region: FormControl<string | null>;
   plotOfLand: FormControl<string | null>;
   cultivationSort: FormControl<string | null>;
+  cultivationQuality: FormControl<string | null>;
   localPlotOfLandId: FormControl<string | null>;
   nationalPlotOfLandId: FormControl<string | null>;
   geoDataInput: FormControl<string | null>;

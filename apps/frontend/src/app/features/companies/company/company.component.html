@@ -19,8 +19,15 @@
     <p class="border-b-2 py-2 text-neutral-500">{{ company.address.city }}</p>
     <span class="border-b-2 font-medium py-2">State</span>
     <p class="border-b-2 py-2 text-neutral-500">{{ company.address.state }}</p>
-    <span class="font-medium py-2 md:border-none sm:border-b-2">Country</span>
-    <p class="text-neutral-500 py-2">{{ company.address.country }}</p>
+    <span class="border-b-2 py-2 font-medium"
+          [class]="company.address.additionalInformation ? '' : 'md:border-none sm:border-b-2'">
+      Country
+    </span>
+    <p class="py-2 text-neutral-500"
+       [class]="company.address.additionalInformation ? 'border-b-2' : ''">{{ company.address.country }}</p>
+    <span *ngIf="company.address?.additionalInformation"
+          class="font-medium py-2 md:border-none sm:border-b-2">Additional Information</span>
+    <p class="text-neutral-500 py-2">{{ company.address.additionalInformation }}</p>
   </div>
 </div>
 

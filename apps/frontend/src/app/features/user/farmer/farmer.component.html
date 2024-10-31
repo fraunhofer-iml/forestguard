@@ -52,8 +52,12 @@
     <p class="border-b-2 py-2 text-neutral-500">{{ farmer.address?.city }}</p>
     <span class="border-b-2 py-2 font-medium">State</span>
     <p class="border-b-2 py-2 text-neutral-500">{{ farmer.address?.state }}</p>
-    <span class="font-medium py-2 md:border-none sm:border-b-2">Country</span>
-    <p class="text-neutral-500 py-2">{{ farmer.address?.country }}</p>
+    <span class="border-b-2 py-2 font-medium" [class]="farmer.address?.additionalInformation ? '' : 'md:border-none sm:border-b-2'"
+      >Country</span
+    >
+    <p class="py-2 text-neutral-500" [class]="farmer.address?.additionalInformation ? 'border-b-2' : ''">{{ farmer.address?.country }}</p>
+    <span *ngIf="farmer.address?.additionalInformation" class="font-medium py-2 md:border-none sm:border-b-2">Additional Information</span>
+    <p class="text-neutral-500 py-2">{{ farmer.address?.additionalInformation }}</p>
   </div>
   <div class="card">
     <h1 class="text-lg font-semibold">Documents</h1>

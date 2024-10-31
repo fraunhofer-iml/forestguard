@@ -6,6 +6,7 @@ export class PlotOfLandDto {
   id: string;
   country?: string;
   region?: string;
+  province?: string;
   district?: string;
   nationalPlotOfLandId?: string;
   localPlotOfLandId?: string;
@@ -20,6 +21,7 @@ export class PlotOfLandDto {
     id: string,
     country?: string,
     region?: string,
+    province?: string,
     district?: string,
     nationalPlotOfLandId?: string,
     localPlotOfLandId?: string,
@@ -32,6 +34,7 @@ export class PlotOfLandDto {
     this.id = id;
     this.country = country;
     this.region = region;
+    this.province = province;
     this.district = district;
     this.nationalPlotOfLandId = nationalPlotOfLandId;
     this.localPlotOfLandId = localPlotOfLandId;

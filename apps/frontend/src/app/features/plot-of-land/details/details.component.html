@@ -123,10 +123,14 @@
           <p class="border-b-2 py-2 text-neutral-500">{{ plotOfLand.country }}</p>
           <span class="border-b-2 py-2 font-medium">Region</span>
           <p class="border-b-2 py-2 text-neutral-500">{{ plotOfLand.region }}</p>
+          <span class="border-b-2 py-2 font-medium">Province</span>
+          <p class="border-b-2 py-2 text-neutral-500">{{ plotOfLand.province }}</p>
           <span class="border-b-2 py-2 font-medium">District</span>
           <p class="border-b-2 py-2 text-neutral-500">{{ plotOfLand.district }}</p>
           <span class="border-b-2 py-2 font-medium">Sort of Coffee</span>
           <p class="border-b-2 py-2 text-neutral-500">{{ plotOfLand.cultivatedWith?.sort }}</p>
+          <span class="border-b-2 py-2 font-medium">Quality</span>
+          <p class="border-b-2 py-2 text-neutral-500">{{ plotOfLand.cultivatedWith?.quality }}</p>
           <span class="py-2 font-medium">Farmer</span>
           <a class="py-2 text-secondary-500 cursor-pointer hover:underline" [routerLink]="['/users', plotOfLand.farmer?.id]">
             {{ getUserOrCompanyName(plotOfLand.farmer) }}

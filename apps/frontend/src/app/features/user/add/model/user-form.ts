@@ -11,4 +11,5 @@ export interface UserForm {
   city: FormControl<string | null>;
   country: FormControl<string | null>;
   state: FormControl<string | null>;
+  additionalInformation: FormControl<string | null>;
 }

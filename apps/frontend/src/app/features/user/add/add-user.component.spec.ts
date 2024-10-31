@@ -88,6 +88,7 @@ describe('AddUserComponent', () => {
       city: 'City',
       country: 'Country',
       state: 'State',
+      additionalInformation: 'additional Information',
     });
 
     component.clearInputFields();
@@ -102,6 +103,7 @@ describe('AddUserComponent', () => {
       city: null,
       country: null,
       state: null,
+      additionalInformation: null,
     });
   });
 
@@ -123,6 +125,7 @@ describe('AddUserComponent', () => {
       city: 'City',
       country: 'Country',
       state: 'State',
+      additionalInformation: 'additional Information',
     });
 
     component.submitUser();
@@ -144,6 +147,7 @@ describe('AddUserComponent', () => {
       city: 'City',
       country: 'Country',
       state: 'State',
+      additionalInformation: 'additional Information',
     });
 
     component.selectedRole = Roles.FARMER;
