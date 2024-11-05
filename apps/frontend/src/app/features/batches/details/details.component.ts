@@ -1,9 +1,9 @@
+import { Component, HostListener, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BatchDto, Edge, ProofDto, ProofType } from '@forest-guard/api-interfaces';
 import { UiGraphComponent } from '@forest-guard/ui-graph';
 import { saveAs } from 'file-saver';
-import { map, Observable, pipe, switchMap, take, tap } from 'rxjs';
-import { Component, HostListener, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, map, switchMap, take, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { Uris } from '../../../shared/uris';
@@ -49,6 +49,13 @@ export class BatchDetailsComponent {
     map(({ coffeeBatches }) => {
       return coffeeBatches.filter((batch) => batch.euInfoSystemId);
     }),
+    map((batches) => batches.map((batch) => batch.id))
+  );
+
+  nodesWithProcessDocuments$ = this.related$.pipe(
+    map(({ coffeeBatches }) => {
+      return coffeeBatches.filter((batch) => batch.processStep.documents?.length !== 0)
+   }),
     map((batches) => batches.map((batch) => batch.id))
   );
 
