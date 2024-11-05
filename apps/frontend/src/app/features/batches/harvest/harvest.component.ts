@@ -42,7 +42,9 @@ export class HarvestComponent {
       this.plotsOfLand.valueChanges.pipe(
         map((value) => value.map((item: { plotOfLand: PlotOfLandDto | null }) => item.plotOfLand?.id)),
         startWith([]),
-        map((value) => plotsOfLand.filter((plot) => value && !value.includes(plot.id)))
+        map((value) =>
+          plotsOfLand.filter((plot) => value && !value.includes(plot.id) && !this.harvestFormGroup.controls.processOwner.invalid)
+        )
       )
     )
   );
@@ -68,9 +70,7 @@ export class HarvestComponent {
   }
 
   addPlotOfLand(): void {
-    if (this.harvestFormGroup.get('processOwner')?.value != null) {
-      this.plotsOfLand.push(this.createPlotOfLand());
-    }
+    this.plotsOfLand.push(this.createPlotOfLand());
   }
 
   removePlotOfLand(index: number): void {

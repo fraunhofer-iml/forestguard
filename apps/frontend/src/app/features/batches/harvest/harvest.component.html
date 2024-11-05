@@ -47,7 +47,7 @@
     <!-- Plots of Land -->
     <div class="card">
       <div class="inline-flex justify-end cursor-pointer w-full">
-        <a mat-button (click)="addPlotOfLand()" [disabled]="!!!(filteredPlotsOfLand$ | async)">Add Plot of Land</a>
+        <a mat-button (click)="addPlotOfLand()" [disabled]="!!!(filteredPlotsOfLand$ | async)?.length">Add Plot of Land</a>
       </div>
       <div class="mt-4" *ngIf="filteredPlotsOfLand$ | async as filteredPlotsOfLand">
         <div formArrayName="plotsOfLand" *ngFor="let plotOfLand of plotsOfLand.controls; let i = index">
