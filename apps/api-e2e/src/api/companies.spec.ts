@@ -120,7 +120,6 @@ describe('/companies', () => {
         },
       });
 
-      // TODO-MP: FarmerDto.plotOfLands -> response...plotsOfLand
       const expectedResponse = [
         {
           id: actualResponseFromPostFarmers.data.id,

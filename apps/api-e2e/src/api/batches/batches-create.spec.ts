@@ -3,8 +3,8 @@ import { beforeEachAndAfterAll, createHttpHeader, HttpHeader } from '../test-uti
 import { ensureResponseBatch, ensureResponseBatchWithProcess } from '../assertions/batches/assertion.utils';
 import {
   prepareBatchCreationWithPlotOfLand,
-  prepareTwoPlotOfLandsCreation,
-  prepareXPlotOfLandsCreation,
+  prepareTwoPlotsOfLandCreation,
+  prepareXPlotsOfLandCreation,
 
 } from '../test-utils/batches/batches.spec.utils';
 import { HttpStatus } from '@nestjs/common';
@@ -64,7 +64,7 @@ describe('/batches-create', () => {
 
   describe('POST /batches/harvests/combined', () => {
     it('should create combined harvest batches', async () => {
-      const givenBatchCombinedCreateDto = await prepareTwoPlotOfLandsCreation(batchCreateDto);
+      const givenBatchCombinedCreateDto = await prepareTwoPlotsOfLandCreation(batchCreateDto);
 
       const response = await axios.post(`/batches/harvests/combined`, givenBatchCombinedCreateDto, httpHeader);
 
@@ -72,7 +72,7 @@ describe('/batches-create', () => {
     });
 
     it('should response with no created batches', async () => {
-      const givenBatchCombinedCreateDto = await prepareXPlotOfLandsCreation(batchCreateDto, 0);
+      const givenBatchCombinedCreateDto = await prepareXPlotsOfLandCreation(batchCreateDto, 0);
 
       const response = await axios.post(`/batches/harvests/combined`, givenBatchCombinedCreateDto, httpHeader);
 

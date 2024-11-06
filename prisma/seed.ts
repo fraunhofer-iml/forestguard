@@ -6,7 +6,7 @@ const batches = require('./data/batches.json');
 const companies = require('./data/companies.json');
 const cultivations = require('./data/cultivations.json');
 const entities = require('./data/entities.json');
-const plotsOfLands = require('./data/plots-of-lands.json');
+const plotsOfLand = require('./data/plots-of-land.json');
 const processSteps = require('./data/process-steps.json');
 const processes = require('./data/processes.json');
 const proofs = require('./data/proofs.json');
@@ -41,7 +41,7 @@ const dataSets: Entity[] = [
   },
   {
     name: 'plotOfLand',
-    records: plotsOfLands,
+    records: plotsOfLand,
     createRecord: async (data: any) => await prisma.plotOfLand.create({ data }),
   },
   {

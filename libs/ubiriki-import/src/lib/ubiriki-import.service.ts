@@ -11,7 +11,7 @@ export class UbirikiImportService implements MasterDataImportService {
   ): Promise<ImportDto> {
     return {
       employees: [],
-      farmersAndPlotOfLands: [],
+      farmersAndPlotsOfLand: [],
     };
   }
 }

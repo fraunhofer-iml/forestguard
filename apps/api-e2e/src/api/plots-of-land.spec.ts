@@ -175,7 +175,7 @@ describe('/pols', () => {
     });
   });
 
-  describe('GET /plot-of-lands?farmerId', () => {
+  describe('GET /plots-of-land?farmerId', () => {
     it('should read one plotOfLand', async () => {
       await axios.post(`/companies`, companyCreate, httpHeader);
       await axios.post(`/users`, userCreate, httpHeader);
@@ -210,7 +210,7 @@ describe('/pols', () => {
     });
   });
 
-  describe('GET /plot-of-lands/id', () => {
+  describe('GET /plots-of-land/id', () => {
     it('should read a plotOfLand by Id', async () => {
       await axios.post(`/companies`, companyCreate, httpHeader);
       await axios.post(`/users`, userCreate, httpHeader);
@@ -223,7 +223,7 @@ describe('/pols', () => {
     });
   });
 
-  describe('PATCH /plot-of-lands/id', () => {
+  describe('PATCH /plots-of-land/id', () => {
     it('should update a plotOfLand', async () => {
       const cultivationCreate: CultivationCreateDto = new CultivationCreateDto('mocca', 'Ecol');
       await axios.post(`/companies`, companyCreate, httpHeader);

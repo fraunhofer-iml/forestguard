@@ -8,7 +8,7 @@ import { UserDto } from './user.dto';
 export class FarmerDto extends UserDto {
   personalId: string;
   address: AddressDto;
-  plotOfLands?: PlotOfLandDto[];
+  plotsOfLand?: PlotOfLandDto[];
 
   constructor(
     id: string,
@@ -20,11 +20,11 @@ export class FarmerDto extends UserDto {
     mobilePhoneNumber: string,
     personalId: string,
     address: AddressDto,
-    plotOfLands?: PlotOfLandDto[]
+    plotsOfLand?: PlotOfLandDto[]
   ) {
     super(id, employeeId, firstName, lastName, email, role, mobilePhoneNumber);
     this.personalId = personalId;
     this.address = address;
-    this.plotOfLands = plotOfLands;
+    this.plotsOfLand = plotsOfLand;
   }
 }

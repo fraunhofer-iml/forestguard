@@ -35,7 +35,7 @@ const IMPORT_DTO_MOCK: ImportDto = {
   employees: [{
     lastName: '',
   }],
-  farmersAndPlotOfLands: [FARMER_AND_PLOT_OF_LAND_MOCK],
+  farmersAndPlotsOfLand: [FARMER_AND_PLOT_OF_LAND_MOCK],
 };
 
 export { IMPORT_DTO_MOCK, FARMER_AND_PLOT_OF_LAND_MOCK };

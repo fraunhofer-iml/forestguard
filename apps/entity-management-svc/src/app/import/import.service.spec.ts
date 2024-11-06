@@ -66,7 +66,7 @@ describe('ImportService', () => {
   it('should accept empty data', async () => {
     jest.spyOn(masterDataImportService, 'import').mockResolvedValue({
       employees: [],
-      farmersAndPlotOfLands: [],
+      farmersAndPlotsOfLand: [],
     });
 
     const companyId = '1';
@@ -106,11 +106,11 @@ describe('ImportService', () => {
       companyId: companyId,
     });
     expect(userService.createFarmer).toHaveBeenCalledWith({
-      dto: IMPORT_DTO_MOCK.farmersAndPlotOfLands[0].farmer,
+      dto: IMPORT_DTO_MOCK.farmersAndPlotsOfLand[0].farmer,
       companyId: companyId,
     });
     expect(plotsOfLandService.createPlotOfLand).toHaveBeenCalledWith(
-      IMPORT_DTO_MOCK.farmersAndPlotOfLands[0].plotOfLand,
+      IMPORT_DTO_MOCK.farmersAndPlotsOfLand[0].plotOfLand,
       resolvedFarmer.id,
     );
   });
@@ -120,7 +120,7 @@ describe('ImportService', () => {
       employees: [{
         lastName: '',
       }],
-      farmersAndPlotOfLands: [FARMER_AND_PLOT_OF_LAND_MOCK, FARMER_AND_PLOT_OF_LAND_MOCK, FARMER_AND_PLOT_OF_LAND_MOCK],
+      farmersAndPlotsOfLand: [FARMER_AND_PLOT_OF_LAND_MOCK, FARMER_AND_PLOT_OF_LAND_MOCK, FARMER_AND_PLOT_OF_LAND_MOCK],
     };
     const resolvedFarmer = new UserOrFarmerDto('farmerId1', '', '', '', '', '', '');
     const resolvedPlotOfLand = new PlotOfLandDto('');
@@ -137,8 +137,8 @@ describe('ImportService', () => {
 
     expect(actualResult).toEqual({
       employeesCreated: importDto.employees.length,
-      farmersCreated: importDto.farmersAndPlotOfLands.length,
-      plotsOfLandCreated: importDto.farmersAndPlotOfLands.length - 1,
+      farmersCreated: importDto.farmersAndPlotsOfLand.length,
+      plotsOfLandCreated: importDto.farmersAndPlotsOfLand.length - 1,
       errors: ['Error: ' + errorMessage],
     });
   });

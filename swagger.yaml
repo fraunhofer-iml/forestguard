@@ -262,11 +262,11 @@ paths:
       security:
         - bearer: []
     get:
-      operationId: CultivationController_getCultivationsByType
+      operationId: CultivationController_getCultivationsByCommodity
       summary: ''
       description: Get all cultivations
       parameters:
-        - name: type
+        - name: commodity
           required: true
           in: query
           schema:
@@ -278,11 +278,11 @@ paths:
         - Cultivations
       security:
         - bearer: []
-  /cultivations/types:
+  /cultivations/commodities:
     get:
-      operationId: CultivationController_getCultivationTypes
+      operationId: CultivationController_getCultivationCommodities
       summary: ''
-      description: Get all cultivation types
+      description: Get all cultivation commodities
       parameters: []
       responses:
         '200':
@@ -306,7 +306,7 @@ paths:
         '200':
           description: Successful request.
       tags:
-        - PlotOfLands
+        - PlotsOfLand
       security:
         - bearer: []
     post:
@@ -329,7 +329,7 @@ paths:
         '201':
           description: Successful creation.
       tags:
-        - PlotOfLands
+        - PlotsOfLand
       security:
         - bearer: []
   /pols/{id}:
@@ -347,7 +347,7 @@ paths:
         '200':
           description: Successful request.
       tags:
-        - PlotOfLands
+        - PlotsOfLand
       security:
         - bearer: []
     patch:
@@ -370,7 +370,7 @@ paths:
         '200':
           description: Successful creation.
       tags:
-        - PlotOfLands
+        - PlotsOfLand
       security:
         - bearer: []
   /pols/{id}/proofs:
@@ -397,7 +397,7 @@ paths:
         '201':
           description: Successful creation.
       tags:
-        - PlotOfLands
+        - PlotsOfLand
       security:
         - bearer: []
     get:
@@ -414,7 +414,7 @@ paths:
         '200':
           description: Successful request.
       tags:
-        - PlotOfLands
+        - PlotsOfLand
       security:
         - bearer: []
   /users:
@@ -605,6 +605,30 @@ paths:
           description: ''
       tags:
         - Process Steps
+      security:
+        - bearer: []
+  /import:
+    post:
+      operationId: ImportController_importMasterData
+      summary: ''
+      description: Import master data from an excel file
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file with master data
+      responses:
+        '201':
+          description: ''
+      tags:
+        - Import
       security:
         - bearer: []
 info:

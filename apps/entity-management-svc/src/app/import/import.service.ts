@@ -26,7 +26,7 @@ export class ImportService {
     const masterDataImportService = await this.getCompanyImportService(payload.companyId);
     const masterDataEntities = await masterDataImportService.import(payload.file);
     const employeesDto = await this.createEmployees(masterDataEntities.employees, payload.companyId);
-    const farmersDto = await this.createFarmersWithPlotOfLands(masterDataEntities.farmersAndPlotOfLands, payload.companyId);
+    const farmersDto = await this.createFarmersWithPlotsOfLand(masterDataEntities.farmersAndPlotsOfLand, payload.companyId);
     return {
       employeesCreated: employeesDto.numberOfCreatedEmployees,
       farmersCreated: farmersDto.numberOfCreatedFarmers,
@@ -64,13 +64,13 @@ export class ImportService {
     return employeesDto;
   }
 
-  private async createFarmersWithPlotOfLands(farmersAndPlotOfLands: FarmerAndPlotOfLand[], companyId: string) {
+  private async createFarmersWithPlotsOfLand(farmersAndPlotsOfLand: FarmerAndPlotOfLand[], companyId: string) {
     const farmersDto = {
       numberOfCreatedFarmers: 0,
       numberOfCreatedPlotsOfLand: 0,
       farmerAndPlotOfLandErrors: Array<string>(),
     };
-    for (const farmerAndPlotOfLand of farmersAndPlotOfLands) {
+    for (const farmerAndPlotOfLand of farmersAndPlotsOfLand) {
       try {
         const farmer = await this.userService.createFarmer({
           dto: farmerAndPlotOfLand.farmer,

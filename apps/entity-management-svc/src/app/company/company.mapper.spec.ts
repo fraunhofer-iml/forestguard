@@ -48,7 +48,7 @@ describe('CompanyMapper', () => {
     expect(actualCompanyDto.farmers).toHaveLength(0);
   });
 
-  it('should return an empty array for plotOfLands when plotsOfLand is null', () => {
+  it('should return an empty array for plotsOfLand when plotsOfLand is null', () => {
     givenCompanyPrisma.users[1].plotsOfLand = null;
 
     expectedCompanyDto.farmers[0].plotsOfLand = [];

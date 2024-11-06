@@ -14,7 +14,7 @@ import { AuthenticatedUser } from 'nest-keycloak-connect';
 import { PlotOfLandService } from './plot-of-land.service';
 import { ProofUploadDto } from './proof-upload.dto';
 
-@ApiTags('PlotOfLands')
+@ApiTags('PlotsOfLand')
 @Controller('pols')
 export class PlotOfLandController {
   constructor(private plotOfLandService: PlotOfLandService) {}

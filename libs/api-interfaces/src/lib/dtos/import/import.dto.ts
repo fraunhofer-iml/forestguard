@@ -3,11 +3,11 @@ import { PlotOfLandCreateDto } from '../plot-of-land';
 
 export class ImportDto {
   employees: UserUpdateDto[];
-  farmersAndPlotOfLands: FarmerAndPlotOfLand[];
+  farmersAndPlotsOfLand: FarmerAndPlotOfLand[];
 
-  constructor(employees: UserUpdateDto[], farmersAndPlotOfLands: FarmerAndPlotOfLand[]) {
+  constructor(employees: UserUpdateDto[], farmersAndPlotsOfLand: FarmerAndPlotOfLand[]) {
     this.employees = employees;
-    this.farmersAndPlotOfLands = farmersAndPlotOfLands;
+    this.farmersAndPlotsOfLand = farmersAndPlotsOfLand;
   }
 }
 

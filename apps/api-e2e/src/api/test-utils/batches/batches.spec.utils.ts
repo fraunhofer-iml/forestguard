@@ -25,7 +25,7 @@ export async function preparePlotOfLandCreation(batchCreateDto: BatchCreateDto):
   return batchCreateDto;
 }
 
-export async function prepareXPlotOfLandsCreation(batchCreateDto: BatchCreateDto, x: number): Promise<BatchCombinedCreateDto> {
+export async function prepareXPlotsOfLandCreation(batchCreateDto: BatchCreateDto, x: number): Promise<BatchCombinedCreateDto> {
   const batchCombinedCreateDto = new BatchCombinedCreateDto(
     batchCreateDto.weight,
     batchCreateDto.recipient,
@@ -45,8 +45,8 @@ export async function prepareXPlotOfLandsCreation(batchCreateDto: BatchCreateDto
   return batchCombinedCreateDto;
 }
 
-export async function prepareTwoPlotOfLandsCreation(batchCreateDto: BatchCreateDto): Promise<BatchCombinedCreateDto> {
-  return prepareXPlotOfLandsCreation(batchCreateDto, 2);
+export async function prepareTwoPlotsOfLandCreation(batchCreateDto: BatchCreateDto): Promise<BatchCombinedCreateDto> {
+  return prepareXPlotsOfLandCreation(batchCreateDto, 2);
 }
 
 export async function getBatchesFromDb(recipient: string) {
