@@ -29,6 +29,9 @@ export const environment = {
   PROCESSSTEPS: {
     URL: `${BASE_URL}/process-steps`,
   },
+  IMPORT: {
+    URL: `${BASE_URL}/import`,
+  },
   MINIO: {
     URL: 'https://minioo.public.apps.blockchain-europe.iml.fraunhofer.de/forest-guard/',
   },

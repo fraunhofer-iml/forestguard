@@ -2,12 +2,14 @@ import { CompanyDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { catchError, EMPTY, map, Observable, switchMap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
+import { Messages } from '../../../shared/messages';
 import { CompanyService } from '../../../shared/services/company/company.service';
+import { ImportService } from '../../../shared/services/import/import.service';
 import { Uris } from '../../../shared/uris';
 
 @Component({
@@ -45,6 +47,7 @@ export class CompanyComponent {
 
   protected readonly Uris = Uris;
 
+  @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
     this.setDataSourceAttributes();
@@ -55,7 +58,11 @@ export class CompanyComponent {
     this.setDataSourceAttributes();
   }
 
-  constructor(private route: ActivatedRoute, private companyService: CompanyService) {
+  constructor(
+    private route: ActivatedRoute,
+    private companyService: CompanyService,
+    private importService: ImportService
+  ) {
     this.getFarmers();
   }
 
@@ -71,5 +78,24 @@ export class CompanyComponent {
         return this.dataSource;
       })
     );
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      const formData = new FormData();
+      formData.append('file', input.files[0]);
+      this.importService
+        .importMasterData(formData)
+        .pipe(
+          catchError(() => {
+            toast.error(Messages.errorMasterDataImport);
+            return EMPTY;
+          })
+        )
+        .subscribe(() => {
+          toast.success(Messages.successMasterDataImport);
+        });
+    }
   }
 }

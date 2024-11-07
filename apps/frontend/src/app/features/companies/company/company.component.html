@@ -31,8 +31,16 @@
   </div>
 </div>
 
-<div class="card mt-4">
+<div class="card mt-4 flex items-center justify-between">
   <h1 class="text-lg font-semibold">Farmers</h1>
+  <button
+    mat-flat-button
+    matTooltip="Import data to add more farmers to the table."
+    (click)="fileInput.click()"
+  >
+    Import Data
+  </button>
+  <input type="file" #fileInput class="hidden" (change)="onFileSelected($event)" />
 </div>
 
 <div class="card mt-4 overflow-x-auto">

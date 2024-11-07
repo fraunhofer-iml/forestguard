@@ -20,7 +20,9 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
+import { MatTooltip } from '@angular/material/tooltip';
 import { CompanyService } from '../../shared/services/company/company.service';
+import { ImportService } from '../../shared/services/import/import.service';
 import { TypeSafeMatCellDefDirective } from '../../shared/services/utils/typesafe-matcell.definition';
 import { SharedModule } from '../../shared/shared.module';
 import { AddCompanyComponent } from './add-company/add-company.component';
@@ -53,10 +55,12 @@ import { CompanyComponent } from './company/company.component';
     MatSortHeader,
     MatTable,
     MatHeaderCellDef,
+    MatTooltip,
   ],
   providers: [
     CompanyService,
     AddCompanyService,
+    ImportService,
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: {
