@@ -7,13 +7,154 @@
 
 = Runtime View
 
-In contrast to the static building block view, this section visualizes dynamic aspects of the {projectName} project.
+*Contents*
 
-The runtime view describes concrete behavior and interactions of the system's building blocks across the architecture, i.e., how instances of building blocks of {projectName} perform their job and communicate at runtime.
+- 1 General Component Communication
+- 2 Transaction related schemes and definitions
+- 3 Use Cases and process flows
 
-Important usage scenarios with architectural relevance are e.g. interactions at critical external interfaces, operation and administration (launch, start-up, stop), and error and exception scenarios.
-
-== TBD
+== General Component Communication
 
 TBD
 
+== Transaction related schemes and definitions
+
+This Chapter outlines all available APIs in the following Order:
+
+1. The Blockchain Connector which accepts AMQP messages related to the process.
+2. The Api exposed through the BFF which the ForestGuard Frontend uses to query for data.
+
+=== AMQP specific messaging interfaces and API
+
+The Entity Management SVC and Process SVC serves as a Bridge and allows the following AMQP Endpoints.
+
+==== Batch API
+|===
+| *ExportToken Controller* | Path | Description
+| CREATE | `/batches/create` | Create a new coffee batch
+| CREATE_HARVESTS | `/batches/create-harvests` | Create new harvest batches
+| CREATE_COMBINED_HARVESTS | `/batches/create-combined-harvests` | Create new Harvest batch to multiple plots of land
+| READ_BY_ID  | `/batches/read-by-id` | Read a batch by its ID
+| READ_BY_ID_RELATED | `/batches/read-by-id-related` | Read all coffee batches that are related to the coffee batch
+| READ_EXPORT | `/batches/read-export` | Read batch file with all batch information and all previous and next batches
+|===
+
+==== Company API
+|===
+| *ExportToken Controller* | Path | Description
+| CREATE | `/companies/create` | Create a new company
+| READ_BY_ID | `/companies/read-by-id` | Read a company by its ID
+| READ_COMPANIES | `/companies/read` | Read all companies
+| READ_BATCHES  | `/companies/read-batches` | Read all batches by company
+|===
+
+==== Cultivation API
+|===
+| *ExportToken Controller* | Path | Description
+| CREATE | `/cultivations/create` | Create a new cultivation
+| READ_ALL_BY_COMMODITY | `/cultivations/read-all-by-commodity` | Read all cultivations by commodity
+|===
+
+==== Plots of Land API
+|===
+| *ExportToken Controller* | Path | Description
+| CREATE | `/plots-of-land/create` | Create a new plot of land
+| READ_ALL | `/plots-of-land/read-all` | Read all plots of land
+| READ_BY_ID | `/plots-of-land/read-by-id` | Read a plot of land by ID
+| UPDATE_BY_ID | `/plots-of-land/update-by-id` | Update a plot of land by ID
+| CREATE_BY_ID_PROOF | `/plot-of-lands/create-by-id-proof` | Create a new proof by plot of land ID
+| READ_BY_ID_PROOFS | `/plot-of-lands/read-by-id-proofs` | Read all proofs by plot of land ID
+|===
+
+==== User API
+|===
+| *ExportToken Controller* | Path | Description
+| CREATE | `/users/create` | Create a new user
+| READ_ALL | `/users/read-all` | Read all users
+| READ_BY_ID | `/users/read-by-id` | Read a user by ID
+| CREATE_FARMER | `/users/create-farmer` | Create a new farmer
+| READ_FARMER_BY_COMPANY_ID | `/users/read-farmer-by-company-id` | Read a farmer by company ID
+|===
+
+==== Document API
+|===
+| *ExportToken Controller* | Path | Description
+| ADD_PROCESS_STEP | `/docs/process-step/add` | Create a new process step
+| ADD_FARMER | `/docs/farmer/add` | Create a new farmer document
+| UPDATE_FARMER | `/docs/farmer/update` | Update a farmer document
+| DELETE_FARMER  | `/docs/farmer/delete` | Delete a farmer document
+|===
+
+==== Import API
+|===
+| *ExportToken Controller* | Path | Description
+| IMPORT_MASTER_DATA | `/import` | Create a new import
+|===
+
+=== REST specific messaging interfaces and API
+
+The BFF serves as a Bridge for the frontend and allows the following REST Endpoints:
+
+==== Batches API
+|===
+| *ExportToken Controller* | Path | Description
+| POST | `/batches` | Create new coffee batches
+| POST | `/batches/harvests` | Create new harvest batches
+| POST | `/batches/harvests/combined` | Create new harvest batch to multiple plots of land
+| GET | `/batches/+{id}+` | Get coffee batch by their ID
+| GET | `/batches/+{id}+/related` | Get all coffee batches that are related to the coffee batch
+| GET | `/batches/+{id}+/export` | Export batch file with all batch information and all previous and next batches
+|===
+
+==== Companies API
+|===
+| *ExportToken Controller* | Path | Description
+| POST | `/companies` | Create a new company
+| GET | `/companies` | Get all companies
+| GET | `/companies/+{id}+` | Get company by their ID
+| GET | `/companies/+{id}+/batches` | Get all coffee batches of the company
+| GET | `/comapnies/+{id}+/farmers` | Get all farmers related to the company
+|===
+
+==== Cultivations API
+|===
+| *ExportToken Controller* | Path | Description
+| POST | `/cultivations` | Create a new cultivation
+| GET | `/cultivations` | Get all cultivations
+| GET | `/cultivations/commodities` | Get all cultivation commodities
+|===
+
+==== Plots of Land API
+|===
+| *ExportToken Controller* | Path | Description
+| POST | `/pols` | Create a new Plot of Land
+| POST | `/pols/+{id}+/proofs` | Create a proof for a plot of land
+| GET | `/pols/+{id}+/proofs` | Get all proofs of a plot of land
+| GET | `/pols` | Get all plots of land of a farmer
+| GET | `/pols/+{id}+` | Get plot of land by ID
+| PATCH | `/pols/+{id}+` | Create or update the seeding for a plot of land
+|===
+
+==== Users API
+|===
+| *ExportToken Controller* | Path | Description
+| POST | `/users` | Create a new user
+| POST | `/users/farmers` | Create a new farmer
+| POST | `/pols/+{id}+/docs` | Create a new document for a farmer
+| GET | `/users` | Get all users
+| GET | `/users/+{id}+` | Get user by their ID
+| PATCH | `/users/+{id}+/docs/+{docRef}+` | Get all plots of land of a farmer
+| DELETE | `/users/+{id}+/docs/+{docRef}+` | Get plot of land by ID
+|===
+
+==== Process Steps API
+|===
+| *ExportToken Controller* | Path | Description
+| POST | `/process-steps/+{id}+/docs` | Create a new document for process steps
+|===
+
+==== Import API
+|===
+| *ExportToken Controller* | Path | Description
+| POST | `/import` | Import master data from an excel file
+|===
