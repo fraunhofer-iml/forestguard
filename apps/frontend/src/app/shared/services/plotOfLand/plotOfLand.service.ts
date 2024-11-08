@@ -7,7 +7,7 @@ import { Uris } from '../../uris';
 
 @Injectable()
 export class PlotOfLandService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private readonly httpClient: HttpClient) {}
 
   public getPlotOfLandById(id: string): Observable<PlotOfLandDto> {
     return this.httpClient.get<PlotOfLandDto>(`${environment.PLOTSOFLAND.URL}/${id}`);

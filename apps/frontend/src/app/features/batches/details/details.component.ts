@@ -1,9 +1,9 @@
-import { Component, HostListener, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { BatchDto, Edge, ProofDto, ProofType } from '@forest-guard/api-interfaces';
 import { UiGraphComponent } from '@forest-guard/ui-graph';
 import { saveAs } from 'file-saver';
-import { Observable, map, switchMap, take, tap } from 'rxjs';
+import { map, Observable, switchMap, take, tap } from 'rxjs';
+import { Component, HostListener, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { Uris } from '../../../shared/uris';
@@ -54,8 +54,8 @@ export class BatchDetailsComponent {
 
   nodesWithProcessDocuments$ = this.related$.pipe(
     map(({ coffeeBatches }) => {
-      return coffeeBatches.filter((batch) => batch.processStep.documents?.length !== 0)
-   }),
+      return coffeeBatches.filter((batch) => batch.processStep.documents?.length !== 0);
+    }),
     map((batches) => batches.map((batch) => batch.id))
   );
 
@@ -75,9 +75,9 @@ export class BatchDetailsComponent {
   ProofType = ProofType;
 
   constructor(
-    private route: ActivatedRoute,
-    private batchesService: BatchService,
-    private router: Router
+    private readonly route: ActivatedRoute,
+    private readonly batchesService: BatchService,
+    private readonly router: Router
   ) {}
 
   getProof(type: ProofType, proofs?: ProofDto[]): ProofDto | undefined {

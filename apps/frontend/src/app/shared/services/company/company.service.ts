@@ -7,7 +7,7 @@ import { Uris } from '../../uris';
 
 @Injectable()
 export class CompanyService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private readonly httpClient: HttpClient) {}
 
   public createCompany(company: CompanyCreateDto): Observable<CompanyDto> {
     return this.httpClient.post<CompanyDto>(environment.COMPANIES.URL, company);

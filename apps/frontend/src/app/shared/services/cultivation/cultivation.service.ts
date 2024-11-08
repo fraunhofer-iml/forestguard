@@ -6,7 +6,7 @@ import { environment } from '../../../../environments/environment';
 
 @Injectable()
 export class CultivationService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private readonly httpClient: HttpClient) {}
 
   readCultivationsByCommodity(type: string): Observable<CultivationDto[]> {
     return this.httpClient.get<CultivationDto[]>(`${environment.CULTIVATIONS.URL}?commodity=${type}`);

@@ -50,11 +50,11 @@ export class HarvestComponent {
   );
 
   constructor(
-    private batchService: BatchService,
-    private plotOfLandService: PlotOfLandService,
-    private companyService: CompanyService,
-    private harvestService: HarvestService,
-    private authenticationService: AuthenticationService
+    private readonly batchService: BatchService,
+    private readonly plotOfLandService: PlotOfLandService,
+    private readonly companyService: CompanyService,
+    private readonly harvestService: HarvestService,
+    private readonly authenticationService: AuthenticationService
   ) {
     this.plotsOfLand.disable();
   }

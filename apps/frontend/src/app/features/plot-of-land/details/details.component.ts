@@ -39,8 +39,8 @@ export class PlotOfLandDetailsComponent {
   ];
 
   constructor(
-    private route: ActivatedRoute,
-    private plotOfLandService: PlotOfLandService
+    private readonly route: ActivatedRoute,
+    private readonly plotOfLandService: PlotOfLandService
   ) {}
 
   getProof(type: ProofType, proofs?: ProofDto[]): ProofDto | undefined {

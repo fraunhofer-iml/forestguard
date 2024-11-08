@@ -6,7 +6,7 @@ import { Uris } from '../../uris';
 
 @Injectable()
 export class ProcessStepService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private readonly httpClient: HttpClient) {}
 
   public addDocToProcessStep(userId: string, file: File, description: string): Observable<Document> {
     const formData = new FormData();

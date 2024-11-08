@@ -24,13 +24,15 @@
     <mat-form-field class="w-full" appearance="outline">
       <mat-label>Process Owner</mat-label>
       <mat-select formControlName="executedBy" placeholder="Process Owner">
-        <mat-option *ngFor="let farmer of farmers$ | async" [value]="farmer.id"> {{ farmer.lastName }}, {{ farmer.firstName }} </mat-option>
+        <mat-option *ngFor="let farmer of farmers$ | async" [value]="farmer.id"> {{ farmer.lastName }}, {{
+          farmer.firstName }} </mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field class="w-full" appearance="outline">
       <mat-label>Author of Entry</mat-label>
       <mat-select formControlName="recordedBy" placeholder="Author">
-        <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }} </mat-option>
+        <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }}
+        </mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field class="w-full" appearance="outline" *ngIf="batchIds.length === 0">
@@ -45,14 +47,9 @@
 </div>
 
 <div class="mt-4">
-  <app-upload-form
-    [title]="'Upload Documents'"
-    [showDescriptionField]="true"
-    [uploadedFiles]="uploadedFiles"
-    [uploadedFilesPosition]="'right'"
-    (uploadDocument)="submitFile($event)"
-    (removeDocument)="removeFile($event)"
-  ></app-upload-form>
+  <app-upload-form [title]="'Upload Documents'" [showDescriptionField]="true" [uploadedFiles]="uploadedFiles"
+    [uploadedFilesPosition]="'right'" (uploadDocument)="submitFile($event)"
+    (removeDocument)="removeFile($event)"></app-upload-form>
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 mt-4 gap-4 text-neutral-300">
@@ -60,11 +57,8 @@
     <h1 class="text-lg font-semibold">Input Batches</h1>
     <p>Input Weight: {{ calculateTotalWeightOfBatches(batches) }}</p>
     <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-      <a
-        class="border border-gray-300 hover:bg-neutral-800/50 p-4 rounded-xl cursor-pointer"
-        [routerLink]="['/batches', batch.id]"
-        *ngFor="let batch of batches"
-      >
+      <a class="border border-gray-300 hover:bg-neutral-800/50 p-4 rounded-xl cursor-pointer"
+        [routerLink]="['/batches', batch.id]" *ngFor="let batch of batches">
         <h2 class="font-medium text-sm">{{ batch.id }}</h2>
         <p class="text-sm text-neutral-500 mt-2">Weight [kg]: {{ batch.weight }}</p>
         <p class="text-sm text-neutral-500">Last process: {{ batch.processStep.process.name }}</p>
@@ -77,32 +71,31 @@
     <p>Output Weight: {{ getOutputWeight() }}</p>
     <div>
       <form [formGroup]="outputBatchForm" class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div
-          formArrayName="outBatches"
-          class="border border-gray-300 p-4 rounded-xl relative"
-          *ngFor="let item of outBatches.controls; let i = index"
-        >
-          <span class="material-symbols-outlined absolute top-4 right-4 cursor-pointer" (click)="removeBatchItem(i)"> close </span>
+        <div formArrayName="outBatches" class="border border-gray-300 p-4 rounded-xl relative"
+          *ngFor="let item of outBatches.controls; let i = index">
+          <button class="material-symbols-outlined absolute top-4 right-4 cursor-pointer" (click)="removeBatchItem(i)">
+            close </button>
           <h2>Batch {{ i + 1 }}</h2>
           <div [formGroupName]="i" class="space-y-4 mt-4">
             <mat-form-field class="w-full" appearance="outline">
               <mat-label>Weight</mat-label>
-              <input matInput type="number" formControlName="weight" id="{{ 'weight' + i }}" min="1" placeholder="Weight" />
+              <input matInput type="number" formControlName="weight" id="{{ 'weight' + i }}" min="1"
+                placeholder="Weight" />
             </mat-form-field>
             <mat-form-field class="w-full" appearance="outline">
               <mat-label>Recipient</mat-label>
               <mat-select formControlName="recipient" id="{{ 'recipient' + i }}" placeholder="Recipient">
-                <mat-option *ngFor="let company of companies$ | async" [value]="company.id"> {{ company.name }} </mat-option>
+                <mat-option *ngFor="let company of companies$ | async" [value]="company.id"> {{ company.name }}
+                </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
         </div>
-        <div
-          class="border border-gray-300 p-4 rounded-xl flex items-center justify-center cursor-pointer hover:bg-neutral-980 transition min-h-52"
-          (click)="addBatchItem()"
-        >
-          <Button>Add Batch</Button>
-        </div>
+        <button
+          class="border border-gray-300 p-4 rounded-xl flex items-center justify-center hover:bg-neutral-980 transition min-h-52"
+          (click)="addBatchItem()">
+          Add Batch
+        </button>
       </form>
     </div>
   </div>

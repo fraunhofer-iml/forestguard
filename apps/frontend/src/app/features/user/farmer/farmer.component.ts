@@ -1,5 +1,5 @@
 import { FGFile, UserOrFarmerDto } from '@forest-guard/api-interfaces';
-import { BehaviorSubject, combineLatest, firstValueFrom, lastValueFrom, map, Observable, startWith, switchMap } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, switchMap } from 'rxjs';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Document } from '@prisma/client';
@@ -23,9 +23,9 @@ export class FarmerComponent {
   MINIO_URL = environment.MINIO.URL;
 
   constructor(
-    private route: ActivatedRoute,
-    private userService: UserService,
-    private companyService: CompanyService,
+    private readonly route: ActivatedRoute,
+    private readonly userService: UserService,
+    private readonly companyService: CompanyService,
     public authenticationService: AuthenticationService
   ) {}
 

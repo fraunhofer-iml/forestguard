@@ -35,7 +35,11 @@ export class BatchOverviewComponent implements AfterViewInit {
     this.setDataSourceAttributes();
   }
 
-  constructor(private companyService: CompanyService, private router: Router, private authenticationService: AuthenticationService) {}
+  constructor(
+    private readonly companyService: CompanyService,
+    private readonly router: Router,
+    private readonly authenticationService: AuthenticationService
+  ) {}
 
   ngAfterViewInit(): void {
     this.getBatches();

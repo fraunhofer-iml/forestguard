@@ -27,8 +27,8 @@ export class AddCompanyComponent {
 
   constructor(
     public authenticationService: AuthenticationService,
-    private companyService: CompanyService,
-    private createCompanyService: AddCompanyService
+    private readonly companyService: CompanyService,
+    private readonly createCompanyService: AddCompanyService
   ) {}
 
   submitCompany() {

@@ -39,7 +39,8 @@
       <mat-form-field class="w-full mt-4" appearance="outline">
         <mat-label>Author of Entry</mat-label>
         <mat-select formControlName="authorOfEntry" placeholder="Author of Entry">
-          <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }} </mat-option>
+          <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }}
+          </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -64,7 +65,8 @@
                   </mat-option>
                 </mat-select>
                 <div class="justify-end ml-1" *ngIf="this.plotsOfLand.length > 1 && i">
-                  <span class="material-symbols-outlined cursor-pointer" (click)="removePlotOfLand(i)"> close </span>
+                  <button class="material-symbols-outlined cursor-pointer" (click)="removePlotOfLand(i)"> close
+                  </button>
                 </div>
               </div>
             </mat-form-field>

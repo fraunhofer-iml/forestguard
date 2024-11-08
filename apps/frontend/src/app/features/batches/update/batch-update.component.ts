@@ -44,12 +44,12 @@ export class BatchUpdateComponent implements OnInit {
   batches$ = new Observable<BatchDto[]>();
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private batchService: BatchService,
-    private companyService: CompanyService,
-    private authenticationService: AuthenticationService,
-    private processStepService: ProcessStepService
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly batchService: BatchService,
+    private readonly companyService: CompanyService,
+    private readonly authenticationService: AuthenticationService,
+    private readonly processStepService: ProcessStepService
   ) {}
 
   get outBatches(): FormArray {

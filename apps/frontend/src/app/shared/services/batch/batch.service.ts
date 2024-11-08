@@ -7,7 +7,7 @@ import { Uris } from '../../uris';
 
 @Injectable()
 export class BatchService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private readonly httpClient: HttpClient) {}
 
   public createBatches(batches: BatchCreateDto[]): Observable<{ processStepId: string }> {
     return this.httpClient.post<{ processStepId: string }>(environment.BATCHES.URL, batches);

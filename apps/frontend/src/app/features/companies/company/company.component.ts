@@ -59,9 +59,9 @@ export class CompanyComponent {
   }
 
   constructor(
-    private route: ActivatedRoute,
-    private companyService: CompanyService,
-    private importService: ImportService
+    private readonly route: ActivatedRoute,
+    private readonly companyService: CompanyService,
+    private readonly importService: ImportService
   ) {
     this.getFarmers();
   }

@@ -69,13 +69,13 @@ export class AddPlotOfLandComponent {
   }
 
   constructor(
-    private companyService: CompanyService,
-    private userService: UserService,
-    private plotOfLandService: PlotOfLandService,
-    private cultivationService: CultivationService,
-    private generatePlotOfLandService: GeneratePlotOfLandService,
-    private authenticationService: AuthenticationService,
-    private router: Router
+    private readonly companyService: CompanyService,
+    private readonly userService: UserService,
+    private readonly plotOfLandService: PlotOfLandService,
+    private readonly cultivationService: CultivationService,
+    private readonly generatePlotOfLandService: GeneratePlotOfLandService,
+    private readonly authenticationService: AuthenticationService,
+    private readonly router: Router
   ) {
     this.farmers$ = this.companyService.getFarmersByCompanyId(this.authenticationService.getCurrentCompanyId() ?? '');
     this.users$ = this.userService.getUsers();
@@ -138,13 +138,13 @@ export class AddPlotOfLandComponent {
     let jsonData: JsonData;
 
     try {
-      jsonData = JSON.parse(this.plotOfLandFormGroup.get('geoDataInput')?.value || '');
+      jsonData = JSON.parse(this.plotOfLandFormGroup.get('geoDataInput')?.value ?? '');
     } catch (error) {
       toast.error(Messages.invalidGeoData);
       return;
     }
 
-    if (jsonData && jsonData.geometry && jsonData.geometry.coordinates && Array.isArray(jsonData.geometry.coordinates[0])) {
+    if (Array.isArray(jsonData?.geometry?.coordinates?.[0])) {
       this.plotOfLandFormGroup.patchValue({
         geoDataStandard: Standard.WGS,
         geoDataCoordinate: JSON.stringify(jsonData.geometry.coordinates[0]),

@@ -7,7 +7,8 @@
     </mat-form-field>
     <div class="flex flex-row gap-4 items-center">
       <a routerLink="{{ Uris.addHarvest }}" mat-button class="w-full text-nowrap">Add Harvest</a>
-      <button mat-flat-button class="w-full text-nowrap" [disabled]="!selection.hasValue()" (click)="routeToAddProcess()">
+      <button mat-flat-button class="w-full text-nowrap" [disabled]="!selection.hasValue()"
+        (click)="routeToAddProcess()">
         Add Process
       </button>
     </div>
@@ -18,21 +19,14 @@
       <!-- Checkbox Column -->
       <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef>
-          <mat-checkbox
-            (change)="$event ? toggleAllRows() : null"
-            [checked]="selection.hasValue() && isAllSelected()"
-            [indeterminate]="selection.hasValue() && !isAllSelected()"
-            [aria-label]="checkboxLabel()"
-          >
+          <mat-checkbox (change)="$event ? toggleAllRows() : null" [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
           </mat-checkbox>
         </th>
         <td mat-cell *matCellDef="let row">
-          <mat-checkbox
-            (click)="$event.stopPropagation()"
-            (change)="$event ? selection.toggle(row) : null"
-            [checked]="selection.isSelected(row)"
-            [aria-label]="checkboxLabel(row)"
-          >
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+            (keydown)="$event.stopPropagation()" [checked]="selection.isSelected(row)"
+            [aria-label]="checkboxLabel(row)">
           </mat-checkbox>
         </td>
       </ng-container>
@@ -47,7 +41,8 @@
 
       <!-- Weight -->
       <ng-container matColumnDef="weight" class="headline-text !text-right">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition="before" class="!text-right">Weight [kg]</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition="before" class="!text-right">Weight [kg]
+        </th>
         <td mat-cell class="!text-right" *matCellDef="let el; dataSource: batches">{{ el.weight }}</td>
       </ng-container>
 
@@ -66,7 +61,8 @@
       <!-- Process Owner -->
       <ng-container matColumnDef="processOwner">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="processStep.executedBy.lastName">Process Owner</th>
-        <td mat-cell *matCellDef="let el; dataSource: batches">{{ getUserOrCompanyName(el.processStep.executedBy) }}</td>
+        <td mat-cell *matCellDef="let el; dataSource: batches">{{ getUserOrCompanyName(el.processStep.executedBy) }}
+        </td>
       </ng-container>
 
       <!-- Row shown when there is no matching data. -->

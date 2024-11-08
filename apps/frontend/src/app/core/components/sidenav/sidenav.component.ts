@@ -12,7 +12,10 @@ export class SidenavComponent {
 
   company$ = this.companyService.getCompanyById(this.authenticationService.getCurrentCompanyId() ?? '');
 
-  constructor(public authenticationService: AuthenticationService, private companyService: CompanyService) {}
+  constructor(
+    public authenticationService: AuthenticationService,
+    private readonly companyService: CompanyService
+  ) {}
 
   getCompanyAbbrevation(companyName: string): string {
     return companyName

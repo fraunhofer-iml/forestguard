@@ -37,9 +37,9 @@ export class AddUserComponent {
 
   constructor(
     public authenticationService: AuthenticationService,
-    private userService: UserService,
-    private generateUserService: GenerateUserService,
-    private router: Router
+    private readonly userService: UserService,
+    private readonly generateUserService: GenerateUserService,
+    private readonly router: Router
   ) {}
 
   setSelectedRole(role: string): void {
