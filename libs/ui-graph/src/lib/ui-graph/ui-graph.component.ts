@@ -44,6 +44,10 @@ export class UiGraphComponent implements OnInit, OnChanges {
     description: '\ue873',
     fingerprint: '\ue90d',
   };
+  private readonly euInfoSystemTooltipText = 'EU System Info ID available';
+  private readonly processDocumentsTooltipText = 'Process-specific documents available';
+  private readonly batchInformationTooltipTemplate = (data: any): string =>
+    `<strong>Batch ${data.id}</strong>\nProcess:\t\t\t\t\t${data.name}\nWeight [kg]:\t\t\t${data.weight}\nDate of Process:\t${new Date(data.processStepDate).toLocaleString()}`;
 
   constructor(private _element: ElementRef) {}
 
@@ -237,6 +241,11 @@ export class UiGraphComponent implements OnInit, OnChanges {
             .attr('width', (d) => d.x1 - d.x0 || 50),
         (exit) => exit.remove()
       )
+      .on('mouseover', (event, data) =>
+        this.onMouseOverElement('tooltip-batch-information', this.batchInformationTooltipTemplate(data), event, data)
+      )
+      .on('mousemove', (event, data) => this.onMouseMoveElement('tooltip-batch-information', event, data))
+      .on('mouseout', (event, data) => this.onMouseOutElement('tooltip-batch-information', event, data))
       .on('click', (event, data) => this.onMouseEnter(event, data));
 
     this.nodes
@@ -278,9 +287,34 @@ export class UiGraphComponent implements OnInit, OnChanges {
               return `rotate(270, ${x}, ${y})`;
             })
       )
+      .on('mouseover', (event, data) =>
+        this.onMouseOverElement('tooltip-batch-information', this.batchInformationTooltipTemplate(data), event, data)
+      )
+      .on('mousemove', (event, data) => this.onMouseMoveElement('tooltip-batch-information', event, data))
+      .on('mouseout', (event, data) => this.onMouseOutElement('tooltip-batch-information', event, data))
       .on('click', (event, data) => this.onMouseEnter(event, data));
 
     this.addVisualIndicators();
+    this.setBatchInformationTooltipDiv();
+  }
+
+  /**
+   * Initializes and appends a tooltip div to the body for displaying batch information.
+   */
+  private setBatchInformationTooltipDiv() {
+    // Tooltip styles for batch information
+    d3_select('body')
+      .append('div')
+      .attr('id', 'tooltip-batch-information')
+      .style('position', 'absolute')
+      .style('display', 'none')
+      .style('background-color', 'rgba(243, 244, 246, 0.75)')
+      .style('color', '#000000')
+      .style('padding', '12px')
+      .style('border-radius', '12px')
+      .style('pointer-events', 'none')
+      .style('white-space', 'pre-wrap')
+      .style('backdrop-filter', 'blur(5px)');
   }
 
   private addVisualIndicators() {
@@ -288,17 +322,18 @@ export class UiGraphComponent implements OnInit, OnChanges {
       return console.error('Missing svg, container, links or nodes');
     }
 
-    // Tooltip styles  for icon-eu-info-system
+    // Tooltip styles for icon-eu-info-system
     d3_select('body')
       .append('div')
       .attr('id', 'tooltip-icon-eu-info-system')
       .style('position', 'absolute')
       .style('display', 'none')
-      .style('background', '#30312C')
-      .style('color', '#FFFFFF')
-      .style('padding', '10px')
+      .style('background', 'rgba(243, 244, 246, 0.75)')
+      .style('color', '#000000')
+      .style('padding', '12px')
       .style('border-radius', '12px')
-      .style('pointer-events', 'none');
+      .style('pointer-events', 'none')
+      .style('backdrop-filter', 'blur(5px)');
 
     // Tooltip styles for icon-process-documents
     d3_select('body')
@@ -306,11 +341,12 @@ export class UiGraphComponent implements OnInit, OnChanges {
       .attr('id', 'tooltip-icon-process-documents')
       .style('position', 'absolute')
       .style('display', 'none')
-      .style('background', '#30312C')
-      .style('color', '#FFFFFF')
-      .style('padding', '10px')
+      .style('background', 'rgba(243, 244, 246, 0.75)')
+      .style('color', '#000000')
+      .style('padding', '12px')
       .style('border-radius', '12px')
-      .style('pointer-events', 'none');
+      .style('pointer-events', 'none')
+      .style('backdrop-filter', 'blur(5px)');
 
     this.nodes
       .selectAll('text.icon-eu-info-system')
@@ -327,10 +363,10 @@ export class UiGraphComponent implements OnInit, OnChanges {
             .attr('font-size', '48px')
             .text(this.getIconUnicode('fingerprint'))
             .on('mouseover', (event, data) =>
-              this.onMouseOverIcon('tooltip-icon-eu-info-system', 'EU System Info ID available', event, data)
+              this.onMouseOverElement('tooltip-icon-eu-info-system', this.euInfoSystemTooltipText, event, data)
             )
-            .on('mousemove', (event, data) => this.onMouseMoveIcon('tooltip-icon-eu-info-system', event, data))
-            .on('mouseout', (event, data) => this.onMouseOutIcon('tooltip-icon-eu-info-system', event, data)),
+            .on('mousemove', (event, data) => this.onMouseMoveElement('tooltip-icon-eu-info-system', event, data))
+            .on('mouseout', (event, data) => this.onMouseOutElement('tooltip-icon-eu-info-system', event, data)),
         (update) =>
           update
             .transition()
@@ -357,10 +393,10 @@ export class UiGraphComponent implements OnInit, OnChanges {
             .attr('font-size', '48px')
             .text(this.getIconUnicode('description'))
             .on('mouseover', (event, data) =>
-              this.onMouseOverIcon('tooltip-icon-process-documents', 'Process-specific documents available', event, data)
+              this.onMouseOverElement('tooltip-icon-process-documents', this.processDocumentsTooltipText, event, data)
             )
-            .on('mousemove', (event, data) => this.onMouseMoveIcon('tooltip-icon-process-documents', event, data))
-            .on('mouseout', (event, data) => this.onMouseOutIcon('tooltip-icon-process-documents', event, data)),
+            .on('mousemove', (event, data) => this.onMouseMoveElement('tooltip-icon-process-documents', event, data))
+            .on('mouseout', (event, data) => this.onMouseOutElement('tooltip-icon-process-documents', event, data)),
         (update) =>
           update
             .transition()
@@ -374,13 +410,13 @@ export class UiGraphComponent implements OnInit, OnChanges {
   }
 
   /**
-   * Handles the mouse out event on an icon, causing the tooltip to fade out and hide.
+   * Handles the mouse out event on an element, causing the tooltip to fade out and hide.
    *
    * @param tooltipId - The ID of the tooltip element.
    * @param event - The mouse event object.
    * @param data - Additional data that might be needed for handling the mouse out event.
    */
-  private onMouseOutIcon(tooltipId: string, event: any, data: any) {
+  private onMouseOutElement(tooltipId: string, event: any, data: any) {
     if (this.showTimeout) {
       clearTimeout(this.showTimeout);
     }
@@ -393,27 +429,27 @@ export class UiGraphComponent implements OnInit, OnChanges {
   }
 
   /**
-   * Handles the mouse move event over an icon, updating the position of the tooltip.
+   * Handles the mouse move event over an element, updating the position of the tooltip.
    *
    * @param tooltipId - The ID of the tooltip element.
    * @param event - The mouse event object containing the current mouse position.
    * @param data - Additional data that might be needed for handling the mouse move event.
    */
-  private onMouseMoveIcon(tooltipId: string, event: { pageX: number; pageY: number }, data: any) {
+  private onMouseMoveElement(tooltipId: string, event: { pageX: number; pageY: number }, data: any) {
     d3_select('#' + tooltipId)
       .style('left', `${event.pageX + 5}px`)
       .style('top', `${event.pageY + 5}px`);
   }
 
   /**
-   * Handles the mouse over event on an icon, causing the tooltip to appear and display a message.
+   * Handles the mouse over event on an element, causing the tooltip to appear and display a message.
    *
    * @param tooltipId - The ID of the tooltip element.
    * @param message - The message to be displayed inside the tooltip.
    * @param event - The mouse event object containing the current mouse position.
    * @param data - Additional data that might be needed for handling the mouse over event.
    */
-  private onMouseOverIcon(tooltipId: string, message: string, event: { pageX: number; pageY: number }, data: any) {
+  private onMouseOverElement(tooltipId: string, message: string, event: { pageX: number; pageY: number }, data: any) {
     if (this.hideTimeout) {
       clearTimeout(this.hideTimeout);
     }
@@ -424,7 +460,7 @@ export class UiGraphComponent implements OnInit, OnChanges {
       .style('display', 'block')
       .style('opacity', '0')
       .style('transition', 'opacity 0.15s ease-in-out')
-      .text(message);
+      .html(message);
 
     this.showTimeout = window.setTimeout(() => {
       tooltip.style('opacity', '1');

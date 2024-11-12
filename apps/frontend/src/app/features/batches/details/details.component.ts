@@ -61,7 +61,12 @@ export class BatchDetailsComponent {
 
   data$: Observable<{ nodes: any[]; links: any[] }> = this.related$.pipe(
     map(({ coffeeBatches, edges }) => {
-      const nodes = coffeeBatches.map((b) => ({ id: b.id, name: b.processStep?.process.name, weight: b.weight }));
+      const nodes = coffeeBatches.map((b) => ({
+        id: b.id,
+        name: b.processStep?.process.name,
+        weight: b.weight,
+        processStepDate: b.processStep.date,
+      }));
       // Filter edges for duplicates
       edges = edges.filter((edge, index, self) => index === self.findIndex((t) => t.from === edge.from && t.to === edge.to));
       const links = edges.map((edge) => ({ source: edge.from, target: edge.to, value: 1 }));
