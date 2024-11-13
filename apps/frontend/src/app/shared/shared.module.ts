@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { authHttpInterceptor } from '../core/interceptors/auth-http.interceptor.ts.interceptor';
+import { SheetComponent } from './components/sheet/sheet.component';
 import { UploadFormComponent } from './components/upload-form/upload-form.component';
 import { BatchService } from './services/batch/batch.service';
 import { CompanyService } from './services/company/company.service';
@@ -18,7 +19,16 @@ import { FileSizePipe } from './utils/file-size.pipe';
 
 @NgModule({
   declarations: [UploadFormComponent, FileSizePipe],
-  imports: [CommonModule, MatFormFieldModule, MatSelectModule, MatButtonModule, ReactiveFormsModule, MatInputModule, MatTooltipModule],
+  imports: [
+    CommonModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatTooltipModule,
+    SheetComponent,
+  ],
   providers: [
     CompanyService,
     BatchService,
@@ -27,6 +37,6 @@ import { FileSizePipe } from './utils/file-size.pipe';
     CultivationService,
     provideHttpClient(withInterceptors([authHttpInterceptor])),
   ],
-  exports: [UploadFormComponent, FileSizePipe],
+  exports: [UploadFormComponent, FileSizePipe, SheetComponent],
 })
 export class SharedModule {}

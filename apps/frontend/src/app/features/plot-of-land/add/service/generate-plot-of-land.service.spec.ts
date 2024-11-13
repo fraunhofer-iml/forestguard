@@ -26,11 +26,12 @@ describe('GeneratePlotOfLandService', (): void => {
     const formGroup: FormGroup = formBuilder.group({
       geoDataStandard: new FormControl(Standard.UTM),
       geoDataType: new FormControl(CoordinateType.MultiPoint),
-      geoDataCoordinate: new FormControl([-105.02986587151608, 40.622831213346714]),
+      geoDataCoordinates: new FormControl([-105.02986587151608, 40.622831213346714]),
       geoDataZone: new FormControl('456'),
     });
 
-    const result = service.createGeoData(formGroup);
+    const coordinates = [-105.02986587151608, 40.622831213346714];
+    const result = service.createGeoData(formGroup, coordinates);
     expect(result).toEqual(new GeoDataDto(Standard.UTM, CoordinateType.MultiPoint, [-105.02986587151608, 40.622831213346714], '456'));
   });
 
@@ -38,16 +39,20 @@ describe('GeneratePlotOfLandService', (): void => {
     const formGroup = new FormGroup({
       region: new FormControl('Germany'),
       plotOfLand: new FormControl('Coffee Field'),
-      geoDataStandard: new FormControl(Standard.UTM),
-      geoDataType: new FormControl(CoordinateType.MultiPoint),
-      geoDataCoordinate: new FormControl([-105.02986587151608, 40.622831213346714]),
-      geoDataZone: new FormControl(null),
       cultivationSort: new FormControl('arabica'),
       nationalPlotOfLandId: new FormControl('456'),
       localPlotOfLandId: new FormControl('123'),
     });
 
-    const result = service.createNewPlotOfLand(formGroup);
+    const geoInfoForm = new FormGroup({
+      geoDataStandard: new FormControl(Standard.UTM),
+      geoDataType: new FormControl(CoordinateType.MultiPoint),
+      geoDataCoordinates: new FormControl([-105.02986587151608, 40.622831213346714]),
+      geoDataZone: new FormControl(null),
+    });
+
+    const coordinates = [-105.02986587151608, 40.622831213346714];
+    const result = service.createNewPlotOfLand(formGroup, geoInfoForm, coordinates);
 
     expect(result).toEqual(
       new PlotOfLandCreateDto(

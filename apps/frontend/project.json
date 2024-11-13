@@ -16,8 +16,21 @@
         "polyfills": ["zone.js"],
         "tsConfig": "apps/frontend/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/frontend/src/favicon.ico", "apps/frontend/src/assets"],
-        "styles": ["@angular/material/prebuilt-themes/deeppurple-amber.css", "apps/frontend/src/styles.scss"],
+        "assets": [
+          "apps/frontend/src/favicon.ico",
+          "apps/frontend/src/assets",
+          "apps/frontend/src/media",
+          {
+            "glob": "**/*",
+            "input": "node_modules/leaflet/dist/images/",
+            "output": "media"
+          }
+        ],
+        "styles": [
+          "@angular/material/prebuilt-themes/deeppurple-amber.css",
+          "apps/frontend/src/styles.scss",
+          "node_modules/leaflet/dist/leaflet.css"
+        ],
         "scripts": []
       },
       "configurations": {

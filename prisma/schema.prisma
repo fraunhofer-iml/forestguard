@@ -108,10 +108,10 @@ model PlotOfLand {
 }
 
 model Cultivation {
-  id   String @id @default(cuid())
+  id        String @id @default(cuid())
   commodity String
-  sort String
-  quality String
+  sort      String
+  quality   String
 
   plotsOfLand PlotOfLand[]
 
@@ -181,6 +181,6 @@ model Document {
   processStep   ProcessStep? @relation(fields: [processStepId], references: [id])
   processStepId String?
 
-  user   User? @relation(fields: [userId], references: [id])
+  user   User?   @relation(fields: [userId], references: [id])
   userId String?
 }

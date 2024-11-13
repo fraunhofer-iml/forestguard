@@ -1,0 +1,116 @@
+<form *ngIf="geoDataFormGroup" [formGroup]="geoDataFormGroup">
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label class="w-full">Standard</mat-label>
+    <mat-select formControlName="geoDataStandard" placeholder="Standard" class="w-full !border-none">
+      <mat-option *ngFor="let standard of getGeoDataStandards()" [value]="standard">
+        {{ standard }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  @if (geoDataStandard === Standard.UTM) {
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Zone</mat-label>
+      <input matInput formControlName="geoDataZone" placeholder="Zone" />
+    </mat-form-field>
+  }
+
+  <div class="flex gap-4 justify-center">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label class="w-full">Type</mat-label>
+      <mat-select formControlName="geoDataType" placeholder="Type" class="w-full !border-none">
+        <mat-option *ngFor="let type of getGeoDataCoordinateTypes()" [value]="type">
+          {{ type }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="flex gap-4 p-4 bg-yellow-100 rounded-lg">
+    <span class="material-symbols-outlined"> info </span>
+    @if (geoDataStandard === Standard.UTM) {
+      <span>
+        The values for the coordinates have to be between 160.000 and 840.000 for X-Coordinates and between 0 and 10.000.000 for
+        Y-Coordinates
+      </span>
+    } @else if (geoDataStandard === Standard.WGS) {
+      <span>
+        The values for the coordinates have to be between -180 and 180 for X-Coordinates and between -90 and 90 for Y-Coordinates
+      </span>
+    } @else {
+      <span> Please select a standard for coordinate inputs </span>
+    }
+  </div>
+
+  <div formArrayName="geoDataCoordinates" class="space-y-4 mt-4">
+    @for (polygons of getPolygons().controls; track $index; let pindex = $index) {
+      <div [formArrayName]="pindex" [ngClass]="{ 'bg-neutral-950 rounded p-4': getCoordinates().length > 0 }">
+        @if (geoDataType === 'MultiPolygon') {
+          <div class="flex justify-between items-center">
+            <h4 class="text-lg font-medium">Polygon {{ pindex + 1 }}</h4>
+            <div>
+              <button mat-icon-button (click)="removePolygon(pindex)">
+                <div class="flex items-center justify-center">
+                  <span class="material-symbols-outlined"> delete </span>
+                </div>
+              </button>
+            </div>
+          </div>
+        }
+        @for (coordinates of getCoordinates(pindex).controls; track $index; let cindex = $index) {
+          <div>
+            <div class="col-span-2 items-center flex gap-2">
+              Point {{ cindex + 1 }}
+              @if (geoDataType !== CoordinateType.Point) {
+                <button mat-icon-button (click)="removeCoordinate(pindex, cindex)">
+                  <div class="flex items -center justify-center">
+                    <span class="material-symbols-outlined"> delete </span>
+                  </div>
+                </button>
+              }
+            </div>
+            <div [formGroupName]="cindex" class="grid grid-cols-2 gap-4 mt-2">
+              <mat-form-field class="w-full" appearance="outline">
+                <mat-label>X Coordinate</mat-label>
+                <input type="number" matInput formControlName="x" placeholder="X" />
+              </mat-form-field>
+              <mat-form-field class="w-full" appearance="outline">
+                <mat-label>Y Coordinate</mat-label>
+                <input type="number" matInput formControlName="y" placeholder="Y" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          @if (
+            (geoDataType === CoordinateType.Polygon || geoDataType === CoordinateType.MultiPolygon) &&
+            cindex === getCoordinates(pindex).controls.length - 2
+          ) {
+            <button
+              (click)="addCoordinate(pindex, 'middle')"
+              class="w-full p-4 text-white bg-secondary-400 hover:bg-secondary-500 transition rounded"
+            >
+              Add Point
+            </button>
+          }
+
+          @if (geoDataType === CoordinateType.MultiPoint && cindex === getCoordinates(pindex).controls.length - 1) {
+            <button
+              (click)="addCoordinate(pindex)"
+              class="w-full p-4 text-white bg-secondary-400 hover:bg-secondary-500 transition rounded"
+            >
+              Add Point
+            </button>
+          }
+        }
+      </div>
+    }
+    @if (geoDataType === CoordinateType.MultiPolygon) {
+      <button
+        (click)="addPolygons({ amount: 1, numberOfPoints: 3 })"
+        class="w-full p-4 text-white bg-secondary-400 hover:bg-secondary-500 transition rounded"
+      >
+        Add Polygon
+      </button>
+    }
+  </div>
+  <button mat-flat-button (click)="save.emit()" [disabled]="geoDataFormGroup.invalid" class="mt-4">Confirm</button>
+</form>

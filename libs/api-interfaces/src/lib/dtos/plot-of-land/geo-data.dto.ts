@@ -10,7 +10,7 @@ export enum CoordinateType {
   MultiPolygon = 'MultiPolygon',
 }
 
-type Coordinates = number[] | number[][] | number[][][] | number[][][][];
+export type Coordinates = number[] | number[][] | number[][][] | number[][][][];
 
 export class GeoDataDto {
   // possibly a validation for type

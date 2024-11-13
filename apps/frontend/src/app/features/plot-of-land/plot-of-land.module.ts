@@ -7,15 +7,17 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { PlotOfLandService } from '../../shared/services/plotOfLand/plotOfLand.service';
 import { SharedModule } from '../../shared/shared.module';
 import { AddPlotOfLandComponent } from './add/add-plot-of-land.component';
+import { CoordinateInputComponent } from './add/components/coordinate-input/coordinate-input.component';
 import { GeneratePlotOfLandService } from './add/service/generate-plot-of-land.service';
 import { PlotOfLandDetailsComponent } from './details/details.component';
 import { PlotOfLandRoutingModule } from './plot-of-land.routes';
 
 @NgModule({
-  declarations: [AddPlotOfLandComponent, PlotOfLandDetailsComponent],
+  declarations: [AddPlotOfLandComponent, PlotOfLandDetailsComponent, CoordinateInputComponent],
   imports: [
     PlotOfLandRoutingModule,
     CommonModule,
@@ -27,6 +29,7 @@ import { PlotOfLandRoutingModule } from './plot-of-land.routes';
     SharedModule,
     ReactiveFormsModule,
     MatSelectModule,
+    LeafletModule,
   ],
   providers: [GeneratePlotOfLandService, PlotOfLandService],
 })

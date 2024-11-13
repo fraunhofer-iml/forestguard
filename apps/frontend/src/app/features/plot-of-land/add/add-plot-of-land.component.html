@@ -56,11 +56,24 @@
         <h1 class="font-semibold text-gray-700">Geo Data</h1>
 
         <div class="inline-flex justify-end gap-4 w-full">
-          <button mat-button (click)="toggleImportGeoData()">Import</button>
+          <button mat-button (click)="toggleImportGeoData()"><div class="text-nowrap">JSON Import</div></button>
+          <button mat-flat-button (click)="sheet.open()" [ngClass]="{ '!bg-red-500': !geoDataFormGroup.valid }">
+            <div class="text-nowrap">Manual Input</div>
+          </button>
         </div>
+
+        @if (geoDataFormGroup.invalid) {
+          <div class="text-red-500 col-span-2">No Geo informations provided or geo data invalid.</div>
+        }
+
+        @if (geoDataFormGroup.valid) {
+          <div class="col-span-2">
+            <div class="h-80 z-0" leaflet id="map" [leafletCenter]="center" [leafletZoom]="10" [leafletLayers]="layers"></div>
+          </div>
+        }
       </div>
 
-      <div *ngIf="isImportGeoDataVisible" class="space-y-4 p-4 bg-gray-100 rounded-lg">
+      <form *ngIf="isImportGeoDataVisible" class="space-y-4 p-4 bg-gray-100 rounded-lg" [formGroup]="geoDataFormGroup">
         <textarea
           formControlName="geoDataInput"
           placeholder="Please enter the Geo Data as a JSON file here."
@@ -71,39 +84,7 @@
           <button mat-button (click)="toggleImportGeoData()">Back</button>
           <button mat-flat-button (click)="saveGeoData()">Save</button>
         </div>
-      </div>
-
-      <div *ngIf="!isImportGeoDataVisible">
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label class="w-full">Standard</mat-label>
-          <mat-select formControlName="geoDataStandard" placeholder="Standard" class="w-full !border-none">
-            <mat-option *ngFor="let standard of getGeoDataStandards()" [value]="standard">
-              {{ standard }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <ng-container *ngIf="valueChangesOfGeoDataStandard$ | async as value"></ng-container>
-        <mat-form-field class="w-full" appearance="outline">
-          <mat-label>Zone</mat-label>
-          <input matInput formControlName="geoDataZone" placeholder="Zone" />
-        </mat-form-field>
-
-        <div class="flex">
-          <mat-form-field appearance="outline" class="w-full mr-4">
-            <mat-label class="w-full">Type</mat-label>
-            <mat-select formControlName="geoDataType" placeholder="Type" class="w-full !border-none">
-              <mat-option *ngFor="let type of getGeoDataCoordinateTypes()" [value]="type">
-                {{ type }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field class="w-full" appearance="outline">
-            <mat-label>Coordinate</mat-label>
-            <input matInput formControlName="geoDataCoordinate" placeholder="Coordinate" />
-          </mat-form-field>
-        </div>
-      </div>
+      </form>
     </div>
   </form>
 
@@ -115,3 +96,11 @@
     <button mat-flat-button (click)="submitPlotOfLand()">Save</button>
   </div>
 </div>
+
+<app-sheet #sheet>
+  <div>
+    <button class="material-symbols-outlined cursor-pointer" (click)="sheet.close()">close</button>
+    <h2 class="font-medium text-sm mb-4">Add Geo Information about the field</h2>
+  </div>
+  <app-coordinate-input [geoDataFormGroup]="geoDataFormGroup" (save)="sheet.close()" />
+</app-sheet>
