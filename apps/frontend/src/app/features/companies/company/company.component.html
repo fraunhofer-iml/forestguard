@@ -2,7 +2,6 @@
 
 <div class="card mb-4 flex justify-end">
   <a routerLink="{{ Uris.addUser }}" mat-button class="text-end">Create User/Farmer</a>
-  <a routerLink="{{ Uris.addCompany }}" mat-button class="ml-2">Add Company</a>
 </div>
 
 <div class="grid md:grid-cols-2 sm:grid-cols-1" *ngIf="company$ | async as company">
@@ -20,24 +19,20 @@
     <span class="border-b-2 font-medium py-2">State</span>
     <p class="border-b-2 py-2 text-neutral-500">{{ company.address.state }}</p>
     <span class="border-b-2 py-2 font-medium"
-          [class]="company.address.additionalInformation ? '' : 'md:border-none sm:border-b-2'">
+      [class]="company.address.additionalInformation ? '' : 'md:border-none sm:border-b-2'">
       Country
     </span>
-    <p class="py-2 text-neutral-500"
-       [class]="company.address.additionalInformation ? 'border-b-2' : ''">{{ company.address.country }}</p>
+    <p class="py-2 text-neutral-500" [class]="company.address.additionalInformation ? 'border-b-2' : ''">{{
+      company.address.country }}</p>
     <span *ngIf="company.address?.additionalInformation"
-          class="font-medium py-2 md:border-none sm:border-b-2">Additional Information</span>
+      class="font-medium py-2 md:border-none sm:border-b-2">Additional Information</span>
     <p class="text-neutral-500 py-2">{{ company.address.additionalInformation }}</p>
   </div>
 </div>
 
 <div class="card mt-4 flex items-center justify-between">
   <h1 class="text-lg font-semibold">Farmers</h1>
-  <button
-    mat-flat-button
-    matTooltip="Import data to add more farmers to the table."
-    (click)="fileInput.click()"
-  >
+  <button mat-flat-button matTooltip="Import data to add more farmers to the table." (click)="fileInput.click()">
     Import Data
   </button>
   <input type="file" #fileInput class="hidden" (change)="onFileSelected($event)" />
@@ -105,11 +100,8 @@
     <ng-container matColumnDef="plotOfLand">
       <th mat-header-cell *matHeaderCellDef mat-sort-header="plotOfLand">Plot of Land</th>
       <td mat-cell *matCellDef="let farmer">
-        <a
-          *ngFor="let plotsOfLand of farmer.plotsOfLand"
-          [routerLink]="['/pols', plotsOfLand.id]"
-          class="cursor-pointer hover:underline text-secondary-500"
-        >
+        <a *ngFor="let plotsOfLand of farmer.plotsOfLand" [routerLink]="['/pols', plotsOfLand.id]"
+          class="cursor-pointer hover:underline text-secondary-500">
           {{ plotsOfLand.description }}
         </a>
       </td>
