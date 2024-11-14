@@ -8,52 +8,32 @@
 = Building Block View
 
 The building block view is a static and hierarchical decomposition of the system into building blocks and their relationships.
-It is a collection of black box and white box descriptions for all important components.
+It is a collection descriptions for all important components.
 Building blocks may be modules, components, subsystems, classes, interfaces, packages, libraries, frameworks, layers, partitions, tiers, functions, macros, operations, data structures, etc.).
 
-In blackbox view, only the _interface_ of the component is visible, not its internals.
-However, for interface specifications including all method signatures and their descriptions we refer to the _OpenAPI_ documents.
+For interface specifications, including all method signatures and their descriptions, we refer to the _OpenAPI_ documents.
 Only other kinds of interfaces are described here.
-This is a simplification of arc42 (which requires short description of interfaces), to avoid redundancy and inconsistencies, and to reduce documentation efforts.
+This is a simplification of arc42 (which requires a short description of interfaces), to avoid redundancy and inconsistencies, and to reduce documentation efforts.
 
 == Overview
 
-TBD
+The ForestGuard project mainly consists of two parts: a frontend and a backend.
+The frontend is a web interface for the user and was developed using Angular.
+The backend consists of an API gateway, which is responsible for routing requests from the frontend to the corresponding service, and a number of services, which provide the business logic. All three backend applications are implemented using TypeScript and Node.js.
+Additionally, the backend utilizes a database, an object storage system, and a blockchain for data storage.
+
+image:images/05_systemarchitecture_components.svg[]
 
 == Building Blocks - Level 1
 
-In level 1, the components of {projectName} and their relationships are shown.
-This is a simplification of the <<Overview>>.
-
 TBD
 
-There are the following components with its responsibilities:
-
-[cols="1,1,3",options="header"]
-|===
-| Name
-| Status
-| Responsibility / Description
-
-| TBD
-| TBD
-| TBD
-|===
-
-For each {projectName} component we give a brief overview as a blackbox view.
-For more details see <<Building Blocks - Level 2>> for the whitebox views of the components.
-
 == Building Blocks - Level 2
-
-In level 2, the black boxes of level 1 become white boxes.
-We look into each component in detail.
 
 TBD
 
 == Building Blocks - Level 3
 
-In level 3, the blackbox components occurring on level 2 are shown, which are developed within this project (i.e. not library components or components developed in other SE projects).
-In the following are class diagrams being shown to give an overview of all classes and functions.
+The following section presents the class diagram for ForestGuard, providing a comprehensive overview of all classes and their functions.
 
-TBD
-
+image:images/05_fg_entity_uml.svg[]
