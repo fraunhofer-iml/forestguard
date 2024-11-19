@@ -1,6 +1,6 @@
 import { AddressCreateDto, RoleType, UserUpdateDto } from "@forest-guard/api-interfaces";
 
-export const COMPANY_IDENTIFIER = 'Acme Corp 2';
+export const COMPANY_IDENTIFIER = process.env['UBIRIKI_IMPORT_IDENTIFIER'] || 'Acme Corp';
 
 export const ENTRY_SHEET_INDEX = 1;
 
@@ -25,7 +25,7 @@ export const Address: AddressCreateDto = {
     country: 'Peru',
     additionalInformation: '',
 }
-    
+
 export const HardcodedPlotsOfLandData = {
     country: 'Peru',
     region: 'Junín',

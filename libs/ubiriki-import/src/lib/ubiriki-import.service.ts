@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CoordinateType, FarmerAndPlotOfLand, FarmerCreateDto, ImportDto, MasterDataImportService, PlotOfLandCreateDto, RoleType, Standard, UserUpdateDto } from '@forest-guard/api-interfaces';
+import { CoordinateType, FarmerAndPlotOfLand, FarmerCreateDto, ImportDto, MasterDataImportService, PlotOfLandCreateDto, RoleType, Standard } from '@forest-guard/api-interfaces';
 import * as XLSX from 'xlsx';
 import { COMPANY_IDENTIFIER, HardcodedPlotsOfLandData, TOTAL_XLSX_SHEETS, ENTRY_SHEET_INDEX, XlsxColumn, Address, HardcodedEmployee } from './ubiriki-import-hardcoded';
 import 'multer';
@@ -32,7 +32,7 @@ export class UbirikiImportService implements MasterDataImportService {
           lastName: userData[XlsxColumn.name],
           role: RoleType.FARMER,
           mobilePhoneNumber: '',
-          personalId: JSON.stringify(userData[XlsxColumn.personalId]),
+          personalId: userData[XlsxColumn.personalId].toString(),
           email: '',
           address: Address,
         };
