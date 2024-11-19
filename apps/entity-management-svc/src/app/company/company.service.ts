@@ -77,6 +77,9 @@ export class CompanyService {
       include: {
         address: true,
         users: {
+          orderBy: {
+            lastName: 'asc',
+          },
           include: {
             address: true,
             plotsOfLand: {
