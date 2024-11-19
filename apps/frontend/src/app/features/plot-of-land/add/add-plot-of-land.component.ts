@@ -1,5 +1,4 @@
 import {
-  Coordinates,
   CoordinateType,
   CultivationDto,
   FGFile,
@@ -10,8 +9,7 @@ import {
   UserDto,
   UserOrFarmerDto,
 } from '@forest-guard/api-interfaces';
-import { utmToLatLong } from '@forest-guard/utm';
-import { LatLng, latLng, Layer, marker, polygon, tileLayer } from 'leaflet';
+import { icon, Icon, LatLng, latLng, Layer, marker, polygon, tileLayer } from 'leaflet';
 import { toast } from 'ngx-sonner';
 import { combineLatest, mergeMap, Observable } from 'rxjs';
 import { Component } from '@angular/core';
@@ -24,14 +22,7 @@ import { CompanyService } from '../../../shared/services/company/company.service
 import { CultivationService } from '../../../shared/services/cultivation/cultivation.service';
 import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
 import { UserService } from '../../../shared/services/user/user.service';
-import {
-  convertToCorrectFormat,
-  convertToMultiPoint,
-  convertToMultiPolygon,
-  convertToPoint,
-  convertToPolygon,
-  convertUTMtoWGS,
-} from '../../../shared/utils/coordinate-utils';
+import { convertToCorrectFormat, convertUTMtoWGS } from '../../../shared/utils/coordinate-utils';
 import { CoordinateInput } from './components/coordinate-input/coordinate-input.type';
 import { JsonData } from './model/json-data';
 import { PlotOfLandForm } from './model/plot-of-land-form';
@@ -220,7 +211,7 @@ export class AddPlotOfLandComponent {
   updateMarkers(coordinates: CoordinateInput): void {
     if (!coordinates || coordinates.length === 0) return;
     const markers = coordinates[0].map((coordinate: { x: number; y: number }) => {
-      return marker([coordinate.x || 0, coordinate.y || 0]);
+      return marker([coordinate.x || 0, coordinate.y || 0], { icon: new Icon.Default({ imagePath: './media/' }) });
     });
 
     this.layers = [tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }), ...markers];
