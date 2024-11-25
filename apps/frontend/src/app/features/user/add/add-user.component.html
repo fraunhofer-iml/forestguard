@@ -3,11 +3,11 @@
     >Company</a
   >
   <span class="material-symbols-outlined text-lg"> chevron_right </span>
-  <h1 class="font-medium">Create User/Farmer</h1>
+  <h1 class="font-medium">Create Employee/Farmer</h1>
 </header>
 
 <div class="card grid grid-cols-1 md:grid-cols-2">
-  <h1 class="font-semibold text-gray-700 mt-1">Create {{ selectedRole }}</h1>
+  <h1 class="font-semibold text-gray-700 mt-1">Create {{ selectedRole === Roles.USER ? 'Employee' : 'Farmer' }}</h1>
   <div class="inline-flex justify-end gap-4 w-full">
     <span class="text-neutral-500 mt-1 hidden md:inline">Role</span>
     <button
@@ -15,7 +15,7 @@
       class="h-8 rounded-full px-7 text-sm"
       (click)="setSelectedRole(Roles.USER)"
     >
-      User
+      Employee
     </button>
     <button
       [ngClass]="selectedRole === Roles.FARMER ? 'bg-primary-400 text-white' : 'bg-secondary-800 text-black'"
@@ -30,8 +30,8 @@
 <form [formGroup]="userFormGroup" class="grid grid-cols-1 md:grid-cols-2 gap-4">
   <div class="card mt-4">
     <mat-form-field appearance="outline" class="w-full">
-      <mat-label class="w-full">Employee Identification</mat-label>
-      <input matInput formControlName="employeeId" placeholder="Employee ID" />
+      <mat-label class="w-full">{{ selectedRole === Roles.USER ? 'Employee Identification' : 'Local Farmer ID' }}</mat-label>
+      <input matInput formControlName="employeeId" [placeholder]="selectedRole === Roles.USER ? 'Employee ID' : 'Local Farmer ID'" />
     </mat-form-field>
 
     <div class="flex-none md:flex">
