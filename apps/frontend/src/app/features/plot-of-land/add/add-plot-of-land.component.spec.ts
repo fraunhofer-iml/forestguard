@@ -32,6 +32,14 @@ describe('AddPlotOfLandComponent', () => {
   let formGroup: FormGroup;
 
   beforeEach(async () => {
+    Object.defineProperty(window, 'location', {
+      writable: true,
+      value: {
+        ...window.location,
+        reload: jest.fn(),
+      },
+    });
+
     await TestBed.configureTestingModule({
       declarations: [AddPlotOfLandComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],

@@ -11,6 +11,7 @@ import { Messages } from '../../../shared/messages';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { ImportService } from '../../../shared/services/import/import.service';
 import { Uris } from '../../../shared/uris';
+import { DataTableUtilityService } from '../../../shared/utils/data-table-utility.service';
 
 @Component({
   selector: 'app-company',
@@ -61,14 +62,26 @@ export class CompanyComponent {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly companyService: CompanyService,
-    private readonly importService: ImportService
+    private readonly importService: ImportService,
+    private readonly dataTableUtilityService: DataTableUtilityService
   ) {
     this.getFarmers();
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   setDataSourceAttributes() {
     this.dataSource.paginator = this.paginator ?? null;
     this.dataSource.sort = this.sort ?? null;
+    this.dataSource.sortingDataAccessor = this.dataTableUtilityService.pathDataAccessor;
+    this.dataSource.filterPredicate = this.dataTableUtilityService.filterPredicate;
   }
 
   getFarmers() {

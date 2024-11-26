@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Messages } from '../../../shared/messages';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { ImportService } from '../../../shared/services/import/import.service';
+import { DataTableUtilityService } from '../../../shared/utils/data-table-utility.service';
 import { CompanyComponent } from './company.component';
 
 jest.mock('ngx-sonner', () => ({
@@ -74,6 +75,7 @@ describe('CompanyComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
       declarations: [CompanyComponent],
       providers: [
+        DataTableUtilityService,
         { provide: CompanyService, useValue: mockCompanyService },
         { provide: ImportService, useValue: mockImportService },
         HttpClient,

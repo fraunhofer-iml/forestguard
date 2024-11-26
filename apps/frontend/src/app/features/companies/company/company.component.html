@@ -27,10 +27,23 @@
   </div>
 </div>
 
-<div class="card mt-4 flex items-center justify-between">
+<div class="card mt-4">
   <h1 class="text-lg font-semibold">Farmers</h1>
-  <button mat-flat-button matTooltip="Import data to add more farmers to the table." (click)="fileInput.click()">Import Data</button>
-  <input type="file" #fileInput class="hidden" (change)="onFileSelected($event)" />
+  <div class="md:flex sm:flex-none items-center justify-between mt-2 gap-4">
+    <mat-form-field class="w-full mb-0" appearance="outline">
+      <mat-label>Filter</mat-label>
+      <input matInput placeholder="Search" (keyup)="applyFilter($event)" />
+    </mat-form-field>
+    <button
+      mat-flat-button
+      class="md:w-48 sm:w-full sm:mt-2"
+      matTooltip="Import data to add more farmers to the table."
+      (click)="fileInput.click()"
+    >
+      Import Data
+    </button>
+    <input type="file" #fileInput class="hidden" (change)="onFileSelected($event)" />
+  </div>
 </div>
 
 <div class="card mt-4 overflow-x-auto">
@@ -43,7 +56,7 @@
 
     <!-- Name -->
     <ng-container matColumnDef="name" class="headline-text">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Name</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="firstName">Name</th>
       <td mat-cell *matCellDef="let farmer" class="cursor-pointer hover:underline text-secondary-500">
         <a [routerLink]="['/users', farmer.id]">{{ farmer.firstName }} {{ farmer.lastName }}</a>
       </td>
@@ -57,43 +70,43 @@
 
     <!-- Phone Number -->
     <ng-container matColumnDef="mobilePhoneNumber">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header="phoneNumber">Phone Number</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="mobilePhoneNumber">Phone Number</th>
       <td mat-cell *matCellDef="let farmer">{{ farmer.mobilePhoneNumber }}</td>
     </ng-container>
 
     <!-- Street -->
     <ng-container matColumnDef="street">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header="street">Street</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="address.street">Street</th>
       <td mat-cell *matCellDef="let farmer">{{ farmer.address.street }}</td>
     </ng-container>
 
     <!-- Postal Code -->
     <ng-container matColumnDef="postalCode">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header="postalCode">Postal Code</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="address.postalCode">Postal Code</th>
       <td mat-cell *matCellDef="let farmer">{{ farmer.address.postalCode }}</td>
     </ng-container>
 
     <!-- City -->
     <ng-container matColumnDef="city">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header="city">City</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="address.city">City</th>
       <td mat-cell *matCellDef="let farmer">{{ farmer.address.city }}</td>
     </ng-container>
 
     <!-- State -->
     <ng-container matColumnDef="state">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header="state">State</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="address.state">State</th>
       <td mat-cell *matCellDef="let farmer">{{ farmer.address.state }}</td>
     </ng-container>
 
     <!-- Country -->
     <ng-container matColumnDef="country">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header="country">Country</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="address.country">Country</th>
       <td mat-cell *matCellDef="let farmer">{{ farmer.address.country }}</td>
     </ng-container>
 
     <!-- Plots of Land -->
     <ng-container matColumnDef="plotOfLand">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header="plotOfLand">Plot of Land</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="plotsOfLand">Plot of Land</th>
       <td mat-cell *matCellDef="let farmer">
         <a
           *ngFor="let plotsOfLand of farmer.plotsOfLand"

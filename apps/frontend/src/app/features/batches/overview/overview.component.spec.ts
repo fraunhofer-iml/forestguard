@@ -10,6 +10,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../core/services/authentication.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
+import { DataTableUtilityService } from '../../../shared/utils/data-table-utility.service';
 import { BatchOverviewComponent } from './overview.component';
 
 const MOCK_BATCH: BatchDto = {
@@ -99,6 +100,7 @@ describe('OverviewComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
       declarations: [BatchOverviewComponent],
       providers: [
+        DataTableUtilityService,
         {
           provide: CompanyService,
           useValue: {
@@ -147,17 +149,6 @@ describe('OverviewComponent', () => {
     component.setDataSourceAttributes();
     expect(component.dataSource.paginator).toBeDefined();
     expect(component.dataSource.sort).toBeDefined();
-  });
-
-  it('pathDataAccessor should return nested property', () => {
-    const item = { a: { b: 'test' } };
-    const result = component.pathDataAccessor(item, 'a.b');
-    expect(result).toEqual('test');
-  });
-
-  it('filterPredicate should return true if filter string is found', () => {
-    const result = component.filterPredicate(MOCK_BATCH, 'test');
-    expect(result).toBeTruthy();
   });
 
   it('getUserOrCompanyName should return user or company name', () => {

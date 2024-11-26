@@ -20,6 +20,7 @@ import { BatchService } from '../../shared/services/batch/batch.service';
 import { CompanyService } from '../../shared/services/company/company.service';
 import { ProcessStepService } from '../../shared/services/process-step/process.step.service';
 import { SharedModule } from '../../shared/shared.module';
+import { DataTableUtilityService } from '../../shared/utils/data-table-utility.service';
 import { TypeSafeMatCellDefDirective } from '../../shared/utils/typesafe-matcell.definition';
 import { BatchesRoutingModule } from './batches.routes';
 import { BatchDetailsComponent } from './details/details.component';
@@ -66,6 +67,7 @@ import { BatchUpdateComponent } from './update/batch-update.component';
     MatDatepickerModule,
     HarvestService,
     ProcessStepService,
+    DataTableUtilityService,
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: {
