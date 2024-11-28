@@ -155,6 +155,7 @@
       <app-upload-form
         [selectOptions]="uploadSelectOption"
         [title]="'Upload Proofs'"
+        [informationText]="'Upload Proof of freedom from deforestation or Proof of ownership for a Plot of Land here.'"
         [showUploadedFiles]="false"
         (uploadDocument)="uploadProof($event, plotOfLand.id)"
       ></app-upload-form>

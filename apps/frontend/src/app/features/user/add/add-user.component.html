@@ -96,6 +96,7 @@
       <app-upload-form
         [title]="'Upload Documents'"
         [showDescriptionField]="true"
+        [informationText]="'Upload relevant Documents or Certificates for a Farmer here (e.g. Fairtrade Certificate). This step is optional, documents can also be added later.'"
         [uploadedFiles]="uploadedFiles"
         [uploadedFilesPosition]="'right'"
         (uploadDocument)="submitFile($event)"

@@ -48,7 +48,8 @@
 
 <div class="mt-4">
   <app-upload-form [title]="'Upload Documents'" [showDescriptionField]="true" [uploadedFiles]="uploadedFiles"
-    [uploadedFilesPosition]="'right'" (uploadDocument)="submitFile($event)"
+                   [informationText]="'Upload relevant Documents or Certificates for a Batch here (e.g. Fairtrade Certificate). This step is optional.'"
+                   [uploadedFilesPosition]="'right'" (uploadDocument)="submitFile($event)"
     (removeDocument)="removeFile($event)"></app-upload-form>
 </div>
 

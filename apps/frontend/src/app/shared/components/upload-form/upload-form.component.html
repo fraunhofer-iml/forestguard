@@ -1,7 +1,16 @@
 <div class="grid gap-4"
   [ngClass]="{ 'grid-cols-1': uploadedFilesPosition === 'bottom', 'grid-cols-2': uploadedFilesPosition === 'right' }">
   <div class="card">
-    <h1 class="font-semibold text-gray-700 pb-4">{{ title || 'Upload' }}</h1>
+    <div class="flex items-baseline">
+      <h1 class="font-semibold text-gray-700 pb-4 mr-2">{{ title || 'Upload' }}</h1>
+      @if (informationText) {
+        <span
+            class="material-symbols-outlined"
+            matTooltip="{{ informationText }}">
+          info
+        </span>
+      }
+    </div>
     <form [formGroup]="formGroup">
       @if (selectOptions && selectOptions.length > 0) {
       <mat-form-field appearance="outline" class="w-full">
@@ -50,7 +59,7 @@
   <div class="card" *ngIf="showUploadedFiles">
     <div class="grid grid-cols-2">
       <div class="border-b-2 p-2" [ngClass]="{ 'col-span-2': !selectOptions }">
-        <span class="font-semibold text-gray-700">Files to upload:</span>
+        <span class="font-semibold text-gray-700">Documents in queue:</span>
         <span class="ml-1">{{ lengthOfUploadedFiles() }}{{ selectOptions && '/' }}{{ selectOptions?.length }}</span>
       </div>
       @if (selectOptions) {
