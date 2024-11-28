@@ -61,7 +61,10 @@
       <!-- Process Owner -->
       <ng-container matColumnDef="processOwner">
         <th mat-header-cell *matHeaderCellDef mat-sort-header="processStep.executedBy.lastName">Process Owner</th>
-        <td mat-cell *matCellDef="let el; dataSource: batches">{{ getUserOrCompanyName(el.processStep.executedBy) }}
+        <td mat-cell *matCellDef="let el; dataSource: batches">
+          <a class="cursor-pointer hover:underline text-secondary-500" [routerLink]="['/users', el.processStep.executedBy.id]">
+            {{ getUserOrCompanyName(el.processStep.executedBy) }}
+          </a>
         </td>
       </ng-container>
 

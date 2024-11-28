@@ -69,4 +69,18 @@ describe('PlotOfLandDetailsComponent', () => {
     expect(formDataSpy).toHaveBeenCalledWith('file', file);
     expect(formDataSpy).toHaveBeenCalledWith('type', ProofType.PROOF_OF_FREEDOM);
   });
+
+  it('should return filtered options when Proof of freedom is provided', () => {
+    component.uploadSelectOption = [
+      {
+        value: ProofType.PROOF_OF_FREEDOM,
+        key: 'Proof of freedom from deforestation',
+      },
+    ];
+
+    const proofs: ProofDto[] = [];
+    const filteredOptions = component.getFilteredOptions(proofs);
+    expect(filteredOptions.length).toBe(1);
+    expect(filteredOptions[0].value).toBe(ProofType.PROOF_OF_FREEDOM);
+  });
 });
