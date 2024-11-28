@@ -6,10 +6,29 @@ import * as Mapper from './user.mapper';
 import * as Queries from './user.queries';
 import { farmerReadByCompanyId } from './user.queries';
 import { UserService } from './user.service';
+import { AmqpException } from '@forest-guard/amqp';
+import { HttpStatus } from '@nestjs/common';
+import { FarmerCreateDto } from '@forest-guard/api-interfaces';
 
 describe('UserService', () => {
   let service: UserService;
   let prisma: PrismaService;
+
+  const givenCompanyId = 'Test Company ID';
+
+  const givenFarmerDto: FarmerCreateDto = {
+    firstName: 'Test firstName',
+    lastName: 'Test lastName',
+    personalId: 'Test personalId',
+    address: {
+      street: 'Example Street',
+      postalCode: '12345',
+      city: 'Example City',
+      state: 'Example State',
+      country: 'Example Country',
+      additionalInformation: 'good to know',
+    }
+  }
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -21,6 +40,7 @@ describe('UserService', () => {
           useValue: {
             user: {
               create: jest.fn(),
+              findFirst: jest.fn(),
               findMany: jest.fn(),
               findUniqueOrThrow: jest.fn(),
             },
@@ -77,19 +97,6 @@ describe('UserService', () => {
   });
 
   it('should create a farmer', async () => {
-    const givenFarmerDto = {
-      firstName: 'Test firstName',
-      lastName: 'Test lastName',
-      personalId: 'Test personalId',
-      address: {
-        street: 'Example Street',
-        postalCode: '12345',
-        city: 'Example City',
-        state: 'Example State',
-        country: 'Example Country',
-        additionalInformation: 'good to know',
-      },
-    };
 
     jest.spyOn(prisma.entity, 'create').mockResolvedValue({id: FARMER_PRISMA_MOCK.id});
     jest.spyOn(prisma.user, 'create').mockResolvedValue(FARMER_PRISMA_MOCK);
@@ -102,12 +109,23 @@ describe('UserService', () => {
   });
 
   it('should read farmer by company ID', async () => {
-    const givenCompanyId = 'Test Company ID';
     jest.spyOn(prisma.user, 'findMany').mockResolvedValue([FARMER_PRISMA_MOCK]);
 
     const response = await service.readFarmersByCompanyId(givenCompanyId);
 
     expect(response).toEqual([FARMER_PRISMA_MOCK].map(Mapper.toUserOrFarmerDto));
     expect(prisma.user.findMany).toHaveBeenCalledWith(farmerReadByCompanyId(givenCompanyId));
+  });
+
+  it('should throw an error when personalId is already used within that company', async () => {
+
+    jest.spyOn(prisma.user, 'findFirst').mockResolvedValue(FARMER_PRISMA_MOCK);
+    await expect(service.createFarmer({ dto: givenFarmerDto, companyId: givenCompanyId })).rejects.toThrow(AmqpException);
+    await expect(service.createFarmer({ dto: givenFarmerDto, companyId: givenCompanyId })).rejects.toMatchObject({
+      error: {
+        message: `Farmer with local id '${givenFarmerDto.personalId}' already exists for this company.`,
+        status: HttpStatus.CONFLICT
+      }
+    });
   });
 });
