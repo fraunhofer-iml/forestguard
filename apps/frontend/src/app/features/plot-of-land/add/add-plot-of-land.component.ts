@@ -9,7 +9,7 @@ import {
   UserDto,
   UserOrFarmerDto,
 } from '@forest-guard/api-interfaces';
-import { icon, Icon, LatLng, latLng, Layer, marker, polygon, tileLayer } from 'leaflet';
+import { Icon, LatLng, latLng, Layer, marker, polygon, tileLayer } from 'leaflet';
 import { toast } from 'ngx-sonner';
 import { combineLatest, mergeMap, Observable } from 'rxjs';
 import { Component } from '@angular/core';
@@ -23,6 +23,7 @@ import { CultivationService } from '../../../shared/services/cultivation/cultiva
 import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
 import { UserService } from '../../../shared/services/user/user.service';
 import { convertToCorrectFormat, convertUTMtoWGS } from '../../../shared/utils/coordinate-utils';
+import { getFormattedUserName } from '../../../shared/utils/user-company-utils';
 import { CoordinateInput } from './components/coordinate-input/coordinate-input.type';
 import { JsonData } from './model/json-data';
 import { PlotOfLandForm } from './model/plot-of-land-form';
@@ -69,6 +70,7 @@ export class AddPlotOfLandComponent {
 
   center: LatLng = latLng(51.514, 7.468);
   layers: Layer[] = [tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 })];
+  protected readonly getFormattedUserName = getFormattedUserName;
 
   getGeoDataStandards() {
     return Object.values(Standard);

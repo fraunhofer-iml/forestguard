@@ -8,6 +8,7 @@ import { Messages } from '../../../shared/messages';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
+import { getFormattedUserName } from '../../../shared/utils/user-company-utils';
 import { HarvestForm } from './model/forms';
 import { HarvestService } from './service/harvest.service';
 
@@ -48,6 +49,7 @@ export class HarvestComponent {
       )
     )
   );
+  protected readonly getFormattedUserName = getFormattedUserName;
 
   constructor(
     private readonly batchService: BatchService,

@@ -8,7 +8,7 @@
         <mat-label class="w-full">Farmer</mat-label>
         <mat-select formControlName="processOwner" placeholder="Farmer" class="w-full !border-none">
           <mat-option *ngFor="let farmer of farmers$ | async" [value]="farmer.id">
-            {{ farmer.lastName }}, {{ farmer.firstName }}
+            {{ getFormattedUserName(farmer) }}
           </mat-option>
         </mat-select>
       </mat-form-field>
