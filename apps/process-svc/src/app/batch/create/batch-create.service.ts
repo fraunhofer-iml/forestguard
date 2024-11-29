@@ -1,7 +1,7 @@
 import { AmqpException } from '@forest-guard/amqp';
 import { BatchCombinedCreateDto, BatchCreateDto, ProcessStepIdResponse } from '@forest-guard/api-interfaces';
 import { PrismaService } from '@forest-guard/database';
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
 import { Batch } from '@prisma/client';
 import { mapBatchCombinedToBatchCreateDto } from '../utils/batch.mapper';
 import { createBatchQuery, createOriginBatchQuery, processStepQuery } from '../utils/batch.queries';
@@ -108,6 +108,7 @@ export class BatchCreateService {
   }
 
   private async createBatch(dto: BatchCreateDto, existingProcessStepId?: string): Promise<Batch> {
+    // TODO: Fetch everything in from ins, check if they are active, if not throw error
     const batch = await this.prismaService.batch.create({
       data: createBatchQuery(dto, existingProcessStepId),
     });

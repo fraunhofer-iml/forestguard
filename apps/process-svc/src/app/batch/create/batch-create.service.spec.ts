@@ -84,4 +84,6 @@ describe('BatchService', () => {
     jest.spyOn(prisma.batch, 'create').mockRejectedValue(new Error('Error'));
     await expect(service.createHarvests(mockedCreateBatchDtosWithLinks)).rejects.toThrow();
   });
+
+  // TODO: test new logic
 });
