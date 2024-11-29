@@ -20,8 +20,14 @@ export class HarvestComponent {
   companyId = this.authenticationService.getCurrentCompanyId() ?? '';
   loading = false;
   companies$: Observable<CompanyDto[]> = this.companyService.getCompanies();
-  users$: Observable<UserDto[]> = this.companies$.pipe(map((companies) => companies.flatMap((company) => company.employees ?? [])));
-  farmers$: Observable<UserOrFarmerDto[]> = this.companies$.pipe(map((companies) => companies.flatMap((company) => company.farmers ?? [])));
+  users$: Observable<UserDto[]> = this.companies$.pipe(
+    map((companies) => companies.filter((company) => company.id === this.companyId)),
+    map((companies) => companies.flatMap((company) => company.employees ?? []))
+  );
+  farmers$: Observable<UserOrFarmerDto[]> = this.companies$.pipe(
+    map((companies) => companies.filter((company) => company.id === this.companyId)),
+    map((companies) => companies.flatMap((company) => company.farmers ?? []))
+  );
 
   harvestFormGroup: FormGroup<HarvestForm> = new FormGroup<HarvestForm>({
     processOwner: new FormControl(null, Validators.required),
