@@ -1,4 +1,4 @@
-import { AmqpException } from '@forest-guard/amqp';
+import { AmqpException, CompanyMessagePatterns } from '@forest-guard/amqp';
 import { CompanyCreateDto, CompanyDto } from '@forest-guard/api-interfaces';
 import { PrismaService } from '@forest-guard/database';
 import JSON5 from 'json5';
@@ -72,7 +72,7 @@ export class CompanyService {
   }
 
   async readCompanyById(id: string): Promise<CompanyDto> {
-    const company: CompanyWithRelations = await this.prismaService.company.findUniqueOrThrow({
+    const fetchedCompany: CompanyWithRelations = await this.prismaService.company.findUnique({
       where: { entityId: id },
       include: {
         address: true,
@@ -93,7 +93,11 @@ export class CompanyService {
       },
     });
 
-    return CompanyMapper.mapCompanyPrismaToCompanyDto(company);
+    if (!fetchedCompany) {
+      throw new AmqpException(`Company with id '${id}' not found.`, HttpStatus.NOT_FOUND);
+    }
+
+    return CompanyMapper.mapCompanyPrismaToCompanyDto(fetchedCompany);
   }
 
   /**

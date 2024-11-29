@@ -16,6 +16,8 @@ export const authGuard: CanActivateFn = async (route: ActivatedRouteSnapshot, st
   const keycloakCompanyId = authenticationService.getCurrentCompanyId();
 
   const isCompanyAddUrl = state.url.includes(Uris.addCompany);
+  console.log(isCompanyAddUrl);
+  console.log(state.url.includes(Uris.addCompany));
   if (isCompanyAddUrl) {
     return true;
   }
@@ -38,7 +40,7 @@ async function validateCompanyExistence(companyId: string, companyService: Compa
 
 function handleCompanyError(error: any, router: Router): boolean {
   if (error instanceof HttpErrorResponse && error.status === 404) {
-    router.navigate([Uris.addCompany]);
+    router.navigateByUrl(Uris.addCompany);
     toast.error(Messages.errorCompany);
   }
   return false;
