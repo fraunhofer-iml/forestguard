@@ -4,7 +4,7 @@ import { PrismaService } from '@forest-guard/database';
 import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
 import { Batch } from '@prisma/client';
 import { mapBatchCombinedToBatchCreateDto } from '../utils/batch.mapper';
-import { createBatchQuery, createOriginBatchQuery, processStepQuery } from '../utils/batch.queries';
+import { createBatchQuery, createOriginBatchQuery, processStepQuery, readBatchByIdQuery } from '../utils/batch.queries';
 
 @Injectable()
 export class BatchCreateService {
@@ -109,6 +109,21 @@ export class BatchCreateService {
 
   private async createBatch(dto: BatchCreateDto, existingProcessStepId?: string): Promise<Batch> {
     // TODO: Fetch everything in from ins, check if they are active, if not throw error
+    // doesnt work with:
+    // for(batchId in dto.ins)
+    console.log("length: ")
+    console.log(dto.ins.length)
+    for(let i = 0; dto.ins.length-1; i++) {
+      // seems like it doesnt end even though length = 2 
+      console.log("### dto ins i ###");
+      console.log(dto.ins[i]);
+      const fetchedBatch = await this.prismaService.batch.findUniqueOrThrow({where:  { id: dto.ins[i]}});
+      console.log("### fetchedBatch ###");
+      console.log(fetchedBatch);
+      if(!(fetchedBatch.active)) {
+        throw new AmqpException(`Batch '${dto.ins[i]}' is already inactive. `, 409);
+      }
+    }
     const batch = await this.prismaService.batch.create({
       data: createBatchQuery(dto, existingProcessStepId),
     });
