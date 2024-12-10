@@ -33,7 +33,7 @@ export class HarvestComponent {
     processOwner: new FormControl(null, Validators.required),
     recipient: new FormControl(null, Validators.required),
     weight: new FormControl(null, [Validators.required, Validators.min(1)]),
-    date: new FormControl(new Date(), Validators.required),
+    dateOfProcess: new FormControl(new Date(), Validators.required),
     authorOfEntry: new FormControl(null, Validators.required),
     plotsOfLand: new FormArray([this.createPlotOfLand()]),
   });
@@ -116,7 +116,7 @@ export class HarvestComponent {
     this.plotsOfLand.disable();
     this.harvestFormGroup.reset();
     this.harvestFormGroup.patchValue({
-      date: new Date(),
+      dateOfProcess: new Date(),
     });
   }
 }

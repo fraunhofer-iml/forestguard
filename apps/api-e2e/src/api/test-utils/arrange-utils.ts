@@ -23,7 +23,7 @@ export const givenBatchCreateDto: BatchCreateDto = {
   recipient: undefined,
   processStep: {
     location: '',
-    date: '2024-05-24T08:28:24Z',
+    dateOfProcess: '2024-05-24T08:28:24Z',
     process: Process.HARVESTING,
     recordedBy: undefined,
     executedBy: undefined,

@@ -209,7 +209,8 @@ paths:
           in: query
           example:
             processStep:
-              date: desc
+              dateOfEntry: desc
+              dateOfProcess: desc
           schema: {}
         - name: query
           required: false

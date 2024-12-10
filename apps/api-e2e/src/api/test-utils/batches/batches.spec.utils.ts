@@ -31,7 +31,7 @@ export async function prepareXPlotsOfLandCreation(batchCreateDto: BatchCreateDto
     batchCreateDto.recipient,
     new ProcessStepWithMultipleHarvestedLandsCreateDto(
       batchCreateDto.processStep.location,
-      batchCreateDto.processStep.date,
+      batchCreateDto.processStep.dateOfProcess,
       batchCreateDto.processStep.executedBy,
       [],
       batchCreateDto.processStep.recordedBy

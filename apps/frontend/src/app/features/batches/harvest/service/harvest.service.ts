@@ -6,7 +6,7 @@ export class HarvestService {
   public createNewProcessStep(formGroup: FormGroup<HarvestForm>, plotsOfLand: string[]): ProcessStepWithMultipleHarvestedLandsCreateDto {
     return new ProcessStepWithMultipleHarvestedLandsCreateDto(
       '',
-      formGroup.value.date?.toISOString() ?? '',
+      formGroup.value.dateOfProcess?.toISOString() ?? '',
       formGroup.value.processOwner ?? '',
       plotsOfLand ?? [],
       formGroup.value.authorOfEntry ?? ''

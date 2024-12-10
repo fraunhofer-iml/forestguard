@@ -17,7 +17,7 @@ import { getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
   templateUrl: './overview.component.html',
 })
 export class BatchOverviewComponent implements AfterViewInit {
-  displayedColumnsOfBatches: string[] = ['select', 'batchId', 'process', 'date', 'processOwner', 'weight'];
+  displayedColumnsOfBatches: string[] = ['select', 'batchId', 'process', 'dateOfProcess', 'dateOfEntry', 'processOwner', 'weight'];
   dataSource: MatTableDataSource<BatchDto> = new MatTableDataSource<BatchDto>();
   selection = new SelectionModel<BatchDto>(true, []);
   paginator?: MatPaginator;
@@ -54,7 +54,6 @@ export class BatchOverviewComponent implements AfterViewInit {
       .getBatchesOfCompany(this.authenticationService.getCurrentCompanyId() ?? '', '{"active": true}')
       .pipe(
         map((batches) => {
-          batches.reverse();
           const dataSource = this.dataSource;
           dataSource.data = batches;
           return dataSource;

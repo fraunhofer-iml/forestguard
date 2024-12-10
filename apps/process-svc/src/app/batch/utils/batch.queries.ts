@@ -36,7 +36,7 @@ export const createBatchQuery = (batchCreateDto: BatchCreateDto, existingProcess
 
 export const processStepQuery = (processStep: ProcessStepCreateDto) => ({
   location: processStep.location,
-  date: processStep.date,
+  dateOfProcess: processStep.dateOfProcess,
   process: {
     connectOrCreate: {
       create: {

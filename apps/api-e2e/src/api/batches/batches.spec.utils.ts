@@ -30,7 +30,8 @@ const givenBatchCreateDto: BatchCreateDto = {
   recipient: undefined,
   processStep: {
     location: '',
-    date: '2024-05-24T08:28:24Z',
+    dateOfProcess: '2024-05-24T08:28:24Z',
+    dateOfEntry: '2024-05-23T08:28:24Z',
     process: Process.HARVESTING,
     recordedBy: undefined,
     executedBy: undefined,
@@ -119,7 +120,8 @@ export async function prepareXPlotsOfLandCreation(batchCreateDto: BatchCreateDto
     batchCreateDto.recipient,
     new ProcessStepWithMultipleHarvestedLandsCreateDto(
       batchCreateDto.processStep.location,
-      batchCreateDto.processStep.date,
+      batchCreateDto.processStep.dateOfProcess,
+      batchCreateDto.processStep.dateOfEntry,
       batchCreateDto.processStep.executedBy,
       [],
       batchCreateDto.processStep.recordedBy

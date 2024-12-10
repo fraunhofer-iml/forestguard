@@ -79,7 +79,7 @@ describe('BatchUpdateComponent', () => {
 
     const formControls = component.formGroup.controls;
     expect(formControls['location']).toBeInstanceOf(FormControl);
-    expect(formControls['date']).toBeInstanceOf(FormControl);
+    expect(formControls['dateOfProcess']).toBeInstanceOf(FormControl);
     expect(formControls['processName']).toBeInstanceOf(FormControl);
     expect(formControls['recordedBy']).toBeInstanceOf(FormControl);
     expect(formControls['executedBy']).toBeInstanceOf(FormControl);
@@ -93,7 +93,7 @@ describe('BatchUpdateComponent', () => {
   it('should submit form', () => {
     component.formGroup.patchValue({
       location: 'Location',
-      date: new Date(),
+      dateOfProcess: new Date(),
       processName: 'Harvesting',
       recordedBy: 'Recorder',
       executedBy: 'Executor',

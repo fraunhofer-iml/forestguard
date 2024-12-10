@@ -18,6 +18,15 @@ describe('HarvestService', (): void => {
     formBuilder = TestBed.inject(FormBuilder);
   });
 
+  beforeAll(() => {
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date('2023-01-01'));
+  });
+
+  afterAll(() => {
+    jest.useRealTimers();
+  });
+
   it('should create', (): void => {
     expect(service).toBeTruthy();
   });
@@ -25,7 +34,7 @@ describe('HarvestService', (): void => {
   it('should create a ProcessStepCreateDto', () => {
     const plotsOfLand: string[] = ['ctest401'];
     const formGroup: FormGroup = formBuilder.group({
-      date: new Date('2023-01-01'),
+      dateOfProcess: new Date('2023-01-01'),
       processOwner: 'McFarland, Guillermo',
       authorOfEntry: 'Smith, Jane',
       weight: 100,
@@ -35,7 +44,7 @@ describe('HarvestService', (): void => {
 
     const expected: ProcessStepWithMultipleHarvestedLandsCreateDto = {
       location: '',
-      date: '2023-01-01T00:00:00.000Z',
+      dateOfProcess: '2023-01-01T00:00:00.000Z',
       executedBy: 'McFarland, Guillermo',
       recordedBy: 'Smith, Jane',
       harvestedLands: plotsOfLand,
@@ -47,7 +56,7 @@ describe('HarvestService', (): void => {
   it('should create a BatchCreateDto', () => {
     const plotsOfLand: string[] = ['ctest401'];
     const formGroup: FormGroup = formBuilder.group({
-      date: new Date('2023-01-01'),
+      dateOfProcess: new Date('2023-01-01'),
       processOwner: 'McFarland, Guillermo',
       authorOfEntry: 'Smith, Jane',
       weight: 100,
@@ -60,7 +69,7 @@ describe('HarvestService', (): void => {
       recipient: '',
       processStep: {
         location: '',
-        date: '2023-01-01T00:00:00.000Z',
+        dateOfProcess: '2023-01-01T00:00:00.000Z',
         recordedBy: 'Smith, Jane',
         executedBy: 'McFarland, Guillermo',
         harvestedLands: plotsOfLand,

@@ -37,7 +37,8 @@ const MOCK_BATCH: BatchDto = {
     name: 'test',
   },
   processStep: {
-    date: new Date(),
+    dateOfProcess: new Date(),
+    dateOfEntry: new Date(),
     id: 'test',
     process: {
       id: 'test',
