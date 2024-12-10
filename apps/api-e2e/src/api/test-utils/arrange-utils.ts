@@ -93,5 +93,13 @@ export async function prepareUser() {
 }
 
 export async function prepareFarmer() {
-  return await axios.post(`/users/farmers`, givenFarmer, await createHttpHeader());
+  return prepareFarmerWithDto(givenFarmer);
+}
+
+export async function prepareFarmerWithDto(farmerCreateDto: FarmerCreateDto) {
+  return await axios.post(`/users/farmers`, farmerCreateDto, await createHttpHeader());
+}
+
+export async function preparePlotOfLand(farmerId: string) {
+  return await axios.post(`/pols?farmerId=${farmerId}`, givenPlotOfLand, await createHttpHeader());
 }

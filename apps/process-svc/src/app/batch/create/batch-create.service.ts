@@ -1,5 +1,10 @@
 import { AmqpException } from '@forest-guard/amqp';
-import { BatchCombinedCreateDto, BatchCreateDto, ProcessStepIdResponse } from '@forest-guard/api-interfaces';
+import {
+  BatchCombinedCreateDto,
+  BatchCreateDto,
+  ProcessStepIdResponse,
+  ProcessStepWithMultipleHarvestedLandsCreateDto,
+} from '@forest-guard/api-interfaces';
 import { PrismaService } from '@forest-guard/database';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Batch } from '@prisma/client';
@@ -15,11 +20,11 @@ export class BatchCreateService {
   private readonly DEFAULT_LOCATION = 'Field';
 
   private readonly NO_CONTENT_MESSAGE = 'There is no input content to create';
+  private readonly INVALID_PLOTSOFLAND_MESSAGE = (plotOfLandIds: string[], processOwner: string): string =>
+    `The included PlotOfLand IDs [${plotOfLandIds}] do not exist or do not all belong to the process owner (${processOwner})`;
 
   async createHarvests(batchCreateDtos: BatchCreateDto[]): Promise<ProcessStepIdResponse> {
-    if (batchCreateDtos.length === 0) {
-      throw new AmqpException(this.NO_CONTENT_MESSAGE, HttpStatus.NO_CONTENT);
-    }
+    this.hasContentForProcessing(batchCreateDtos);
 
     const batches: Batch[] = [];
     for (const dto of batchCreateDtos) {
@@ -40,9 +45,8 @@ export class BatchCreateService {
   }
 
   async createCombinedHarvests(batchCombinedCreateDto: BatchCombinedCreateDto): Promise<ProcessStepIdResponse> {
-    if (batchCombinedCreateDto.processStep.harvestedLands.length === 0) {
-      throw new AmqpException(this.NO_CONTENT_MESSAGE, HttpStatus.NO_CONTENT);
-    }
+    this.hasContentForProcessing(batchCombinedCreateDto.processStep.harvestedLands);
+    await this.checkPlotsOfLand(batchCombinedCreateDto.processStep);
 
     const dividedWeight = this.calculateDividedWeight(batchCombinedCreateDto);
     const batches: Batch[] = [];
@@ -68,9 +72,7 @@ export class BatchCreateService {
   }
 
   async createBatches(batchCreateDtos: BatchCreateDto[]): Promise<ProcessStepIdResponse> {
-    if (batchCreateDtos.length === 0) {
-      throw new AmqpException(this.NO_CONTENT_MESSAGE, HttpStatus.NO_CONTENT);
-    }
+    this.hasContentForProcessing(batchCreateDtos);
 
     const processStep = await this.prismaService.processStep.create({
       data: processStepQuery(batchCreateDtos[0].processStep),
@@ -83,6 +85,32 @@ export class BatchCreateService {
     return {
       processStepId: processStep.id,
     };
+  }
+
+  private hasContentForProcessing(content: unknown[]) {
+    if (content.length === 0) {
+      throw new AmqpException(this.NO_CONTENT_MESSAGE, HttpStatus.NO_CONTENT);
+    }
+  }
+
+  private async checkPlotsOfLand(processStep: ProcessStepWithMultipleHarvestedLandsCreateDto) {
+    const harvestedLandIds = this.removeDuplicates(processStep.harvestedLands);
+    const numberOfPlotOfLandMatches = await this.prismaService.plotOfLand.count({
+      where: {
+        id: { in: harvestedLandIds },
+        farmerId: processStep.executedBy,
+      },
+    });
+    if (numberOfPlotOfLandMatches !== harvestedLandIds.length) {
+      throw new AmqpException(
+        this.INVALID_PLOTSOFLAND_MESSAGE(harvestedLandIds, processStep.executedBy),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  private removeDuplicates(list: string[]) {
+    return Array.from(new Set(list));
   }
 
   private calculateDividedWeight(batchCombinedCreateDto: BatchCombinedCreateDto) {

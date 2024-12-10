@@ -21,6 +21,9 @@ describe('BatchService', () => {
             processStep: {
               create: jest.fn(),
             },
+            plotOfLand: {
+              count: jest.fn(),
+            },
           },
         },
       ],
@@ -56,6 +59,7 @@ describe('BatchService', () => {
   it('should create multiple harvest batches to multiple plot of lands', async () => {
     const combinedBatchDto = mockedCombinedBatchDto;
     jest.spyOn(prisma.batch, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1);
+    jest.spyOn(prisma.plotOfLand, 'count').mockResolvedValue(mockedCombinedBatchDto.processStep.harvestedLands.length);
 
     await service.createCombinedHarvests(combinedBatchDto);
     expect(prisma.batch.create).toHaveBeenCalledTimes(combinedBatchDto.processStep.harvestedLands.length + 1);

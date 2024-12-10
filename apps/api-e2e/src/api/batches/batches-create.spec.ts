@@ -5,11 +5,15 @@ import {
   prepareBatchCreationWithPlotOfLand,
   prepareTwoPlotsOfLandCreation,
   prepareXPlotsOfLandCreation,
-
 } from '../test-utils/batches/batches.spec.utils';
 import { HttpStatus } from '@nestjs/common';
 import { BatchCreateDto } from '@forest-guard/api-interfaces';
-import { Process } from '../test-utils/arrange-utils';
+import {
+  givenFarmer,
+  prepareFarmerWithDto,
+  preparePlotOfLand,
+  Process,
+} from '../test-utils/arrange-utils';
 
 describe('/batches-create', () => {
 
@@ -77,6 +81,23 @@ describe('/batches-create', () => {
       const response = await axios.post(`/batches/harvests/combined`, givenBatchCombinedCreateDto, httpHeader);
 
       expect(response.status).toBe(HttpStatus.NO_CONTENT);
+    });
+
+    it('should throw error if PlotsOfLand come from different farmers', async () => {
+      const givenBatchCombinedCreateDto = await prepareXPlotsOfLandCreation(batchCreateDto, 0);
+      const plotOfLand1 = await preparePlotOfLand(batchCreateDto.processStep.executedBy);
+      const farmerDto = structuredClone(givenFarmer);
+      farmerDto.personalId = 'pf2';
+      const farmer2 = await prepareFarmerWithDto(farmerDto);
+      const plotOfLand2 = await preparePlotOfLand(farmer2.data.id);
+      givenBatchCombinedCreateDto.processStep.harvestedLands = [plotOfLand1.data.id, plotOfLand2.data.id];
+
+      try {
+        await axios.post(`/batches/harvests/combined`, givenBatchCombinedCreateDto, httpHeader);
+      } catch (err) {
+        expect(err.response.data.status).toBe(HttpStatus.BAD_REQUEST);
+
+      }
     });
   });
 

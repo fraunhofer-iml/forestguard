@@ -20,7 +20,7 @@ export async function prepareBatchCreation(): Promise<BatchCreateDto> {
 }
 
 export async function preparePlotOfLandCreation(batchCreateDto: BatchCreateDto): Promise<BatchCreateDto> {
-  const plotOfLandResponse = await axios.post(`/pols?farmerId=${batchCreateDto.recipient}`, givenPlotOfLand, await createHttpHeader());
+  const plotOfLandResponse = await axios.post(`/pols?farmerId=${batchCreateDto.processStep.executedBy}`, givenPlotOfLand, await createHttpHeader());
   batchCreateDto.processStep.harvestedLand = plotOfLandResponse.data.id;
   return batchCreateDto;
 }
@@ -39,7 +39,7 @@ export async function prepareXPlotsOfLandCreation(batchCreateDto: BatchCreateDto
     batchCreateDto.euInfoSystemId
   );
   if (x !== 0) {
-    const plotOfLandResponse = await axios.post(`/pols?farmerId=${batchCreateDto.recipient}`, givenPlotOfLand, await createHttpHeader());
+    const plotOfLandResponse = await axios.post(`/pols?farmerId=${batchCreateDto.processStep.executedBy}`, givenPlotOfLand, await createHttpHeader());
     batchCombinedCreateDto.processStep.harvestedLands = new Array(x).fill(plotOfLandResponse.data.id);
   }
   return batchCombinedCreateDto;
