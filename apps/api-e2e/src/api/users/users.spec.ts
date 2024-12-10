@@ -28,6 +28,19 @@ describe('/users', () => {
     });
   });
 
+  describe('PATCH /users/:id', () => {
+    it('should update an user', async () => {
+      const createdFarmer = (await axios.post(`/users/farmers`, givenFarmer, httpHeader)).data;
+      createdFarmer.firstName = 'alteredName';
+      createdFarmer.address.street = 'alteredStreet';
+
+      const actualResponse = await axios.patch(`/users/${createdFarmer.id}`, createdFarmer, httpHeader);
+
+      expect(actualResponse.status).toBe(HttpStatus.OK);
+      ensureFarmer(actualResponse.data, createdFarmer);
+    });
+  });
+
   describe('GET /users', () => {
     it('should get all users', async () => {
       const givenUser2 = createVariantOf(givenUser);

@@ -1,4 +1,10 @@
-import { FarmerCreateDto, TAuthenticatedUser, UserDto, UserOrFarmerDto, UserUpdateDto } from '@forest-guard/api-interfaces';
+import {
+  FarmerCreateDto, UserUpdateDto,
+  TAuthenticatedUser,
+  UserDto,
+  UserOrFarmerDto,
+  UserCreateDto,
+} from '@forest-guard/api-interfaces';
 import { AuthenticatedUser } from 'nest-keycloak-connect';
 import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -23,8 +29,16 @@ export class UserController {
   @ApiBearerAuth()
   @ApiOperation({ description: 'Create a user object' })
   @ApiOkResponse({ description: 'Successful creation.' })
-  createUser(@Body() dto: UserUpdateDto, @AuthenticatedUser() user: TAuthenticatedUser): Promise<UserDto> {
+  createUser(@Body() dto: UserCreateDto, @AuthenticatedUser() user: TAuthenticatedUser): Promise<UserDto> {
     return this.userService.createUser({ dto, companyId: user.sub });
+  }
+
+  @Patch(':id')
+  @ApiBearerAuth()
+  @ApiOperation({ description: 'Update an user' })
+  @ApiOkResponse({ description: 'Successful update.' })
+  updateUser(@Param('id') id: string, @Body() dto: UserUpdateDto): Promise<UserOrFarmerDto> {
+    return this.userService.updateUser({ id, dto });
   }
 
   @Get(':id')

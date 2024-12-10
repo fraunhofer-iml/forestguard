@@ -1,8 +1,31 @@
-import { FarmerCreateDto, RoleType, UserUpdateDto } from '@forest-guard/api-interfaces';
+import {
+  AddressCreateDto,
+  FarmerCreateDto,
+  RoleType,
+  UserCreateDto,
+  UserUpdateDto,
+} from '@forest-guard/api-interfaces';
 
-export function userCreate({ dto, entityId, companyId }: { dto: UserUpdateDto; entityId: string; companyId: string }) {
+export function userCreate({ dto, entityId, companyId }: { dto: UserCreateDto; entityId: string; companyId: string }) {
   return {
     data: user({ dto, entityId, companyId }),
+  };
+}
+
+export function userUpdate(id: string, dto: UserUpdateDto) {
+  return {
+    where: {
+      id: id,
+    },
+    data: {
+      ...dto,
+      address: {
+        update: dto.address,
+      },
+    },
+    include: {
+      address: true,
+    },
   };
 }
 
@@ -17,9 +40,9 @@ export function farmerCreate({ dto, entityId, companyId }: {
       role: RoleType.FARMER,
       address: {
         connectOrCreate: {
-          create: { ...address(dto), additionalInformation: dto.address.additionalInformation },
+          create: dto.address,
           where: {
-            street_postalCode_city_state_country: address(dto),
+            street_postalCode_city_state_country: uniqueAddress(dto.address),
           },
         },
       },
@@ -31,7 +54,7 @@ export function farmerCreate({ dto, entityId, companyId }: {
   };
 }
 
-function user({ dto, entityId, companyId }: { dto: UserUpdateDto; entityId: string; companyId: string }) {
+function user({ dto, entityId, companyId }: { dto: UserCreateDto; entityId: string; companyId: string }) {
   return {
     id: entityId,
     firstName: dto.firstName,
@@ -53,13 +76,13 @@ function user({ dto, entityId, companyId }: { dto: UserUpdateDto; entityId: stri
   };
 }
 
-function address(dto: FarmerCreateDto) {
+function uniqueAddress(dto: AddressCreateDto) {
   return {
-    street: dto.address.street,
-    city: dto.address.city,
-    state: dto.address.state,
-    postalCode: dto.address.postalCode,
-    country: dto.address.country,
+    street: dto.street,
+    city: dto.city,
+    state: dto.state,
+    postalCode: dto.postalCode,
+    country: dto.country,
   };
 }
 

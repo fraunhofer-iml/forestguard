@@ -1,4 +1,4 @@
-import { AddressCreateDto, RoleType, UserUpdateDto } from '@forest-guard/api-interfaces';
+import { AddressCreateDto, RoleType, UserCreateDto } from "@forest-guard/api-interfaces";
 
 export const COMPANY_IDENTIFIER = process.env['UBIRIKI_IMPORT_IDENTIFIER'] || 'Acme Corp';
 
@@ -37,10 +37,12 @@ export const HardcodedPlotsOfLandData = {
   cultivationSort: 'Arabica',
 };
 
-export const HardcodedEmployee: UserUpdateDto = {
-  firstName: '',
-  lastName: 'Cesar Maquera',
-  email: '',
-  mobilePhoneNumber: '',
-  role: RoleType.EMPLOYEE,
-};
+export const HardcodedEmployee: UserCreateDto = {
+    firstName: '',
+    lastName: 'Cesar Maquera',
+    email: '',
+    mobilePhoneNumber: '',
+    role: RoleType.EMPLOYEE,
+}
+
+

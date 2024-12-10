@@ -6,7 +6,7 @@ import {
   PlotOfLandCreateDto,
   RoleType,
   Standard,
-  UserUpdateDto,
+  UserCreateDto,
 } from '@forest-guard/api-interfaces';
 import axios from 'axios';
 import { createHttpHeader } from './test.utils';
@@ -29,7 +29,7 @@ export const givenBatchCreateDto: BatchCreateDto = {
     executedBy: undefined,
   },
 };
-export const givenUser: UserUpdateDto = {
+export const givenUser: UserCreateDto = {
   firstName: 'Jane',
   lastName: 'Smith',
   email: 'jane.smith@acme.com',

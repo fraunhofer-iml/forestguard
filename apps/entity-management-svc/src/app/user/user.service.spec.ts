@@ -40,6 +40,7 @@ describe('UserService', () => {
           useValue: {
             user: {
               create: jest.fn(),
+              update: jest.fn(),
               findFirst: jest.fn(),
               findMany: jest.fn(),
               findUniqueOrThrow: jest.fn(),
@@ -74,6 +75,17 @@ describe('UserService', () => {
     expect(response).toEqual(Mapper.toUserDto(USER_PRISMA_MOCK));
     expect(prisma.entity.create).toHaveBeenCalledWith({data: {}});
     expect(prisma.user.create).toHaveBeenCalledWith(Queries.userCreate({ dto: givenUserDto, entityId: FARMER_PRISMA_MOCK.id, companyId: 'Test Company ID' }));
+  });
+
+  it('should update an user', async () => {
+    const userId = 'Test User ID';
+
+    jest.spyOn(prisma.user, 'update').mockResolvedValue(FARMER_PRISMA_MOCK);
+
+    const response = await service.updateUser({ id: userId, dto: givenFarmerDto });
+
+    expect(response).toEqual(Mapper.toUserOrFarmerDto(FARMER_PRISMA_MOCK));
+    expect(prisma.user.update).toHaveBeenCalledWith(Queries.userUpdate(userId, givenFarmerDto));
   });
 
   it('should read users', async () => {
