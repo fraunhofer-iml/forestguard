@@ -30,7 +30,7 @@ export const mockedCombinedBatchDto: BatchCombinedCreateDto = {
   },
 };
 
-export const mockedPrismaBatchWithRelations1: BatchWithRelations = {
+export const mockedPrismaBatchWithRelations1: BatchWithRelations & { ins: [] } = {
   id: '1',
   euInfoSystemId: '1',
   weight: 100,
@@ -208,6 +208,7 @@ export const mockedPrismaBatchWithRelations1: BatchWithRelations = {
       },
     },
   },
+  ins: [],
 };
 
 export const mockedPrismaBatchWithRelations2: BatchWithRelations = {

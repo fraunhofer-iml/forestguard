@@ -1,3 +1,4 @@
+import { BlockchainConnectorModule, BlockchainConnectorService } from '@forest-guard/blockchain-connector';
 import { PrismaService } from '@forest-guard/database';
 import { Test, TestingModule } from '@nestjs/testing';
 import { mockedCombinedBatchDto, mockedCreateBatchDto, mockedPrismaBatchWithRelations1 } from '../mocked-data/batch.mock';
@@ -6,9 +7,11 @@ import { BatchCreateService } from './batch-create.service';
 describe('BatchService', () => {
   let service: BatchCreateService;
   let prisma: PrismaService;
+  let blockchainConnectorService: BlockchainConnectorService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [BlockchainConnectorModule],
       providers: [
         BatchCreateService,
         {
@@ -26,15 +29,25 @@ describe('BatchService', () => {
             },
           },
         },
+        {
+          provide: BlockchainConnectorService,
+          useValue: {
+            mintBatchRootNft: jest.fn(),
+            mintBatchLeafNft: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
     service = module.get<BatchCreateService>(BatchCreateService);
     prisma = module.get<PrismaService>(PrismaService);
+    blockchainConnectorService = module.get<BlockchainConnectorService>(BlockchainConnectorService);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+    expect(prisma).toBeDefined();
+    expect(blockchainConnectorService).toBeDefined();
   });
 
   it('should create one harvest batch', async () => {
@@ -70,7 +83,7 @@ describe('BatchService', () => {
     const links = ['l1', 'l2', 'l3'];
     mockedCreateBatchDtosWithLinks[0].ins = links;
 
-    jest.spyOn(prisma.batch, 'create').mockImplementation();
+    jest.spyOn(prisma.batch, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1);
     jest.spyOn(prisma.batch, 'updateMany').mockImplementation();
     jest.spyOn(prisma.processStep, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1.processStep);
     await service.createBatches(mockedCreateBatchDtosWithLinks);

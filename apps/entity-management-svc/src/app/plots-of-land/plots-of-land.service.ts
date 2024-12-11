@@ -1,4 +1,5 @@
 import { GeoDataDto, PlotOfLandCreateDto, PlotOfLandDto, PlotOfLandUpdateDto } from '@forest-guard/api-interfaces';
+import { BlockchainConnectorService } from '@forest-guard/blockchain-connector';
 import { ConfigurationService } from '@forest-guard/configuration';
 import { PrismaService } from '@forest-guard/database';
 import { Injectable } from '@nestjs/common';
@@ -9,7 +10,11 @@ import { User } from '@prisma/client';
 export class PlotsOfLandService {
   private readonly cultivationCommodity: string;
 
-  constructor(private readonly prismaService: PrismaService, private readonly configurationService: ConfigurationService) {
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly configurationService: ConfigurationService,
+    private readonly blockchainConnectorService: BlockchainConnectorService
+  ) {
     const generalConfiguration = this.configurationService.getEntityManagementConfiguration();
     this.cultivationCommodity = generalConfiguration.cultivationCommodity;
   }
@@ -50,7 +55,7 @@ export class PlotsOfLandService {
 
     const geoDataEudr = this.createGeoDataEudr(plotOfLand.geoData, farmer);
 
-    return this.prismaService.plotOfLand.create({
+    const createdPlotOfLand = await this.prismaService.plotOfLand.create({
       data: {
         areaInHA: plotOfLand.areaInHA,
         country: plotOfLand.country,
@@ -83,6 +88,10 @@ export class PlotsOfLandService {
         },
       },
     });
+
+    await this.blockchainConnectorService.mintPlotOfLandNft(createdPlotOfLand);
+
+    return createdPlotOfLand;
   }
 
   createGeoDataEudr(geoDataDto: GeoDataDto, farmerEntity: User) {

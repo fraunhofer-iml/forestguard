@@ -1,5 +1,5 @@
 import { BatchCombinedCreateDto, BatchCreateDto } from '@forest-guard/api-interfaces';
-import { getBatchesFromDb } from '../../test-utils/batches/batches.spec.utils';
+import { getBatchesFromDb } from '../../test-utils/batches.spec.utils';
 import { HttpStatus } from '@nestjs/common';
 import { Process } from '../../test-utils/arrange-utils';
 

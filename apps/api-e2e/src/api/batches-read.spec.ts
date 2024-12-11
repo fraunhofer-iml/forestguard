@@ -1,11 +1,10 @@
 import axios from 'axios';
-import { beforeEachAndAfterAll, createHttpHeader, HttpHeader, prisma } from '../test-utils/test.utils';
-import { ensureBatch, batchNotFoundMessage } from '../assertions/batches/assertion.utils';
-import { prepareBatchCreation } from '../test-utils/batches/batches.spec.utils';
-import { ensureException } from '../assertions/assertion.utils';
+import { ensureException } from './assertions/assertion.utils';
+import { batchNotFoundMessage, ensureBatch } from './assertions/batches/assertion.utils';
+import { prepareBatchCreation } from './test-utils/batches.spec.utils';
+import { beforeEachAndAfterAll, createHttpHeader, HttpHeader, prisma } from './test-utils/test.utils';
 
 describe('/batches-read', () => {
-
   let httpHeader: HttpHeader;
 
   beforeAll(async () => {
@@ -37,4 +36,3 @@ describe('/batches-read', () => {
     });
   });
 });
-

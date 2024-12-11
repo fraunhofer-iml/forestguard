@@ -38,6 +38,7 @@
     "@nestjs/microservices": "^10.3.8",
     "@nestjs/platform-express": "^10.3.9",
     "@nestjs/swagger": "^7.3.1",
+    "@nft-folder/blockchain-connector": "^1.2.0",
     "@prisma/client": "^5.21.1",
     "@syncfusion/ej2-angular-diagrams": "^26.1.41",
     "amqp-connection-manager": "^4.1.14",

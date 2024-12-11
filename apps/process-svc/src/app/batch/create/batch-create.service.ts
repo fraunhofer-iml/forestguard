@@ -5,6 +5,7 @@ import {
   ProcessStepIdResponse,
   ProcessStepWithMultipleHarvestedLandsCreateDto,
 } from '@forest-guard/api-interfaces';
+import { BlockchainConnectorService } from '@forest-guard/blockchain-connector';
 import { PrismaService } from '@forest-guard/database';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Batch } from '@prisma/client';
@@ -13,7 +14,7 @@ import { createBatchQuery, createOriginBatchQuery, processStepQuery } from '../u
 
 @Injectable()
 export class BatchCreateService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService, private readonly blockchainConnectorService: BlockchainConnectorService) {}
 
   private readonly HARVESTING_PROCESS = 'Harvesting';
   private readonly MERGE_PROCESS = 'Merge';
@@ -121,9 +122,20 @@ export class BatchCreateService {
   }
 
   private async createHarvest(dto: BatchCreateDto): Promise<Batch> {
-    return this.prismaService.batch.create({
+    const createdBatch = await this.prismaService.batch.create({
       data: createOriginBatchQuery(dto),
+      include: {
+        processStep: {
+          include: {
+            farmedLand: true,
+          },
+        },
+      },
     });
+
+    const plotOfLandId = createdBatch.processStep.farmedLand.id;
+    await this.blockchainConnectorService.mintBatchRootNft({ ...createdBatch, plotOfLandId });
+    return createdBatch;
   }
 
   private async mergeIntoOneHarvestBatch(batchCreateDto: BatchCreateDto, batches: Batch[]): Promise<Batch> {
@@ -136,11 +148,15 @@ export class BatchCreateService {
   }
 
   private async createBatch(dto: BatchCreateDto, existingProcessStepId?: string): Promise<Batch> {
-    const batch = await this.prismaService.batch.create({
+    const createdBatch = await this.prismaService.batch.create({
       data: createBatchQuery(dto, existingProcessStepId),
+      include: { ins: true },
     });
+
+    const parentIds = createdBatch.ins.map((ins) => ins.id);
+    await this.blockchainConnectorService.mintBatchLeafNft({ ...createdBatch, parentIds });
     await this.setBatchesInactive(dto);
-    return batch;
+    return createdBatch;
   }
 
   private setBatchesInactive(dto: BatchCreateDto) {

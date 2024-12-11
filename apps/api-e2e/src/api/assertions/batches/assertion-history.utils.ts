@@ -1,7 +1,7 @@
 import { BatchExportWrapperDto } from '@forest-guard/api-interfaces';
-import { Process } from '../batches.spec.utils';
 import { HttpStatus } from '@nestjs/common';
-import { marker1, marker2, marker3 } from '../batches.spec.utils';
+import { Process } from '../../test-utils/arrange-utils';
+import { marker1, marker2, marker3 } from '../../test-utils/batches-history.spec.utils';
 
 export function ensureRelatedBatches(response, targetBatch, deadEndBatch) {
   expect(response.status).toBe(HttpStatus.OK);
@@ -10,25 +10,25 @@ export function ensureRelatedBatches(response, targetBatch, deadEndBatch) {
 
   // Ensure that number of batches is correct and that target batch belongs to response
   expect(responseBatches.length).toBe(6);
-  expect(responseBatches.find(batch => batch.id === targetBatch.id).processStep.location).toBe(marker2);
+  expect(responseBatches.find((batch) => batch.id === targetBatch.id).processStep.location).toBe(marker2);
 
   // Ensure that harvest merge is correct
-  const harvestMergeEdges = responseEdges.filter(edge => edge.to === targetBatch.id);
+  const harvestMergeEdges = responseEdges.filter((edge) => edge.to === targetBatch.id);
   expect(harvestMergeEdges.length).toBe(1);
-  expect(responseBatches.find(batch => batch.id === harvestMergeEdges[0].from).processStep.process.name).toBe(Process.MERGE);
+  expect(responseBatches.find((batch) => batch.id === harvestMergeEdges[0].from).processStep.process.name).toBe(Process.MERGE);
 
   // Ensure that harvest batches are correct
-  const harvestBatchEdges = responseEdges.filter(edge => edge.to === harvestMergeEdges[0].from);
+  const harvestBatchEdges = responseEdges.filter((edge) => edge.to === harvestMergeEdges[0].from);
   expect(harvestBatchEdges.length).toBe(2);
-  expect(responseBatches.find(batch => batch.id === harvestBatchEdges[0].from).processStep.location).toBe(marker1);
+  expect(responseBatches.find((batch) => batch.id === harvestBatchEdges[0].from).processStep.location).toBe(marker1);
 
   // Ensure that final batches are correct
-  const finalBatchEdges = responseEdges.filter(edge => edge.from === targetBatch.id);
+  const finalBatchEdges = responseEdges.filter((edge) => edge.from === targetBatch.id);
   expect(finalBatchEdges.length).toBe(2);
-  expect(responseBatches.find(batch => batch.id === finalBatchEdges[0].to).processStep.location).toBe(marker3);
+  expect(responseBatches.find((batch) => batch.id === finalBatchEdges[0].to).processStep.location).toBe(marker3);
 
   // Ensure that dead end batch does not belong to tree
-  expect(responseBatches.filter(batch => batch.id === deadEndBatch.id).length).toBe(0);
+  expect(responseBatches.filter((batch) => batch.id === deadEndBatch.id).length).toBe(0);
 }
 
 export function ensureExport(response, targetBatch) {

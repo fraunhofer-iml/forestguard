@@ -4,10 +4,15 @@ import { FileStorageService } from '@forest-guard/file-storage';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import 'multer';
 import { AmqpException } from '@forest-guard/amqp';
+import { BlockchainConnectorService } from '@forest-guard/blockchain-connector';
 
 @Injectable()
 export class ProofService {
-  constructor(private readonly prismaService: PrismaService, private readonly fileStorageService: FileStorageService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly fileStorageService: FileStorageService,
+    private readonly blockchainConnectorService: BlockchainConnectorService
+  ) {}
 
   private async verifyUniquenessOfProof(plotOfLandId: string, proofCreateDto: ProofCreateDto): Promise<void> {
     const numberOfProofs = await this.prismaService.proof.count({
@@ -26,7 +31,7 @@ export class ProofService {
     await this.verifyUniquenessOfProof(plotOfLandId, proofCreateDto);
     const fileName = await this.fileStorageService.uploadFileWithDeepPath(file, 'plot-of-land', plotOfLandId);
 
-    return this.prismaService.proof.create({
+    const createdProof = await this.prismaService.proof.create({
       data: {
         type: proofCreateDto.type,
         documentRef: fileName,
@@ -37,7 +42,14 @@ export class ProofService {
           },
         },
       },
+      include: {
+        plotOfLand: true,
+      },
     });
+
+    await this.blockchainConnectorService.updatePlotOfLandNft(createdProof);
+
+    return createdProof;
   }
 
   async readProofsByPlotOfLandId(plotOfLandId: string): Promise<ProofDto[]> {

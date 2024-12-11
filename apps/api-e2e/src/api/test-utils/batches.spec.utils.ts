@@ -1,7 +1,14 @@
 import { BatchCombinedCreateDto, BatchCreateDto, ProcessStepWithMultipleHarvestedLandsCreateDto } from '@forest-guard/api-interfaces';
 import axios from 'axios';
-import { givenBatchCreateDto, givenPlotOfLand, prepareCompany, prepareFarmer, prepareUser } from '../arrange-utils';
-import { createHttpHeader } from '../test.utils';
+import { givenBatchCreateDto, givenPlotOfLand, prepareCompany, prepareFarmer, prepareUser } from './arrange-utils';
+import { createHttpHeader } from './test.utils';
+
+// We need to wait until a PlotOfLand NFT is fully minted. Unfortunately, this can take some time on a local machine.
+async function waitForMinting() {
+  if (process.env['BLOCKCHAIN_ENABLED'] === 'true') {
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+  }
+}
 
 export async function prepareBatchCreationWithPlotOfLand(): Promise<BatchCreateDto> {
   const batchCreateDto = await prepareBatchCreation();
@@ -22,6 +29,8 @@ export async function prepareBatchCreation(): Promise<BatchCreateDto> {
 export async function preparePlotOfLandCreation(batchCreateDto: BatchCreateDto): Promise<BatchCreateDto> {
   const plotOfLandResponse = await axios.post(`/pols?farmerId=${batchCreateDto.processStep.executedBy}`, givenPlotOfLand, await createHttpHeader());
   batchCreateDto.processStep.harvestedLand = plotOfLandResponse.data.id;
+
+  await waitForMinting();
   return batchCreateDto;
 }
 
@@ -41,7 +50,10 @@ export async function prepareXPlotsOfLandCreation(batchCreateDto: BatchCreateDto
   if (x !== 0) {
     const plotOfLandResponse = await axios.post(`/pols?farmerId=${batchCreateDto.processStep.executedBy}`, givenPlotOfLand, await createHttpHeader());
     batchCombinedCreateDto.processStep.harvestedLands = new Array(x).fill(plotOfLandResponse.data.id);
+
+    await waitForMinting();
   }
+
   return batchCombinedCreateDto;
 }
 

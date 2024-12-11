@@ -35,6 +35,7 @@ api:run-integration-tests:
     KEYCLOAK_ADMIN_PASSWORD: admin
     KEYCLOAK_URL: http://keycloak:8080
     KEYCLOAK_REALM_CONFIG_PATH: ./keycloak/realm/ForestGuard-realm.json
+    BLOCKCHAIN_ENABLED: false
   script:
     - apk add --no-cache wget ca-certificates curl jq
     - wget https://github.com/jwilder/dockerize/releases/download/v0.8.0/dockerize-alpine-linux-amd64-v0.8.0.tar.gz

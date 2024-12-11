@@ -1,22 +1,16 @@
+import { BatchCreateDto } from '@forest-guard/api-interfaces';
 import axios from 'axios';
-import { beforeEachAndAfterAll, createHttpHeader, HttpHeader } from '../test-utils/test.utils';
-import { ensureResponseBatch, ensureResponseBatchWithProcess } from '../assertions/batches/assertion.utils';
+import { HttpStatus } from '@nestjs/common';
+import { ensureResponseBatch, ensureResponseBatchWithProcess } from './assertions/batches/assertion.utils';
+import { givenFarmer, prepareFarmerWithDto, preparePlotOfLand, Process } from './test-utils/arrange-utils';
 import {
   prepareBatchCreationWithPlotOfLand,
   prepareTwoPlotsOfLandCreation,
   prepareXPlotsOfLandCreation,
-} from '../test-utils/batches/batches.spec.utils';
-import { HttpStatus } from '@nestjs/common';
-import { BatchCreateDto } from '@forest-guard/api-interfaces';
-import {
-  givenFarmer,
-  prepareFarmerWithDto,
-  preparePlotOfLand,
-  Process,
-} from '../test-utils/arrange-utils';
+} from './test-utils/batches.spec.utils';
+import { beforeEachAndAfterAll, createHttpHeader, HttpHeader } from './test-utils/test.utils';
 
 describe('/batches-create', () => {
-
   let httpHeader: HttpHeader;
   let batchCreateDto: BatchCreateDto;
 
@@ -96,10 +90,7 @@ describe('/batches-create', () => {
         await axios.post(`/batches/harvests/combined`, givenBatchCombinedCreateDto, httpHeader);
       } catch (err) {
         expect(err.response.data.status).toBe(HttpStatus.BAD_REQUEST);
-
       }
     });
   });
-
 });
-

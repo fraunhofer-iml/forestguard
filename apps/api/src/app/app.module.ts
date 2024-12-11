@@ -24,6 +24,8 @@ import { ImportModule } from './import/import.module';
       useExisting: KeycloakConfigurationService,
       imports: [ConfigurationModule],
     }),
+    // Activate the following line to enable the token endpoints from the blockchain-connector library
+    // TokenModule.getDynamicModule(),
   ],
   controllers: [],
   providers: [
