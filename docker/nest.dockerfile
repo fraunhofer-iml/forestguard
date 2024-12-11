@@ -5,6 +5,7 @@ ARG APP
 WORKDIR /app
 COPY ./dist/apps/${APP} .
 COPY ./prisma .
+COPY ./blockchain/abi ./blockchain/abi
 COPY ./.npmrc .
 
 RUN npm ci --omit=dev
