@@ -1,6 +1,6 @@
 [
   {
-    "id": "ctest201",
+    "id": "acme_corp_address",
     "street": "123 Main St",
     "city": "Springfield",
     "state": "IL",
@@ -9,7 +9,7 @@
     "additionalInformation": "good to know"
   },
   {
-    "id": "ctest202",
+    "id": "some_address",
     "street": "456 Elm St",
     "city": "Shelbyville",
     "state": "IN",

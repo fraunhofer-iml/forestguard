@@ -52,7 +52,7 @@ services:
   # BLOCKCHAIN #
   ##############
   blockchain-network:
-    image: container-registry.gitlab.cc-asp.fraunhofer.de/silicon-economy/base/blockchainbroker/ethereum/networks/hyperledger-besu/besu-dev-node:latest
+    image: container-registry.gitlab.cc-asp.fraunhofer.de/silicon-economy/base/blockchainbroker/ethereum/networks/hyperledger-besu/dev-network:1.0.0
     depends_on:
       minio-setup:
         condition: service_completed_successfully
