@@ -1,5 +1,5 @@
 import { ConfigurationModule, KeycloakConfigurationService } from '@forest-guard/configuration';
-import { AuthGuard, KeycloakConnectModule } from 'nest-keycloak-connect';
+import { AuthGuard, KeycloakConnectModule, RoleGuard } from 'nest-keycloak-connect';
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { BatchModule } from './batch/batch.module';
@@ -32,6 +32,10 @@ import { ImportModule } from './import/import.module';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RoleGuard,
     },
   ],
 })

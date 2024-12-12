@@ -4,12 +4,14 @@ import {
   BatchDto,
   ProcessDisplayDto,
   ProcessStepIdResponse,
+  Role,
   TAuthenticatedUser,
 } from '@forest-guard/api-interfaces';
-import { AuthenticatedUser } from 'nest-keycloak-connect';
+import { AuthenticatedUser, Roles } from 'nest-keycloak-connect';
 import { Body, Controller, Get, Header, Param, Post, StreamableFile } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BatchService } from './batch.service';
+import { KeycloakUtil } from '@forest-guard/util';
 
 @ApiTags('Batches')
 @Controller('batches')
@@ -25,6 +27,7 @@ export class BatchController {
   }
 
   @Post('harvests')
+  @Roles({ roles: [KeycloakUtil.toRealmRole(Role.Cooperative)]})
   @ApiBearerAuth()
   @ApiOperation({ description: 'Create harvest batches' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
@@ -36,6 +39,7 @@ export class BatchController {
   }
 
   @Post('harvests/combined')
+  @Roles({ roles: [KeycloakUtil.toRealmRole(Role.Cooperative)]})
   @ApiBearerAuth()
   @ApiOperation({ description: 'Create harvest batches to multiple plot of lands' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
