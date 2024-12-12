@@ -13,7 +13,11 @@
     "test-api-e2e": "nx test api-e2e --skip-nx-cache --runInBand",
     "test-em": "nx test entity-management-svc",
     "test-process": "nx test process-svc",
-    "test-frontend": "nx test frontend"
+    "test-frontend": "nx test frontend",
+    "license-checker": "npm run license-checker-all && npm run license-checker-unknown && npm run license-checker-summary",
+    "license-checker-all": "npx license-checker --unknown --csv --out=./third-party-licenses/third-party-licenses.csv",
+    "license-checker-unknown": "npx license-checker --onlyunknown --csv --out=./third-party-licenses/third-party-licenses-unknown.csv",
+    "license-checker-summary": "npx license-checker --unknown --summary --out=./third-party-licenses/third-party-licenses-summary.txt"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
