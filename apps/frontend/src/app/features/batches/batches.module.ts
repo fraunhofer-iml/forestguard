@@ -15,7 +15,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { DiagramModule } from '@syncfusion/ej2-angular-diagrams';
 import { BatchService } from '../../shared/services/batch/batch.service';
 import { CompanyService } from '../../shared/services/company/company.service';
 import { ProcessStepService } from '../../shared/services/process-step/process.step.service';
@@ -58,7 +57,6 @@ import { BatchUpdateComponent } from './update/batch-update.component';
     MatSelectModule,
     MatCheckboxModule,
     MatTooltipModule,
-    DiagramModule,
     MatIcon,
   ],
   providers: [
