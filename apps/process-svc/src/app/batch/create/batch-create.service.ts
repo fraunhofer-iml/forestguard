@@ -17,7 +17,6 @@ export class BatchCreateService {
   private readonly NO_CONTENT_MESSAGE = 'There is no input content to create';
 
   async createHarvests(batchCreateDtos: BatchCreateDto[]): Promise<ProcessStepIdResponse> {
-    //  TODO: das für tests nutzen
     if (batchCreateDtos.length === 0) {
       throw new AmqpException(this.NO_CONTENT_MESSAGE, HttpStatus.NO_CONTENT);
     }

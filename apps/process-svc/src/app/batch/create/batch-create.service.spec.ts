@@ -1,7 +1,8 @@
 import { PrismaService } from '@forest-guard/database';
 import { Test, TestingModule } from '@nestjs/testing';
-import { mockedCombinedBatchDto, mockedCreateBatchDto, mockedPrismaBatch1, mockedPrismaBatchWithRelations1 } from '../mocked-data/batch.mock';
+import { mockedCombinedBatchDto, mockedCreateBatchDto, mockedPrismaBatch1, mockedPrismaBatchWithRelations1, mockedPrismaBatchWithRelations4 } from '../mocked-data/batch.mock';
 import { BatchCreateService } from './batch-create.service';
+
 
 describe('BatchService', () => {
   let service: BatchCreateService;
@@ -92,4 +93,41 @@ describe('BatchService', () => {
   // TODO: test new logic
   // für jede exception einen
   // für 2. nochmal mit dem 1. element active und dem 2. inactve
+
+
+  // 1. 
+
+  it('should throw an error for not finding a Batch', async () => {
+    const mockedCreateBatchDtos = [mockedCreateBatchDto];
+    // findUnique fails 
+    jest.spyOn(prisma.batch, 'findUnique').mockRejectedValue(new Error('error'));
+    jest.spyOn(prisma.batch, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1);
+
+    await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toThrow();
+  });
+
+  // 2.1 
+  it('should throw an error for an inactive batch', async () => {
+    // mockedPrismaBatchWithRelations4.active = false
+    const mockedCreateBatchDtos = [mockedCreateBatchDto];
+
+    jest.spyOn(prisma.batch, 'findUnique').mockResolvedValue(mockedPrismaBatchWithRelations4);
+    jest.spyOn(prisma.batch, 'create').mockImplementation();
+    await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toThrow();
+  });
+
+  // 2.2
+  // prüfen ob findUnique 2 mal aufgerufen wird 
+
+  /*
+  it('should throw an error for an inactive batch', async () => {
+    const mockedCreateBatchDtos = [mockedCreateBatchDto];
+    jest.spyOn(prisma.batch, 'findUnique').mockResolvedValue(mockedPrismaBatchWithRelations1);
+    jest.spyOn(prisma.batch, 'create').mockResolvedValue(mockedPrismaBatch1);
+    
+    await service.createBatches(mockedCreateBatchDtos);
+
+    expect(prisma.batch.findUnique).toHaveBeenCalledTimes(2);
+  });
+  */
 });
