@@ -1,6 +1,6 @@
 import { PrismaService } from '@forest-guard/database';
 import { Test, TestingModule } from '@nestjs/testing';
-import { mockedCombinedBatchDto, mockedCreateBatchDto, mockedPrismaBatchWithRelations1 } from '../mocked-data/batch.mock';
+import { mockedCombinedBatchDto, mockedCreateBatchDto, mockedPrismaBatch1, mockedPrismaBatchWithRelations1 } from '../mocked-data/batch.mock';
 import { BatchCreateService } from './batch-create.service';
 
 describe('BatchService', () => {
@@ -17,6 +17,7 @@ describe('BatchService', () => {
             batch: {
               create: jest.fn(),
               updateMany: jest.fn(),
+              findUnique: jest.fn(),
             },
             processStep: {
               create: jest.fn(),
@@ -47,6 +48,7 @@ describe('BatchService', () => {
 
   it('should create multiple harvest batches', async () => {
     const createBatchDtos = [mockedCreateBatchDto, mockedCreateBatchDto];
+    jest.spyOn(prisma.batch, 'findUnique').mockResolvedValue(mockedPrismaBatchWithRelations1);
     jest.spyOn(prisma.batch, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1);
 
     await service.createHarvests(createBatchDtos);
@@ -55,6 +57,7 @@ describe('BatchService', () => {
 
   it('should create multiple harvest batches to multiple plot of lands', async () => {
     const combinedBatchDto = mockedCombinedBatchDto;
+    jest.spyOn(prisma.batch, 'findUnique').mockResolvedValue(mockedPrismaBatchWithRelations1);
     jest.spyOn(prisma.batch, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1);
 
     await service.createCombinedHarvests(combinedBatchDto);
@@ -66,6 +69,7 @@ describe('BatchService', () => {
     const links = ['l1', 'l2', 'l3'];
     mockedCreateBatchDtosWithLinks[0].ins = links;
 
+    jest.spyOn(prisma.batch, 'findUnique').mockResolvedValue(mockedPrismaBatchWithRelations1);
     jest.spyOn(prisma.batch, 'create').mockImplementation();
     jest.spyOn(prisma.batch, 'updateMany').mockImplementation();
     jest.spyOn(prisma.processStep, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1.processStep);
@@ -86,4 +90,6 @@ describe('BatchService', () => {
   });
 
   // TODO: test new logic
+  // für jede exception einen
+  // für 2. nochmal mit dem 1. element active und dem 2. inactve
 });

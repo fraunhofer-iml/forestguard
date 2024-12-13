@@ -17,6 +17,7 @@ export class BatchCreateService {
   private readonly NO_CONTENT_MESSAGE = 'There is no input content to create';
 
   async createHarvests(batchCreateDtos: BatchCreateDto[]): Promise<ProcessStepIdResponse> {
+    //  TODO: das für tests nutzen
     if (batchCreateDtos.length === 0) {
       throw new AmqpException(this.NO_CONTENT_MESSAGE, HttpStatus.NO_CONTENT);
     }
@@ -108,20 +109,13 @@ export class BatchCreateService {
   }
 
   private async createBatch(dto: BatchCreateDto, existingProcessStepId?: string): Promise<Batch> {
-    // TODO: Fetch everything in from ins, check if they are active, if not throw error
-    // doesnt work with:
-    // for(batchId in dto.ins)
-    console.log("length: ")
-    console.log(dto.ins.length)
-    for(let i = 0; dto.ins.length-1; i++) {
-      // seems like it doesnt end even though length = 2 
-      console.log("### dto ins i ###");
-      console.log(dto.ins[i]);
-      const fetchedBatch = await this.prismaService.batch.findUniqueOrThrow({where:  { id: dto.ins[i]}});
-      console.log("### fetchedBatch ###");
-      console.log(fetchedBatch);
+    for(const batchId of dto.ins) {
+      const fetchedBatch = await this.prismaService.batch.findUnique({where:  { id: batchId}});
+      if(!(fetchedBatch)) {
+        throw new AmqpException(`no batch with id ${batchId} found. `, HttpStatus.NOT_FOUND);
+      }
       if(!(fetchedBatch.active)) {
-        throw new AmqpException(`Batch '${dto.ins[i]}' is already inactive. `, 409);
+        throw new AmqpException(`Batch '${batchId}' is already inactive. `, HttpStatus.BAD_REQUEST);
       }
     }
     const batch = await this.prismaService.batch.create({
