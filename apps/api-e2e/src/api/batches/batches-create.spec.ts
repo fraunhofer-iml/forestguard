@@ -41,6 +41,13 @@ describe('/batches-create', () => {
       const response = await axios.post(`/batches`, [], httpHeader);
       expect(response.status).toBe(HttpStatus.NO_CONTENT);
     });
+
+    // TODO: new e2e test 
+    it('should throw an exception', async () => {
+      console.log(batchCreateDto);
+      const response = await axios.post('/batches', [/* one with ins that dont work */]); 
+      expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+    });
   });
 
   describe('POST /batches/harvests', () => {
@@ -80,7 +87,6 @@ describe('/batches-create', () => {
     });
   });
 
-  // TODO: new e2e test 
 
 });
 

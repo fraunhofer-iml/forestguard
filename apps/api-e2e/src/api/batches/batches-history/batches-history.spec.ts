@@ -23,6 +23,7 @@ describe('/batches', () => {
   });
 
   describe('GET /batches/:id/related', () => {
+    // TODO: anpassen
     it('should return batch with related batches', async () => {
       const { targetBatch, deadEndBatch } = await prepareTree(batchCreateDto);
 
@@ -44,6 +45,7 @@ describe('/batches', () => {
   });
 
   describe('GET /batches/:id/export', () => {
+    // TODO: anpassen
     it('should return export file of the specified batch ', async () => {
       const { targetBatch } = await prepareTree(batchCreateDto);
 

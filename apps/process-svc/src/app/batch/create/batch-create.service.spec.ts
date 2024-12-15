@@ -99,7 +99,7 @@ describe('BatchService', () => {
 
   it('should throw an error for not finding a Batch', async () => {
     const mockedCreateBatchDtos = [mockedCreateBatchDto];
-    // findUnique fails 
+    // findUnique should fail
     jest.spyOn(prisma.batch, 'findUnique').mockRejectedValue(new Error('error'));
     jest.spyOn(prisma.batch, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1);
 
@@ -118,16 +118,16 @@ describe('BatchService', () => {
 
   // 2.2
   // prüfen ob findUnique 2 mal aufgerufen wird 
-
-  /*
-  it('should throw an error for an inactive batch', async () => {
-    const mockedCreateBatchDtos = [mockedCreateBatchDto];
-    jest.spyOn(prisma.batch, 'findUnique').mockResolvedValue(mockedPrismaBatchWithRelations1);
+  
+  it('should throw an error for just one inactive batch', async () => {
+    const mockedCreateBatchDtos = [mockedCreateBatchDto, mockedCreateBatchDto];
+    jest.spyOn(prisma.batch, 'findUnique')
+    .mockResolvedValueOnce(mockedPrismaBatchWithRelations1)
+    .mockResolvedValue(mockedPrismaBatchWithRelations4);
     jest.spyOn(prisma.batch, 'create').mockResolvedValue(mockedPrismaBatch1);
+    jest.spyOn(prisma.processStep, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1.processStep);
     
-    await service.createBatches(mockedCreateBatchDtos);
-
-    expect(prisma.batch.findUnique).toHaveBeenCalledTimes(2);
+    await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toThrow();
   });
-  */
+  
 });
