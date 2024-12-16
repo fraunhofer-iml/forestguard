@@ -17,11 +17,13 @@ type BlockchainRequest = {
   type: BlockchainRequestType;
   dto: TokenMintDto | PlotOfLandTokenUpdateDto;
   parentIds?: string[];
+  numberOfRetries: number;
 };
 
 @Injectable()
 export class BlockchainConnectorService {
   private readonly DURATION_IN_MS = 500;
+  private readonly MAX_BLOCKCHAIN_REQUEST_RETRIES = 10;
   private readonly logger = new Logger('BlockchainConnectorService');
 
   private blockchainEnabled: boolean;
@@ -48,7 +50,7 @@ export class BlockchainConnectorService {
     // eslint-disable-next-line no-constant-condition
     while (true) {
       if (this.blockchainRequestQueue.length === 0) {
-        await this.waitForDelay(this.DURATION_IN_MS); 
+        await this.waitForDelay(this.DURATION_IN_MS);
       } else {
         const firstBlockchainRequestFromQueue = this.blockchainRequestQueue.shift();
 
@@ -64,7 +66,16 @@ export class BlockchainConnectorService {
   }
 
   private async processBlockchainRequest(blockchainRequest: BlockchainRequest) {
-    const { type, dto, parentIds } = blockchainRequest;
+    blockchainRequest.numberOfRetries++;
+
+    const { type, dto, parentIds, numberOfRetries } = blockchainRequest;
+
+    if (numberOfRetries > this.MAX_BLOCKCHAIN_REQUEST_RETRIES) {
+      throw new AmqpException(
+        `Number of maximum retries (${this.MAX_BLOCKCHAIN_REQUEST_RETRIES}) exceeded for blockchain request of type: ${type}`,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
 
     switch (type) {
       case BlockchainRequestType.MINT_PLOT_OF_LAND_NFT:
@@ -99,6 +110,7 @@ export class BlockchainConnectorService {
     this.blockchainRequestQueue.push({
       type: BlockchainRequestType.MINT_PLOT_OF_LAND_NFT,
       dto: dto,
+      numberOfRetries: 0,
     });
   }
 
@@ -112,6 +124,7 @@ export class BlockchainConnectorService {
     this.blockchainRequestQueue.push({
       type: BlockchainRequestType.UPDATE_PLOT_OF_LAND_NFT,
       dto: dto,
+      numberOfRetries: 0,
     });
   }
 
@@ -126,6 +139,7 @@ export class BlockchainConnectorService {
     this.blockchainRequestQueue.push({
       type: BlockchainRequestType.MINT_BATCH_ROOT_NFT,
       dto: dto,
+      numberOfRetries: 0,
     });
   }
 
@@ -140,6 +154,7 @@ export class BlockchainConnectorService {
       type: BlockchainRequestType.MINT_BATCH_LEAF_NFT,
       dto: dto,
       parentIds: batch.parentIds,
+      numberOfRetries: 0,
     });
   }
 }
