@@ -2,6 +2,7 @@ import { PrismaService } from '@forest-guard/database';
 import { Test, TestingModule } from '@nestjs/testing';
 import { mockedCombinedBatchDto, mockedCreateBatchDto, mockedPrismaBatch1, mockedPrismaBatchWithRelations1, mockedPrismaBatchWithRelations4 } from '../mocked-data/batch.mock';
 import { BatchCreateService } from './batch-create.service';
+import { AmqpException } from '@forest-guard/amqp';
 
 
 describe('BatchService', () => {
@@ -100,10 +101,15 @@ describe('BatchService', () => {
   it('should throw an error for not finding a Batch', async () => {
     const mockedCreateBatchDtos = [mockedCreateBatchDto];
     // findUnique should fail
-    jest.spyOn(prisma.batch, 'findUnique').mockRejectedValue(new Error('error'));
-    jest.spyOn(prisma.batch, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1);
 
-    await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toThrow();
+    jest.spyOn(prisma.processStep, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1.processStep);
+
+    jest.spyOn(prisma.batch, 'findUnique').mockResolvedValue(undefined);
+    jest.spyOn(prisma.batch, 'create').mockImplementation();
+
+
+    await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toThrow(AmqpException);
+    // implement siehe screenshot 
   });
 
   // 2.1 
@@ -111,9 +117,13 @@ describe('BatchService', () => {
     // mockedPrismaBatchWithRelations4.active = false
     const mockedCreateBatchDtos = [mockedCreateBatchDto];
 
+    jest.spyOn(prisma.processStep, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1.processStep);
     jest.spyOn(prisma.batch, 'findUnique').mockResolvedValue(mockedPrismaBatchWithRelations4);
     jest.spyOn(prisma.batch, 'create').mockImplementation();
-    await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toThrow();
+    
+
+    await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toThrow(AmqpException);
+    // implement siehe screenshot 
   });
 
   // 2.2
@@ -121,13 +131,15 @@ describe('BatchService', () => {
   
   it('should throw an error for just one inactive batch', async () => {
     const mockedCreateBatchDtos = [mockedCreateBatchDto, mockedCreateBatchDto];
+    jest.spyOn(prisma.processStep, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1.processStep);
+
     jest.spyOn(prisma.batch, 'findUnique')
     .mockResolvedValueOnce(mockedPrismaBatchWithRelations1)
-    .mockResolvedValue(mockedPrismaBatchWithRelations4);
+    .mockResolvedValueOnce(mockedPrismaBatchWithRelations4);
     jest.spyOn(prisma.batch, 'create').mockResolvedValue(mockedPrismaBatch1);
-    jest.spyOn(prisma.processStep, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1.processStep);
-    
-    await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toThrow();
+    expect(prisma.batch.findUnique).toHaveBeenCalledTimes(2);
+    await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toThrow(AmqpException);
+    // implement siehe Screenshot
   });
   
 });

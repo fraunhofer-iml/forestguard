@@ -110,10 +110,10 @@ export class BatchCreateService {
   private async createBatch(dto: BatchCreateDto, existingProcessStepId?: string): Promise<Batch> {
     for(const batchId of dto.ins) {
       const fetchedBatch = await this.prismaService.batch.findUnique({where:  { id: batchId}});
-      if(!(fetchedBatch)) {
-        throw new AmqpException(`no batch with id ${batchId} found. `, HttpStatus.NOT_FOUND);
+      if(!fetchedBatch) {
+        throw new AmqpException(`No batch with id ${batchId} found. `, HttpStatus.NOT_FOUND);
       }
-      if(!(fetchedBatch.active)) {
+      if(!fetchedBatch.active) {
         throw new AmqpException(`Batch '${batchId}' is already inactive. `, HttpStatus.BAD_REQUEST);
       }
     }
