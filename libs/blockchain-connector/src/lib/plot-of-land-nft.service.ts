@@ -21,11 +21,11 @@ export type PlotOfLandTokenUpdateDto = {
 @Injectable()
 export class PlotOfLandNftService {
   private readonly plotOfLandsUrl = 'https://forest-guard.apps.blockchain-europe.iml.fraunhofer.de/pols/';
+  private readonly logger: Logger = new Logger(PlotOfLandNftService.name);
 
   constructor(
     @Inject(DataIntegrityService) private readonly dataIntegrityService: DataIntegrityService,
     @Inject(FileStorageService) private readonly fileStorageService: FileStorageService,
-    @Inject(Logger) private readonly logger: Logger,
     @Inject(TokenMintService) private readonly tokenCreateService: TokenMintService,
     @Inject(TokenReadService) private readonly tokenReadService: TokenReadService,
     @Inject(TokenUpdateService) private readonly tokenUpdateService: TokenUpdateService

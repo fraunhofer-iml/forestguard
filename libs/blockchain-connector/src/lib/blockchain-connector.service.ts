@@ -22,17 +22,17 @@ type BlockchainRequest = {
 
 @Injectable()
 export class BlockchainConnectorService implements OnModuleDestroy {
-  private readonly DURATION_IN_MS = 500;
-  private readonly MAX_BLOCKCHAIN_REQUEST_RETRIES = 10;
+  private readonly logger = new Logger(BlockchainConnectorService.name);
+  private readonly delayInMs = 500;
+  private readonly maxRetries = 10;
+  private readonly blockchainRequestQueue: BlockchainRequest[] = [];
 
-  private isRunning = true;
-  private blockchainEnabled: boolean;
-  private blockchainRequestQueue: BlockchainRequest[] = [];
+  private serviceRunning = true;
+  private blockchainEnabled = false;
 
   constructor(
     @Inject(BatchNftService) private readonly batchNftService: BatchNftService,
     @Inject(ConfigurationService) private readonly configurationService: ConfigurationService,
-    @Inject(Logger) private readonly logger: Logger,
     @Inject(PlotOfLandNftService) private readonly plotOfLandNftService: PlotOfLandNftService
   ) {
     this.blockchainEnabled = this.configurationService?.getGeneralConfiguration()?.blockchainEnabled || false;
@@ -45,47 +45,51 @@ export class BlockchainConnectorService implements OnModuleDestroy {
     }
   }
 
-  async onModuleDestroy() {
-    this.isRunning = false;
+  public async onModuleDestroy() {
+    this.serviceRunning = false;
   }
 
   private async startWorker() {
     // TODO-MP: check node worker thread
-    while (this.isRunning) {
+    while (this.serviceRunning) {
       if (this.blockchainRequestQueue.length === 0) {
-        await this.waitForDelay(this.DURATION_IN_MS);
+        await this.delayBlockchainRequest();
       } else {
-        this.logger.log({
-          message: 'Getting the next element in the blockchain request queue',
-          blockchainRequestQueue: this.blockchainRequestQueue.length,
-        });
-        const firstBlockchainRequestFromQueue = this.blockchainRequestQueue.shift();
-
-        if (firstBlockchainRequestFromQueue) {
-          await this.processBlockchainRequest(firstBlockchainRequestFromQueue);
-        }
+        await this.handleBlockchainRequest();
       }
     }
   }
 
-  private waitForDelay(durationInMilliseconds: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, durationInMilliseconds));
+  private async delayBlockchainRequest(): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, this.delayInMs));
+  }
+
+  private async handleBlockchainRequest() {
+    this.logger.log(`Handling blockchain request | Queue length: ${this.blockchainRequestQueue.length}`);
+
+    const firstBlockchainRequestFromQueue = this.blockchainRequestQueue.shift();
+
+    if (firstBlockchainRequestFromQueue) {
+      if (firstBlockchainRequestFromQueue.numberOfRetries > 0) {
+        await this.delayBlockchainRequest();
+      }
+      await this.processBlockchainRequest(firstBlockchainRequestFromQueue);
+    }
   }
 
   private async processBlockchainRequest(blockchainRequest: BlockchainRequest) {
-    this.logger.log({
-      message: 'Processing blockchain request',
-      blockchainRequestType: blockchainRequest.type,
-      blockchainRequestRetry: blockchainRequest.numberOfRetries,
-    });
+    const id: string = 'remoteId' in blockchainRequest.dto ? blockchainRequest.dto.remoteId : blockchainRequest.dto.plotOfLandId;
+    this.logger.log(
+      `Processing blockchain request | ID: ${id} | Type: ${blockchainRequest.type} | Retries: ${blockchainRequest.numberOfRetries}`
+    );
 
     blockchainRequest.numberOfRetries++;
 
     const { type, dto, parentIds, numberOfRetries } = blockchainRequest;
 
-    if (numberOfRetries > this.MAX_BLOCKCHAIN_REQUEST_RETRIES) {
+    if (numberOfRetries > this.maxRetries) {
       throw new AmqpException(
-        `Number of maximum retries (${this.MAX_BLOCKCHAIN_REQUEST_RETRIES}) exceeded for blockchain request of type: ${type}`,
+        `Number of maximum retries (${this.maxRetries}) exceeded for blockchain request of type: ${type}`,
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
