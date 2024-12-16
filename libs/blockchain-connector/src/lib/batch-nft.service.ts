@@ -6,7 +6,7 @@ import { Batch } from '@prisma/client';
 @Injectable()
 export class BatchNftService {
   private readonly batchesUrl = 'https://forest-guard.apps.blockchain-europe.iml.fraunhofer.de/batches/';
-  private readonly logger: Logger = new Logger(BatchNftService.name);
+  private readonly logger = new Logger(BatchNftService.name);
 
   constructor(
     @Inject(DataIntegrityService) private readonly dataIntegrityService: DataIntegrityService,
