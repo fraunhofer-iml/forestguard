@@ -1,17 +1,17 @@
 import { AmqpException } from '@forest-guard/amqp';
 import { DataIntegrityService, TokenMintDto, TokenMintService, TokenReadService } from '@nft-folder/blockchain-connector';
-import { HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { Batch } from '@prisma/client';
 
 @Injectable()
 export class BatchNftService {
-  private readonly logger = new Logger('BatchNftService');
   private readonly batchesUrl = 'https://forest-guard.apps.blockchain-europe.iml.fraunhofer.de/batches/';
 
   constructor(
-    private readonly dataIntegrityService: DataIntegrityService,
-    private readonly tokenMintService: TokenMintService,
-    private readonly tokenReadService: TokenReadService
+    @Inject(DataIntegrityService) private readonly dataIntegrityService: DataIntegrityService,
+    @Inject(Logger) private readonly logger: Logger,
+    @Inject(TokenMintService) private readonly tokenMintService: TokenMintService,
+    @Inject(TokenReadService) private readonly tokenReadService: TokenReadService
   ) {}
 
   public async createDtoForMintingRootNft(batch: Batch, plotOfLandTokenId: number): Promise<TokenMintDto> {

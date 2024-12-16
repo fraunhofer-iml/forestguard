@@ -1,7 +1,7 @@
 import { AmqpException } from '@forest-guard/amqp';
 import { ConfigurationService } from '@forest-guard/configuration';
 import { TokenMintDto } from '@nft-folder/blockchain-connector';
-import { HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { Batch, PlotOfLand, Proof } from '@prisma/client';
 import { BatchNftService } from './batch-nft.service';
 import { PlotOfLandNftService, PlotOfLandTokenUpdateDto } from './plot-of-land-nft.service';
@@ -21,37 +21,44 @@ type BlockchainRequest = {
 };
 
 @Injectable()
-export class BlockchainConnectorService {
+export class BlockchainConnectorService implements OnModuleDestroy {
   private readonly DURATION_IN_MS = 500;
   private readonly MAX_BLOCKCHAIN_REQUEST_RETRIES = 10;
-  private readonly logger = new Logger('BlockchainConnectorService');
 
+  private isRunning = true;
   private blockchainEnabled: boolean;
   private blockchainRequestQueue: BlockchainRequest[] = [];
 
   constructor(
-    private readonly batchNftService: BatchNftService,
-    private readonly plotOfLandNftService: PlotOfLandNftService,
-    private readonly configurationService: ConfigurationService
+    @Inject(BatchNftService) private readonly batchNftService: BatchNftService,
+    @Inject(ConfigurationService) private readonly configurationService: ConfigurationService,
+    @Inject(Logger) private readonly logger: Logger,
+    @Inject(PlotOfLandNftService) private readonly plotOfLandNftService: PlotOfLandNftService
   ) {
     this.blockchainEnabled = this.configurationService?.getGeneralConfiguration()?.blockchainEnabled || false;
 
     if (this.blockchainEnabled) {
-      this.logger.log('### Blockchain is enabled. Starting worker... ###');
+      this.logger.log('### Blockchain is ENABLED. Worker is starting... ###');
       this.startWorker();
     } else {
-      this.logger.log('### Blockchain is disabled. Worker will not start. ###');
+      this.logger.log('### Blockchain is DISABLED. Worker will not start. ###');
     }
+  }
+
+  async onModuleDestroy() {
+    this.isRunning = false;
   }
 
   private async startWorker() {
     // TODO-MP: check node worker thread
-    // Set to true intentionally to prevent the worker from stopping
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
+    while (this.isRunning) {
       if (this.blockchainRequestQueue.length === 0) {
         await this.waitForDelay(this.DURATION_IN_MS);
       } else {
+        this.logger.log({
+          message: 'Getting the next element in the blockchain request queue',
+          blockchainRequestQueue: this.blockchainRequestQueue.length,
+        });
         const firstBlockchainRequestFromQueue = this.blockchainRequestQueue.shift();
 
         if (firstBlockchainRequestFromQueue) {
@@ -66,6 +73,12 @@ export class BlockchainConnectorService {
   }
 
   private async processBlockchainRequest(blockchainRequest: BlockchainRequest) {
+    this.logger.log({
+      message: 'Processing blockchain request',
+      blockchainRequestType: blockchainRequest.type,
+      blockchainRequestRetry: blockchainRequest.numberOfRetries,
+    });
+
     blockchainRequest.numberOfRetries++;
 
     const { type, dto, parentIds, numberOfRetries } = blockchainRequest;
