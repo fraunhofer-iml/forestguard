@@ -1,4 +1,5 @@
 import { ProofCreateDto, ProofType } from '@forest-guard/api-interfaces';
+import { BlockchainConnectorService } from '@forest-guard/blockchain-connector';
 import { PrismaService } from '@forest-guard/database';
 import { FileStorageService } from '@forest-guard/file-storage';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -9,6 +10,7 @@ describe('ProofService', () => {
   let proofService: ProofService;
   let prismaService: PrismaService;
   let fileStorageService: FileStorageService;
+  let blockchainConnectorService: BlockchainConnectorService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -31,18 +33,26 @@ describe('ProofService', () => {
             uploadFileWithDeepPath: jest.fn(),
           },
         },
+        {
+          provide: BlockchainConnectorService,
+          useValue: {
+            updatePlotOfLandNft: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
     proofService = module.get<ProofService>(ProofService);
     prismaService = module.get<PrismaService>(PrismaService);
     fileStorageService = module.get<FileStorageService>(FileStorageService);
+    blockchainConnectorService = module.get<BlockchainConnectorService>(BlockchainConnectorService);
   });
 
   it('should be defined', () => {
     expect(proofService).toBeDefined();
     expect(prismaService).toBeDefined();
     expect(fileStorageService).toBeDefined();
+    expect(blockchainConnectorService).toBeDefined();
   });
 
   it('should create a proof', async () => {
@@ -84,6 +94,9 @@ describe('ProofService', () => {
             id: givenPlotOfLandId,
           },
         },
+      },
+      include: {
+        plotOfLand: true,
       },
     });
 

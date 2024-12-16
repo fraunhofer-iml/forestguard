@@ -20,7 +20,7 @@ export class BatchUpdateComponent implements OnInit {
   uploadedFiles: FGFile[] = [];
   formGroup: FormGroup = new FormGroup({
     location: new FormControl(null, Validators.required),
-    date: new FormControl(new Date(), Validators.required),
+    dateOfProcess: new FormControl(new Date(), Validators.required),
     processName: new FormControl(
       {
         disabled: this.batchIds.length === 0,
@@ -113,7 +113,7 @@ export class BatchUpdateComponent implements OnInit {
       euInfoSystemId: this.formGroup.value.euInfoSystemId,
       processStep: new ProcessStepCreateDto(
         this.formGroup.value.location,
-        this.formGroup.value.date,
+        this.formGroup.value.dateOfProcess,
         this.formGroup.value.processName,
         this.formGroup.value.executedBy,
         this.formGroup.value.recordedBy,

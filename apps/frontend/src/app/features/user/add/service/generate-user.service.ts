@@ -1,10 +1,10 @@
-import { AddressCreateDto, FarmerCreateDto, RoleType, UserUpdateDto } from '@forest-guard/api-interfaces';
+import { AddressCreateDto, FarmerCreateDto, RoleType, UserCreateDto } from '@forest-guard/api-interfaces';
 import { FormGroup } from '@angular/forms';
 import { UserForm } from '../model/user-form';
 
 export class GenerateUserService {
-  generateNewUser(formGroup: FormGroup<UserForm>): UserUpdateDto {
-    return new UserUpdateDto(
+  generateNewUser(formGroup: FormGroup<UserForm>): UserCreateDto {
+    return new UserCreateDto(
       formGroup.value.firstName ?? '',
       formGroup.value.lastName ?? '',
       formGroup.value.email ?? '',

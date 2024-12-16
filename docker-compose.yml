@@ -48,6 +48,33 @@ services:
       exit 0
       "
 
+  ##############
+  # BLOCKCHAIN #
+  ##############
+  blockchain-network:
+    image: container-registry.gitlab.cc-asp.fraunhofer.de/silicon-economy/base/blockchainbroker/ethereum/networks/hyperledger-besu/dev-network:1.0.0
+    depends_on:
+      minio-setup:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    ports:
+      - '8545:8545'
+
+  blockchain-network-setup:
+    build:
+      context: ./blockchain
+      dockerfile: Dockerfile
+      args:
+        GITLAB_TOKEN: ${NFT_FOLDER_GITLAB_TOKEN}
+        DEPLOYMENT_MNEMONIC: ${DEPLOYMENT_MNEMONIC}
+        TOKEN_NAME: ${TOKEN_NAME}
+        TOKEN_SYMBOL: ${TOKEN_SYMBOL}
+    depends_on:
+      blockchain-network:
+        condition: service_started
+    environment:
+      DEV_NODE_URL: 'http://blockchain-network:8545'
+
   #########
   # UTILS #
   #########
@@ -62,7 +89,6 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0
-    container_name: keycloak-forest-guard
     ports:
       - '8080:8080'
     command:

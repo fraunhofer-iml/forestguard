@@ -82,6 +82,8 @@ model User {
   plotsOfLand PlotOfLand[]
 
   documents Document[]
+
+  @@unique([companyId, personalId])
 }
 
 model PlotOfLand {
@@ -138,7 +140,8 @@ model Process {
 model ProcessStep {
   id       String   @id @default(cuid())
   location String
-  date     DateTime @default(now())
+  dateOfProcess     DateTime @default(now())
+  dateOfEntry       DateTime @default(now())
 
   documents Document[]
 

@@ -1,4 +1,4 @@
-import { RoleType, UserDto, UserUpdateDto } from '@forest-guard/api-interfaces';
+import { RoleType, UserDto, UserCreateDto } from '@forest-guard/api-interfaces';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
@@ -9,7 +9,7 @@ describe('UserService', (): void => {
   let httpMock: HttpTestingController;
   let usersMock: UserDto[];
   let userMock: UserDto;
-  let updateUserMock: UserUpdateDto;
+  let updateUserMock: UserCreateDto;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

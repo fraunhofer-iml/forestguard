@@ -33,7 +33,7 @@ export const convertToMultiPolygon = (geoData: CoordinateInput): number[][][][] 
   return [geoData.map((polygon) => polygon.map((point) => [point.x, point.y]))];
 };
 
-export const convertUTMtoWGS = (geoData: CoordinateInput, zone: number): CoordinateInput => {
+export const convertUTMtoWGS = (geoData: CoordinateInput, zone: string): CoordinateInput => {
   const coordinates = JSON.parse(JSON.stringify(geoData)) as CoordinateInput;
 
   return [
@@ -43,8 +43,7 @@ export const convertUTMtoWGS = (geoData: CoordinateInput, zone: number): Coordin
           const coordinate = utmToLatLong({
             easting: point.x,
             northing: point.y,
-            zoneNumber: zone,
-            northern: true,
+            utmRef: zone,
           });
 
           point.x = coordinate.latitude;

@@ -4,7 +4,7 @@ import {
   FarmerAndPlotOfLand,
   ImportResponseDto,
   MasterDataImportService,
-  UserUpdateDto,
+  UserCreateDto,
 } from '@forest-guard/api-interfaces';
 import { UserService } from '../user/user.service';
 import { PlotsOfLandService } from '../plots-of-land/plots-of-land.service';
@@ -44,7 +44,7 @@ export class ImportService {
     return masterDataImportService;
   }
 
-  private async createEmployees(employees: UserUpdateDto[], companyId: string) {
+  private async createEmployees(employees: UserCreateDto[], companyId: string) {
     const employeesDto = {
       numberOfCreatedEmployees: 0,
       employeeErrors: Array<string>(),

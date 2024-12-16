@@ -1,12 +1,13 @@
 import { CompanyDto, UserDto } from '../entity';
 import { PlotOfLandDto } from '../plot-of-land';
-import { ProcessDto } from './process.dto';
 import { DocumentDto } from './document.dto';
+import { ProcessDto } from './process.dto';
 
 export class ProcessStepDto {
   id: string;
   location: string;
-  date: Date;
+  dateOfProcess: Date;
+  dateOfEntry: Date;
   process: ProcessDto;
   recordedBy?: UserDto | CompanyDto;
   executedBy: UserDto | CompanyDto;
@@ -16,7 +17,8 @@ export class ProcessStepDto {
   constructor(
     id: string,
     location: string,
-    date: Date,
+    dateOfProcess: Date,
+    dateOfEntry: Date,
     process: ProcessDto,
     executedBy: UserDto | CompanyDto,
     recordedBy?: UserDto,
@@ -25,7 +27,8 @@ export class ProcessStepDto {
   ) {
     this.id = id;
     this.location = location;
-    this.date = date;
+    this.dateOfProcess = dateOfProcess;
+    this.dateOfEntry = dateOfEntry;
     this.process = process;
     this.executedBy = executedBy;
     this.recordedBy = recordedBy;

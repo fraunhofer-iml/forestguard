@@ -1,21 +1,34 @@
-import { Injectable } from '@nestjs/common';
-import { CoordinateType, FarmerAndPlotOfLand, FarmerCreateDto, ImportDto, MasterDataImportService, PlotOfLandCreateDto, RoleType, Standard } from '@forest-guard/api-interfaces';
+import {
+  CoordinateType,
+  FarmerAndPlotOfLand,
+  FarmerCreateDto,
+  ImportDto,
+  MasterDataImportService,
+  PlotOfLandCreateDto,
+  RoleType,
+  Standard,
+} from '@forest-guard/api-interfaces';
 import * as XLSX from 'xlsx';
-import { COMPANY_IDENTIFIER, HardcodedPlotsOfLandData, TOTAL_XLSX_SHEETS, ENTRY_SHEET_INDEX, XlsxColumn, Address, HardcodedEmployee } from './ubiriki-import-hardcoded';
+import { Injectable } from '@nestjs/common';
+import {
+  Address,
+  COMPANY_IDENTIFIER,
+  ENTRY_SHEET_INDEX,
+  HardcodedEmployee,
+  HardcodedPlotsOfLandData,
+  TOTAL_XLSX_SHEETS,
+  XlsxColumn,
+} from './ubiriki-import-hardcoded';
 import 'multer';
 
 @Injectable()
 export class UbirikiImportService implements MasterDataImportService {
-  readonly COMPANY_IDENTIFIER =  COMPANY_IDENTIFIER;
+  readonly COMPANY_IDENTIFIER = COMPANY_IDENTIFIER;
 
-  async import(
-    file: Express.Multer.File,
-  ): Promise<ImportDto> {
-
+  async import(file: Express.Multer.File): Promise<ImportDto> {
     const farmersAndPlotsOfLand: FarmerAndPlotOfLand[] = [];
 
     const xlsxDocument = XLSX.read(Buffer.from(file.buffer));
-
 
     for (let i = ENTRY_SHEET_INDEX; i < TOTAL_XLSX_SHEETS; i++) {
       const sheet = xlsxDocument.Sheets[xlsxDocument.SheetNames[i]];
@@ -43,7 +56,7 @@ export class UbirikiImportService implements MasterDataImportService {
           district: HardcodedPlotsOfLandData.district,
           nationalPlotOfLandId: HardcodedPlotsOfLandData.nationalPlotOfLandId,
           localPlotOfLandId: userData[XlsxColumn.employeeId],
-          description: HardcodedPlotsOfLandData.description,
+          description: userData[XlsxColumn.description],
           geoData: {
             standard: Standard.UTM,
             coordinateType: CoordinateType.Point,
@@ -60,7 +73,6 @@ export class UbirikiImportService implements MasterDataImportService {
         farmersAndPlotsOfLand.push(farmerAndPlotOfLand);
       }
     }
-
 
     return {
       employees: [HardcodedEmployee],

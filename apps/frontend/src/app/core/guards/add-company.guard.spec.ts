@@ -1,11 +1,11 @@
 import { AddressDto, CompanyDto } from '@forest-guard/api-interfaces';
-import { AuthenticationService } from 'apps/frontend/src/app/core/services/authentication.service';
-import { CompanyService } from 'apps/frontend/src/app/shared/services/company/company.service';
 import { KeycloakService } from 'keycloak-angular';
 import { firstValueFrom, Observable, of, throwError } from 'rxjs';
 import { HttpErrorResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, CanActivateFn, GuardResult, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { CompanyService } from '../../shared/services/company/company.service';
+import { AuthenticationService } from '../services/authentication.service';
 import { addCompanyGuard } from './add-company.guard';
 
 describe('addCompanyGuard', () => {
@@ -49,7 +49,7 @@ describe('addCompanyGuard', () => {
     jest.spyOn(AuthenticationService.prototype, 'getCurrentCompanyId').mockReturnValue('1');
     jest
       .spyOn(CompanyService.prototype as any, 'getCompanyById')
-      .mockReturnValue(throwError(() => new HttpErrorResponse({ status: 400, statusText: 'Bad Request' })));
+      .mockReturnValue(throwError(() => new HttpErrorResponse({ status: 404, statusText: 'Not found' })));
 
     const resultObservable = await TestBed.runInInjectionContext(() => addCompanyGuard(route, state));
     const result = await firstValueFrom(resultObservable as Observable<GuardResult>);
@@ -66,7 +66,7 @@ describe('addCompanyGuard', () => {
     jest.spyOn(AuthenticationService.prototype, 'getCurrentCompanyId').mockReturnValue('1');
     jest
       .spyOn(CompanyService.prototype as any, 'getCompanyById')
-      .mockReturnValue(throwError(() => new HttpErrorResponse({ status: 400, statusText: 'Bad Request' })));
+      .mockReturnValue(throwError(() => new HttpErrorResponse({ status: 404, statusText: 'Not found' })));
 
     const resultObservable = await TestBed.runInInjectionContext(() => addCompanyGuard(route, state));
     const result = await firstValueFrom(resultObservable as Observable<GuardResult>);
@@ -83,7 +83,7 @@ describe('addCompanyGuard', () => {
     jest.spyOn(AuthenticationService.prototype, 'getCurrentCompanyId').mockReturnValue(null);
     jest
       .spyOn(CompanyService.prototype as any, 'getCompanyById')
-      .mockReturnValue(throwError(() => new HttpErrorResponse({ status: 400, statusText: 'Bad Request' })));
+      .mockReturnValue(throwError(() => new HttpErrorResponse({ status: 404, statusText: 'Not found' })));
 
     const result = await TestBed.runInInjectionContext(() => addCompanyGuard(route, state));
 

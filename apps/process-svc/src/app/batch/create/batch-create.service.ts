@@ -1,5 +1,11 @@
 import { AmqpException } from '@forest-guard/amqp';
-import { BatchCombinedCreateDto, BatchCreateDto, ProcessStepIdResponse } from '@forest-guard/api-interfaces';
+import {
+  BatchCombinedCreateDto,
+  BatchCreateDto,
+  ProcessStepIdResponse,
+  ProcessStepWithMultipleHarvestedLandsCreateDto,
+} from '@forest-guard/api-interfaces';
+import { BlockchainConnectorService } from '@forest-guard/blockchain-connector';
 import { PrismaService } from '@forest-guard/database';
 import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
 import { Batch } from '@prisma/client';
@@ -8,18 +14,18 @@ import { createBatchQuery, createOriginBatchQuery, processStepQuery, readBatchBy
 
 @Injectable()
 export class BatchCreateService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService, private readonly blockchainConnectorService: BlockchainConnectorService) {}
 
   private readonly HARVESTING_PROCESS = 'Harvesting';
   private readonly MERGE_PROCESS = 'Merge';
   private readonly DEFAULT_LOCATION = 'Field';
 
   private readonly NO_CONTENT_MESSAGE = 'There is no input content to create';
+  private readonly INVALID_PLOTSOFLAND_MESSAGE = (plotOfLandIds: string[], processOwner: string): string =>
+    `The included PlotOfLand IDs [${plotOfLandIds}] do not exist or do not all belong to the process owner (${processOwner})`;
 
   async createHarvests(batchCreateDtos: BatchCreateDto[]): Promise<ProcessStepIdResponse> {
-    if (batchCreateDtos.length === 0) {
-      throw new AmqpException(this.NO_CONTENT_MESSAGE, HttpStatus.NO_CONTENT);
-    }
+    this.hasContentForProcessing(batchCreateDtos);
 
     const batches: Batch[] = [];
     for (const dto of batchCreateDtos) {
@@ -40,9 +46,8 @@ export class BatchCreateService {
   }
 
   async createCombinedHarvests(batchCombinedCreateDto: BatchCombinedCreateDto): Promise<ProcessStepIdResponse> {
-    if (batchCombinedCreateDto.processStep.harvestedLands.length === 0) {
-      throw new AmqpException(this.NO_CONTENT_MESSAGE, HttpStatus.NO_CONTENT);
-    }
+    this.hasContentForProcessing(batchCombinedCreateDto.processStep.harvestedLands);
+    await this.checkPlotsOfLand(batchCombinedCreateDto.processStep);
 
     const dividedWeight = this.calculateDividedWeight(batchCombinedCreateDto);
     const batches: Batch[] = [];
@@ -68,9 +73,7 @@ export class BatchCreateService {
   }
 
   async createBatches(batchCreateDtos: BatchCreateDto[]): Promise<ProcessStepIdResponse> {
-    if (batchCreateDtos.length === 0) {
-      throw new AmqpException(this.NO_CONTENT_MESSAGE, HttpStatus.NO_CONTENT);
-    }
+    this.hasContentForProcessing(batchCreateDtos);
 
     const processStep = await this.prismaService.processStep.create({
       data: processStepQuery(batchCreateDtos[0].processStep),
@@ -85,6 +88,32 @@ export class BatchCreateService {
     };
   }
 
+  private hasContentForProcessing(content: unknown[]) {
+    if (content.length === 0) {
+      throw new AmqpException(this.NO_CONTENT_MESSAGE, HttpStatus.NO_CONTENT);
+    }
+  }
+
+  private async checkPlotsOfLand(processStep: ProcessStepWithMultipleHarvestedLandsCreateDto) {
+    const harvestedLandIds = this.removeDuplicates(processStep.harvestedLands);
+    const numberOfPlotOfLandMatches = await this.prismaService.plotOfLand.count({
+      where: {
+        id: { in: harvestedLandIds },
+        farmerId: processStep.executedBy,
+      },
+    });
+    if (numberOfPlotOfLandMatches !== harvestedLandIds.length) {
+      throw new AmqpException(
+        this.INVALID_PLOTSOFLAND_MESSAGE(harvestedLandIds, processStep.executedBy),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  private removeDuplicates(list: string[]) {
+    return Array.from(new Set(list));
+  }
+
   private calculateDividedWeight(batchCombinedCreateDto: BatchCombinedCreateDto) {
     if (batchCombinedCreateDto.processStep.harvestedLands.length === 0) {
       return 0;
@@ -93,9 +122,20 @@ export class BatchCreateService {
   }
 
   private async createHarvest(dto: BatchCreateDto): Promise<Batch> {
-    return this.prismaService.batch.create({
+    const createdBatch = await this.prismaService.batch.create({
       data: createOriginBatchQuery(dto),
+      include: {
+        processStep: {
+          include: {
+            farmedLand: true,
+          },
+        },
+      },
     });
+
+    const plotOfLandId = createdBatch.processStep.farmedLand.id;
+    await this.blockchainConnectorService.mintBatchRootNft({ ...createdBatch, plotOfLandId });
+    return createdBatch;
   }
 
   private async mergeIntoOneHarvestBatch(batchCreateDto: BatchCreateDto, batches: Batch[]): Promise<Batch> {
@@ -117,11 +157,15 @@ export class BatchCreateService {
         throw new AmqpException(`Batch '${batchId}' is already inactive. `, HttpStatus.BAD_REQUEST);
       }
     }
-    const batch = await this.prismaService.batch.create({
+    const createdBatch = await this.prismaService.batch.create({
       data: createBatchQuery(dto, existingProcessStepId),
+      include: { ins: true },
     });
+
+    const parentIds = createdBatch.ins.map((ins) => ins.id);
+    await this.blockchainConnectorService.mintBatchLeafNft({ ...createdBatch, parentIds });
     await this.setBatchesInactive(dto);
-    return batch;
+    return createdBatch;
   }
 
   private setBatchesInactive(dto: BatchCreateDto) {

@@ -15,7 +15,7 @@ export const addCompanyGuard: CanActivateChildFn = (route: ActivatedRouteSnapsho
     ? companyService.getCompanyById(keycloakCompanyId).pipe(
         map(() => router.parseUrl(`/companies/${keycloakCompanyId}`)),
         catchError((error) => {
-          return error instanceof HttpErrorResponse && error.status === 400 ? of(true) : of(false);
+          return error instanceof HttpErrorResponse && error.status === 404 ? of(true) : of(false);
         })
       )
     : false;

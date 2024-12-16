@@ -47,7 +47,7 @@ export class UiGraphComponent implements OnInit, OnChanges {
   private readonly euInfoSystemTooltipText = 'EU System Info ID available';
   private readonly processDocumentsTooltipText = 'Process-specific documents available';
   private readonly batchInformationTooltipTemplate = (data: any): string =>
-    `<strong>Batch ${data.id}</strong>\nProcess:\t\t\t\t\t${data.name}\nWeight [kg]:\t\t\t${data.weight}\nDate of Process:\t${new Date(data.processStepDate).toLocaleString()}`;
+    `<strong>Batch ${data.id}</strong>\nProcess:\t\t\t\t\t${data.name}\nWeight [kg]:\t\t\t${data.weight}\nDate of Process:\t${new Date(data.processStepDateOfProcess).toLocaleString()}`;
 
   constructor(private _element: ElementRef) {}
 

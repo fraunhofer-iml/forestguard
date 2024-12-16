@@ -1,5 +1,5 @@
 import { ConfigurationModule, KeycloakConfigurationService } from '@forest-guard/configuration';
-import { AuthGuard, KeycloakConnectModule } from 'nest-keycloak-connect';
+import { AuthGuard, KeycloakConnectModule, RoleGuard } from 'nest-keycloak-connect';
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { BatchModule } from './batch/batch.module';
@@ -24,12 +24,18 @@ import { ImportModule } from './import/import.module';
       useExisting: KeycloakConfigurationService,
       imports: [ConfigurationModule],
     }),
+    // Activate the following line to enable the token endpoints from the blockchain-connector library
+    // TokenModule.getDynamicModule(),
   ],
   controllers: [],
   providers: [
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RoleGuard,
     },
   ],
 })

@@ -1,30 +1,23 @@
 import {
   FarmerCreateDto,
-  TAuthenticatedUser,
+  Role,
+  TAuthenticatedUser, UserCreateDto,
   UserDto,
   UserOrFarmerDto,
   UserUpdateDto,
 } from '@forest-guard/api-interfaces';
-import { AuthenticatedUser } from 'nest-keycloak-connect';
+import { AuthenticatedUser, Roles } from 'nest-keycloak-connect';
 import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiConsumes,
-  ApiCreatedResponse,
-  ApiOkResponse,
-  ApiOperation, ApiParam,
-  ApiTags,
-} from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Document } from '@prisma/client';
+import { KeycloakUtil } from '@forest-guard/util';
 
 @ApiTags('Users')
 @Controller('users')
 export class UserController {
-  constructor(private userService: UserService) {
-  }
+  constructor(private userService: UserService) {}
 
   @Get()
   @ApiBearerAuth()
@@ -38,8 +31,16 @@ export class UserController {
   @ApiBearerAuth()
   @ApiOperation({ description: 'Create a user object' })
   @ApiOkResponse({ description: 'Successful creation.' })
-  createUser(@Body() dto: UserUpdateDto, @AuthenticatedUser() user: TAuthenticatedUser): Promise<UserDto> {
+  createUser(@Body() dto: UserCreateDto, @AuthenticatedUser() user: TAuthenticatedUser): Promise<UserDto> {
     return this.userService.createUser({ dto, companyId: user.sub });
+  }
+
+  @Patch(':id')
+  @ApiBearerAuth()
+  @ApiOperation({ description: 'Update an user' })
+  @ApiOkResponse({ description: 'Successful update.' })
+  updateUser(@Param('id') id: string, @Body() dto: UserUpdateDto): Promise<UserOrFarmerDto> {
+    return this.userService.updateUser({ id, dto });
   }
 
   @Get(':id')
@@ -51,6 +52,7 @@ export class UserController {
   }
 
   @Post('farmers')
+  @Roles({ roles: [KeycloakUtil.toRealmRole(Role.Cooperative)]})
   @ApiBearerAuth()
   @ApiOperation({ description: 'Create a farmer' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
@@ -83,7 +85,7 @@ export class UserController {
   addDocToFarmer(
     @Param('id') farmerId: string,
     @Body() { description }: { description: string },
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: Express.Multer.File
   ): Promise<Document> {
     return this.userService.addFarmerDoc({ farmerId, description, file });
   }
@@ -115,7 +117,7 @@ export class UserController {
     @Param('id') farmerId: string,
     @Param('docRef') documentRef: string,
     @Body() { description }: { description: string },
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: Express.Multer.File
   ): Promise<Document> {
     return this.userService.updateFarmerDoc({ farmerId, documentRef, description, file });
   }
@@ -123,9 +125,7 @@ export class UserController {
   @Delete(':id/docs/:docRef')
   @ApiBearerAuth()
   @ApiOperation({ description: 'Delete a farmer document' })
-  deleteFarmerDoc(
-    @Param('docRef') documentRef: string,
-  ): Promise<Document> {
+  deleteFarmerDoc(@Param('docRef') documentRef: string): Promise<Document> {
     return this.userService.deleteFarmerDoc(documentRef);
   }
 }

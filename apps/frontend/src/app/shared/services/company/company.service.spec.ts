@@ -73,7 +73,8 @@ describe('CompanyService', (): void => {
             name: 'test',
           },
           processStep: {
-            date: new Date(),
+            dateOfProcess: new Date(),
+            dateOfEntry: new Date(),
             id: 'test',
             process: {
               id: 'test',

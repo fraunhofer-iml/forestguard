@@ -1,4 +1,5 @@
 import { CoordinateType, GeoDataDto, Standard } from '@forest-guard/api-interfaces';
+import { BlockchainConnectorModule, BlockchainConnectorService } from '@forest-guard/blockchain-connector';
 import { ConfigurationService } from '@forest-guard/configuration';
 import { PrismaService } from '@forest-guard/database';
 import { RpcException } from '@nestjs/microservices';
@@ -9,9 +10,11 @@ import { PlotsOfLandService } from './plots-of-land.service';
 describe('PlotsOfLandService', () => {
   let service: PlotsOfLandService;
   let prisma: PrismaService;
+  let blockchainConnectorService: BlockchainConnectorService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [BlockchainConnectorModule],
       providers: [
         PlotsOfLandService,
         {
@@ -39,11 +42,18 @@ describe('PlotsOfLandService', () => {
             getEntityManagementConfiguration: jest.fn().mockReturnValue({ cultivationCommodity: 'coffee' }),
           },
         },
+        {
+          provide: BlockchainConnectorService,
+          useValue: {
+            mintPlotOfLandNft: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
     service = module.get<PlotsOfLandService>(PlotsOfLandService);
     prisma = module.get<PrismaService>(PrismaService);
+    blockchainConnectorService = module.get<BlockchainConnectorService>(BlockchainConnectorService);
 
     expectedPlotOfLandDto.geoData = JSON.stringify(service.createGeoDataEudr(givenGeoDataDto, givenUser));
   });
@@ -51,6 +61,7 @@ describe('PlotsOfLandService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
     expect(prisma).toBeDefined();
+    expect(blockchainConnectorService).toBeDefined();
   });
 
   it('should return a valid PlotOfLandDto', async () => {

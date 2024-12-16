@@ -4,12 +4,12 @@ import {
   FarmerCreateDto,
   UserDto,
   UserOrFarmerDto,
-  UserUpdateDto,
+  UserCreateDto,
 } from '@forest-guard/api-interfaces';
 
 export const userNotFoundMessage = 'No User found';
 
-export function ensureUser(actualUser: UserDto, expectedUser: UserUpdateDto) {
+export function ensureUser(actualUser: UserDto, expectedUser: UserCreateDto) {
   expect(actualUser.employeeId).toEqual(expectedUser.employeeId);
   expect(actualUser.firstName).toEqual(expectedUser.firstName);
   expect(actualUser.lastName).toEqual(expectedUser.lastName);
@@ -18,7 +18,7 @@ export function ensureUser(actualUser: UserDto, expectedUser: UserUpdateDto) {
   expect(actualUser.mobilePhoneNumber).toEqual(expectedUser.mobilePhoneNumber);
 }
 
-export function ensureUsers(actualUsers: UserDto[], ...expectedUsers: UserUpdateDto[]) {
+export function ensureUsers(actualUsers: UserDto[], ...expectedUsers: UserCreateDto[]) {
   expect(actualUsers.length).toBe(expectedUsers.length);
   for (let i = 0; i < expectedUsers.length; i++) {
     ensureUser(actualUsers[i], expectedUsers[i]);

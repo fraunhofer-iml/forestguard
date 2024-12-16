@@ -84,6 +84,15 @@
         "clientRole": false,
         "containerId": "cbd7a2c3-b5bf-4164-a7fb-912c3bf63ccc",
         "attributes": {}
+      },
+      {
+        "id": "9693db8d-0e93-4623-8522-5195c222f06d",
+        "name": "cooperative",
+        "description": "Special access to create farmers und harvests",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "cbd7a2c3-b5bf-4164-a7fb-912c3bf63ccc",
+        "attributes": {}
       }
     ],
     "client": {
@@ -478,7 +487,8 @@
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
-        "default-roles-forest-guard"
+        "default-roles-forest-guard",
+        "cooperative"
       ],
       "notBefore": 0,
       "groups": []
@@ -504,7 +514,8 @@
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
-        "default-roles-forest-guard"
+        "default-roles-forest-guard",
+        "cooperative"
       ],
       "notBefore": 0,
       "groups": []
@@ -599,7 +610,8 @@
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
-        "default-roles-forest-guard"
+        "default-roles-forest-guard",
+        "cooperative"
       ],
       "notBefore": 0,
       "groups": []

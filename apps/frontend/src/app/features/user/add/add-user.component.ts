@@ -1,6 +1,7 @@
 import { FGFile, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
-import { merge } from 'rxjs';
+import { catchError, EMPTY, merge } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -73,6 +74,12 @@ export class AddUserComponent {
   submitFarmer(): void {
     this.userService
       .createFarmer(this.generateUserService.generateNewFarmer(this.userFormGroup))
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          toast.error(error.error.message);
+          return EMPTY;
+        })
+      )
       .subscribe((createdFarmer: UserOrFarmerDto) => {
         if (this.uploadedFiles.length === 0) {
           this.clearInputFields();

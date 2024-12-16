@@ -1,4 +1,5 @@
 export * from './user.dto';
+export * from './user-create.dto';
 export * from './user-update.dto';
 export * from './company.dto';
 export * from './company-create.dto';

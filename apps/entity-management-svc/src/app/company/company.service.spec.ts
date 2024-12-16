@@ -26,7 +26,7 @@ describe('CompanyService', () => {
             company: {
               count: jest.fn(),
               create: jest.fn(),
-              findUniqueOrThrow: jest.fn(),
+              findUnique: jest.fn(),
               findMany: jest.fn(),
             },
             entity: {
@@ -133,12 +133,12 @@ describe('CompanyService', () => {
     const givenCompanyId = COMPANY_PRISMA_MOCK.id;
     const expectedResult = CompanyMapper.mapCompanyPrismaToCompanyDto(COMPANY_PRISMA_MOCK);
 
-    jest.spyOn(prismaService.company, 'findUniqueOrThrow').mockResolvedValue(COMPANY_PRISMA_MOCK);
+    jest.spyOn(prismaService.company, 'findUnique').mockResolvedValue(COMPANY_PRISMA_MOCK);
     const actualResult = await companyService.readCompanyById(givenCompanyId);
 
     expect(actualResult).toEqual(expectedResult);
 
-    expect(prismaService.company.findUniqueOrThrow).toHaveBeenCalledWith({
+    expect(prismaService.company.findUnique).toHaveBeenCalledWith({
       include: {
         address: true,
         users: {
@@ -165,7 +165,7 @@ describe('CompanyService', () => {
   it('should throw an error if no company was found', async () => {
     const givenCompanyId = '1';
 
-    jest.spyOn(prismaService.company, 'findUniqueOrThrow').mockRejectedValue(new AmqpException('', 404));
+    jest.spyOn(prismaService.company, 'findUnique').mockRejectedValue(new AmqpException('', 404));
 
     await expect(companyService.readCompanyById(givenCompanyId)).rejects.toThrow(AmqpException);
   });

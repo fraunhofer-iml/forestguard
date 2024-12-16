@@ -9,7 +9,7 @@ export const mockedCreateBatchDto: BatchCreateDto = {
   recipient: 'ctest102',
   processStep: {
     location: '',
-    date: '2024-05-24T08:28:24Z',
+    dateOfProcess: '2024-05-24T08:28:24Z',
     process: null,
     recordedBy: 'ctest102',
     executedBy: 'ctest101',
@@ -23,14 +23,14 @@ export const mockedCombinedBatchDto: BatchCombinedCreateDto = {
   recipient: 'ctest102',
   processStep: {
     location: '',
-    date: '2024-05-24T08:28:24Z',
+    dateOfProcess: '2024-05-24T08:28:24Z',
     recordedBy: 'ctest102',
     executedBy: 'ctest101',
     harvestedLands: ['harvestedLand1', 'harvestedLand2', 'harvestedLand3'],
   },
 };
 
-export const mockedPrismaBatchWithRelations1: BatchWithRelations = {
+export const mockedPrismaBatchWithRelations1: BatchWithRelations & { ins: [] } = {
   id: '1',
   euInfoSystemId: '1',
   weight: 100,
@@ -40,7 +40,8 @@ export const mockedPrismaBatchWithRelations1: BatchWithRelations = {
   processStep: {
     id: '1',
     location: 'Location1',
-    date: new Date(),
+    dateOfProcess: new Date(),
+    dateOfEntry: new Date(),
     processId: '1',
     farmedLandId: '1',
     executedByEntityId: '1',
@@ -207,6 +208,7 @@ export const mockedPrismaBatchWithRelations1: BatchWithRelations = {
       },
     },
   },
+  ins: [],
 };
 
 export const mockedPrismaBatchWithRelations2: BatchWithRelations = {
@@ -219,7 +221,8 @@ export const mockedPrismaBatchWithRelations2: BatchWithRelations = {
   processStep: {
     id: '2',
     location: 'Location2',
-    date: new Date(),
+    dateOfProcess: new Date(),
+    dateOfEntry: new Date(),
     processId: '2',
     farmedLandId: '2',
     executedByEntityId: '2',
@@ -332,7 +335,8 @@ export const mockedPrismaBatchWithRelations3: BatchWithRelations = {
   processStep: {
     id: '2',
     location: 'Location2',
-    date: new Date(),
+    dateOfProcess: new Date(),
+    dateOfEntry: new Date(),
     processId: '2',
     farmedLandId: '2',
     executedByEntityId: '2',
@@ -438,7 +442,8 @@ export const mockedPrismaBatchWithRelations4: BatchWithRelations = {
   processStep: {
     id: '2',
     location: 'Location2',
-    date: new Date(),
+    dateOfProcess: new Date(),
+    dateOfEntry: new Date(),
     processId: '2',
     farmedLandId: '2',
     executedByEntityId: '2',

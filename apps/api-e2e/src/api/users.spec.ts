@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { beforeEachAndAfterAll, createHttpHeader, HttpHeader } from '../test-utils/test.utils';
 import { HttpStatus } from '@nestjs/common';
-import { ensureException } from '../assertions/assertion.utils';
-import { ensureFarmer, ensureUser, ensureUsers, userNotFoundMessage } from '../assertions/users/assertion.utils';
-import { createVariantOf } from '../test-utils/users/users.spec.utils';
-import { givenFarmer, givenUser, prepareCompany } from '../test-utils/arrange-utils';
+import { ensureException } from './assertions/assertion.utils';
+import { ensureFarmer, ensureUser, ensureUsers, userNotFoundMessage } from './assertions/users/assertion.utils';
+import { givenFarmer, givenUser, prepareCompany } from './test-utils/arrange-utils';
+import { beforeEachAndAfterAll, createHttpHeader, HttpHeader } from './test-utils/test.utils';
+import { createVariantOf } from './test-utils/users.spec.utils';
 
 describe('/users', () => {
   let httpHeader: HttpHeader;
@@ -17,7 +17,7 @@ describe('/users', () => {
 
   beforeEach(async () => {
     await prepareCompany();
-  })
+  });
 
   describe('POST /users', () => {
     it('should create an user', async () => {
@@ -25,6 +25,19 @@ describe('/users', () => {
 
       expect(actualResponse.status).toBe(HttpStatus.CREATED);
       ensureUser(actualResponse.data, givenUser);
+    });
+  });
+
+  describe('PATCH /users/:id', () => {
+    it('should update an user', async () => {
+      const createdFarmer = (await axios.post(`/users/farmers`, givenFarmer, httpHeader)).data;
+      createdFarmer.firstName = 'alteredName';
+      createdFarmer.address.street = 'alteredStreet';
+
+      const actualResponse = await axios.patch(`/users/${createdFarmer.id}`, createdFarmer, httpHeader);
+
+      expect(actualResponse.status).toBe(HttpStatus.OK);
+      ensureFarmer(actualResponse.data, createdFarmer);
     });
   });
 
@@ -48,7 +61,6 @@ describe('/users', () => {
       const createdUser2 = await axios.post(`/users`, givenUser2, httpHeader);
 
       let actualResponse = await axios.get(`/users/${createdUser1.data.id}`, httpHeader);
-
 
       expect(actualResponse.status).toBe(HttpStatus.OK);
       ensureUser(actualResponse.data, givenUser);
@@ -78,5 +90,4 @@ describe('/users', () => {
       ensureFarmer(actualResponse.data, givenFarmer);
     });
   });
-
 });

@@ -8,9 +8,8 @@ import { ClientProxy } from '@nestjs/microservices';
 export class CompanyService {
   constructor(
     @Inject(AmqpClientEnum.QUEUE_ENTITY_MANAGEMENT) private readonly entityManagementService: ClientProxy,
-    @Inject(AmqpClientEnum.QUEUE_PROCESS) private processService: ClientProxy,
-  ) {
-  }
+    @Inject(AmqpClientEnum.QUEUE_PROCESS) private processService: ClientProxy
+  ) {}
 
   createCompany(dto: CompanyCreateDto, user): Promise<CompanyDto> {
     const keycloakCompanyId: string = user.sub;
@@ -29,10 +28,12 @@ export class CompanyService {
    * @returns The list of companies that satisfy the given filters ordered by the given sorting.
    */
   readCompanies(filters: string, sorting: string): Promise<CompanyDto[]> {
-    return firstValueFrom(this.entityManagementService.send(CompanyMessagePatterns.READ_COMPANIES, {
-      filters,
-      sorting,
-    }));
+    return firstValueFrom(
+      this.entityManagementService.send(CompanyMessagePatterns.READ_COMPANIES, {
+        filters,
+        sorting,
+      })
+    );
   }
 
   /**
@@ -42,7 +43,7 @@ export class CompanyService {
    * @param sorting The property to set the sorting
    * @returns The batches that belong to the company
    */
-  readBatchesByCompanyId(companyId: string, query: string, sorting: string): Promise<BatchDto[]> {
+  async readBatchesByCompanyId(companyId: string, query: string, sorting: string): Promise<BatchDto[]> {
     return firstValueFrom(this.processService.send(CompanyMessagePatterns.READ_BATCHES, { companyId, query, sorting }));
   }
 

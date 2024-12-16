@@ -6,7 +6,7 @@ import {
   PlotOfLandCreateDto,
   RoleType,
   Standard,
-  UserUpdateDto,
+  UserCreateDto,
 } from '@forest-guard/api-interfaces';
 import axios from 'axios';
 import { createHttpHeader } from './test.utils';
@@ -23,13 +23,13 @@ export const givenBatchCreateDto: BatchCreateDto = {
   recipient: undefined,
   processStep: {
     location: '',
-    date: '2024-05-24T08:28:24Z',
+    dateOfProcess: '2024-05-24T08:28:24Z',
     process: Process.HARVESTING,
     recordedBy: undefined,
     executedBy: undefined,
   },
 };
-export const givenUser: UserUpdateDto = {
+export const givenUser: UserCreateDto = {
   firstName: 'Jane',
   lastName: 'Smith',
   email: 'jane.smith@acme.com',
@@ -93,5 +93,13 @@ export async function prepareUser() {
 }
 
 export async function prepareFarmer() {
-  return await axios.post(`/users/farmers`, givenFarmer, await createHttpHeader());
+  return prepareFarmerWithDto(givenFarmer);
+}
+
+export async function prepareFarmerWithDto(farmerCreateDto: FarmerCreateDto) {
+  return await axios.post(`/users/farmers`, farmerCreateDto, await createHttpHeader());
+}
+
+export async function preparePlotOfLand(farmerId: string) {
+  return await axios.post(`/pols?farmerId=${farmerId}`, givenPlotOfLand, await createHttpHeader());
 }

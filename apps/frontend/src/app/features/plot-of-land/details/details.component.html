@@ -153,8 +153,9 @@
 
     <div *ngIf="(plotOfLand.proofs?.length ?? 0) < 2; else uploadedProofs">
       <app-upload-form
-        [selectOptions]="uploadSelectOption"
+        [selectOptions]="getFilteredOptions(plotOfLand.proofs)"
         [title]="'Upload Proofs'"
+        [informationText]="'Upload Proof of freedom from deforestation or Proof of ownership for a Plot of Land here.'"
         [showUploadedFiles]="false"
         (uploadDocument)="uploadProof($event, plotOfLand.id)"
       ></app-upload-form>

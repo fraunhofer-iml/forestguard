@@ -51,6 +51,11 @@ export class PlotOfLandDetailsComponent {
     return this.uploadSelectOption?.filter((option) => option.value === type && option.file).length > 0;
   }
 
+  getFilteredOptions(proofs: ProofDto[] | undefined): UploadFormSelectType[] {
+    const selectedProofTypes = (proofs || []).map((proofDto) => proofDto.type);
+    return (this.uploadSelectOption || []).filter((option) => !selectedProofTypes.includes(option.value));
+  }
+
   uploadProof({ file, documentType }: FGFile, id: string | undefined): void {
     const option = this.uploadSelectOption.find((option) => option.value === documentType);
 

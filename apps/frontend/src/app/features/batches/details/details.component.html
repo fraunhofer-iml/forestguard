@@ -22,8 +22,10 @@
         <span class="text-neutral-500 text-sm">Weight [kg] {{ batch.weight }}</span>
       </div>
       <div class="grid grid-cols-2 space-x-4 text-neutral-500">
-        <p class="text-right font-medium">Process Date</p>
-        <p>{{ batch.processStep.date | date }}</p>
+        <p class="text-right font-medium">Date of Process</p>
+        <p>{{ batch.processStep.dateOfProcess | date }}</p>
+        <p class="text-right font-medium">Date of Entry</p>
+        <p>{{ batch.processStep.dateOfEntry | date }}</p>
         <p class="text-right font-medium">Process Owner</p>
         <a class="cursor-pointer hover:underline text-secondary-500"
           [routerLink]="[Uris.users, batch.processStep.executedBy.id]">

@@ -4,8 +4,7 @@ import { meridionalArc, toDegrees, zoneNumberToCentralLongitude } from './utils'
 interface ToLatLonProps {
   easting: number;
   northing: number;
-  zoneNumber: number;
-  northern?: boolean;
+  utmRef: string;
   strict?: boolean;
   decimals?: number;
 }
@@ -15,7 +14,16 @@ interface LatLon {
   longitude: number;
 }
 
-export function utmToLatLong({ easting, northing, strict = true, zoneNumber, northern = true, decimals = 6 }: ToLatLonProps): LatLon {
+function parseUtmRef(utmRef: string): { zoneNumber: number; northern: boolean } {
+  const zoneNumber = parseInt(utmRef.slice(0, -1), 10);
+  const hemisphere = utmRef.slice(-1).toUpperCase();
+  const northern = hemisphere >= 'N';
+  return { zoneNumber, northern };
+}
+
+export function utmToLatLong({ easting, northing, utmRef, strict = true, decimals = 6 }: ToLatLonProps): LatLon {
+  const { zoneNumber, northern } = parseUtmRef(utmRef);
+
   if (strict) {
     if (easting < 100000 || easting >= 1000000) {
       throw new RangeError('easting out of range (must be between 100,000m and 999,999m)');

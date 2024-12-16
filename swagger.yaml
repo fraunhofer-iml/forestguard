@@ -209,7 +209,8 @@ paths:
           in: query
           example:
             processStep:
-              date: desc
+              dateOfEntry: desc
+              dateOfProcess: desc
           schema: {}
         - name: query
           required: false
@@ -440,7 +441,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserUpdateDto'
+              $ref: '#/components/schemas/UserCreateDto'
       responses:
         '200':
           description: Successful creation.
@@ -449,6 +450,29 @@ paths:
       security:
         - bearer: []
   /users/{id}:
+    patch:
+      operationId: UserController_updateUser
+      summary: ''
+      description: Update an user
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateDto'
+      responses:
+        '200':
+          description: Successful update.
+      tags:
+        - Users
+      security:
+        - bearer: []
     get:
       operationId: UserController_getUser
       summary: ''
@@ -671,6 +695,9 @@ components:
       required:
         - type
         - file
+    UserCreateDto:
+      type: object
+      properties: {}
     UserUpdateDto:
       type: object
       properties: {}

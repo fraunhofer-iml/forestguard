@@ -72,6 +72,7 @@ The Entity Management SVC and Process SVC serves as a Bridge and allows the foll
 | CREATE | `/users/create` | Create a new user
 | READ_ALL | `/users/read-all` | Read all users
 | READ_BY_ID | `/users/read-by-id` | Read a user by ID
+| UPDATE_BY_ID | `/users/update-by-id` | Update a user by ID
 | CREATE_FARMER | `/users/create-farmer` | Create a new farmer
 | READ_FARMER_BY_COMPANY_ID | `/users/read-farmer-by-company-id` | Read a farmer by company ID
 |===
@@ -143,8 +144,9 @@ The BFF serves as a Bridge for the frontend and allows the following REST Endpoi
 | POST | `/pols/+{id}+/docs` | Create a new document for a farmer
 | GET | `/users` | Get all users
 | GET | `/users/+{id}+` | Get user by their ID
-| PATCH | `/users/+{id}+/docs/+{docRef}+` | Get all plots of land of a farmer
-| DELETE | `/users/+{id}+/docs/+{docRef}+` | Get plot of land by ID
+| PATCH | `/users/+{id}+` | Update a user
+| PATCH | `/users/+{id}+/docs/+{docRef}+` | Update a document of a farmer
+| DELETE | `/users/+{id}+/docs/+{docRef}+` | Delete a document of a farmer
 |===
 
 ==== Process Steps API

@@ -86,7 +86,7 @@ function expectResultToBeBatchDto(result: BatchDto, mockBatch: BatchWithRelation
   expect(result.id).toBe(mockBatch.id);
   expect(result.weight).toBe(mockBatch.weight);
   expect(result.processStep.location).toBe(mockBatch.processStep.location);
-  expect(result.processStep.date).toBe(mockBatch.processStep.date);
+  expect(result.processStep.dateOfProcess).toBe(mockBatch.processStep.dateOfProcess);
   expect(result.processStep.farmedLand).toBe(mockBatch.processStep.farmedLand);
 }
 

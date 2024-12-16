@@ -1,3 +1,4 @@
+import { BlockchainConnectorModule } from '@forest-guard/blockchain-connector';
 import { PrismaService } from '@forest-guard/database';
 import { Module } from '@nestjs/common';
 import { BatchController } from './batch.controller';
@@ -7,6 +8,7 @@ import { BatchReadService } from './read/batch-read.service';
 import { BatchReadRelatedService } from './related/batch-read-related.service';
 
 @Module({
+  imports: [BlockchainConnectorModule],
   controllers: [BatchController],
   providers: [BatchCreateService, BatchReadService, BatchReadRelatedService, BatchExportService, PrismaService],
 })

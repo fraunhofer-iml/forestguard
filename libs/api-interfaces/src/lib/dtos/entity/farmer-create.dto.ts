@@ -1,7 +1,7 @@
 import { AddressCreateDto } from './address-create.dto';
-import { UserUpdateDto } from './user-update.dto';
+import { UserCreateDto } from './user-create.dto';
 
-export class FarmerCreateDto extends UserUpdateDto {
+export class FarmerCreateDto extends UserCreateDto {
   personalId: string;
   address: AddressCreateDto;
 

@@ -65,7 +65,7 @@ export class BatchDetailsComponent {
         id: b.id,
         name: b.processStep?.process.name,
         weight: b.weight,
-        processStepDate: b.processStep.date,
+        processStepDateOfProcess: b.processStep.dateOfProcess,
       }));
       // Filter edges for duplicates
       edges = edges.filter((edge, index, self) => index === self.findIndex((t) => t.from === edge.from && t.to === edge.to));

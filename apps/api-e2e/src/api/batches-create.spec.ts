@@ -1,18 +1,16 @@
+import { BatchCreateDto } from '@forest-guard/api-interfaces';
 import axios from 'axios';
-import { beforeEachAndAfterAll, createHttpHeader, HttpHeader } from '../test-utils/test.utils';
-import { ensureResponseBatch, ensureResponseBatchWithProcess } from '../assertions/batches/assertion.utils';
+import { HttpStatus } from '@nestjs/common';
+import { ensureResponseBatch, ensureResponseBatchWithProcess } from './assertions/batches/assertion.utils';
+import { givenFarmer, prepareFarmerWithDto, preparePlotOfLand, Process } from './test-utils/arrange-utils';
 import {
   prepareBatchCreationWithPlotOfLand,
   prepareTwoPlotsOfLandCreation,
   prepareXPlotsOfLandCreation,
-
-} from '../test-utils/batches/batches.spec.utils';
-import { HttpStatus } from '@nestjs/common';
-import { BatchCreateDto } from '@forest-guard/api-interfaces';
-import { Process } from '../test-utils/arrange-utils';
+} from './test-utils/batches.spec.utils';
+import { beforeEachAndAfterAll, createHttpHeader, HttpHeader } from './test-utils/test.utils';
 
 describe('/batches-create', () => {
-
   let httpHeader: HttpHeader;
   let batchCreateDto: BatchCreateDto;
 
@@ -40,13 +38,6 @@ describe('/batches-create', () => {
     it('should response with no created batches', async () => {
       const response = await axios.post(`/batches`, [], httpHeader);
       expect(response.status).toBe(HttpStatus.NO_CONTENT);
-    });
-
-    // TODO: new e2e test 
-    it('should throw an exception', async () => {
-      console.log(batchCreateDto);
-      const response = await axios.post('/batches', [/* one with ins that dont work */]); 
-      expect(response.status).toBe(HttpStatus.BAD_REQUEST);
     });
   });
 
@@ -85,8 +76,21 @@ describe('/batches-create', () => {
 
       expect(response.status).toBe(HttpStatus.NO_CONTENT);
     });
+
+    it('should throw error if PlotsOfLand come from different farmers', async () => {
+      const givenBatchCombinedCreateDto = await prepareXPlotsOfLandCreation(batchCreateDto, 0);
+      const plotOfLand1 = await preparePlotOfLand(batchCreateDto.processStep.executedBy);
+      const farmerDto = structuredClone(givenFarmer);
+      farmerDto.personalId = 'pf2';
+      const farmer2 = await prepareFarmerWithDto(farmerDto);
+      const plotOfLand2 = await preparePlotOfLand(farmer2.data.id);
+      givenBatchCombinedCreateDto.processStep.harvestedLands = [plotOfLand1.data.id, plotOfLand2.data.id];
+
+      try {
+        await axios.post(`/batches/harvests/combined`, givenBatchCombinedCreateDto, httpHeader);
+      } catch (err) {
+        expect(err.response.data.status).toBe(HttpStatus.BAD_REQUEST);
+      }
+    });
   });
-
-
 });
-

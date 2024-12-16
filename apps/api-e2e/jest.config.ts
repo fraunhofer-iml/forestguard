@@ -9,8 +9,10 @@ export default {
   transform: {
     '^.+\\.[tj]s$': ['ts-jest', {
       tsconfig: '<rootDir>/tsconfig.spec.json',
-    }],
+      },
+    ],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/api-e2e',
+  testTimeout: 30000, // required when BLOCKCHAIN_ENABLED=true
 };

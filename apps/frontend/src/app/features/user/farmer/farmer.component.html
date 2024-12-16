@@ -83,7 +83,8 @@
 
   <div>
     <app-upload-form [title]="'Upload Documents'" [showDescriptionField]="true" [showUploadedFiles]="false"
-      [buttonText]="'Upload '" [buttonTooltip]="'Uploads the document directly to the farmer'"
+                     [informationText]="'Upload relevant Documents or Certificates for a Farmer here (e.g. Fairtrade Certificate). This step is optional, documents can also be added later.'"
+                     [buttonText]="'Upload '" [buttonTooltip]="'Uploads the document directly to the farmer'"
       (uploadDocument)="submitFile({ fgFile: $event, farmerId: farmer.id })"></app-upload-form>
   </div>
 </div>

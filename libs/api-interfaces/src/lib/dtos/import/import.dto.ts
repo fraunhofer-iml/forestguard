@@ -1,11 +1,11 @@
-import { FarmerCreateDto, UserUpdateDto } from '../entity';
+import { FarmerCreateDto, UserCreateDto } from '../entity';
 import { PlotOfLandCreateDto } from '../plot-of-land';
 
 export class ImportDto {
-  employees: UserUpdateDto[];
+  employees: UserCreateDto[];
   farmersAndPlotsOfLand: FarmerAndPlotOfLand[];
 
-  constructor(employees: UserUpdateDto[], farmersAndPlotsOfLand: FarmerAndPlotOfLand[]) {
+  constructor(employees: UserCreateDto[], farmersAndPlotsOfLand: FarmerAndPlotOfLand[]) {
     this.employees = employees;
     this.farmersAndPlotsOfLand = farmersAndPlotsOfLand;
   }

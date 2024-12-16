@@ -1,27 +1,12 @@
 [
   {
-    "id": "ctest101"
+    "id": "employee_jane"
   },
   {
-    "id": "ctest102"
+    "id": "farmer_john"
   },
   {
-    "id": "ctest103"
-  },
-  {
-    "id": "cooperative_address"
-  },
-  {
-    "id": "exporter_address"
-  },
-  {
-    "id": "importer_address"
-  },
-  {
-    "id": "roaster_address"
-  },
-  {
-    "id": "trader_address"
+    "id": "employee_alex"
   },
   {
     "id": "c1c1f27f-75c9-45f8-98f6-cff1357561e1"

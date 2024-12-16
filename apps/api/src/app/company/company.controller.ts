@@ -7,8 +7,7 @@ import { CompanyService } from './company.service';
 @ApiTags('Companies')
 @Controller('companies')
 export class CompanyController {
-  constructor(private readonly companyService: CompanyService) {
-  }
+  constructor(private readonly companyService: CompanyService) {}
 
   @Post()
   @ApiBearerAuth()
@@ -55,11 +54,11 @@ export class CompanyController {
   @ApiOperation({ description: 'Get all coffee batches of the company' })
   @ApiOkResponse({ description: 'Successful request.' })
   @ApiQuery({ name: 'query', required: false, example: { active: true } })
-  @ApiQuery({ name: 'sorting', required: false, example: { processStep: { date: 'desc' } } })
+  @ApiQuery({ name: 'sorting', required: false, example: { processStep: { dateOfEntry: 'desc' } } })
   getBatches(
     @Param('id') id: string,
     @Query('query') query = '{active: true}',
-    @Query('sorting') sorting = '{processStep: {date: "desc"}}',
+    @Query('sorting') sorting = '{processStep: {dateOfEntry: "desc"}}'
   ): Promise<BatchDto[]> {
     return this.companyService.readBatchesByCompanyId(id, query, sorting);
   }

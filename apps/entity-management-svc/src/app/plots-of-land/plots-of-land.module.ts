@@ -1,3 +1,4 @@
+import { BlockchainConnectorModule } from '@forest-guard/blockchain-connector';
 import { ConfigurationModule } from '@forest-guard/configuration';
 import { PrismaService } from '@forest-guard/database';
 import { FileStorageModule } from '@forest-guard/file-storage';
@@ -7,7 +8,7 @@ import { PlotsOfLandService } from './plots-of-land.service';
 import { ProofService } from './proof.service';
 
 @Module({
-  imports: [ConfigurationModule, FileStorageModule],
+  imports: [BlockchainConnectorModule, ConfigurationModule, FileStorageModule],
   providers: [PlotsOfLandService, ProofService, PrismaService],
   controllers: [PlotsOfLandController],
   exports: [PlotsOfLandService],

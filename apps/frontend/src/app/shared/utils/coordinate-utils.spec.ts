@@ -74,7 +74,7 @@ describe('Coordinate Utils', () => {
 
   describe('convertUTMtoWGS', () => {
     it('should convert UTM to WGS format', () => {
-      const result = convertUTMtoWGS(sampleInput, 33);
+      const result = convertUTMtoWGS(sampleInput, '33');
       expect(result).toEqual([[{ x: expect.any(Number), y: expect.any(Number) }], [{ x: expect.any(Number), y: expect.any(Number) }]]);
     });
   });

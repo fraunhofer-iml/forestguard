@@ -197,6 +197,7 @@ describe('/pols', () => {
 
       const farmerCreate2 = structuredClone(farmerCreate);
       farmerCreate2.lastName = 'Johnson';
+      farmerCreate2.personalId = 'pf2';
       const farmer2 = await axios.post(`/users/farmers`, farmerCreate2, httpHeader);
       const actualPostResponse2 = await axios.post(`/pols?farmerId=${farmer2.data.id}`, givenPlotOfLandCreateDto, httpHeader);
 

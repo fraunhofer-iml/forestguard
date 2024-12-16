@@ -1,6 +1,6 @@
 import { CompanyDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
-import { catchError, EMPTY, map, Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, EMPTY, map, Observable, switchMap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
@@ -18,6 +18,7 @@ import { DataTableUtilityService } from '../../../shared/utils/data-table-utilit
   templateUrl: './company.component.html',
 })
 export class CompanyComponent {
+  reload$ = new BehaviorSubject(undefined);
   id$ = this.route.params.pipe(map((params) => params['id']));
   company$: Observable<CompanyDto> = this.id$.pipe(
     switchMap((id) =>
@@ -85,11 +86,15 @@ export class CompanyComponent {
   }
 
   getFarmers() {
-    this.farmers$ = this.company$.pipe(
-      map((company) => {
-        this.dataSource = new MatTableDataSource<UserOrFarmerDto>(company.farmers ?? []);
-        return this.dataSource;
-      })
+    this.farmers$ = this.reload$.pipe(
+      switchMap(() =>
+        this.company$.pipe(
+          map((company) => {
+            this.dataSource = new MatTableDataSource<UserOrFarmerDto>(company.farmers ?? []);
+            return this.dataSource;
+          })
+        )
+      )
     );
   }
 
@@ -107,6 +112,7 @@ export class CompanyComponent {
           })
         )
         .subscribe(() => {
+          this.reload$.next(undefined);
           toast.success(Messages.successMasterDataImport);
         });
     }

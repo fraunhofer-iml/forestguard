@@ -8,6 +8,7 @@ import { Messages } from '../../../shared/messages';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
+import { getFormattedUserName } from '../../../shared/utils/user-company-utils';
 import { HarvestForm } from './model/forms';
 import { HarvestService } from './service/harvest.service';
 
@@ -19,14 +20,20 @@ export class HarvestComponent {
   companyId = this.authenticationService.getCurrentCompanyId() ?? '';
   loading = false;
   companies$: Observable<CompanyDto[]> = this.companyService.getCompanies();
-  users$: Observable<UserDto[]> = this.companies$.pipe(map((companies) => companies.flatMap((company) => company.employees ?? [])));
-  farmers$: Observable<UserOrFarmerDto[]> = this.companies$.pipe(map((companies) => companies.flatMap((company) => company.farmers ?? [])));
+  users$: Observable<UserDto[]> = this.companies$.pipe(
+    map((companies) => companies.filter((company) => company.id === this.companyId)),
+    map((companies) => companies.flatMap((company) => company.employees ?? []))
+  );
+  farmers$: Observable<UserOrFarmerDto[]> = this.companies$.pipe(
+    map((companies) => companies.filter((company) => company.id === this.companyId)),
+    map((companies) => companies.flatMap((company) => company.farmers ?? []))
+  );
 
   harvestFormGroup: FormGroup<HarvestForm> = new FormGroup<HarvestForm>({
     processOwner: new FormControl(null, Validators.required),
     recipient: new FormControl(null, Validators.required),
     weight: new FormControl(null, [Validators.required, Validators.min(1)]),
-    date: new FormControl(new Date(), Validators.required),
+    dateOfProcess: new FormControl(new Date(), Validators.required),
     authorOfEntry: new FormControl(null, Validators.required),
     plotsOfLand: new FormArray([this.createPlotOfLand()]),
   });
@@ -48,6 +55,7 @@ export class HarvestComponent {
       )
     )
   );
+  protected readonly getFormattedUserName = getFormattedUserName;
 
   constructor(
     private readonly batchService: BatchService,
@@ -108,7 +116,7 @@ export class HarvestComponent {
     this.plotsOfLand.disable();
     this.harvestFormGroup.reset();
     this.harvestFormGroup.patchValue({
-      date: new Date(),
+      dateOfProcess: new Date(),
     });
   }
 }

@@ -12,7 +12,7 @@
         <mat-label>Process Owner</mat-label>
         <mat-select formControlName="processOwner" placeholder="Process Owner" class="w-full !border-none">
           <mat-option *ngFor="let farmer of farmers$ | async" [value]="farmer.id">
-            {{ farmer.lastName }}, {{ farmer.firstName }}
+           {{ getFormattedUserName(farmer) }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -30,8 +30,8 @@
       </mat-form-field>
 
       <mat-form-field class="w-full mt-4" appearance="outline">
-        <mat-label>Date</mat-label>
-        <input matInput formControlName="date" [matDatepicker]="picker" />
+        <mat-label>Date of Process</mat-label>
+        <input matInput formControlName="dateOfProcess" [matDatepicker]="picker" />
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
@@ -48,7 +48,8 @@
     <!-- Plots of Land -->
     <div class="card">
       <div class="inline-flex justify-end cursor-pointer w-full">
-        <a mat-button (click)="addPlotOfLand()" [disabled]="!!!(filteredPlotsOfLand$ | async)?.length">Add Plot of Land</a>
+        <a mat-button (click)="addPlotOfLand()" [disabled]="!!!(filteredPlotsOfLand$ | async)?.length">Add Plot of
+          Land</a>
       </div>
       <div class="mt-4" *ngIf="filteredPlotsOfLand$ | async as filteredPlotsOfLand">
         <div formArrayName="plotsOfLand" *ngFor="let plotOfLand of plotsOfLand.controls; let i = index">

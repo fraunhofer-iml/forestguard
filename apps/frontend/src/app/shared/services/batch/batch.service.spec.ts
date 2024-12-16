@@ -25,7 +25,7 @@ describe('BatchService', (): void => {
         recipient: 'string',
         processStep: {
           location: 'location',
-          date: '2024-05-13T13:08:44.247Z',
+          dateOfProcess: '2024-05-12T13:08:44.247Z',
           process: 'string',
           recordedBy: 'string',
           executedBy: 'string',
@@ -56,7 +56,8 @@ describe('BatchService', (): void => {
       processStep: {
         id: '6eb8e77c-cc08-44de-9b7a-2cdfc9387e7d',
         location: 'location',
-        date: new Date('2024-05-13T13:08:44.247Z'),
+        dateOfProcess: new Date('2024-05-12T13:08:44.247Z'),
+        dateOfEntry: new Date('2024-05-13T13:08:44.247Z'),
         process: {
           id: 'eec06f70-ab67-49c5-a82b-ffcbff53229a',
           name: 'Process 1',

@@ -8,8 +8,8 @@
   <h1 class="text-lg font-semibold">Process Information</h1>
   <form class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4" [formGroup]="formGroup">
     <mat-form-field class="w-full" appearance="outline">
-      <mat-label>Date</mat-label>
-      <input matInput formControlName="date" [matDatepicker]="picker" />
+      <mat-label>DateOfProcess</mat-label>
+      <input matInput formControlName="dateOfProcess" [matDatepicker]="picker" />
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
@@ -48,7 +48,8 @@
 
 <div class="mt-4">
   <app-upload-form [title]="'Upload Documents'" [showDescriptionField]="true" [uploadedFiles]="uploadedFiles"
-    [uploadedFilesPosition]="'right'" (uploadDocument)="submitFile($event)"
+                   [informationText]="'Upload relevant Documents or Certificates for a Batch here (e.g. Fairtrade Certificate). This step is optional.'"
+                   [uploadedFilesPosition]="'right'" (uploadDocument)="submitFile($event)"
     (removeDocument)="removeFile($event)"></app-upload-form>
 </div>
 
