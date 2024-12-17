@@ -8,7 +8,7 @@
 
     <div class="grid grid-cols-2 mb-4">
       <p class="font-medium">{{ farmer.firstName }} {{ farmer.lastName }}</p>
-      <p class="text-neutral-500 text-xs text-end">ID: {{ farmer.personalId }}</p>
+      <p class="text-neutral-500 text-xs text-end" *ngIf="farmer.personalId">ID: {{ farmer.personalId }}</p>
     </div>
 
     <div class="flex">
