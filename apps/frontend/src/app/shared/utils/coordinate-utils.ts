@@ -21,16 +21,39 @@ export const convertToPoint = (geoData: CoordinateInput): number[] => {
   return geoData[0].map((point) => [point.x, point.y]).flat();
 };
 
+export const convertFromPoint = (coordinates: [number, number]): CoordinateInput => {
+  return [
+    [
+      {
+        x: coordinates[0],
+        y: coordinates[1],
+      },
+    ],
+  ];
+};
+
 export const convertToMultiPoint = (geoData: CoordinateInput): number[][] => {
   return geoData.flatMap((coordinate) => coordinate.map((point) => [point.x, point.y]));
+};
+
+export const convertFromMultiPoint = (coordinates: [number, number][]): CoordinateInput => {
+  return [coordinates.flatMap((point) => convertFromPoint(point).flatMap((coordinate) => coordinate))];
 };
 
 export const convertToPolygon = (geoData: CoordinateInput): number[][][] => {
   return geoData.map((polygon) => polygon.map((point) => [point.x, point.y]));
 };
 
+export const convertFromPolygon = (coordinates: [number, number][][]): CoordinateInput => {
+  return [coordinates.flatMap((polygon) => convertFromMultiPoint(polygon).flatMap((coordinates) => coordinates))];
+};
+
 export const convertToMultiPolygon = (geoData: CoordinateInput): number[][][][] => {
   return [geoData.map((polygon) => polygon.map((point) => [point.x, point.y]))];
+};
+
+export const convertFromMultiPloygon = (coordinates: [number, number][][][]): CoordinateInput => {
+  return coordinates.flatMap((polygons) => polygons.flatMap((polygon) => convertFromMultiPoint(polygon)));
 };
 
 export const convertUTMtoWGS = (geoData: CoordinateInput, zone: string): CoordinateInput => {
