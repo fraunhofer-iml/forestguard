@@ -78,7 +78,6 @@
     "@angular/compiler-cli": "18.0.2",
     "@angular/language-service": "18.0.2",
     "@ianvs/prettier-plugin-sort-imports": "^4.2.1",
-    "@nestjs/axios": "^3.0.3",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^10.0.2",
     "@nx/angular": "19.5.6",

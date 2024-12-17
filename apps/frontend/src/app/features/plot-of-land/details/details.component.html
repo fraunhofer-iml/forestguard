@@ -4,7 +4,6 @@
   <div class="card">
     <div class="items-center justify-between">
       <div>
-        <span class="text-neutral-500 text-sm">Plot of Land</span>
         <h2 class="text-lg font-medium">{{ plotOfLand.description }}</h2>
       </div>
 
@@ -143,8 +142,18 @@
           <p class="border-b-2 py-2 text-neutral-500">{{ plotOfLand.nationalPlotOfLandId }}</p>
           <span class="border-b-2 py-2 font-medium">Local Plot of Land Id</span>
           <p class="border-b-2 py-2 text-neutral-500">{{ plotOfLand.localPlotOfLandId }}</p>
-          <span class="border-b-2 py-2 font-medium">Geo Data</span>
-          <p class="border-b-2 py-2 text-neutral-500 break-words">{{ plotOfLand.geoData }}</p>
+          <span class="py-2 font-medium col-span-2 flex items-center gap-1.5"
+            >Geo Data
+            <span
+              class="p-1 material-symbols-outlined hover:bg-gray-200 rounded-full cursor-pointer"
+              [cdkCopyToClipboard]="plotOfLand.geoData ?? ''"
+            >
+              content_copy
+            </span>
+          </span>
+          <div class="border-b-2 py-2 text-neutral-500 break-words col-span-2">
+            <div class="h-80 z-0 rounded-lg" leaflet id="map" [leafletCenter]="center" [leafletZoom]="10" [leafletLayers]="layers"></div>
+          </div>
           <span class="py-2 font-medium">Area in HA</span>
           <p class="py-2 text-neutral-500">{{ plotOfLand.areaInHA }}</p>
         </div>
