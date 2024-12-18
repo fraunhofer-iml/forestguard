@@ -19,7 +19,7 @@ import { GenerateUserService } from './service/generate-user.service';
 export class AddUserComponent {
   selectedRole: string = Roles.USER;
   userFormGroup: FormGroup<UserForm> = new FormGroup<UserForm>({
-    employeeId: new FormControl(null, Validators.required),
+    employeeId: new FormControl(null),
     firstName: new FormControl(null, Validators.required),
     lastName: new FormControl(null, Validators.required),
     email: new FormControl(null, Validators.required),
