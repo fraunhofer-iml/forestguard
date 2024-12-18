@@ -24,14 +24,16 @@
     <mat-form-field class="w-full" appearance="outline">
       <mat-label>Process Owner</mat-label>
       <mat-select formControlName="executedBy" placeholder="Process Owner">
-        <mat-option *ngFor="let farmer of farmers$ | async" [value]="farmer.id"> {{ farmer.lastName }}, {{
-          farmer.firstName }} </mat-option>
+        <mat-option *ngFor="let farmer of farmers$ | async" [value]="farmer.id">
+          {{ getFormattedUserName(farmer) }}
+        </mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field class="w-full" appearance="outline">
       <mat-label>Author of Entry</mat-label>
       <mat-select formControlName="recordedBy" placeholder="Author">
-        <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }}
+        <mat-option *ngFor="let user of users$ | async" [value]="user.id">
+          {{ getFormattedUserName(user) }}
         </mat-option>
       </mat-select>
     </mat-form-field>

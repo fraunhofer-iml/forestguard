@@ -10,6 +10,7 @@ import { BatchService } from '../../../shared/services/batch/batch.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { ProcessStepService } from '../../../shared/services/process-step/process.step.service';
 import { Uris } from '../../../shared/uris';
+import { getFormattedUserName } from '../../../shared/utils/user-company-utils';
 
 @Component({
   selector: 'app-batch-update',
@@ -140,4 +141,6 @@ export class BatchUpdateComponent implements OnInit {
   removeBatchItem(index: number): void {
     this.outBatches.removeAt(index);
   }
+
+  protected readonly getFormattedUserName = getFormattedUserName;
 }
