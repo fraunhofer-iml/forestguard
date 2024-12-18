@@ -1,9 +1,5 @@
 <h1 class="font-semibold text-gray-700 pb-4">Company</h1>
 
-<div class="card mb-4 flex justify-end">
-  <a routerLink="{{ Uris.addUser }}" mat-button class="text-end">Create Employee/Farmer</a>
-</div>
-
 <div class="grid md:grid-cols-2 sm:grid-cols-1" *ngIf="company$ | async as company">
   <div class="card grid md:grid-cols-2 md:mr-4 sm:mr-0">
     <span class="border-b-2 py-2 font-medium">Name</span>
@@ -27,6 +23,19 @@
   </div>
 </div>
 
+<div class=" mt-4 mb-4 flex justify-end">
+  <button
+    class="mr-2"
+    mat-stroked-button
+    matTooltip="Import data to add more farmers to the table."
+    (click)="fileInput.click()"
+  >
+    Import Data
+  </button>
+  <input type="file" #fileInput class="hidden" (change)="onFileSelected($event)" />
+  <a routerLink="{{ Uris.addUser }}" mat-stroked-button class="text-end">Create Employee/Farmer</a>
+</div>
+
 <div class="card mt-4">
   <h1 class="text-lg font-semibold">Farmers</h1>
   <div class="md:flex sm:flex-none items-center justify-between mt-2 gap-4">
@@ -34,15 +43,6 @@
       <mat-label>Filter</mat-label>
       <input matInput placeholder="Search" (keyup)="applyFilter($event)" />
     </mat-form-field>
-    <button
-      mat-flat-button
-      class="md:w-48 sm:w-full sm:mt-2"
-      matTooltip="Import data to add more farmers to the table."
-      (click)="fileInput.click()"
-    >
-      Import Data
-    </button>
-    <input type="file" #fileInput class="hidden" (change)="onFileSelected($event)" />
   </div>
 </div>
 
