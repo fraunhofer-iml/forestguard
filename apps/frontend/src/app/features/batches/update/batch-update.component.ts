@@ -19,7 +19,7 @@ import { getFormattedUserName } from '../../../shared/utils/user-company-utils';
 export class BatchUpdateComponent implements OnInit {
   batchIds: string[] = this.route.snapshot.queryParams['batchIds']?.split(',') || [];
   uploadedFiles: FGFile[] = [];
-  maxDate: Date;
+  maxDate: Date = new Date();
   formGroup: FormGroup = new FormGroup({
     location: new FormControl(null, Validators.required),
     dateOfProcess: new FormControl(new Date(), Validators.required),
@@ -52,9 +52,7 @@ export class BatchUpdateComponent implements OnInit {
     private readonly companyService: CompanyService,
     private readonly authenticationService: AuthenticationService,
     private readonly processStepService: ProcessStepService
-  ) {
-    this.maxDate = new Date();
-  }
+  ) {}
 
   get outBatches(): FormArray {
     return this.outputBatchForm.get('outBatches') as FormArray;
