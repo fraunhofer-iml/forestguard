@@ -45,6 +45,8 @@ export class BatchUpdateComponent implements OnInit {
   farmers$: Observable<UserOrFarmerDto[]> = this.currentCompany.pipe(map((company) => company.farmers ?? []));
   batches$ = new Observable<BatchDto[]>();
 
+  protected readonly getFormattedUserName = getFormattedUserName;
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
@@ -142,6 +144,4 @@ export class BatchUpdateComponent implements OnInit {
   removeBatchItem(index: number): void {
     this.outBatches.removeAt(index);
   }
-
-  protected readonly getFormattedUserName = getFormattedUserName;
 }
