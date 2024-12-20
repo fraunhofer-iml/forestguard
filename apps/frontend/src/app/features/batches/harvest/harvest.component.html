@@ -39,7 +39,8 @@
       <mat-form-field class="w-full mt-4" appearance="outline">
         <mat-label>Author of Entry</mat-label>
         <mat-select formControlName="authorOfEntry" placeholder="Author of Entry">
-          <mat-option *ngFor="let user of users$ | async" [value]="user.id"> {{ user.lastName }}, {{ user.firstName }}
+          <mat-option *ngFor="let user of users$ | async" [value]="user.id">
+            {{ getFormattedUserName(user) }}
           </mat-option>
         </mat-select>
       </mat-form-field>
