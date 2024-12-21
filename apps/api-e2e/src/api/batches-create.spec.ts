@@ -39,6 +39,27 @@ describe('/batches-create', () => {
       const response = await axios.post(`/batches`, [], httpHeader);
       expect(response.status).toBe(HttpStatus.NO_CONTENT);
     });
+
+    it('should throw an error for a batch that is already inactive', async () => {
+      const prepedBatches = await axios.post(`/batches`, [batchCreateDto], httpHeader);
+      
+      const batchCreateForError: BatchCreateDto = {
+        ins: [prepedBatches.data.batchId], 
+        weight: batchCreateDto.weight,
+        recipient: batchCreateDto.recipient,
+        processStep: batchCreateDto.processStep,
+      }
+
+
+      console.log(batchCreateForError);
+      console.log(batchCreateDto);
+
+
+      
+      const response = await axios.post(`/batches`, [batchCreateForError], httpHeader);
+      console.log(response.data);
+      expect(response.status).toBe(HttpStatus.BAD_REQUEST);
+    });
   });
 
   describe('POST /batches/harvests', () => {

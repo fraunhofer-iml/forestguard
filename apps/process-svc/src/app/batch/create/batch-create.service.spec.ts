@@ -4,6 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { mockedCombinedBatchDto, mockedCreateBatchDto, mockedPrismaBatch1, mockedPrismaBatchWithRelations1, mockedPrismaBatchWithRelations4 } from '../mocked-data/batch.mock';
 import { BatchCreateService } from './batch-create.service';
 import { AmqpException } from '@forest-guard/amqp';
+import { HttpStatus } from '@nestjs/common';
 
 
 describe('BatchService', () => {
@@ -127,6 +128,12 @@ describe('BatchService', () => {
 
     await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toThrow(AmqpException);
     // implement siehe screenshot 
+    await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toMatchObject({
+      error: {
+        message: "No batch with id l1 found. ", 
+        status: HttpStatus.NOT_FOUND,
+      }
+    });
   });
 
   // 2.1 
@@ -141,6 +148,12 @@ describe('BatchService', () => {
 
     await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toThrow(AmqpException);
     // implement siehe screenshot 
+    await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toMatchObject({
+      error: {
+        message: "Batch 'l1' is already inactive. ", 
+        status: HttpStatus.BAD_REQUEST,
+      }
+    });
   });
 
   // 2.2
@@ -157,6 +170,12 @@ describe('BatchService', () => {
     expect(prisma.batch.findUnique).toHaveBeenCalledTimes(2);
     await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toThrow(AmqpException);
     // implement siehe Screenshot
+    await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toMatchObject({
+      error: {
+        message: "Batch 'l1' is already inactive. ", 
+        status: HttpStatus.BAD_REQUEST,
+      }
+    });
   });
   
 });
