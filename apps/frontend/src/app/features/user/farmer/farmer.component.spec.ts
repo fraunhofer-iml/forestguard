@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { UserService } from '../../../shared/services/user/user.service';
 import { FarmerComponent } from './farmer.component';
+import { UpdateFarmerService } from './service/update-farmer.service';
 
 describe('FarmerComponent', () => {
   let component: FarmerComponent;
@@ -36,6 +37,7 @@ describe('FarmerComponent', () => {
       providers: [
         UserService,
         CompanyService,
+        UpdateFarmerService,
         HttpClient,
         HttpHandler,
         { provide: KeycloakService, useValue: keycloakService },

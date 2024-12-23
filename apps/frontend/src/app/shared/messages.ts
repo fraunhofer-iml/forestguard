@@ -7,6 +7,7 @@ export enum Messages {
   successUser = 'User successfully added',
   successFarmer = 'Farmer successfully added',
   successMasterDataImport = 'Data successfully imported',
+  successUpdateFarmer = 'Farmer successfully updated',
   error = 'Please fill in all required fields',
   errorCreateHarvest = 'Creation of harvest batches failed.',
   invalidGeoData = 'Invalid JSON format.',

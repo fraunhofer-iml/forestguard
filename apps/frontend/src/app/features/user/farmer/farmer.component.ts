@@ -1,12 +1,15 @@
 import { FGFile, UserOrFarmerDto } from '@forest-guard/api-interfaces';
+import { toast } from 'ngx-sonner';
 import { BehaviorSubject, combineLatest, Observable, switchMap } from 'rxjs';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Document } from '@prisma/client';
 import { environment } from '../../../../environments/environment';
 import { AuthenticationService } from '../../../core/services/authentication.service';
+import { Messages } from '../../../shared/messages';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { UserService } from '../../../shared/services/user/user.service';
+import { UpdateFarmerService } from './service/update-farmer.service';
 
 @Component({
   selector: 'app-farmer',
@@ -26,6 +29,7 @@ export class FarmerComponent {
     private readonly route: ActivatedRoute,
     private readonly userService: UserService,
     private readonly companyService: CompanyService,
+    private readonly updateFarmerService: UpdateFarmerService,
     public authenticationService: AuthenticationService
   ) {}
 
@@ -35,5 +39,11 @@ export class FarmerComponent {
 
   submitFile({ fgFile, farmerId }: { fgFile: FGFile; farmerId: string }): void {
     this.userService.addDocumentToUser(farmerId, fgFile.file, fgFile.documentType ?? '').subscribe(() => this.reload$.next(undefined));
+  }
+
+  updateFarmerData(farmer: UserOrFarmerDto): void {
+    this.userService
+      .updateUser(farmer.id, this.updateFarmerService.convertFarmerToUserUpdateDto(farmer))
+      .subscribe(() => toast.success(Messages.successUpdateFarmer));
   }
 }

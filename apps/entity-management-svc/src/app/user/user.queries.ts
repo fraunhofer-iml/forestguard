@@ -1,10 +1,4 @@
-import {
-  AddressCreateDto,
-  FarmerCreateDto,
-  RoleType,
-  UserCreateDto,
-  UserUpdateDto,
-} from '@forest-guard/api-interfaces';
+import { FarmerCreateDto, RoleType, UserCreateDto, UserUpdateDto } from '@forest-guard/api-interfaces';
 
 export function userCreate({ dto, entityId, companyId }: { dto: UserCreateDto; entityId: string; companyId: string }) {
   return {
@@ -39,12 +33,7 @@ export function farmerCreate({ dto, entityId, companyId }: {
       ...user({ dto, entityId, companyId }),
       role: RoleType.FARMER,
       address: {
-        connectOrCreate: {
-          create: dto.address,
-          where: {
-            street_postalCode_city_state_country: uniqueAddress(dto.address),
-          },
-        },
+        create: dto.address,
       },
       personalId: dto.personalId,
     },
@@ -73,16 +62,6 @@ function user({ dto, entityId, companyId }: { dto: UserCreateDto; entityId: stri
       },
     },
     employeeId: dto.employeeId,
-  };
-}
-
-function uniqueAddress(dto: AddressCreateDto) {
-  return {
-    street: dto.street,
-    city: dto.city,
-    state: dto.state,
-    postalCode: dto.postalCode,
-    country: dto.country,
   };
 }
 

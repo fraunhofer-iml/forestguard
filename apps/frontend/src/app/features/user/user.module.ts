@@ -1,6 +1,6 @@
 import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatOption } from '@angular/material/autocomplete';
 import { MatButton } from '@angular/material/button';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
@@ -12,6 +12,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { AddUserComponent } from './add/add-user.component';
 import { GenerateUserService } from './add/service/generate-user.service';
 import { FarmerComponent } from './farmer/farmer.component';
+import { UpdateFarmerService } from './farmer/service/update-farmer.service';
 import { UsersRoutingModule } from './user.routes';
 
 @NgModule({
@@ -33,7 +34,8 @@ import { UsersRoutingModule } from './user.routes';
     MatOption,
     MatSelect,
     NgForOf,
+    FormsModule,
   ],
-  providers: [GenerateUserService],
+  providers: [GenerateUserService, UpdateFarmerService],
 })
 export class UserModule {}
