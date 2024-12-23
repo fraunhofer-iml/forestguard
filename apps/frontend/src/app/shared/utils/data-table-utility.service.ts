@@ -9,9 +9,11 @@ export class DataTableUtilityService {
    * @returns The objects in the sorted way
    */
   public pathDataAccessor(item: any, path: string): any {
-    return path.split('.').reduce((accumulator: any, key: string) => {
+    const returnVal = path.split('.').reduce((accumulator: any, key: string) => {
       return accumulator ? accumulator[key] : undefined;
     }, item);
+
+    return returnVal === 'string' ? returnVal.toLowerCase().trim() : returnVal;
   }
 
   /**

@@ -4,90 +4,142 @@
 </div>
 <div class="grid md:grid-cols-2 sm:grid-cols-1 mt-4 gap-4" *ngIf="farmer$ | async as farmer">
   <div class="card">
-    <div class="grid grid-cols-1 md:grid-cols-2">
+    <div class="grid grid-cols-1 md:grid-cols-2 mb-4">
       <h1 class="text-lg font-semibold">General Information</h1>
       <div class="mt-2 md:mt-0 md:text-end">
         <p class="text-neutral-500 text-xs" *ngIf="farmer.employeeId">Local Farmer ID: {{ farmer.employeeId }}</p>
       <p class="text-neutral-500 text-xs" *ngIf="farmer.personalId">Personal ID: {{ farmer.personalId }}</p>
       </div>
     </div>
-    <p class="font-medium col-span-2 mb-4">{{ farmer.firstName }} {{ farmer.lastName }}</p>
 
-    <div class="flex">
-      <span class="material-symbols-outlined text-neutral-500"> mail </span>
-      <p class="text-neutral-500 font-medium ml-4">{{ farmer.email }}</p>
+    <div class="grid md:grid-cols-2 sm:grid-cols-1 md:space-x-4">
+      <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input matInput [(ngModel)]="farmer.firstName" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input matInput [(ngModel)]="farmer.lastName" />
+      </mat-form-field>
     </div>
 
-    <div class="flex">
-      <span class="material-symbols-outlined text-neutral-500"> call </span>
-      <p class="text-neutral-500 font-medium ml-4">{{ farmer.mobilePhoneNumber }}</p>
-    </div>
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput [(ngModel)]="farmer.email" />
+    </mat-form-field>
+
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Phone Number</mat-label>
+      <input matInput [(ngModel)]="farmer.mobilePhoneNumber" />
+    </mat-form-field>
 
     <div class="grid md:grid-cols-2 mt-4">
       <span class="border-b-2 py-2 font-medium">Company</span>
-      <a *ngIf="company$ | async as company" class="py-2 border-b-2 text-secondary-500 cursor-pointer hover:underline"
-        routerLink="/companies/{{ this.authenticationService.getCurrentCompanyId() }}">
+      <a
+        *ngIf="company$ | async as company"
+        class="py-2 border-b-2 text-secondary-500 cursor-pointer hover:underline"
+        routerLink="/companies/{{ this.authenticationService.getCurrentCompanyId() }}"
+      >
         {{ company.name }}
       </a>
       <span class="py-2 font-medium md:border-none sm:border-b-2">Plot of Land</span>
       <div>
-        <a class="py-2 text-secondary-500 cursor-pointer hover:underline" *ngFor="let plotOfLand of farmer?.plotsOfLand"
-          [routerLink]="['/pols', plotOfLand.id]">
+        <a
+          class="py-2 text-secondary-500 cursor-pointer hover:underline"
+          *ngFor="let plotOfLand of farmer?.plotsOfLand"
+          [routerLink]="['/pols', plotOfLand.id]"
+        >
           {{ plotOfLand.description }}
         </a>
       </div>
     </div>
   </div>
-  <div class="card grid grid-cols-2">
-    <h1 class="text-lg font-semibold col-span-2">Address Information</h1>
-    <span class="border-b-2 py-2 font-medium">Street</span>
-    <p class="border-b-2 py-2 text-neutral-500">{{ farmer.address?.street }}</p>
-    <span class="border-b-2 font-medium py-2">Postal Code</span>
-    <p class="border-b-2 py-2 text-neutral-500">{{ farmer.address?.postalCode }}</p>
-    <span class="border-b-2 font-medium py-2">City</span>
-    <p class="border-b-2 py-2 text-neutral-500">{{ farmer.address?.city }}</p>
-    <span class="border-b-2 py-2 font-medium">State</span>
-    <p class="border-b-2 py-2 text-neutral-500">{{ farmer.address?.state }}</p>
-    <span class="border-b-2 py-2 font-medium"
-      [class]="farmer.address?.additionalInformation ? '' : 'md:border-none sm:border-b-2'">Country</span>
-    <p class="py-2 text-neutral-500" [class]="farmer.address?.additionalInformation ? 'border-b-2' : ''">{{
-      farmer.address?.country }}</p>
-    <span *ngIf="farmer.address?.additionalInformation" class="font-medium py-2 md:border-none sm:border-b-2">Additional
-      Information</span>
-    <p class="text-neutral-500 py-2">{{ farmer.address?.additionalInformation }}</p>
+  <div class="card" *ngIf="farmer.address">
+    <h1 class="text-lg font-semibold mb-4">Address Information</h1>
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Street</mat-label>
+      <input matInput [(ngModel)]="farmer.address.street" />
+    </mat-form-field>
+
+    <div class="grid md:grid-cols-2 sm:grid-cols-1 md:space-x-4">
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Postal Code</mat-label>
+        <input matInput [(ngModel)]="farmer.address.postalCode" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>City</mat-label>
+        <input matInput [(ngModel)]="farmer.address.city" />
+      </mat-form-field>
+    </div>
+
+    <div class="grid md:grid-cols-2 sm:grid-cols-1 md:space-x-4">
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>State</mat-label>
+        <input matInput [(ngModel)]="farmer.address.state" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Country</mat-label>
+        <input matInput [(ngModel)]="farmer.address.country" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Additional Information</mat-label>
+      <input matInput [(ngModel)]="farmer.address.additionalInformation" />
+    </mat-form-field>
+
+    <div class="flex justify-center items-center">
+      <button mat-flat-button class="text-nowrap" (click)="updateFarmerData(farmer)">Update Farmer</button>
+    </div>
   </div>
+
   <div class="card">
     <h1 class="text-lg font-semibold">Documents</h1>
     @if (!farmer.documents || farmer.documents.length === 0) {
-    <p>No documents uploaded yet.</p>
+      <p>No documents uploaded yet.</p>
     }
 
     @for (document of farmer.documents; track $index) {
-    <div class="flex w-full justify-between items-center border-b-2">
-      <div class="font-medium">
-        {{ document.description.length > 0 ? document.description : 'No custom description provided (ID: ' + document.id
-        + ')' }}
+      <div class="flex w-full justify-between items-center border-b-2">
+        <div class="font-medium">
+          {{ document.description.length > 0 ? document.description : 'No custom description provided (ID: ' + document.id + ')' }}
+        </div>
+        <div class="text-neutral-500 flex items-center gap-2">
+          <a
+            [href]="MINIO_URL + document.documentRef"
+            target="_blank"
+            class="p-1 material-symbols-outlined hover:bg-gray-200 rounded-full cursor-pointer"
+            matTooltip="Download document"
+          >
+            <span class="material-symbols-outlined"> download </span>
+          </a>
+          <button
+            class="p-1 material-symbols-outlined hover:bg-red-200 rounded-full cursor-pointer"
+            (click)="deleteDocument(document)"
+            matTooltip="Delete document"
+          >
+            delete
+          </button>
+        </div>
       </div>
-      <div class="text-neutral-500 flex items-center gap-2">
-        <a [href]="MINIO_URL + document.documentRef" target="_blank"
-          class="p-1 material-symbols-outlined hover:bg-gray-200 rounded-full cursor-pointer"
-          matTooltip="Download document">
-          <span class="material-symbols-outlined"> download </span>
-        </a>
-        <button class="p-1 material-symbols-outlined hover:bg-red-200 rounded-full cursor-pointer"
-          (click)="deleteDocument(document)" matTooltip="Delete document">
-          delete
-        </button>
-      </div>
-    </div>
     }
   </div>
 
   <div>
-    <app-upload-form [title]="'Upload Documents'" [showDescriptionField]="true" [showUploadedFiles]="false"
-                     [informationText]="'Upload relevant Documents or Certificates for a Farmer here (e.g. Fairtrade Certificate). This step is optional, documents can also be added later.'"
-                     [buttonText]="'Upload '" [buttonTooltip]="'Uploads the document directly to the farmer'"
-      (uploadDocument)="submitFile({ fgFile: $event, farmerId: farmer.id })"></app-upload-form>
+    <app-upload-form
+      [title]="'Upload Documents'"
+      [showDescriptionField]="true"
+      [showUploadedFiles]="false"
+      [informationText]="
+        'Upload relevant Documents or Certificates for a Farmer here (e.g. Fairtrade Certificate). This step is optional, documents can also be added later.'
+      "
+      [buttonText]="'Upload '"
+      [buttonTooltip]="'Uploads the document directly to the farmer'"
+      (uploadDocument)="submitFile({ fgFile: $event, farmerId: farmer.id })"
+    ></app-upload-form>
   </div>
 </div>
 

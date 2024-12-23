@@ -1,4 +1,4 @@
-import { FarmerCreateDto, UserDto, UserOrFarmerDto, UserCreateDto } from '@forest-guard/api-interfaces';
+import { FarmerCreateDto, UserCreateDto, UserDto, UserOrFarmerDto, UserUpdateDto } from '@forest-guard/api-interfaces';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -23,6 +23,10 @@ export class UserService {
 
   public createFarmer(farmer: FarmerCreateDto): Observable<UserOrFarmerDto> {
     return this.httpClient.post<UserOrFarmerDto>(`${environment.USERS.URL}${Uris.farmers}`, farmer);
+  }
+
+  public updateUser(id: string, user: UserUpdateDto): Observable<UserOrFarmerDto> {
+    return this.httpClient.patch<UserOrFarmerDto>(`${environment.USERS.URL}/${id}`, user);
   }
 
   public addDocumentToUser(userId: string, file: File, description: string) {

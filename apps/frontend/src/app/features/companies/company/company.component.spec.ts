@@ -1,4 +1,4 @@
-import { CompanyDto, farmer1Mock } from '@forest-guard/api-interfaces';
+import { CompanyDto, farmer1Mock, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { of } from 'rxjs';
 import { HttpClient, HttpHandler } from '@angular/common/http';
@@ -61,6 +61,7 @@ describe('CompanyComponent', () => {
   let fixture: ComponentFixture<CompanyComponent>;
   let mockCompanyService: { getCompanyById: jest.Mock };
   let mockImportService: jest.Mocked<ImportService>;
+  let dataTableUtilityServiceMock: jest.Mocked<DataTableUtilityService>;
 
   beforeEach(async () => {
     mockCompanyService = {
@@ -70,6 +71,11 @@ describe('CompanyComponent', () => {
     mockImportService = {
       importMasterData: jest.fn().mockReturnValue(of(null)),
     } as unknown as jest.Mocked<ImportService>;
+
+    dataTableUtilityServiceMock = {
+      pathDataAccessor: jest.fn(),
+      filterPredicate: jest.fn(),
+    };
 
     await TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
@@ -127,5 +133,20 @@ describe('CompanyComponent', () => {
     component.onFileSelected(event);
     expect(mockImportService.importMasterData).toHaveBeenCalled();
     expect(toast.success).toHaveBeenCalledWith(Messages.successMasterDataImport);
+  });
+
+  it('should return formatted name with first and last name', () => {
+    const item: UserOrFarmerDto = new UserOrFarmerDto('', '', 'John', 'Doe', '', '', '');
+    const result = (component as any).getFormattedName(item);
+    expect(result).toBe('john doe');
+  });
+
+  it('should return john doe, when path is name', () => {
+    const userOrFarmerDtoMock = new UserOrFarmerDto('', '', 'John', 'Doe', '', '', '');
+    dataTableUtilityServiceMock.pathDataAccessor = jest.fn().mockReturnValue('value');
+    component.setDataSourceAttributes();
+    const sortingDataAccessor = component.dataSource.sortingDataAccessor;
+    const result = sortingDataAccessor(userOrFarmerDtoMock, 'name');
+    expect(result).toBe('john doe');
   });
 });

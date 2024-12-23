@@ -1,4 +1,4 @@
-import { AmqpException, CompanyMessagePatterns } from '@forest-guard/amqp';
+import { AmqpException } from '@forest-guard/amqp';
 import { CompanyCreateDto, CompanyDto } from '@forest-guard/api-interfaces';
 import { PrismaService } from '@forest-guard/database';
 import JSON5 from 'json5';
@@ -8,7 +8,8 @@ import { CompanyWithRelations } from './company.types';
 
 @Injectable()
 export class CompanyService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {
+  }
 
   private async verifyUniquenessByName(name: string): Promise<void> {
     const numberOfCompanies = await this.prismaService.company.count({
@@ -40,24 +41,13 @@ export class CompanyService {
           },
         },
         address: {
-          connectOrCreate: {
-            create: {
-              street,
-              postalCode,
-              city,
-              state,
-              country,
-              additionalInformation,
-            },
-            where: {
-              street_postalCode_city_state_country: {
-                street,
-                postalCode,
-                city,
-                state,
-                country,
-              },
-            },
+          create: {
+            street,
+            postalCode,
+            city,
+            state,
+            country,
+            additionalInformation,
           },
         },
       },
