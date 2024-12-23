@@ -23,26 +23,25 @@
   </div>
 </div>
 
-<div class=" mt-4 mb-4 flex justify-end">
-  <button
-    class="mr-2"
-    mat-stroked-button
-    matTooltip="Import data to add more farmers to the table."
-    (click)="fileInput.click()"
-  >
-    Import Data
-  </button>
-  <input type="file" #fileInput class="hidden" (change)="onFileSelected($event)" />
-  <a routerLink="{{ Uris.addUser }}" mat-stroked-button class="text-end">Create Employee/Farmer</a>
-</div>
-
 <div class="card mt-4">
   <h1 class="text-lg font-semibold">Farmers</h1>
-  <div class="md:flex sm:flex-none items-center justify-between mt-2 gap-4">
-    <mat-form-field class="w-full mb-0" appearance="outline">
+  <div class="md:flex sm:flex-none items-center justify-between mt-2 divide-x-2">
+    <mat-form-field class="w-9/12 mr-4" appearance="outline">
       <mat-label>Filter</mat-label>
       <input matInput placeholder="Search" (keyup)="applyFilter($event)" />
     </mat-form-field>
+    <div class="md:flex sm:flex-none gap-2">
+      <button
+        class="md:ml-4 sm:ml-0 mr-2 w-max"
+        mat-flat-button
+        matTooltip="Import data to add more farmers to the table."
+        (click)="fileInput.click()"
+      >
+        Import Data
+      </button>
+      <input type="file" #fileInput class="hidden" (change)="onFileSelected($event)" />
+      <a routerLink="{{ Uris.addUser }}" mat-flat-button class="w-max">Create Employee/Farmer</a>
+    </div>
   </div>
 </div>
 
