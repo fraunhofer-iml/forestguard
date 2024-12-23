@@ -1,4 +1,4 @@
-import { CompanyDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
+import { CompanyDto, PlotOfLandDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { BehaviorSubject, catchError, EMPTY, map, Observable, switchMap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -50,6 +50,7 @@ export class CompanyComponent {
   protected readonly Uris = Uris;
 
   @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
+
   @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
     this.setDataSourceAttributes();
@@ -81,7 +82,13 @@ export class CompanyComponent {
   setDataSourceAttributes() {
     this.dataSource.paginator = this.paginator ?? null;
     this.dataSource.sort = this.sort ?? null;
-    this.dataSource.sortingDataAccessor = this.dataTableUtilityService.pathDataAccessor;
+    this.dataSource.sortingDataAccessor = (userOrFarmerDto, path) => {
+      if (path === 'name') {
+        return this.getFormattedName(userOrFarmerDto);
+      }
+      return this.dataTableUtilityService.pathDataAccessor(userOrFarmerDto, path);
+    };
+
     this.dataSource.filterPredicate = this.dataTableUtilityService.filterPredicate;
   }
 
@@ -116,5 +123,11 @@ export class CompanyComponent {
           toast.success(Messages.successMasterDataImport);
         });
     }
+  }
+
+  private getFormattedName(userOrFarmerDto: UserOrFarmerDto): string {
+    const firstName = userOrFarmerDto.firstName ? userOrFarmerDto.firstName : '';
+    const lastName = userOrFarmerDto.lastName ? userOrFarmerDto.lastName : '';
+    return `${firstName} ${lastName}`.toLowerCase().trim();
   }
 }
