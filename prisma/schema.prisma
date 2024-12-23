@@ -28,8 +28,6 @@ model Address {
 
   companies Company[]
   users     User[]
-
-  @@unique([street, postalCode, city, state, country])
 }
 
 model Entity {
@@ -138,10 +136,10 @@ model Process {
 }
 
 model ProcessStep {
-  id       String   @id @default(cuid())
-  location String
-  dateOfProcess     DateTime @default(now())
-  dateOfEntry       DateTime @default(now())
+  id            String   @id @default(cuid())
+  location      String
+  dateOfProcess DateTime @default(now())
+  dateOfEntry   DateTime @default(now())
 
   documents Document[]
 
