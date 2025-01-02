@@ -1,5 +1,7 @@
+import { Role } from '@forest-guard/api-interfaces';
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
+import { cooperativeGuard } from '../../core/guards/cooperative.guard';
 import { BatchDetailsComponent } from './details/details.component';
 import { HarvestComponent } from './harvest/harvest.component';
 import { BatchOverviewComponent } from './overview/overview.component';
@@ -13,6 +15,8 @@ export const batchesRoutes: Route[] = [
   {
     path: 'harvest',
     component: HarvestComponent,
+    data: { roles: [Role.Cooperative] },
+    canActivate: [cooperativeGuard],
   },
   {
     path: 'update',

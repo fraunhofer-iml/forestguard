@@ -6,6 +6,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
+import { AuthenticationService } from '../../../core/services/authentication.service';
 import { Messages } from '../../../shared/messages';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { ImportService } from '../../../shared/services/import/import.service';
@@ -90,6 +91,13 @@ describe('CompanyComponent', () => {
           provide: ActivatedRoute,
           useValue: {
             params: of('1'),
+          },
+        },
+        {
+          provide: AuthenticationService,
+          useValue: {
+            getCurrentCompanyId: jest.fn().mockReturnValue(''),
+            isRoleCooperative: jest.fn().mockReturnValue(true),
           },
         },
       ],

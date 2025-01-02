@@ -1,3 +1,4 @@
+import { Role } from '@forest-guard/api-interfaces';
 import { KeycloakEventType, KeycloakService } from 'keycloak-angular';
 import { Injectable } from '@angular/core';
 
@@ -16,6 +17,10 @@ export class AuthenticationService {
 
   getCurrentJwt() {
     return this.keycloak.getKeycloakInstance().token;
+  }
+
+  isRoleCooperative() {
+    return this.keycloak.getUserRoles().some((role: string) => role === Role.Cooperative);
   }
 
   logout(): void {

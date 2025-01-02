@@ -37,9 +37,9 @@ export class BatchOverviewComponent implements AfterViewInit {
   }
 
   constructor(
+    readonly authenticationService: AuthenticationService,
     private readonly companyService: CompanyService,
     private readonly router: Router,
-    private readonly authenticationService: AuthenticationService,
     private readonly dataTableUtilityService: DataTableUtilityService
   ) {}
 
