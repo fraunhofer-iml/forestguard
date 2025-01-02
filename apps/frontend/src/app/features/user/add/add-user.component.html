@@ -39,6 +39,11 @@
       <input matInput formControlName="employeeId" [placeholder]="selectedRole === Roles.USER ? 'Employee ID' : 'Local Farmer ID'" />
     </mat-form-field>
 
+    <mat-form-field *ngIf="selectedRole === Roles.FARMER" class="w-full" appearance="outline">
+      <mat-label>Personal ID</mat-label>
+      <input matInput formControlName="personalId" placeholder="Personal ID" />
+    </mat-form-field>
+
     <div class="flex-none md:flex">
       <mat-form-field class="w-full" appearance="outline">
         <mat-label>First Name</mat-label>
