@@ -52,6 +52,7 @@ describe('AddUserComponent', () => {
           provide: AuthenticationService,
           useValue: {
             getCurrentCompanyId: jest.fn().mockReturnValue(''),
+            isRoleCooperative: jest.fn().mockReturnValue(true),
           },
         },
       ],
