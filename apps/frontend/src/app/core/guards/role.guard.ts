@@ -2,9 +2,10 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 
-export const cooperativeGuard: CanActivateFn = () => {
+export const roleGuard: CanActivateFn = (route) => {
   const authService = inject(AuthenticationService);
   const router = inject(Router);
+  const requiredRoles = (route.data?.['roles'] as string[]) || [];
 
-  return authService.isRoleCooperative() || router.navigateByUrl('/batches');
+  return requiredRoles.some((role) => authService.hasRole(role)) ? true : router.navigateByUrl('/batches');
 };
