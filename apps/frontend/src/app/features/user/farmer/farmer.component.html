@@ -4,9 +4,12 @@
 </div>
 <div class="grid md:grid-cols-2 sm:grid-cols-1 mt-4 gap-4" *ngIf="farmer$ | async as farmer">
   <div class="card">
-    <div class="grid grid-cols-2 mb-4">
-      <h1 class="text-lg font-semibold col-span-1">General Information</h1>
-      <p class="text-neutral-500 text-xs text-end col-span-1">ID: {{ farmer.personalId }}</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 mb-4">
+      <h1 class="text-lg font-semibold">General Information</h1>
+      <div class="mt-2 md:mt-0 md:text-end">
+        <p class="text-neutral-500 text-xs" *ngIf="farmer.employeeId">Local Farmer ID: {{ farmer.employeeId }}</p>
+        <p class="text-neutral-500 text-xs" *ngIf="farmer.personalId">Personal ID: {{ farmer.personalId }}</p>
+      </div>
     </div>
 
     <div class="grid md:grid-cols-2 sm:grid-cols-1 md:space-x-4">
