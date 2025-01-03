@@ -85,24 +85,13 @@ describe('CompanyService', () => {
           },
         },
         address: {
-          connectOrCreate: {
-            create: {
-              street: givenDto.address.street,
-              postalCode: givenDto.address.postalCode,
-              city: givenDto.address.city,
-              state: givenDto.address.state,
-              country: givenDto.address.country,
-              additionalInformation: givenDto.address.additionalInformation,
-            },
-            where: {
-              street_postalCode_city_state_country: {
-                street: givenDto.address.street,
-                postalCode: givenDto.address.postalCode,
-                city: givenDto.address.city,
-                state: givenDto.address.state,
-                country: givenDto.address.country,
-              },
-            },
+          create: {
+            street: givenDto.address.street,
+            postalCode: givenDto.address.postalCode,
+            city: givenDto.address.city,
+            state: givenDto.address.state,
+            country: givenDto.address.country,
+            additionalInformation: givenDto.address.additionalInformation,
           },
         },
       },
@@ -123,7 +112,7 @@ describe('CompanyService', () => {
     await expect(companyService.createCompany(givenDto, '1')).rejects.toThrow(AmqpException);
     await expect(companyService.createCompany(givenDto, '1')).rejects.toMatchObject({
       error: {
-        message: "Company with name 'Acme Corporation' already exists.",
+        message: 'Company with name \'Acme Corporation\' already exists.',
         status: HttpStatus.CONFLICT,
       },
     });
