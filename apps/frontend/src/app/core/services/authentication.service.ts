@@ -19,6 +19,11 @@ export class AuthenticationService {
     return this.keycloak.getKeycloakInstance().token;
   }
 
+  hasRole(role: string): boolean {
+    const roles = this.keycloak.getKeycloakInstance().realmAccess?.roles || [];
+    return roles.includes(role);
+  }
+
   isRoleCooperative() {
     return this.keycloak.getUserRoles().some((role: string) => role === Role.Cooperative);
   }
