@@ -1,7 +1,7 @@
 import { AmqpException } from '@forest-guard/amqp';
 import { ConfigurationService } from '@forest-guard/configuration';
 import { TokenMintDto } from '@nft-folder/blockchain-connector';
-import { HttpStatus, Inject, Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { Batch, PlotOfLand, Proof } from '@prisma/client';
 import { BatchNftService } from './batch-nft.service';
 import { PlotOfLandNftService, PlotOfLandTokenUpdateDto } from './plot-of-land-nft.service';
@@ -31,9 +31,9 @@ export class BlockchainConnectorService implements OnModuleDestroy {
   private blockchainEnabled = false;
 
   constructor(
-    @Inject(BatchNftService) private readonly batchNftService: BatchNftService,
-    @Inject(ConfigurationService) private readonly configurationService: ConfigurationService,
-    @Inject(PlotOfLandNftService) private readonly plotOfLandNftService: PlotOfLandNftService
+    private readonly batchNftService: BatchNftService,
+    private readonly configurationService: ConfigurationService,
+    private readonly plotOfLandNftService: PlotOfLandNftService
   ) {
     this.blockchainEnabled = this.configurationService?.getGeneralConfiguration()?.blockchainEnabled || false;
 

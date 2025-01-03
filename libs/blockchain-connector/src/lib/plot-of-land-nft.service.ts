@@ -9,7 +9,7 @@ import {
   TokenUpdateDto,
   TokenUpdateService,
 } from '@nft-folder/blockchain-connector';
-import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { PlotOfLand, Proof } from '@prisma/client';
 
 export type PlotOfLandTokenUpdateDto = {
@@ -24,11 +24,11 @@ export class PlotOfLandNftService {
   private readonly logger = new Logger(PlotOfLandNftService.name);
 
   constructor(
-    @Inject(DataIntegrityService) private readonly dataIntegrityService: DataIntegrityService,
-    @Inject(FileStorageService) private readonly fileStorageService: FileStorageService,
-    @Inject(TokenMintService) private readonly tokenCreateService: TokenMintService,
-    @Inject(TokenReadService) private readonly tokenReadService: TokenReadService,
-    @Inject(TokenUpdateService) private readonly tokenUpdateService: TokenUpdateService
+    private readonly dataIntegrityService: DataIntegrityService,
+    private readonly fileStorageService: FileStorageService,
+    private readonly tokenCreateService: TokenMintService,
+    private readonly tokenReadService: TokenReadService,
+    private readonly tokenUpdateService: TokenUpdateService
   ) {}
 
   public async createDtoForMintingNft(plotOfLand: PlotOfLand): Promise<TokenMintDto> {
