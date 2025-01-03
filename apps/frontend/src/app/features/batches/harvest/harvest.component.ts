@@ -41,7 +41,10 @@ export class HarvestComponent {
   plotsOfLand$: Observable<PlotOfLandDto[]> = this.harvestFormGroup.controls.processOwner.valueChanges.pipe(
     filter((farmerId): farmerId is string => !!farmerId),
     switchMap((farmerId) => this.plotOfLandService.getPlotsOfLandByFarmerId(farmerId)),
-    tap(() => this.plotsOfLand.enable()),
+    tap(() => {
+      this.plotsOfLand.clear();
+      this.addPlotOfLand();
+    }),
     shareReplay(1)
   );
   filteredPlotsOfLand$: Observable<PlotOfLandDto[]> = this.plotsOfLand$.pipe(
