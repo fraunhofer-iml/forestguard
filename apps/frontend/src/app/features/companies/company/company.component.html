@@ -25,14 +25,14 @@
 
 <div class="card mt-4">
   <h1 class="text-lg font-semibold">Farmers</h1>
-  <div class="md:flex sm:flex-none items-center justify-between mt-2 divide-x-2">
+  <div class="md:flex sm:flex-none md:divide-x-2 items-center justify-between mt-2">
     <mat-form-field class="w-3/4 mr-4" appearance="outline">
       <mat-label>Filter</mat-label>
       <input matInput placeholder="Search" (keyup)="applyFilter($event)" />
     </mat-form-field>
-    <div class="md:flex sm:flex-none gap-2">
+    <div class="md:flex md:space-y-0 md:pl-4 sm:flex-none sm:mt-2 sm:space-y-2 gap-2">
       <button
-        class="md:ml-4 sm:ml-0 mr-2 w-max"
+        class="w-max"
         mat-flat-button
         matTooltip="Import data to add more farmers to the table."
         (click)="fileInput.click()"
