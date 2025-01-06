@@ -41,10 +41,6 @@ export class UiGraphComponent implements OnInit, OnChanges {
   private zoomFn?: any;
   private showTimeout: number | null = null;
   private hideTimeout: number | null = null;
-  private readonly materialIconsMap: { [key: string]: string } = {
-    description: '\ue873',
-    fingerprint: '\ue90d',
-  };
   private readonly euInfoSystemTooltipText = 'EU System Info ID available';
   private readonly processDocumentsTooltipText = 'Process-specific documents available';
   private readonly batchInformationTooltipTemplate = (data: any): string =>
@@ -608,10 +604,6 @@ export class UiGraphComponent implements OnInit, OnChanges {
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
-  }
-
-  private getIconUnicode(iconName: string): string {
-    return this.materialIconsMap[iconName] || '';
   }
 }
 
