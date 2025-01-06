@@ -1,7 +1,9 @@
 <h1 class="font-semibold text-gray-700 pb-4">Company</h1>
 
 <div class="card mb-4 flex justify-end">
-  <a routerLink="{{ Uris.addUser }}" mat-button class="text-end">Create Employee/Farmer</a>
+  <a [routerLink]="Uris.addUser" mat-button class="text-end">
+    {{ authenticationService.hasRole(Role.Cooperative) ? 'Create Employee/Farmer' : 'Create Employee' }}
+  </a>
 </div>
 
 <div class="grid md:grid-cols-2 sm:grid-cols-1" *ngIf="company$ | async as company">
