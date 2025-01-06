@@ -1,4 +1,4 @@
-import { CompanyDto, PlotOfLandDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
+import { CompanyDto, Role, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { BehaviorSubject, catchError, EMPTY, map, Observable, switchMap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -7,6 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
+import { AuthenticationService } from '../../../core/services/authentication.service';
 import { Messages } from '../../../shared/messages';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { ImportService } from '../../../shared/services/import/import.service';
@@ -48,6 +49,7 @@ export class CompanyComponent {
   sort?: MatSort;
 
   protected readonly Uris = Uris;
+  protected readonly Role = Role;
 
   @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
 
@@ -62,6 +64,7 @@ export class CompanyComponent {
   }
 
   constructor(
+    readonly authenticationService: AuthenticationService,
     private readonly route: ActivatedRoute,
     private readonly companyService: CompanyService,
     private readonly importService: ImportService,
