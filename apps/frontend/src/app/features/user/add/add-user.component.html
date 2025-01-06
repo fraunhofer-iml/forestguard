@@ -4,13 +4,13 @@
   >
   <span class="material-symbols-outlined text-lg"> chevron_right </span>
   <h1 class="font-medium">
-    {{ authenticationService.isRoleCooperative() ? 'Create Employee/Farmer' : 'Create Employee' }}
+    {{ authenticationService.hasRole(Role.Cooperative) ? 'Create Employee/Farmer' : 'Create Employee' }}
   </h1>
 </header>
 
 <div class="card grid grid-cols-1 md:grid-cols-2">
   <h1 class="font-semibold text-gray-700 mt-1">
-    Create {{ authenticationService.isRoleCooperative() ? (selectedRole === Roles.USER ? 'Employee' : 'Farmer') : 'Employee' }}
+    Create {{ authenticationService.hasRole(Role.Cooperative) ? (selectedRole === Roles.USER ? 'Employee' : 'Farmer') : 'Employee' }}
   </h1>
   <div class="inline-flex justify-end gap-4 w-full">
     <span class="text-neutral-500 mt-1 hidden md:inline">Role</span>
@@ -22,7 +22,7 @@
       Employee
     </button>
     <button
-      *ngIf="authenticationService.isRoleCooperative()"
+      *ngIf="authenticationService.hasRole(Role.Cooperative)"
       [ngClass]="selectedRole === Roles.FARMER ? 'bg-primary-400 text-white' : 'bg-secondary-800 text-black'"
       class="h-8 rounded-full px-7 text-sm"
       (click)="setSelectedRole(Roles.FARMER)"

@@ -1,3 +1,4 @@
+import { Role } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { of } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -52,7 +53,7 @@ describe('AddUserComponent', () => {
           provide: AuthenticationService,
           useValue: {
             getCurrentCompanyId: jest.fn().mockReturnValue(''),
-            isRoleCooperative: jest.fn().mockReturnValue(true),
+            hasRole: jest.fn().mockReturnValue(Role.Cooperative),
           },
         },
       ],

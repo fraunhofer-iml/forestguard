@@ -6,7 +6,7 @@
       <input matInput placeholder="Search" #input (keyup)="applyFilter($event)" />
     </mat-form-field>
     <div class="flex flex-row gap-4 items-center">
-      <a *ngIf="authenticationService.isRoleCooperative()" routerLink="{{ Uris.addHarvest }}" mat-button class="w-full text-nowrap">Add Harvest</a>
+      <a *ngIf="authenticationService.hasRole(Role.Cooperative)" routerLink="{{ Uris.addHarvest }}" mat-button class="w-full text-nowrap">Add Harvest</a>
       <button mat-flat-button class="w-full text-nowrap" [disabled]="!selection.hasValue()"
         (click)="routeToAddProcess()">
         Add Process

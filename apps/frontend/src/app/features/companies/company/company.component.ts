@@ -1,4 +1,4 @@
-import { CompanyDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
+import { CompanyDto, Role, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { BehaviorSubject, catchError, EMPTY, map, Observable, switchMap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -49,6 +49,7 @@ export class CompanyComponent {
   sort?: MatSort;
 
   protected readonly Uris = Uris;
+  protected readonly Role = Role;
 
   @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
 

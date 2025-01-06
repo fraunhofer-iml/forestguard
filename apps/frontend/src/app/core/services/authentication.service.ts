@@ -1,4 +1,3 @@
-import { Role } from '@forest-guard/api-interfaces';
 import { KeycloakEventType, KeycloakService } from 'keycloak-angular';
 import { Injectable } from '@angular/core';
 
@@ -20,12 +19,7 @@ export class AuthenticationService {
   }
 
   hasRole(role: string): boolean {
-    const roles = this.keycloak.getKeycloakInstance().realmAccess?.roles || [];
-    return roles.includes(role);
-  }
-
-  isRoleCooperative() {
-    return this.keycloak.getUserRoles().some((role: string) => role === Role.Cooperative);
+    return this.keycloak.getUserRoles().includes(role);
   }
 
   logout(): void {

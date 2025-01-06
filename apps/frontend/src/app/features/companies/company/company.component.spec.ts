@@ -1,4 +1,4 @@
-import { CompanyDto, farmer1Mock, UserOrFarmerDto } from '@forest-guard/api-interfaces';
+import { CompanyDto, farmer1Mock, Role, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { of } from 'rxjs';
 import { HttpClient, HttpHandler } from '@angular/common/http';
@@ -97,7 +97,7 @@ describe('CompanyComponent', () => {
           provide: AuthenticationService,
           useValue: {
             getCurrentCompanyId: jest.fn().mockReturnValue(''),
-            isRoleCooperative: jest.fn().mockReturnValue(true),
+            hasRole: jest.fn().mockReturnValue(Role.Cooperative),
           },
         },
       ],

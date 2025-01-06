@@ -1,4 +1,4 @@
-import { BatchDto } from '@forest-guard/api-interfaces';
+import { BatchDto, Role } from '@forest-guard/api-interfaces';
 import { map, Observable } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
@@ -25,6 +25,7 @@ export class BatchOverviewComponent implements AfterViewInit {
   batches$?: Observable<MatTableDataSource<BatchDto>>;
   getUserOrCompanyName = getUserOrCompanyName;
   protected readonly Uris = Uris;
+  protected readonly Role = Role;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     this.sort = ms;
