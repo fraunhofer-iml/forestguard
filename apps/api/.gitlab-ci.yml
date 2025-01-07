@@ -45,6 +45,8 @@ api:run-integration-tests:
       echo "Fetching admin JWT from Keycloak..."
       export TOKEN_RESPONSE=$(curl --request POST --url ${KEYCLOAK_URL}/realms/master/protocol/openid-connect/token --header 'Accept: application/x-www-form-urlencoded' --header 'Content-Type: application/x-www-form-urlencoded' --data grant_type=password --data client_id=admin-cli --data username=${KEYCLOAK_ADMIN} --data password=${KEYCLOAK_ADMIN_PASSWORD})
       export ADMIN_ACCESS_TOKEN=$(echo $TOKEN_RESPONSE | jq -r .access_token)
+      echo $TOKEN_RESPONSE
+      echo $ADMIN_ACCESS_TOKEN
       echo "Importing ForestGuard Keycloak realm configuration..."
       curl --request POST --url ${KEYCLOAK_URL}/admin/realms --header "Accept: application/x-www-form-urlencoded" --header "Authorization: Bearer ${ADMIN_ACCESS_TOKEN}" --header "Content-Type: application/json" --data-binary @${KEYCLOAK_REALM_CONFIG_PATH}
     - npx nx serve api &
