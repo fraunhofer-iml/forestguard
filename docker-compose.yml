@@ -93,7 +93,7 @@ services:
       - '8080:8080'
     command:
       - start-dev
-      # - --import-realm
+      - --import-realm
     networks:
       default:
     environment:
@@ -101,8 +101,8 @@ services:
       KC_LOG_LEVEL: ERROR
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-    # volumes:
-    #   - './keycloak/realm/ForestGuard-realm.json:/opt/keycloak/data/import/realm.json'
+    volumes:
+      - './keycloak/realm/ForestGuard-realm.json:/opt/keycloak/data/import/realm.json'
     healthcheck:
       test: timeout 5s bash -c ':> /dev/tcp/localhost/8080'
       start_period: 10s
