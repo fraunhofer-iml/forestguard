@@ -33,7 +33,7 @@ api:run-integration-tests:
     AMQP_URI: amqp://rabbitmq:5672
     KEYCLOAK_ADMIN: admin
     KEYCLOAK_ADMIN_PASSWORD: admin
-    KEYCLOAK_URL: http://keycloak:8080
+    KEYCLOAK_URL: https://keycloak:8080
     KEYCLOAK_REALM_CONFIG_PATH: ./keycloak/realm/ForestGuard-realm.json
     BLOCKCHAIN_ENABLED: false
   script:
