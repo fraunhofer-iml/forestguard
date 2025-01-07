@@ -21,7 +21,7 @@ api:run-integration-tests:
       alias: postgres
     - name: rabbitmq:3-alpine
       alias: rabbitmq
-    - name: quay.io/keycloak/keycloak:26.0
+    - name: quay.io/keycloak/keycloak:24.0
       alias: keycloak
       command:
         - start-dev
