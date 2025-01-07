@@ -1,5 +1,11 @@
 <h1 class="font-semibold text-gray-700 pb-4">Company</h1>
 
+<div class="card mb-4 flex justify-end">
+  <a [routerLink]="Uris.addUser" mat-button class="text-end">
+    {{ authenticationService.hasRole(Role.Cooperative) ? 'Create Employee/Farmer' : 'Create Employee' }}
+  </a>
+</div>
+
 <div class="grid md:grid-cols-2 sm:grid-cols-1" *ngIf="company$ | async as company">
   <div class="card grid md:grid-cols-2 md:mr-4 sm:mr-0">
     <span class="border-b-2 py-2 font-medium">Name</span>
@@ -25,7 +31,7 @@
 
 <div class="card mt-4">
   <h1 class="text-lg font-semibold">Farmers</h1>
-  <div class="lg:flex lg:divide-x-2 items-center justify-between mt-2">
+  <div class="md:flex md:divide-x-2 items-center justify-between mt-2">
     <mat-form-field class="w-full mr-4" appearance="outline">
       <mat-label>Filter</mat-label>
       <input matInput placeholder="Search" (keyup)="applyFilter($event)" />
