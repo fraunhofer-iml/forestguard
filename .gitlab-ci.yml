@@ -11,7 +11,7 @@ stages:
   - deploy
 
 .default:
-  image: node:20.13-alpine3.19
+  image: node:20.18-alpine3.21
   interruptible: true
   cache:
     key:
