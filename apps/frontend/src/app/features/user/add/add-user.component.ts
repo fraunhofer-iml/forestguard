@@ -1,4 +1,4 @@
-import { FGFile, UserOrFarmerDto } from '@forest-guard/api-interfaces';
+import { FGFile, Role, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { catchError, EMPTY, merge } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -35,6 +35,7 @@ export class AddUserComponent {
   uploadedFiles: { file: File; documentType?: string }[] = [];
 
   protected readonly Roles = Roles;
+  protected readonly Role = Role;
 
   constructor(
     public authenticationService: AuthenticationService,

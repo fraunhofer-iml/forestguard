@@ -18,6 +18,10 @@ export class AuthenticationService {
     return this.keycloak.getKeycloakInstance().token;
   }
 
+  hasRole(role: string): boolean {
+    return this.keycloak.getUserRoles().includes(role);
+  }
+
   logout(): void {
     this.keycloak.logout(window.location.origin);
   }
