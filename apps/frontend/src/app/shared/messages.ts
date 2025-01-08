@@ -13,4 +13,5 @@ export enum Messages {
   invalidGeoData = 'Invalid JSON format.',
   errorCompany = 'Please add a company before proceeding',
   errorMasterDataImport = 'Invalid File',
+  errorUserExists = 'Farmer or Employee with this Identifier already exists',
 }
