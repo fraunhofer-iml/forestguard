@@ -27,11 +27,16 @@ export class BatchReadService {
     const batch = await this.prismaService.batch.findUniqueOrThrow(readBatchByIdQuery(batchId));
 
     if (batch.processStep.farmedLand) {
-      return batch.processStep.farmedLand.proofs?.length === 2;
+      return batch.processStep.farmedLand.proofs && batch.processStep.farmedLand.proofs?.length === 2;
     }
 
     if (!batch.processStep.farmedLand && batch.ins.length > 0) {
-      return batch.ins.every((previousBatch) => this.getStatusOfBatch(previousBatch.id));
+      for (const inStep of batch.ins) {
+        if (!(await this.getStatusOfBatch(inStep.id))) {
+          return false;
+        }
+      }
+      return true;
     }
 
     return false;
