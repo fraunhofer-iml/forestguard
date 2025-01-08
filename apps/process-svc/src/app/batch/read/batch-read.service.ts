@@ -26,7 +26,7 @@ export class BatchReadService {
     const batch = await this.prismaService.batch.findUniqueOrThrow(readBatchByIdQuery(batchId));
 
     if (batch.processStep.farmedLand) {
-      return batch.processStep.farmedLand.proofs && batch.processStep.farmedLand.proofs?.length === 2;
+      return batch.processStep.farmedLand.proofs?.length === 2;
     }
 
     if (!batch.processStep.farmedLand && batch.ins.length > 0) {
