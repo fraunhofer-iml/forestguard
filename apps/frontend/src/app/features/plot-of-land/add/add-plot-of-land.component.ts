@@ -100,7 +100,6 @@ export class AddPlotOfLandComponent {
     this.farmers$ = this.companyService.getFarmersByCompanyId(this.authenticationService.getCurrentCompanyId() ?? '');
     this.users$ = this.userService.getUsers();
     this.coffeeOptions$ = this.cultivationService.readCultivationsByCommodity('coffee').pipe(
-      tap((cultivations) => console.log(cultivations)),
       switchMap(
         (cultivations) =>
           this.plotOfLandFormGroup.get('cultivationSort')?.valueChanges.pipe(
