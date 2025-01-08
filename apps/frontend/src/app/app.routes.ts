@@ -18,22 +18,22 @@ export const appRoutes: Route[] = [
       {
         path: 'batches',
         loadChildren: () => import('./features/batches/batches.module').then((m) => m.BatchesModule),
-        canActivate: [authGuard, roleGuard],
+        canActivate: [authGuard],
       },
       {
         path: 'companies',
         loadChildren: () => import('./features/companies/companies.module').then((m) => m.CompaniesModule),
-        canActivate: [authGuard, roleGuard],
+        canActivate: [authGuard],
       },
       {
         path: 'pols',
         loadChildren: () => import('./features/plot-of-land/plot-of-land.module').then((m) => m.PlotOfLandModule),
-        canActivate: [authGuard, roleGuard],
+        canActivate: [authGuard],
       },
       {
         path: 'users',
         loadChildren: () => import('./features/user/user.module').then((m) => m.UserModule),
-        canActivate: [authGuard, roleGuard],
+        canActivate: [authGuard],
       },
       {
         path: 'unauthorized',
