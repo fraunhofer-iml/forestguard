@@ -1,7 +1,7 @@
 import { AmqpException } from '@forest-guard/amqp';
 import { ConfigurationService } from '@forest-guard/configuration';
 import { TokenMintDto } from '@nft-folder/blockchain-connector';
-import { HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { Batch, PlotOfLand, Proof } from '@prisma/client';
 import { BatchNftService } from './batch-nft.service';
 import { PlotOfLandNftService, PlotOfLandTokenUpdateDto } from './plot-of-land-nft.service';
@@ -17,54 +17,82 @@ type BlockchainRequest = {
   type: BlockchainRequestType;
   dto: TokenMintDto | PlotOfLandTokenUpdateDto;
   parentIds?: string[];
+  numberOfRetries: number;
 };
 
 @Injectable()
-export class BlockchainConnectorService {
-  private readonly DURATION_IN_MS = 500;
-  private readonly logger = new Logger('BlockchainConnectorService');
+export class BlockchainConnectorService implements OnModuleDestroy {
+  private readonly logger = new Logger(BlockchainConnectorService.name);
+  private readonly delayInMs = 500;
+  private readonly maxRetries = 10;
+  private readonly blockchainRequestQueue: BlockchainRequest[] = [];
 
-  private blockchainEnabled: boolean;
-  private blockchainRequestQueue: BlockchainRequest[] = [];
+  private serviceRunning = true;
+  private blockchainEnabled = false;
 
   constructor(
     private readonly batchNftService: BatchNftService,
-    private readonly plotOfLandNftService: PlotOfLandNftService,
-    private readonly configurationService: ConfigurationService
+    private readonly configurationService: ConfigurationService,
+    private readonly plotOfLandNftService: PlotOfLandNftService
   ) {
     this.blockchainEnabled = this.configurationService?.getGeneralConfiguration()?.blockchainEnabled || false;
 
     if (this.blockchainEnabled) {
-      this.logger.log('### Blockchain is enabled. Starting worker... ###');
+      this.logger.log('### Blockchain is ENABLED. Worker is starting... ###');
       this.startWorker();
     } else {
-      this.logger.log('### Blockchain is disabled. Worker will not start. ###');
+      this.logger.log('### Blockchain is DISABLED. Worker will not start. ###');
     }
+  }
+
+  public async onModuleDestroy() {
+    this.serviceRunning = false;
   }
 
   private async startWorker() {
     // TODO-MP: check node worker thread
-    // Set to true intentionally to prevent the worker from stopping
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
+    while (this.serviceRunning) {
       if (this.blockchainRequestQueue.length === 0) {
-        await this.waitForDelay(this.DURATION_IN_MS); 
+        await this.delayBlockchainRequest();
       } else {
-        const firstBlockchainRequestFromQueue = this.blockchainRequestQueue.shift();
-
-        if (firstBlockchainRequestFromQueue) {
-          await this.processBlockchainRequest(firstBlockchainRequestFromQueue);
-        }
+        await this.handleBlockchainRequest();
       }
     }
   }
 
-  private waitForDelay(durationInMilliseconds: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, durationInMilliseconds));
+  private async delayBlockchainRequest(): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, this.delayInMs));
+  }
+
+  private async handleBlockchainRequest() {
+    this.logger.log(`Handling blockchain request | Queue length: ${this.blockchainRequestQueue.length}`);
+
+    const firstBlockchainRequestFromQueue = this.blockchainRequestQueue.shift();
+
+    if (firstBlockchainRequestFromQueue) {
+      if (firstBlockchainRequestFromQueue.numberOfRetries > 0) {
+        await this.delayBlockchainRequest();
+      }
+      await this.processBlockchainRequest(firstBlockchainRequestFromQueue);
+    }
   }
 
   private async processBlockchainRequest(blockchainRequest: BlockchainRequest) {
-    const { type, dto, parentIds } = blockchainRequest;
+    const id: string = 'remoteId' in blockchainRequest.dto ? blockchainRequest.dto.remoteId : blockchainRequest.dto.plotOfLandId;
+    this.logger.log(
+      `Processing blockchain request | ID: ${id} | Type: ${blockchainRequest.type} | Retries: ${blockchainRequest.numberOfRetries}`
+    );
+
+    blockchainRequest.numberOfRetries++;
+
+    const { type, dto, parentIds, numberOfRetries } = blockchainRequest;
+
+    if (numberOfRetries > this.maxRetries) {
+      throw new AmqpException(
+        `Number of maximum retries (${this.maxRetries}) exceeded for blockchain request of type: ${type}`,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
 
     switch (type) {
       case BlockchainRequestType.MINT_PLOT_OF_LAND_NFT:
@@ -99,6 +127,7 @@ export class BlockchainConnectorService {
     this.blockchainRequestQueue.push({
       type: BlockchainRequestType.MINT_PLOT_OF_LAND_NFT,
       dto: dto,
+      numberOfRetries: 0,
     });
   }
 
@@ -112,6 +141,7 @@ export class BlockchainConnectorService {
     this.blockchainRequestQueue.push({
       type: BlockchainRequestType.UPDATE_PLOT_OF_LAND_NFT,
       dto: dto,
+      numberOfRetries: 0,
     });
   }
 
@@ -126,6 +156,7 @@ export class BlockchainConnectorService {
     this.blockchainRequestQueue.push({
       type: BlockchainRequestType.MINT_BATCH_ROOT_NFT,
       dto: dto,
+      numberOfRetries: 0,
     });
   }
 
@@ -140,6 +171,7 @@ export class BlockchainConnectorService {
       type: BlockchainRequestType.MINT_BATCH_LEAF_NFT,
       dto: dto,
       parentIds: batch.parentIds,
+      numberOfRetries: 0,
     });
   }
 }

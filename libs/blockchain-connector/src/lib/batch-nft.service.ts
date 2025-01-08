@@ -5,8 +5,8 @@ import { Batch } from '@prisma/client';
 
 @Injectable()
 export class BatchNftService {
-  private readonly logger = new Logger('BatchNftService');
   private readonly batchesUrl = 'https://forest-guard.apps.blockchain-europe.iml.fraunhofer.de/batches/';
+  private readonly logger = new Logger(BatchNftService.name);
 
   constructor(
     private readonly dataIntegrityService: DataIntegrityService,
@@ -62,12 +62,12 @@ export class BatchNftService {
       const parentNfts = await this.tokenReadService.getTokens(parentId);
 
       if (parentNfts.length === 0) {
-        this.logger.log(`No NFT found for parentId '${parentId}'. Putting request back into queue.`);
+        this.logger.log(`No NFT found for parent Batch '${parentId}'. Putting request back into queue.`);
         requeueBlockchainRequest();
         return;
       } else if (parentNfts.length > 1) {
         throw new AmqpException(
-          `${parentNfts.length} NFTs found for parentId '${parentId}'. Unable to determine which one to use as a parent.`,
+          `${parentNfts.length} NFTs found for parent Batch '${parentId}'. Unable to determine which one to use as a parent.`,
           HttpStatus.CONFLICT
         );
       }

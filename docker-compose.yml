@@ -20,18 +20,17 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
   minio:
-    image: quay.io/minio/minio
+    image: minio/minio:RELEASE.2024-09-22T00-33-43Z
     restart: unless-stopped
     environment:
-      # TODO-MP: these envs are deprecated https://min.io/docs/minio/linux/reference/minio-server/minio-server.html#envvar.MINIO_ACCESS_KEY
-      - MINIO_ACCESS_KEY=admin
-      - MINIO_SECRET_KEY=blockchain
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=blockchain
     ports:
       - '9000:9000'
       - '9090:9090'
     volumes:
       - minio-data:/data
-    command: server /data --console-address ":9090"
+    command: server /data --address ":9000" --console-address ":9090"
 
   minio-setup:
     image: minio/mc
@@ -40,12 +39,15 @@ services:
         condition: service_started
     entrypoint: >
       /bin/sh -c "
-      echo '### MinIO setup started ...';
-      mc alias set local http://minio:9000 admin blockchain;
-      mc mb local/forest-guard;
-      mc anonymous set download local/forest-guard;
-      echo '### ... MinIO setup ended';
-      exit 0
+      echo '### MinIO setup started' &&
+      mc alias set local http://minio:9000 admin blockchain &&
+      if mc ls local/forest-guard 2>/dev/null; then
+        echo 'Bucket local/forest-guard already exists';
+      else
+        mc mb local/forest-guard &&
+        mc anonymous set download local/forest-guard
+      fi &&
+      echo '### MinIO setup ended'
       "
 
   ##############
