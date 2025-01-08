@@ -1,3 +1,4 @@
 export enum Role {
-  Cooperative = 'cooperative',
+  COOPERATIVE = 'cooperative',
+  ENABLED = 'enabled',
 }
