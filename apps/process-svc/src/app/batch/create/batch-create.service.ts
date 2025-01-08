@@ -86,12 +86,7 @@ export class BatchCreateService {
       for (const currentInBatchId of batch.ins) {
         // TODO-MP: extract to private method
         const fetchedBatch = await this.prismaService.batch.findUnique({ where: { id: currentInBatchId } });
-        if (!fetchedBatch) {
-          throw new AmqpException(`No batch with id ${currentInBatchId} found. `, HttpStatus.NOT_FOUND);
-        }
-        if (!fetchedBatch.active) {
-          throw new AmqpException(`Batch '${currentInBatchId}' is already inactive. `, HttpStatus.BAD_REQUEST);
-        }
+        this.verifyActive(fetchedBatch);
         // END
       }
     }
@@ -156,12 +151,7 @@ export class BatchCreateService {
     for (const currentBatch of batches) {
       // TODO-MP: extract to private method
       const fetchedBatch = await this.prismaService.batch.findUnique({ where: { id: currentBatch.id } });
-      if (!fetchedBatch) {
-        throw new AmqpException(`No batch with id ${currentBatch} found. `, HttpStatus.NOT_FOUND);
-      }
-      if (!fetchedBatch.active) {
-        throw new AmqpException(`Batch '${currentBatch}' is already inactive. `, HttpStatus.BAD_REQUEST);
-      }
+      this.verifyActive(fetchedBatch);
       // END
     }
 
@@ -194,5 +184,15 @@ export class BatchCreateService {
         active: false,
       },
     });
+  }
+
+  private async verifyActive(fetchedBatch) {
+    if (!fetchedBatch) {
+      throw new AmqpException(`No batch with id ${fetchedBatch.id} found. `, HttpStatus.NOT_FOUND);
+    }
+    if (!fetchedBatch.active) {
+      throw new AmqpException(`Batch '${fetchedBatch.id}' is already inactive. `, HttpStatus.BAD_REQUEST);
+    }
+    return;
   }
 }
