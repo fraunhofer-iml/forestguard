@@ -20,6 +20,7 @@ export class GenerateUserService {
       formGroup.value.lastName ?? '',
       formGroup.value.email ?? '',
       formGroup.value.employeeId ?? '',
+      formGroup.value.personalId ?? '',
       formGroup.value.phoneNumber ?? '',
       this.generateNewAddress(formGroup)
     );
