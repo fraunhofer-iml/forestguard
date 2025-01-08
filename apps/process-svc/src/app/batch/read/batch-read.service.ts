@@ -24,12 +24,13 @@ export class BatchReadService {
 
   async getStatusOfBatch(batchId: string): Promise<boolean> {
     const batch = await this.prismaService.batch.findUniqueOrThrow(readBatchByIdQuery(batchId));
+    const farmedLand = batch.processStep.farmedLand;
 
-    if (batch.processStep.farmedLand) {
+    if (farmedLand) {
       return batch.processStep.farmedLand.proofs?.length === 2;
     }
 
-    if (!batch.processStep.farmedLand && batch.ins.length > 0) {
+    if (!farmedLand && batch.ins.length > 0) {
       for (const inStep of batch.ins) {
         if (!(await this.getStatusOfBatch(inStep.id))) {
           return false;
