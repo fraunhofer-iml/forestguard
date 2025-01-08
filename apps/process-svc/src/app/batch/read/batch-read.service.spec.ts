@@ -60,6 +60,7 @@ describe('BatchReadService', () => {
     const mockBatches = [mockedPrismaBatchWithRelations1, mockedPrismaBatchWithRelations2];
 
     jest.spyOn(prisma.batch, 'findMany').mockResolvedValue(mockBatches);
+    jest.spyOn(prisma.batch, 'findUniqueOrThrow').mockResolvedValue(mockBatches[0]);
 
     const result = await service.readBatchesByCompanyId(companyId, '{}', '{}');
     expect(result).toHaveLength(mockBatches.length);
