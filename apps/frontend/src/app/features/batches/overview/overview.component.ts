@@ -1,5 +1,5 @@
 import { BatchDto, Role } from '@forest-guard/api-interfaces';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
@@ -17,7 +17,16 @@ import { getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
   templateUrl: './overview.component.html',
 })
 export class BatchOverviewComponent implements AfterViewInit {
-  displayedColumnsOfBatches: string[] = ['select', 'batchId', 'process', 'dateOfProcess', 'dateOfEntry', 'processOwner', 'weight'];
+  displayedColumnsOfBatches: string[] = [
+    'select',
+    'status',
+    'batchId',
+    'process',
+    'dateOfProcess',
+    'dateOfEntry',
+    'processOwner',
+    'weight',
+  ];
   dataSource: MatTableDataSource<BatchDto> = new MatTableDataSource<BatchDto>();
   selection = new SelectionModel<BatchDto>(true, []);
   paginator?: MatPaginator;
