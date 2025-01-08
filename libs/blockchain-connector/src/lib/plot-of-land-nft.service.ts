@@ -1,3 +1,4 @@
+import { buffer } from 'stream/consumers';
 import { AmqpException } from '@forest-guard/amqp';
 import { FileStorageService } from '@forest-guard/file-storage';
 import {
@@ -10,7 +11,6 @@ import {
 } from '@nft-folder/blockchain-connector';
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { PlotOfLand, Proof } from '@prisma/client';
-import { buffer } from 'stream/consumers';
 
 export type PlotOfLandTokenUpdateDto = {
   plotOfLandId: string;
@@ -20,8 +20,8 @@ export type PlotOfLandTokenUpdateDto = {
 
 @Injectable()
 export class PlotOfLandNftService {
-  private readonly logger = new Logger('PlotOfLandNftService');
   private readonly plotOfLandsUrl = 'https://forest-guard.apps.blockchain-europe.iml.fraunhofer.de/pols/';
+  private readonly logger = new Logger(PlotOfLandNftService.name);
 
   constructor(
     private readonly dataIntegrityService: DataIntegrityService,
