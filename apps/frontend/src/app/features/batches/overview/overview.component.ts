@@ -63,7 +63,6 @@ export class BatchOverviewComponent implements AfterViewInit {
     this.batches$ = this.companyService
       .getBatchesOfCompany(this.authenticationService.getCurrentCompanyId() ?? '', '{"active": true}')
       .pipe(
-        tap((batches) => console.log(batches)),
         map((batches) => {
           const dataSource = this.dataSource;
           dataSource.data = batches;
