@@ -18,7 +18,6 @@ export class BatchReadService {
     const batchDtos = batches.map(mapBatchPrismaToBatchDto);
     for (const batch of batchDtos) {
       batch.hasAllProofs = await this.getStatusOfBatch(batch.id);
-      console.log(batch.hasAllProofs);
     }
     return batchDtos;
   }
