@@ -56,6 +56,7 @@ describe('GenerateUserService', (): void => {
       lastName: ['Doe'],
       email: ['john.doe@example.com'],
       employeeId: ['123'],
+      personalId: ['234'],
       street: ['123 Street'],
       postalCode: ['12345'],
       city: ['City'],
@@ -71,6 +72,7 @@ describe('GenerateUserService', (): void => {
         'Doe',
         'john.doe@example.com',
         '123',
+        '234',
         '',
         new AddressCreateDto('123 Street', '12345', 'City', 'State', 'Country', 'AdditionalInformation')
       )

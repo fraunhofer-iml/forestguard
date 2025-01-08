@@ -2,6 +2,7 @@ import { FormControl } from '@angular/forms';
 
 export interface UserForm {
   employeeId: FormControl<string | null>;
+  personalId: FormControl<string | null>;
   firstName: FormControl<string | null>;
   lastName: FormControl<string | null>;
   email: FormControl<string | null>;
