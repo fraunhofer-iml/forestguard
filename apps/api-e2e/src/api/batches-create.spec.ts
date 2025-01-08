@@ -81,6 +81,7 @@ describe('/batches-create', () => {
       const givenBatchCombinedCreateDto = await prepareXPlotsOfLandCreation(batchCreateDto, 0);
       const plotOfLand1 = await preparePlotOfLand(batchCreateDto.processStep.executedBy);
       const farmerDto = structuredClone(givenFarmer);
+      farmerDto.employeeId = crypto.randomUUID();
       farmerDto.personalId = 'pf2';
       const farmer2 = await prepareFarmerWithDto(farmerDto);
       const plotOfLand2 = await preparePlotOfLand(farmer2.data.id);
