@@ -1,21 +1,23 @@
 import {
   FarmerCreateDto,
   Role,
-  TAuthenticatedUser, UserCreateDto,
+  TAuthenticatedUser,
+  UserCreateDto,
   UserDto,
   UserOrFarmerDto,
   UserUpdateDto,
 } from '@forest-guard/api-interfaces';
+import { KeycloakUtil } from '@forest-guard/util';
 import { AuthenticatedUser, Roles } from 'nest-keycloak-connect';
 import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Document } from '@prisma/client';
-import { KeycloakUtil } from '@forest-guard/util';
+import { UserService } from './user.service';
 
 @ApiTags('Users')
 @Controller('users')
+@Roles({ roles: [KeycloakUtil.toRealmRole(Role.ENABLED)] })
 export class UserController {
   constructor(private userService: UserService) {}
 
@@ -52,7 +54,7 @@ export class UserController {
   }
 
   @Post('farmers')
-  @Roles({ roles: [KeycloakUtil.toRealmRole(Role.Cooperative)]})
+  @Roles({ roles: [KeycloakUtil.toRealmRole(Role.COOPERATIVE)] })
   @ApiBearerAuth()
   @ApiOperation({ description: 'Create a farmer' })
   @ApiCreatedResponse({ description: 'Successful creation.' })

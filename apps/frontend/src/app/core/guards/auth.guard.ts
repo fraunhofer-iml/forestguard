@@ -13,11 +13,13 @@ export const authGuard: CanActivateFn = async (route: ActivatedRouteSnapshot, st
   const router: Router = inject(Router);
   const companyService: CompanyService = inject(CompanyService);
 
+  if (!authenticationService.isEnabled()) {
+    return router.navigateByUrl('/unauthorized?enabled=true');
+  }
+
   const keycloakCompanyId = authenticationService.getCurrentCompanyId();
 
   const isCompanyAddUrl = state.url.includes(Uris.addCompany);
-  console.log(isCompanyAddUrl);
-  console.log(state.url.includes(Uris.addCompany));
   if (isCompanyAddUrl) {
     return true;
   }

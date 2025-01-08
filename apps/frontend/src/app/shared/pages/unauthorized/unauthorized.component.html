@@ -1,0 +1,8 @@
+<div class="w-full h-screen flex flex-col gap-4 items-center justify-center">
+  <h1 class="text-xl font-semibold">UNAUTHORIZED</h1>
+  @if (enabled) {
+    <p class="font-medium">Your account needs to be enabled by an administrator</p>
+  } @else {
+    <p class="font-medium">You do not have permission to access this page</p>
+  }
+</div>
