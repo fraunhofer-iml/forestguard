@@ -82,16 +82,17 @@ export class BatchCreateService {
       data: processStepQuery(batchCreateDtos[0].processStep),
     });
 
-    // TODO-MP: extract to private method
     for (const batch of batchCreateDtos) {
-      for (const batchId of batch.ins) {
-        const fetchedBatch = await this.prismaService.batch.findUnique({ where: { id: batchId } });
+      for (const currentInBatchId of batch.ins) {
+        // TODO-MP: extract to private method
+        const fetchedBatch = await this.prismaService.batch.findUnique({ where: { id: currentInBatchId } });
         if (!fetchedBatch) {
-          throw new AmqpException(`No batch with id ${batchId} found. `, HttpStatus.NOT_FOUND);
+          throw new AmqpException(`No batch with id ${currentInBatchId} found. `, HttpStatus.NOT_FOUND);
         }
         if (!fetchedBatch.active) {
-          throw new AmqpException(`Batch '${batchId}' is already inactive. `, HttpStatus.BAD_REQUEST);
+          throw new AmqpException(`Batch '${currentInBatchId}' is already inactive. `, HttpStatus.BAD_REQUEST);
         }
+        // END
       }
     }
 
@@ -152,7 +153,17 @@ export class BatchCreateService {
   }
 
   private async mergeIntoOneHarvestBatch(batchCreateDto: BatchCreateDto, batches: Batch[]): Promise<Batch> {
-    // TODO-MP: call new private method and pass `batches`
+    for (const currentBatch of batches) {
+      // TODO-MP: extract to private method
+      const fetchedBatch = await this.prismaService.batch.findUnique({ where: { id: currentBatch.id } });
+      if (!fetchedBatch) {
+        throw new AmqpException(`No batch with id ${currentBatch} found. `, HttpStatus.NOT_FOUND);
+      }
+      if (!fetchedBatch.active) {
+        throw new AmqpException(`Batch '${currentBatch}' is already inactive. `, HttpStatus.BAD_REQUEST);
+      }
+      // END
+    }
 
     const mergeBatchCreateDto = structuredClone(batchCreateDto);
     mergeBatchCreateDto.ins = batches.map((batch) => batch.id);
