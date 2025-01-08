@@ -22,7 +22,7 @@ export class AuthenticationService {
     return this.keycloak.getUserRoles().includes(role);
   }
 
-  isEnabled(): boolean {
+  isAccountEnabled(): boolean {
     return this.hasRole('enabled');
   }
 

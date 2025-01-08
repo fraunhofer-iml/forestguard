@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './unauthorized.component.html',
 })
 export class UnauthorizedComponent {
-  enabled = this.route.snapshot.queryParams['enabled'] ?? false;
+  accountDisabled = this.route.snapshot.queryParams['account-disabled'] ?? false;
 
   constructor(private route: ActivatedRoute) {}
 }
