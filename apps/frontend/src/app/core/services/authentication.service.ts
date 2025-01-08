@@ -22,6 +22,10 @@ export class AuthenticationService {
     return this.keycloak.getUserRoles().includes(role);
   }
 
+  isAccountEnabled(): boolean {
+    return this.hasRole('enabled');
+  }
+
   logout(): void {
     this.keycloak.logout(window.location.origin);
   }

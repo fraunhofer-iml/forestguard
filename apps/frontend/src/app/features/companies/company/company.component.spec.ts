@@ -97,7 +97,7 @@ describe('CompanyComponent', () => {
           provide: AuthenticationService,
           useValue: {
             getCurrentCompanyId: jest.fn().mockReturnValue(''),
-            hasRole: jest.fn().mockReturnValue(Role.Cooperative),
+            hasRole: jest.fn().mockReturnValue(Role.COOPERATIVE),
           },
         },
       ],
