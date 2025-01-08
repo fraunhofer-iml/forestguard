@@ -11,7 +11,7 @@ import {
 } from '@forest-guard/api-interfaces';
 import { Icon, LatLng, latLng, Layer, marker, polygon, tileLayer } from 'leaflet';
 import { toast } from 'ngx-sonner';
-import { combineLatest, mergeMap, Observable } from 'rxjs';
+import { combineLatest, map, mergeMap, Observable, startWith, switchMap, tap } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -38,7 +38,7 @@ export class AddPlotOfLandComponent {
   valueChangesOfGeoDataStandard$: Observable<string | null> | undefined;
   users$: Observable<UserDto[]>;
   farmers$: Observable<UserOrFarmerDto[]>;
-  coffeeOptions$: Observable<CultivationDto[]>;
+  coffeeOptions$?: Observable<CultivationDto[]>;
   plotOfLandFormGroup: FormGroup<PlotOfLandForm> = new FormGroup<PlotOfLandForm>({
     processOwner: new FormControl(null, Validators.required),
     region: new FormControl(null, Validators.required),
@@ -99,7 +99,16 @@ export class AddPlotOfLandComponent {
   ) {
     this.farmers$ = this.companyService.getFarmersByCompanyId(this.authenticationService.getCurrentCompanyId() ?? '');
     this.users$ = this.userService.getUsers();
-    this.coffeeOptions$ = this.cultivationService.readCultivationsByCommodity('coffee');
+    this.coffeeOptions$ = this.cultivationService.readCultivationsByCommodity('coffee').pipe(
+      tap((cultivations) => console.log(cultivations)),
+      switchMap(
+        (cultivations) =>
+          this.plotOfLandFormGroup.get('cultivationSort')?.valueChanges.pipe(
+            startWith(''),
+            map((value) => cultivations.filter((cultivation) => cultivation.sort.includes(value ?? '')))
+          ) ?? []
+      )
+    );
     this.handleGeoDataValueChange();
   }
 
