@@ -10,6 +10,7 @@ import { BatchService } from '../../../shared/services/batch/batch.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { ProcessStepService } from '../../../shared/services/process-step/process.step.service';
 import { Uris } from '../../../shared/uris';
+import { getFormattedUserName } from '../../../shared/utils/user-company-utils';
 
 @Component({
   selector: 'app-batch-update',
@@ -18,6 +19,7 @@ import { Uris } from '../../../shared/uris';
 export class BatchUpdateComponent implements OnInit {
   batchIds: string[] = this.route.snapshot.queryParams['batchIds']?.split(',') || [];
   uploadedFiles: FGFile[] = [];
+  maxDate: Date = new Date();
   formGroup: FormGroup = new FormGroup({
     location: new FormControl(null, Validators.required),
     dateOfProcess: new FormControl(new Date(), Validators.required),
@@ -42,6 +44,8 @@ export class BatchUpdateComponent implements OnInit {
   users$: Observable<UserDto[]> = this.currentCompany.pipe(map((company) => company.employees ?? []));
   farmers$: Observable<UserOrFarmerDto[]> = this.currentCompany.pipe(map((company) => company.farmers ?? []));
   batches$ = new Observable<BatchDto[]>();
+
+  protected readonly getFormattedUserName = getFormattedUserName;
 
   constructor(
     private readonly route: ActivatedRoute,

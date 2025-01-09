@@ -31,20 +31,18 @@
 
 <div class="card mt-4">
   <h1 class="text-lg font-semibold">Farmers</h1>
-  <div class="md:flex sm:flex-none items-center justify-between mt-2 gap-4">
-    <mat-form-field class="w-full mb-0" appearance="outline">
+  <div class="flex flex-col lg:flex-row lg:divide-x-2 mt-2 gap-2">
+    <mat-form-field class="w-full" appearance="outline">
       <mat-label>Filter</mat-label>
       <input matInput placeholder="Search" (keyup)="applyFilter($event)" />
     </mat-form-field>
-    <button
-      mat-flat-button
-      class="md:w-48 sm:w-full sm:mt-2"
-      matTooltip="Import data to add more farmers to the table."
-      (click)="fileInput.click()"
-    >
-      Import Data
-    </button>
-    <input type="file" #fileInput class="hidden" (change)="onFileSelected($event)" />
+    <div class="flex flex-col md:flex-row gap-2 lg:pl-2 md:items-center">
+      <button class="w-max" mat-flat-button matTooltip="Import data to add more farmers to the table." (click)="fileInput.click()">
+        Import Data
+      </button>
+      <input type="file" #fileInput class="hidden" (change)="onFileSelected($event)" />
+      <a routerLink="{{ Uris.addUser }}" mat-flat-button class="w-max">Create Employee/Farmer</a>
+    </div>
   </div>
 </div>
 
