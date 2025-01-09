@@ -1,7 +1,8 @@
+import { UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { FormControl } from '@angular/forms';
 
 export interface PlotOfLandForm {
-  processOwner: FormControl<string | null>;
+  processOwner: FormControl<string | UserOrFarmerDto | null>;
   region: FormControl<string | null>;
   plotOfLand: FormControl<string | null>;
   cultivationSort: FormControl<string | null>;

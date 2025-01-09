@@ -1,6 +1,6 @@
 import { CompanyDto, PlotOfLandDto, UserDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
-import { catchError, EMPTY, filter, map, Observable, shareReplay, startWith, switchMap, tap } from 'rxjs';
+import { catchError, EMPTY, filter, map, Observable, of, shareReplay, startWith, switchMap, tap } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../../core/services/authentication.service';
@@ -8,7 +8,7 @@ import { Messages } from '../../../shared/messages';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
-import { getFormattedUserName } from '../../../shared/utils/user-company-utils';
+import { getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
 import { HarvestForm } from './model/forms';
 import { HarvestService } from './service/harvest.service';
 
@@ -20,13 +20,61 @@ export class HarvestComponent {
   companyId = this.authenticationService.getCurrentCompanyId() ?? '';
   loading = false;
   companies$: Observable<CompanyDto[]> = this.companyService.getCompanies();
+  filteredCompanies$: Observable<CompanyDto[]> = this.companies$.pipe(
+    switchMap(
+      (companies) =>
+        this.harvestFormGroup.controls.recipient.valueChanges.pipe(
+          startWith(''),
+          map((value) =>
+            companies.filter((company) => {
+              if (!value || typeof value !== 'string') return company;
+
+              return company.name.toLowerCase().includes((value as string).toLowerCase() ?? '');
+            })
+          )
+        ) ?? []
+    )
+  );
+
   users$: Observable<UserDto[]> = this.companies$.pipe(
     map((companies) => companies.filter((company) => company.id === this.companyId)),
-    map((companies) => companies.flatMap((company) => company.employees ?? []))
+    map((companies) => companies.flatMap((company) => company.employees ?? [])),
+    switchMap(
+      (farmers) =>
+        this.harvestFormGroup.controls.authorOfEntry.valueChanges.pipe(
+          startWith(''),
+          map((value) =>
+            farmers.filter((farmer) => {
+              if (!value || typeof value !== 'string') return farmer;
+
+              return (
+                farmer.firstName.toLowerCase().includes((value as string).toLowerCase() ?? '') ||
+                farmer.lastName.toLowerCase().includes((value as string).toLowerCase() ?? '')
+              );
+            })
+          )
+        ) ?? []
+    )
   );
   farmers$: Observable<UserOrFarmerDto[]> = this.companies$.pipe(
     map((companies) => companies.filter((company) => company.id === this.companyId)),
-    map((companies) => companies.flatMap((company) => company.farmers ?? []))
+    map((companies) => companies.flatMap((company) => company.farmers ?? [])),
+    switchMap(
+      (farmers) =>
+        this.harvestFormGroup.controls.processOwner.valueChanges.pipe(
+          startWith(''),
+          map((value) =>
+            farmers.filter((farmer) => {
+              if (!value || typeof value !== 'string') return farmer;
+
+              return (
+                farmer.firstName.toLowerCase().includes((value as string).toLowerCase()) ||
+                farmer.lastName.toLowerCase().includes((value as string).toLowerCase())
+              );
+            })
+          )
+        ) ?? []
+    )
   );
 
   harvestFormGroup: FormGroup<HarvestForm> = new FormGroup<HarvestForm>({
@@ -39,8 +87,13 @@ export class HarvestComponent {
   });
 
   plotsOfLand$: Observable<PlotOfLandDto[]> = this.harvestFormGroup.controls.processOwner.valueChanges.pipe(
-    filter((farmerId): farmerId is string => !!farmerId),
-    switchMap((farmerId) => this.plotOfLandService.getPlotsOfLandByFarmerId(farmerId)),
+    switchMap((farmer: UserOrFarmerDto | string | null) => {
+      if (!farmer || typeof farmer === 'string') {
+        return of([]);
+      }
+
+      return this.plotOfLandService.getPlotsOfLandByFarmerId((farmer as UserOrFarmerDto).id);
+    }),
     tap(() => {
       this.plotsOfLand.clear();
       this.addPlotOfLand();
@@ -58,7 +111,7 @@ export class HarvestComponent {
       )
     )
   );
-  protected readonly getFormattedUserName = getFormattedUserName;
+  protected readonly getUserOrCompanyName = getUserOrCompanyName;
 
   constructor(
     private readonly batchService: BatchService,
@@ -89,6 +142,7 @@ export class HarvestComponent {
   }
 
   submitHarvest(): void {
+    if (!this.checkAllSelections()) return;
     const plotsOfLand = this.plotsOfLand.value.map((item: { plotOfLand: PlotOfLandDto | null }) => item.plotOfLand?.id);
 
     if (this.harvestFormGroup.valid && this.harvestFormGroup.value.plotsOfLand) {
@@ -111,6 +165,30 @@ export class HarvestComponent {
       this.harvestFormGroup.markAllAsTouched();
       toast.error(Messages.error);
     }
+  }
+
+  checkAllSelections(): boolean {
+    let returnValue = true;
+    const controls = this.harvestFormGroup.controls;
+    const values = this.harvestFormGroup.value;
+    const error = {
+      noObjectSelected: true,
+    };
+    if (typeof values.authorOfEntry === 'string') {
+      returnValue = false;
+      controls.authorOfEntry.setErrors(error);
+    }
+    if (typeof values.recipient === 'string') {
+      returnValue = false;
+      controls.recipient.setErrors(error);
+    }
+
+    if (typeof values.processOwner === 'string') {
+      returnValue = false;
+      controls.processOwner.setErrors(error);
+    }
+
+    return returnValue;
   }
 
   clearInputFields(): void {

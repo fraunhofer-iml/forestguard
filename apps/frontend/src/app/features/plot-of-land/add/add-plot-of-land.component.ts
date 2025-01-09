@@ -97,7 +97,24 @@ export class AddPlotOfLandComponent {
     private readonly authenticationService: AuthenticationService,
     private readonly router: Router
   ) {
-    this.farmers$ = this.companyService.getFarmersByCompanyId(this.authenticationService.getCurrentCompanyId() ?? '');
+    this.farmers$ = this.companyService.getFarmersByCompanyId(this.authenticationService.getCurrentCompanyId() ?? '').pipe(
+      switchMap(
+        (farmers) =>
+          this.plotOfLandFormGroup.controls.processOwner.valueChanges.pipe(
+            startWith(''),
+            map((value) =>
+              farmers.filter((farmer) => {
+                if (!value || value instanceof Object) return farmer;
+
+                return (
+                  farmer.firstName.toLowerCase().includes((value as string).toLowerCase()) ||
+                  farmer.lastName.toLowerCase().includes((value as string).toLowerCase())
+                );
+              })
+            )
+          ) ?? []
+      )
+    );
     this.users$ = this.userService.getUsers();
     this.coffeeOptions$ = this.cultivationService.readCultivationsByCommodity('coffee').pipe(
       switchMap(
@@ -120,6 +137,14 @@ export class AddPlotOfLandComponent {
     if (this.plotOfLandFormGroup.valid && this.geoDataFormGroup.valid && this.plotOfLandFormGroup.value.processOwner) {
       const formData = this.geoDataFormGroup.get('geoDataCoordinates')?.value as CoordinateInput;
 
+      if (typeof this.plotOfLandFormGroup.value.processOwner === 'string') {
+        this.plotOfLandFormGroup.controls.processOwner.setErrors({
+          noUserSelected: true,
+        });
+        this.plotOfLandFormGroup.markAllAsTouched();
+        return;
+      }
+
       const convertedCoordinates =
         this.geoDataStandard === Standard.UTM ? convertUTMtoWGS(formData, this.geoDataFormGroup.get('geoDataZone')?.value) : formData;
 
@@ -127,7 +152,7 @@ export class AddPlotOfLandComponent {
 
       this.plotOfLandService
         .createPlotOfLand(
-          this.plotOfLandFormGroup.value.processOwner,
+          (this.plotOfLandFormGroup.value.processOwner as UserOrFarmerDto).id,
           this.generatePlotOfLandService.createNewPlotOfLand(this.plotOfLandFormGroup, this.geoDataFormGroup, coordinates)
         )
         .pipe(
