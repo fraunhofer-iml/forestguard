@@ -4,6 +4,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { AuthenticationService } from '../../../core/services/authentication.service';
 import { BatchService } from '../../../shared/services/batch/batch.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
@@ -23,7 +24,7 @@ describe('HarvestComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [],
+      imports: [MatAutocompleteModule],
       declarations: [HarvestComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
       providers: [

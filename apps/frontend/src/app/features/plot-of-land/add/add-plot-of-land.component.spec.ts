@@ -1,4 +1,4 @@
-import { PlotOfLandDto, ProofDto } from '@forest-guard/api-interfaces';
+import { PlotOfLandDto, ProofDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import * as L from 'leaflet';
 import { toast } from 'ngx-sonner';
 import { of, take, tap } from 'rxjs';
@@ -317,7 +317,7 @@ describe('AddPlotOfLandComponent', () => {
     const markAllAsTouchedSpy = jest.spyOn(component.plotOfLandFormGroup, 'markAllAsTouched');
 
     component.plotOfLandFormGroup.setValue({
-      processOwner: 'owner',
+      processOwner: { id: 'owner' } as UserOrFarmerDto,
       region: 'region',
       plotOfLand: 'plot',
       cultivationSort: 'sort',
@@ -368,7 +368,7 @@ describe('AddPlotOfLandComponent', () => {
     const navigateSpy = jest.spyOn(router, 'navigate');
 
     component.plotOfLandFormGroup.setValue({
-      processOwner: 'owner',
+      processOwner: { id: 'owner' } as UserOrFarmerDto,
       region: 'region',
       plotOfLand: 'plot',
       cultivationSort: 'sort',

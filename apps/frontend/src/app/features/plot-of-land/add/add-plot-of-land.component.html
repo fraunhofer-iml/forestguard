@@ -5,12 +5,13 @@
   <form [formGroup]="plotOfLandFormGroup">
     <div class="card">
       <mat-form-field appearance="outline" class="w-full">
-        <mat-label class="w-full">Farmer</mat-label>
-        <mat-select formControlName="processOwner" placeholder="Farmer" class="w-full !border-none">
-          <mat-option *ngFor="let farmer of farmers$ | async" [value]="farmer.id">
+        <mat-label>Process Owner</mat-label>
+        <input placeholder="Process Owner" matInput formControlName="processOwner" [matAutocomplete]="processOwnerAuto" />
+        <mat-autocomplete #processOwnerAuto="matAutocomplete" [displayWith]="getFormattedUserName">
+          <mat-option *ngFor="let farmer of farmers$ | async" [value]="farmer">
             {{ getFormattedUserName(farmer) }}
           </mat-option>
-        </mat-select>
+        </mat-autocomplete>
       </mat-form-field>
 
       <mat-form-field class="w-full" appearance="outline">
