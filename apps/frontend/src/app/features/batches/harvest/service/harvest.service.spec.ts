@@ -35,8 +35,8 @@ describe('HarvestService', (): void => {
     const plotsOfLand: string[] = ['ctest401'];
     const formGroup: FormGroup = formBuilder.group({
       dateOfProcess: new Date('2023-01-01'),
-      processOwner: 'McFarland, Guillermo',
-      authorOfEntry: 'Smith, Jane',
+      processOwner: { id: 'McFarland, Guillermo' },
+      authorOfEntry: { id: 'Smith, Jane' },
       weight: 100,
     });
 
@@ -57,8 +57,9 @@ describe('HarvestService', (): void => {
     const plotsOfLand: string[] = ['ctest401'];
     const formGroup: FormGroup = formBuilder.group({
       dateOfProcess: new Date('2023-01-01'),
-      processOwner: 'McFarland, Guillermo',
-      authorOfEntry: 'Smith, Jane',
+      processOwner: { id: 'McFarland, Guillermo' },
+      authorOfEntry: { id: 'Smith, Jane' },
+      recipient: { id: 'Recipient' },
       weight: 100,
     });
 
@@ -66,7 +67,7 @@ describe('HarvestService', (): void => {
 
     const expected: BatchCombinedCreateDto = {
       weight: 100,
-      recipient: '',
+      recipient: 'Recipient',
       processStep: {
         location: '',
         dateOfProcess: '2023-01-01T00:00:00.000Z',

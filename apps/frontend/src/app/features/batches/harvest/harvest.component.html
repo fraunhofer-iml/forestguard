@@ -7,50 +7,54 @@
 <h1 class="font-semibold text-gray-700 pb-4">Add Harvest</h1>
 <form [formGroup]="harvestFormGroup" class="space-y-4">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div class="card">
+    <div class="card flex flex-col gap-4">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Process Owner</mat-label>
-        <mat-select formControlName="processOwner" placeholder="Process Owner" class="w-full !border-none">
-          <mat-option *ngFor="let farmer of farmers$ | async" [value]="farmer.id">
-           {{ getFormattedUserName(farmer) }}
+        <input placeholder="Process Owner" matInput formControlName="processOwner" [matAutocomplete]="processOwnerAuto" />
+        <mat-autocomplete #processOwnerAuto="matAutocomplete" [displayWith]="getUserOrCompanyName">
+          <mat-option *ngFor="let farmer of farmers$ | async" [value]="farmer">
+            {{ getUserOrCompanyName(farmer) }}
           </mat-option>
-        </mat-select>
+        </mat-autocomplete>
       </mat-form-field>
 
-      <mat-form-field class="w-full mt-4" appearance="outline">
+      <mat-form-field appearance="outline" class="w-full">
         <mat-label>Recipient</mat-label>
-        <mat-select formControlName="recipient" placeholder="Recipient">
-          <mat-option *ngFor="let company of companies$ | async" [value]="company.id"> {{ company.name }} </mat-option>
-        </mat-select>
+        <input placeholder="Recipient" matInput formControlName="recipient" [matAutocomplete]="recipientAuto" />
+        <mat-autocomplete #recipientAuto="matAutocomplete" [displayWith]="getUserOrCompanyName">
+          <mat-option *ngFor="let company of filteredCompanies$ | async" [value]="company">
+            {{ getUserOrCompanyName(company) }}
+          </mat-option>
+        </mat-autocomplete>
       </mat-form-field>
 
-      <mat-form-field class="w-full mt-4" appearance="outline">
+      <mat-form-field class="w-full" appearance="outline">
         <mat-label>Weight</mat-label>
         <input matInput type="number" formControlName="weight" placeholder="Weight" />
       </mat-form-field>
 
-      <mat-form-field class="w-full mt-4" appearance="outline">
+      <mat-form-field class="w-full" appearance="outline">
         <mat-label>Date of Process</mat-label>
         <input matInput formControlName="dateOfProcess" [matDatepicker]="picker" />
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field class="w-full mt-4" appearance="outline">
+      <mat-form-field appearance="outline" class="w-full">
         <mat-label>Author of Entry</mat-label>
-        <mat-select formControlName="authorOfEntry" placeholder="Author of Entry">
-          <mat-option *ngFor="let user of users$ | async" [value]="user.id">
-            {{ getFormattedUserName(user) }}
+        <input placeholder="Author of Entry" matInput formControlName="authorOfEntry" [matAutocomplete]="authorAuto" />
+        <mat-autocomplete #authorAuto="matAutocomplete" [displayWith]="getUserOrCompanyName">
+          <mat-option *ngFor="let user of users$ | async" [value]="user">
+            {{ getUserOrCompanyName(user) }}
           </mat-option>
-        </mat-select>
+        </mat-autocomplete>
       </mat-form-field>
     </div>
 
     <!-- Plots of Land -->
     <div class="card">
       <div class="inline-flex justify-end cursor-pointer w-full">
-        <a mat-button (click)="addPlotOfLand()" [disabled]="!!!(filteredPlotsOfLand$ | async)?.length">Add Plot of
-          Land</a>
+        <a mat-button (click)="addPlotOfLand()" [disabled]="!!!(filteredPlotsOfLand$ | async)?.length">Add Plot of Land</a>
       </div>
       <div class="mt-4" *ngIf="filteredPlotsOfLand$ | async as filteredPlotsOfLand">
         <div formArrayName="plotsOfLand" *ngFor="let plotOfLand of plotsOfLand.controls; let i = index">
@@ -67,8 +71,7 @@
                   </mat-option>
                 </mat-select>
                 <div class="justify-end ml-1" *ngIf="this.plotsOfLand.length > 1 && i">
-                  <button class="material-symbols-outlined cursor-pointer" (click)="removePlotOfLand(i)"> close
-                  </button>
+                  <button class="material-symbols-outlined cursor-pointer" (click)="removePlotOfLand(i)">close</button>
                 </div>
               </div>
             </mat-form-field>

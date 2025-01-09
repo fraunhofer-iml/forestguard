@@ -12,6 +12,7 @@ documentation/index.pdf
 
 # dependencies
 node_modules
+migrations
 
 # IDEs and editors
 /.idea
