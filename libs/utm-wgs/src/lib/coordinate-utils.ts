@@ -1,6 +1,7 @@
+import { CoordinateInput } from './coordinate-input.type';
+import { utmToLatLong } from './utm-wgs';
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { Coordinates, CoordinateType } from '@forest-guard/api-interfaces';
-import { utmToLatLong } from '@forest-guard/utm';
-import { CoordinateInput } from '../../features/plot-of-land/add/components/coordinate-input/coordinate-input.type';
 
 export const convertToCorrectFormat = (coordinates: CoordinateInput, type: CoordinateType): Coordinates => {
   switch (type) {
@@ -52,7 +53,7 @@ export const convertToMultiPolygon = (geoData: CoordinateInput): number[][][][] 
   return [geoData.map((polygon) => polygon.map((point) => [point.x, point.y]))];
 };
 
-export const convertFromMultiPloygon = (coordinates: [number, number][][][]): CoordinateInput => {
+export const convertFromMultiPolygon = (coordinates: [number, number][][][]): CoordinateInput => {
   return coordinates.flatMap((polygons) => polygons.flatMap((polygon) => convertFromMultiPoint(polygon)));
 };
 

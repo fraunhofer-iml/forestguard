@@ -1,11 +1,11 @@
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { CoordinateType } from '@forest-guard/api-interfaces';
 import {
   convertToCorrectFormat,
   convertToMultiPoint,
   convertToMultiPolygon,
   convertToPoint,
-  convertToPolygon,
-  convertUTMtoWGS,
+  convertToPolygon, convertUTMtoWGS,
 } from './coordinate-utils';
 
 describe('Coordinate Utils', () => {
