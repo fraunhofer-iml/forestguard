@@ -53,7 +53,7 @@ describe('AddUserComponent', () => {
           provide: AuthenticationService,
           useValue: {
             getCurrentCompanyId: jest.fn().mockReturnValue(''),
-            hasRole: jest.fn().mockReturnValue(Role.Cooperative),
+            hasRole: jest.fn().mockReturnValue(Role.COOPERATIVE),
           },
         },
       ],
@@ -81,6 +81,7 @@ describe('AddUserComponent', () => {
   it('should reset form fields when clearInputFields is called', () => {
     component.userFormGroup.setValue({
       employeeId: '123',
+      personalId: '234',
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
@@ -96,6 +97,7 @@ describe('AddUserComponent', () => {
     component.clearInputFields();
     expect(component.userFormGroup.value).toEqual({
       employeeId: null,
+      personalId: null,
       firstName: null,
       lastName: null,
       email: null,
@@ -118,6 +120,7 @@ describe('AddUserComponent', () => {
     generateUserServiceMock.generateNewUser.mockReturnValue({} as any);
     component.userFormGroup.setValue({
       employeeId: '123',
+      personalId: '234',
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
@@ -140,6 +143,7 @@ describe('AddUserComponent', () => {
     generateUserServiceMock.generateNewFarmer.mockReturnValue({} as any);
     component.userFormGroup.setValue({
       employeeId: '123',
+      personalId: '234',
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',

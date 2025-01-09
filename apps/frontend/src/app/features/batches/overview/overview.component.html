@@ -6,9 +6,10 @@
       <input matInput placeholder="Search" #input (keyup)="applyFilter($event)" />
     </mat-form-field>
     <div class="flex flex-row gap-4 items-center">
-      <a *ngIf="authenticationService.hasRole(Role.Cooperative)" routerLink="{{ Uris.addHarvest }}" mat-button class="w-full text-nowrap">Add Harvest</a>
-      <button mat-flat-button class="w-full text-nowrap" [disabled]="!selection.hasValue()"
-        (click)="routeToAddProcess()">
+      <a *ngIf="authenticationService.hasRole(Role.COOPERATIVE)" routerLink="{{ Uris.addHarvest }}" mat-button class="w-full text-nowrap"
+        >Add Harvest</a
+      >
+      <button mat-flat-button class="w-full text-nowrap" [disabled]="!selection.hasValue()" (click)="routeToAddProcess()">
         Add Process
       </button>
     </div>
@@ -19,14 +20,22 @@
       <!-- Checkbox Column -->
       <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef>
-          <mat-checkbox (change)="$event ? toggleAllRows() : null" [checked]="selection.hasValue() && isAllSelected()"
-            [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+          <mat-checkbox
+            (change)="$event ? toggleAllRows() : null"
+            [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()"
+            [aria-label]="checkboxLabel()"
+          >
           </mat-checkbox>
         </th>
         <td mat-cell *matCellDef="let row">
-          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-            (keydown)="$event.stopPropagation()" [checked]="selection.isSelected(row)"
-            [aria-label]="checkboxLabel(row)">
+          <mat-checkbox
+            (click)="$event.stopPropagation()"
+            (change)="$event ? selection.toggle(row) : null"
+            (keydown)="$event.stopPropagation()"
+            [checked]="selection.isSelected(row)"
+            [aria-label]="checkboxLabel(row)"
+          >
           </mat-checkbox>
         </td>
       </ng-container>
@@ -41,9 +50,29 @@
 
       <!-- Weight -->
       <ng-container matColumnDef="weight" class="headline-text !text-right">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition="before" class="!text-right">Weight [kg]
-        </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition="before" class="!text-right">Weight [kg]</th>
         <td mat-cell class="!text-right" *matCellDef="let el; dataSource: batches">{{ el.weight }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let el; dataSource: batches">
+          @if (el.hasAllProofs) {
+            <div
+              class="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center"
+              matTooltip="All proofs of referenced plots of lands are uploaded"
+            >
+              <span class="material-symbols-outlined text-white text-[1.25rem]">check</span>
+            </div>
+          } @else {
+            <div
+              class="w-6 h-6 bg-red-600 rounded-full animate-pulse flex items-center justify-center"
+              matTooltip="There are missing proofs at at least one referenced plot of land"
+            >
+              <span class="material-symbols-outlined text-white">exclamation</span>
+            </div>
+          }
+        </td>
       </ng-container>
 
       <!-- Process -->

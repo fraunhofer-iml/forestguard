@@ -1,10 +1,13 @@
-import { CultivationCreateDto, CultivationDto } from '@forest-guard/api-interfaces';
+import { CultivationCreateDto, CultivationDto, Role } from '@forest-guard/api-interfaces';
+import { KeycloakUtil } from '@forest-guard/util';
+import { Roles } from 'nest-keycloak-connect';
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CultivationService } from './cultivation.service';
 
 @ApiTags('Cultivations')
 @Controller('cultivations')
+@Roles({ roles: [KeycloakUtil.toRealmRole(Role.ENABLED)] })
 export class CultivationController {
   constructor(private readonly cultivationService: CultivationService) {}
 

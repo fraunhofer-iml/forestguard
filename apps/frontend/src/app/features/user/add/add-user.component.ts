@@ -20,6 +20,7 @@ export class AddUserComponent {
   selectedRole: string = Roles.USER;
   userFormGroup: FormGroup<UserForm> = new FormGroup<UserForm>({
     employeeId: new FormControl(null),
+    personalId: new FormControl(null),
     firstName: new FormControl(null, Validators.required),
     lastName: new FormControl(null, Validators.required),
     email: new FormControl(null, Validators.required),
@@ -65,11 +66,23 @@ export class AddUserComponent {
   }
 
   submitUser(): void {
-    this.userService.createUser(this.generateUserService.generateNewUser(this.userFormGroup)).subscribe(() => {
-      this.clearInputFields();
-      toast.success(Messages.successUser);
-      this.router.navigate(['/companies', this.authenticationService.getCurrentCompanyId()]);
-    });
+    this.userService
+      .createUser(this.generateUserService.generateNewUser(this.userFormGroup))
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.error.message.toLowerCase().includes('unique constraint')) {
+            toast.error(Messages.errorUserExists);
+            return EMPTY;
+          }
+          toast.error(error.error.message);
+          return EMPTY;
+        })
+      )
+      .subscribe(() => {
+        this.clearInputFields();
+        toast.success(Messages.successUser);
+        this.router.navigate(['/companies', this.authenticationService.getCurrentCompanyId()]);
+      });
   }
 
   submitFarmer(): void {
@@ -77,6 +90,10 @@ export class AddUserComponent {
       .createFarmer(this.generateUserService.generateNewFarmer(this.userFormGroup))
       .pipe(
         catchError((error: HttpErrorResponse) => {
+          if (error.error.message.toLowerCase().includes('unique constraint')) {
+            toast.error(Messages.errorUserExists);
+            return EMPTY;
+          }
           toast.error(error.error.message);
           return EMPTY;
         })
