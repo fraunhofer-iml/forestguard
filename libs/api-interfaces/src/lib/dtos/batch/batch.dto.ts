@@ -8,6 +8,7 @@ export class BatchDto {
   active: boolean;
   recipient: UserDto | CompanyDto;
   processStep: ProcessStepDto;
+  hasAllProofs?: boolean;
 
   constructor(
     id: string,
@@ -15,7 +16,8 @@ export class BatchDto {
     active: boolean,
     recipient: UserDto | CompanyDto,
     processStep: ProcessStepDto,
-    euInfoSystemId?: string
+    euInfoSystemId?: string,
+    hasAllProofs?: boolean
   ) {
     this.id = id;
     this.weight = weight;
@@ -23,5 +25,6 @@ export class BatchDto {
     this.recipient = recipient;
     this.processStep = processStep;
     this.euInfoSystemId = euInfoSystemId;
+    this.hasAllProofs = hasAllProofs;
   }
 }

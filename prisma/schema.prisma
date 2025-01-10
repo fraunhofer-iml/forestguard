@@ -82,6 +82,7 @@ model User {
   documents Document[]
 
   @@unique([companyId, personalId])
+  @@unique([companyId, employeeId])
 }
 
 model PlotOfLand {

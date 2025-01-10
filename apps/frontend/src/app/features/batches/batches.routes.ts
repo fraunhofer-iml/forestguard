@@ -16,7 +16,7 @@ export const batchesRoutes: Route[] = [
     path: 'harvest',
     component: HarvestComponent,
     canActivate: [roleGuard],
-    data: { roles: [Role.Cooperative] },
+    data: { roles: [Role.COOPERATIVE] },
   },
   {
     path: 'update',

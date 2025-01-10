@@ -1,15 +1,16 @@
+import { ImportResponseDto, Role, TAuthenticatedUser } from '@forest-guard/api-interfaces';
+import { KeycloakUtil } from '@forest-guard/util';
+import { AuthenticatedUser, Roles } from 'nest-keycloak-connect';
 import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ImportService } from './import.service';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { AuthenticatedUser } from 'nest-keycloak-connect';
-import { ImportResponseDto, TAuthenticatedUser } from '@forest-guard/api-interfaces';
 
 @ApiTags('Import')
 @Controller('import')
+@Roles({ roles: [KeycloakUtil.toRealmRole(Role.ENABLED)] })
 export class ImportController {
-  constructor(private importService: ImportService) {
-  }
+  constructor(private importService: ImportService) {}
 
   @Post()
   @ApiBearerAuth()

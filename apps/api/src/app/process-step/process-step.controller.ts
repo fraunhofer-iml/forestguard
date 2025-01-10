@@ -1,3 +1,6 @@
+import { Role } from '@forest-guard/api-interfaces';
+import { KeycloakUtil } from '@forest-guard/util';
+import { Roles } from 'nest-keycloak-connect';
 import { Body, Controller, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
@@ -6,6 +9,7 @@ import { ProcessStepService } from './process-step.service';
 
 @ApiTags('Process Steps')
 @Controller('process-steps')
+@Roles({ roles: [KeycloakUtil.toRealmRole(Role.ENABLED)] })
 export class ProcessStepController {
   constructor(private readonly processStepService: ProcessStepService) {}
 

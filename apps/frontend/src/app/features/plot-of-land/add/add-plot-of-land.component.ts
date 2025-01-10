@@ -11,7 +11,7 @@ import {
 } from '@forest-guard/api-interfaces';
 import { Icon, LatLng, latLng, Layer, marker, polygon, tileLayer } from 'leaflet';
 import { toast } from 'ngx-sonner';
-import { combineLatest, mergeMap, Observable } from 'rxjs';
+import { combineLatest, map, mergeMap, Observable, startWith, switchMap, tap } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -37,7 +37,7 @@ export class AddPlotOfLandComponent {
   valueChangesOfGeoDataStandard$: Observable<string | null> | undefined;
   users$: Observable<UserDto[]>;
   farmers$: Observable<UserOrFarmerDto[]>;
-  coffeeOptions$: Observable<CultivationDto[]>;
+  coffeeOptions$?: Observable<CultivationDto[]>;
   plotOfLandFormGroup: FormGroup<PlotOfLandForm> = new FormGroup<PlotOfLandForm>({
     processOwner: new FormControl(null, Validators.required),
     region: new FormControl(null, Validators.required),
@@ -94,11 +94,36 @@ export class AddPlotOfLandComponent {
     private readonly cultivationService: CultivationService,
     private readonly generatePlotOfLandService: GeneratePlotOfLandService,
     private readonly authenticationService: AuthenticationService,
-    private readonly router: Router,
+    private readonly router: Router
   ) {
-    this.farmers$ = this.companyService.getFarmersByCompanyId(this.authenticationService.getCurrentCompanyId() ?? '');
+    this.farmers$ = this.companyService.getFarmersByCompanyId(this.authenticationService.getCurrentCompanyId() ?? '').pipe(
+      switchMap(
+        (farmers) =>
+          this.plotOfLandFormGroup.controls.processOwner.valueChanges.pipe(
+            startWith(''),
+            map((value) =>
+              farmers.filter((farmer) => {
+                if (!value || value instanceof Object) return farmer;
+
+                return (
+                  farmer.firstName.toLowerCase().includes((value as string).toLowerCase()) ||
+                  farmer.lastName.toLowerCase().includes((value as string).toLowerCase())
+                );
+              })
+            )
+          ) ?? []
+      )
+    );
     this.users$ = this.userService.getUsers();
-    this.coffeeOptions$ = this.cultivationService.readCultivationsByCommodity('coffee');
+    this.coffeeOptions$ = this.cultivationService.readCultivationsByCommodity('coffee').pipe(
+      switchMap(
+        (cultivations) =>
+          this.plotOfLandFormGroup.get('cultivationSort')?.valueChanges.pipe(
+            startWith(''),
+            map((value) => cultivations.filter((cultivation) => cultivation.sort.includes(value ?? '')))
+          ) ?? []
+      )
+    );
     this.handleGeoDataValueChange();
   }
 
@@ -111,6 +136,14 @@ export class AddPlotOfLandComponent {
     if (this.plotOfLandFormGroup.valid && this.geoDataFormGroup.valid && this.plotOfLandFormGroup.value.processOwner) {
       const formData = this.geoDataFormGroup.get('geoDataCoordinates')?.value as CoordinateInput;
 
+      if (typeof this.plotOfLandFormGroup.value.processOwner === 'string') {
+        this.plotOfLandFormGroup.controls.processOwner.setErrors({
+          noUserSelected: true,
+        });
+        this.plotOfLandFormGroup.markAllAsTouched();
+        return;
+      }
+
       const convertedCoordinates =
         this.geoDataStandard === Standard.UTM ? convertUTMtoWGS(formData, this.geoDataFormGroup.get('geoDataZone')?.value) : formData;
       const coordinates = convertToCorrectFormat(convertedCoordinates, this.geoDataType);
@@ -120,8 +153,8 @@ export class AddPlotOfLandComponent {
 
       this.plotOfLandService
         .createPlotOfLand(
-          this.plotOfLandFormGroup.value.processOwner,
-          this.generatePlotOfLandService.createNewPlotOfLand(this.plotOfLandFormGroup, this.geoDataFormGroup, coordinates),
+          (this.plotOfLandFormGroup.value.processOwner as UserOrFarmerDto).id,
+          this.generatePlotOfLandService.createNewPlotOfLand(this.plotOfLandFormGroup, this.geoDataFormGroup, coordinates)
         )
         .pipe(
           mergeMap((plotOfLand: PlotOfLandDto) => {
@@ -137,7 +170,7 @@ export class AddPlotOfLandComponent {
             });
             this.router.navigate(['/pols', plotOfLand.id]);
             return combineLatest(createProofsObservables);
-          }),
+          })
         )
         .subscribe(() => {
           this.uploadSelectOption.forEach((option) => {

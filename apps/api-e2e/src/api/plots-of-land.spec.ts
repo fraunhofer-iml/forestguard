@@ -107,27 +107,13 @@ describe('/pols', () => {
       const errorPlotOfLandCreateDto = structuredClone(givenPlotOfLandCreateDto);
       errorPlotOfLandCreateDto.cultivationSort = null;
 
-      await axios.post(
-        `/companies`,
-        companyCreate,
-        httpHeader
-      );
+      await axios.post(`/companies`, companyCreate, httpHeader);
 
-      await axios.post(
-        `/users`,
-        userCreate,
-        httpHeader
-      );
+      await axios.post(`/users`, userCreate, httpHeader);
 
-      const farmer = await axios.post(
-        `/users/farmers`,
-        farmerCreate,
-        httpHeader
-      );
+      const farmer = await axios.post(`/users/farmers`, farmerCreate, httpHeader);
 
-      await expect(
-        axios.post(`/pols?farmerId=${farmer.data.id}`, errorPlotOfLandCreateDto, httpHeader)
-      ).rejects.toMatchObject({
+      await expect(axios.post(`/pols?farmerId=${farmer.data.id}`, errorPlotOfLandCreateDto, httpHeader)).rejects.toMatchObject({
         response: {
           data: {
             timestamp: expect.any(String),
@@ -197,6 +183,7 @@ describe('/pols', () => {
 
       const farmerCreate2 = structuredClone(farmerCreate);
       farmerCreate2.lastName = 'Johnson';
+      farmerCreate2.employeeId = crypto.randomUUID();
       farmerCreate2.personalId = 'pf2';
       const farmer2 = await axios.post(`/users/farmers`, farmerCreate2, httpHeader);
       const actualPostResponse2 = await axios.post(`/pols?farmerId=${farmer2.data.id}`, givenPlotOfLandCreateDto, httpHeader);

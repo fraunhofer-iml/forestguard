@@ -1,11 +1,13 @@
-import { BatchDto, CompanyCreateDto, CompanyDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
-import { AuthenticatedUser } from 'nest-keycloak-connect';
+import { BatchDto, CompanyCreateDto, CompanyDto, Role, UserOrFarmerDto } from '@forest-guard/api-interfaces';
+import { KeycloakUtil } from '@forest-guard/util';
+import { AuthenticatedUser, Roles } from 'nest-keycloak-connect';
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CompanyService } from './company.service';
 
 @ApiTags('Companies')
 @Controller('companies')
+@Roles({ roles: [KeycloakUtil.toRealmRole(Role.ENABLED)] })
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
