@@ -146,8 +146,6 @@ describe('AddPlotOfLandComponent', () => {
     );
     component.saveGeoData();
 
-    console.log(component.geoDataFormGroup.value);
-
     expect(component.geoDataFormGroup.get('geoDataStandard')?.value).toBe('WGS');
     expect(component.geoDataFormGroup.get('geoDataCoordinates')?.value).toEqual([[]]);
     expect(component.geoDataFormGroup.get('geoDataType')?.value).toBe('MultiPoint');
