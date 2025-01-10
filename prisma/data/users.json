@@ -7,7 +7,7 @@
     "mobilePhoneNumber": "555-987-6543",
     "role": "EMPLOYEE",
     "entityId": "employee_jane",
-    "companyId": "c1c1f27f-75c9-45f8-98f6-cff1357561e1",
+    "companyId": "858c2ddf-f27c-4381-b2b6-3e97d0aec564",
     "employeeId": "EID12345678"
   },
   {
@@ -18,7 +18,7 @@
     "mobilePhoneNumber": "555-123-4567",
     "role": "FARMER",
     "entityId": "farmer_john",
-    "companyId": "c1c1f27f-75c9-45f8-98f6-cff1357561e1",
+    "companyId": "858c2ddf-f27c-4381-b2b6-3e97d0aec564",
     "employeeId": "EID23456789",
     "addressId": "some_address",
     "personalId": "PID12345678"
