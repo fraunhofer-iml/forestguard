@@ -61,7 +61,7 @@ export class UbirikiImportService implements MasterDataImportService {
             standard: Standard.UTM,
             coordinateType: CoordinateType.Point,
             coordinates: [userData[XlsxColumn.xCoordinate], userData[XlsxColumn.yCoordinate]],
-            zone: userData[XlsxColumn.zone],
+            zone: userData[XlsxColumn.zone] + "L",
           },
           areaInHA: userData[XlsxColumn.areaInHA],
           province: HardcodedPlotsOfLandData.province,

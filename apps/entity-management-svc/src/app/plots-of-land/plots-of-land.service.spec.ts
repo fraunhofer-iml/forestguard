@@ -200,12 +200,12 @@ describe('PlotsOfLandService', () => {
         {
           type: 'Feature',
           geometry: {
-            type: CoordinateType.MultiPoint,
+            type: CoordinateType.Polygon,
             coordinates: [
               [
-                [1, 2],
+                [-9.046562, -75],
 
-                [3, 4],
+                [-13.56674, -74.075772],
               ],
             ],
           },

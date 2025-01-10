@@ -18,6 +18,31 @@ export const convertToCorrectFormat = (coordinates: CoordinateInput, type: Coord
   }
 };
 
+export const convertCoordinates = (coordinates: Coordinates, zone: string, coordinateType: CoordinateType): Coordinates => {
+  switch (coordinateType) {
+    case CoordinateType.Point: {
+      const point = convertFromPoint(coordinates as [number, number]);
+      const convertedCoordinates = convertUTMtoWGS(point, zone);
+      return convertToPoint(convertedCoordinates);
+    }
+    case CoordinateType.MultiPoint: {
+      const multiPoint = convertFromMultiPoint(coordinates as [number, number][]);
+      const convertedCoordinates = convertUTMtoWGS(multiPoint, zone);
+      return convertToMultiPoint(convertedCoordinates);
+    }
+    case CoordinateType.Polygon: {
+      const polygon = convertFromPolygon(coordinates as [number, number][][]);
+      const convertedCoordinates = convertUTMtoWGS(polygon, zone);
+      return convertToPolygon(convertedCoordinates);
+    }
+    case CoordinateType.MultiPolygon: {
+      const multiPolygon = convertFromMultiPolygon(coordinates as [number, number][][][]);
+      const convertedCoordinates = convertUTMtoWGS(multiPolygon, zone);
+      return convertToMultiPolygon(convertedCoordinates);
+    }
+  }
+}
+
 export const convertToPoint = (geoData: CoordinateInput): number[] => {
   return geoData[0].map((point) => [point.x, point.y]).flat();
 };

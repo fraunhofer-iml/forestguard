@@ -15,12 +15,17 @@ const givenUser = {
   personalId: undefined,
 };
 
-const givenGeoDataDto = new GeoDataDto(Standard.UTM, CoordinateType.MultiPoint, [
+const givenGeoDataDto = new GeoDataDto(
+  Standard.UTM,
+  CoordinateType.Polygon,
   [
-    [1, 2],
-    [3, 4],
+    [
+      [500000, 9000000],
+      [600000, 8500000],
+    ],
   ],
-]);
+  '18L'
+);
 
 const expectedPlotOfLandDto: PlotOfLand = {
   id: '1',
