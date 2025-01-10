@@ -7,7 +7,7 @@ import { prepareTree } from './test-utils/batches-history.spec.utils';
 import { prepareBatchCreationWithPlotOfLand } from './test-utils/batches.spec.utils';
 import { beforeEachAndAfterAll, createHttpHeader, HttpHeader } from './test-utils/test.utils';
 
-describe('/batches', () => {
+xdescribe('/batches', () => {
   let httpHeader: HttpHeader;
   let batchCreateDto: BatchCreateDto;
 

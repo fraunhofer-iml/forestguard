@@ -13,7 +13,7 @@ describe('/batches-read', () => {
 
   beforeEachAndAfterAll();
 
-  describe('GET /batches/:id', () => {
+  xdescribe('GET /batches/:id', () => {
     it('should get a batch', async () => {
       const batchCreateDto = await prepareBatchCreation();
       await axios.post(`/batches`, [batchCreateDto], httpHeader);

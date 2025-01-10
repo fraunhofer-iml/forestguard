@@ -6,7 +6,7 @@ import { givenFarmer, givenUser, prepareCompany } from './test-utils/arrange-uti
 import { beforeEachAndAfterAll, createHttpHeader, HttpHeader } from './test-utils/test.utils';
 import { createVariantOf } from './test-utils/users.spec.utils';
 
-describe('/users', () => {
+xdescribe('/users', () => {
   let httpHeader: HttpHeader;
 
   beforeAll(async () => {

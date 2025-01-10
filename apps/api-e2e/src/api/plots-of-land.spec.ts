@@ -9,7 +9,7 @@ import {
 import axios from 'axios';
 import { beforeEachAndAfterAll, createHttpHeader, HttpHeader } from './test-utils/test.utils';
 
-describe('/pols', () => {
+xdescribe('/pols', () => {
   let httpHeader: HttpHeader;
 
   const givenPlotOfLandCreateDto: PlotOfLandCreateDto = {

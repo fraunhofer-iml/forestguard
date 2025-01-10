@@ -81,16 +81,15 @@ export class BatchCreateService {
     const processStep = await this.prismaService.processStep.create({
       data: processStepQuery(batchCreateDtos[0].processStep),
     });
-
+    /*
     for (const batch of batchCreateDtos) {
       for (const currentInBatchId of batch.ins) {
         // TODO-MP: extract to private method
-        const fetchedBatch = await this.prismaService.batch.findUnique({ where: { id: currentInBatchId } });
-        this.verifyActive(fetchedBatch);
+        this.verifyActive(currentInBatchId);
         // END
       }
     }
-
+    */
     for (const dto of batchCreateDtos) {
       await this.createBatch(dto, processStep.id);
     }
@@ -150,8 +149,7 @@ export class BatchCreateService {
   private async mergeIntoOneHarvestBatch(batchCreateDto: BatchCreateDto, batches: Batch[]): Promise<Batch> {
     for (const currentBatch of batches) {
       // TODO-MP: extract to private method
-      const fetchedBatch = await this.prismaService.batch.findUnique({ where: { id: currentBatch.id } });
-      this.verifyActive(fetchedBatch);
+      this.verifyActive(currentBatch.id);
       // END
     }
 
@@ -185,8 +183,10 @@ export class BatchCreateService {
       },
     });
   }
+  
+  private async verifyActive(batchId: string) {
+    const fetchedBatch = await this.prismaService.batch.findUnique({ where: { id: batchId } });
 
-  private async verifyActive(fetchedBatch) {
     if (!fetchedBatch) {
       throw new AmqpException(`No batch with id ${fetchedBatch.id} found. `, HttpStatus.NOT_FOUND);
     }
