@@ -4,6 +4,7 @@ import { HttpClient, HttpHandler } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../../../core/services/authentication.service';
 import { BatchService } from '../../../shared/services/batch/batch.service';
@@ -18,6 +19,7 @@ describe('BatchUpdateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [MatAutocompleteModule],
       declarations: [BatchUpdateComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
