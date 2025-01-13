@@ -31,6 +31,7 @@ async function getActiveBatches() {
 }
 
 async function splitIntoTwoBatches(batchCreateDto: BatchCreateDto, predecessorBatches, marker: string, httpHeader: HttpHeader) {
+  batchCreateDto.ins = [];
   batchCreateDto.ins.push(...predecessorBatches.map((batch) => batch.id));
   batchCreateDto.processStep.location = marker;
   await axios.post(`/batches`, [batchCreateDto, batchCreateDto], httpHeader);

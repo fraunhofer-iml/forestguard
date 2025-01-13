@@ -7,7 +7,7 @@ import { prepareTree } from './test-utils/batches-history.spec.utils';
 import { prepareBatchCreationWithPlotOfLand } from './test-utils/batches.spec.utils';
 import { beforeEachAndAfterAll, createHttpHeader, HttpHeader } from './test-utils/test.utils';
 
-xdescribe('/batches', () => {
+describe('/batches', () => {
   let httpHeader: HttpHeader;
   let batchCreateDto: BatchCreateDto;
 
@@ -22,7 +22,6 @@ xdescribe('/batches', () => {
   });
 
   describe('GET /batches/:id/related', () => {
-    // TODO: anpassen
     it('should return batch with related batches', async () => {
       const { targetBatch, deadEndBatch } = await prepareTree(batchCreateDto, httpHeader);
 
@@ -43,7 +42,6 @@ xdescribe('/batches', () => {
   });
 
   describe('GET /batches/:id/export', () => {
-    // TODO: anpassen
     it('should return export file of the specified batch ', async () => {
       const { targetBatch } = await prepareTree(batchCreateDto, httpHeader);
 

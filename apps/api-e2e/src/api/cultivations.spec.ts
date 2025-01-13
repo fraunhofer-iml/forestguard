@@ -7,7 +7,7 @@ dotenv.config();
 
 const cultivationCommodity = process.env.CULTIVATION_COMMODITY;
 
-xdescribe('/cultivations', () => {
+describe('/cultivations', () => {
   let httpHeader: HttpHeader;
 
   const givenCultivationCreateDto: CultivationCreateDto = {

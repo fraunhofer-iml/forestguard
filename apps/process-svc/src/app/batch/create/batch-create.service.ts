@@ -81,15 +81,11 @@ export class BatchCreateService {
     const processStep = await this.prismaService.processStep.create({
       data: processStepQuery(batchCreateDtos[0].processStep),
     });
-    /*
     for (const batch of batchCreateDtos) {
       for (const currentInBatchId of batch.ins) {
-        // TODO-MP: extract to private method
-        this.verifyActive(currentInBatchId);
-        // END
+        await this.verifyActive(currentInBatchId);
       }
     }
-    */
     for (const dto of batchCreateDtos) {
       await this.createBatch(dto, processStep.id);
     }
@@ -148,9 +144,7 @@ export class BatchCreateService {
 
   private async mergeIntoOneHarvestBatch(batchCreateDto: BatchCreateDto, batches: Batch[]): Promise<Batch> {
     for (const currentBatch of batches) {
-      // TODO-MP: extract to private method
-      this.verifyActive(currentBatch.id);
-      // END
+      await this.verifyActive(currentBatch.id);
     }
 
     const mergeBatchCreateDto = structuredClone(batchCreateDto);

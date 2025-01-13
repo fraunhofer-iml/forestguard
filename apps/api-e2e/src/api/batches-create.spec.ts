@@ -52,7 +52,6 @@ describe('/batches-create', () => {
         processStep: batchCreateDto.processStep,
       }
       const result = await axios.post(`/batches`, [batchCreateForError], httpHeader);
-      console.log(result);
 
       await expect(
         axios.post(`/batches`, [batchCreateForError], httpHeader)
@@ -69,7 +68,7 @@ describe('/batches-create', () => {
     });
   });
 
-  xdescribe('POST /batches/harvests', () => {
+  describe('POST /batches/harvests', () => {
     it('should create one harvest batch', async () => {
       const response = await axios.post(`/batches/harvests`, [batchCreateDto], httpHeader);
       await ensureResponseBatchWithProcess(response, batchCreateDto, 1, Process.HARVESTING);
@@ -88,7 +87,7 @@ describe('/batches-create', () => {
     });
   });
 
-  xdescribe('POST /batches/harvests/combined', () => {
+  describe('POST /batches/harvests/combined', () => {
     it('should create combined harvest batches', async () => {
       const givenBatchCombinedCreateDto = await prepareTwoPlotsOfLandCreation(batchCreateDto);
 

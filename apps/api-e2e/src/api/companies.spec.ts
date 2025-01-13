@@ -2,7 +2,7 @@ import { CompanyCreateDto, CompanyDto, FarmerCreateDto, RoleType } from '@forest
 import axios from 'axios';
 import { beforeEachAndAfterAll, createHttpHeader, HttpHeader, prisma } from './test-utils/test.utils';
 
-xdescribe('/companies', () => {
+describe('/companies', () => {
   let httpHeader: HttpHeader;
 
   const givenCompanyCreateDto: CompanyCreateDto = {
