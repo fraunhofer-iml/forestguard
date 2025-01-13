@@ -1,6 +1,5 @@
 import { CoordinateInput } from './coordinate-input.type';
 import { utmToLatLong } from './utm-wgs';
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { Coordinates, CoordinateType } from '@forest-guard/api-interfaces';
 
 export const convertToCorrectFormat = (coordinates: CoordinateInput, type: CoordinateType): Coordinates => {
