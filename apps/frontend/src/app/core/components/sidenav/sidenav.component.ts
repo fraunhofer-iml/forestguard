@@ -17,6 +17,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 })
 export class SidenavComponent {
   version = environment.VERSION;
+
   company$ = this.companyService.getCompanyById(this.authenticationService.getCurrentCompanyId() ?? '');
 
   constructor(
