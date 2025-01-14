@@ -57,43 +57,48 @@
   </div>
 
   <div class="card" *ngIf="showUploadedFiles">
-    <div class="grid grid-cols-2">
-      <div class="border-b-2 p-2" [ngClass]="{ 'col-span-2': !selectOptions }">
+    <div class="flex border-b-2 p-2">
+      @if (selectOptions) {
+        <span class="material-symbols-outlined">{{ lengthOfUploadedFiles() === selectOptions.length ? 'check_circle' : 'pending' }}</span>
+      }
+      <div class="ml-2" [ngClass]="{ 'col-span-2': !selectOptions }">
         <span class="font-semibold text-gray-700">Documents in queue:</span>
         <span class="ml-1">{{ lengthOfUploadedFiles() }}{{ selectOptions && '/' }}{{ selectOptions?.length }}</span>
       </div>
-      @if (selectOptions) {
-      <span class="material-symbols-outlined text-right border-b-2 p-2">{{
-        lengthOfUploadedFiles() === selectOptions.length ? 'check_circle' : 'pending'
-        }}</span>
-      }
-      @if (selectOptions && selectOptions.length > 0) {
-      @for (option of selectOptions; track $index) {
-      <div class="p-2 border-b border-gray-200">
-        {{ option.key }}
-      </div>
-      <span class="material-symbols-outlined text-right p-2 border-b border-gray-200"
-        [ngClass]="{ 'text-green-600': option.file }">
-        {{ option.file ? 'check_circle' : 'pending' }}
-      </span>
-      }
-      }
-      @if (uploadedFiles && uploadedFiles.length > 0) {
-      @for (uploadedFile of uploadedFiles; track $index) {
-      <div class="border-b border-gray-200 flex w-full justify-between p-2 col-span-2">
-        <span>
-          {{ uploadedFile.documentType }}
-        </span>
-        <div class="flex items-center gap-4">
-          {{ uploadedFile.file.name }} ({{ uploadedFile.file.size | fileSize }})
-          <button class="material-symbols-outlined hover:text-red-400 cursor-pointer"
-            (click)="removeDocument.emit(uploadedFile)">
-            delete
-          </button>
-        </div>
-      </div>
-      }
-      }
     </div>
+    @if (selectOptions && selectOptions.length > 0) {
+      @for (option of selectOptions; track $index) {
+        <div class="grid grid-cols-2 border-b-2 p-2">
+          <div class="flex">
+            <span class="material-symbols-outlined border-gray-200" [ngClass]="{ 'text-green-600': option.file }">
+              {{ option.file ? 'check_circle' : 'pending' }}
+            </span>
+            <div class="ml-2">
+              {{ option.key }}
+            </div>
+          </div>
+          @if (option.file) {
+            <div class="text-end">
+              <button class="material-symbols-outlined hover:text-red-400 cursor-pointer" (click)="removeProof.emit(option)">delete</button>
+            </div>
+          }
+        </div>
+      }
+    }
+    @if (uploadedFiles && uploadedFiles.length > 0) {
+      @for (uploadedFile of uploadedFiles; track $index) {
+        <div class="border-b border-gray-200 flex w-full justify-between p-2 col-span-2">
+          <span>
+            {{ uploadedFile.documentType }}
+          </span>
+          <div class="flex items-center gap-4">
+            {{ uploadedFile.file.name }} ({{ uploadedFile.file.size | fileSize }})
+            <button class="material-symbols-outlined hover:text-red-400 cursor-pointer" (click)="removeDocument.emit(uploadedFile)">
+              delete
+            </button>
+          </div>
+        </div>
+      }
+    }
   </div>
 </div>

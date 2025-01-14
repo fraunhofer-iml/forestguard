@@ -202,6 +202,12 @@ export class AddPlotOfLandComponent {
     option.file = file;
   }
 
+  removeFile(upload: UploadFormSelectType): void {
+    this.uploadSelectOption = this.uploadSelectOption.map((uploadedFile: UploadFormSelectType) =>
+      uploadedFile.key === upload.key ? { ...uploadedFile, file: undefined } : uploadedFile
+    );
+  }
+
   // #FOR-518 (https://oe160.iml.fraunhofer.de/jira/browse/FOR-518)
   saveGeoData(): void {
     let jsonData: JsonData;
