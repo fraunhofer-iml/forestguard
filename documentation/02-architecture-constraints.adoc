@@ -3,7 +3,7 @@
 :toc: left
 :toclevels: 3
 :sectnums:
-:copyright: Open Logistics Foundation License 1.3
+:copyright: Apache License 2.0
 
 = Architecture Constraints
 
@@ -72,7 +72,7 @@ The following technical constraints apply:
 
 | *BC2*
 | Project License
-| Developed under the Open Logistics Foundation License 1.3
+| Developed under the Apache License 2.0
 
 | *BC3*
 | Requirements at libraries
@@ -80,7 +80,7 @@ The following technical constraints apply:
 
 | *BC4*
 | Libraries constraints
-| Frameworks & libraries under an open-source license (such as GPL, LGPL) are restricted by the use of the Open Logistics Foundation License 1.3
+| Frameworks & libraries under an open-source license (such as GPL, LGPL) are restricted by the use of the Apache License 2.0
 |===
 
 == Organizational Constraints
@@ -143,7 +143,7 @@ The following political constraints apply:
 
 | *P1*
 | Release as Open Source
-| The source code of the solution is made available as open source. License: Open Logistics Foundation License 1.3, Hosted by the Open Logistics Foundation.
+| The source code of the solution is made available as open source. License: Apache License 2.0.
 
 | *P2*
 | All dependencies are Open Source
