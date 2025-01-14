@@ -1,7 +1,7 @@
 {
   "name": "@forest-guard/source",
   "version": "0.3.0",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "scripts": {
     "clean": "rm -rf .angular dist node_modules prisma/dev.db prisma/erd.png",
     "set-up-database": "npx prisma db push --force-reset && npx prisma db seed",
