@@ -1,5 +1,11 @@
 [
   {
+    "id": "c1c1f27f-75c9-45f8-98f6-cff1357561e1",
+    "name": "Acme Corp",
+    "entityId": "c1c1f27f-75c9-45f8-98f6-cff1357561e1",
+    "addressId": "acme_corp_address"
+  },
+  {
     "id": "1bd6751f-4007-4168-b252-81c970a45af6",
     "name": "Acme Corp 2",
     "entityId": "1bd6751f-4007-4168-b252-81c970a45af6",
