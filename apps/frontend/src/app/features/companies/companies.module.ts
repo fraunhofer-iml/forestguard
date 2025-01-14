@@ -26,6 +26,7 @@ import { ImportService } from '../../shared/services/import/import.service';
 import { TypeSafeMatCellDefDirective } from '../../shared/services/utils/typesafe-matcell.definition';
 import { SharedModule } from '../../shared/shared.module';
 import { DataTableUtilityService } from '../../shared/utils/data-table-utility.service';
+import { SharedReload } from '../../shared/utils/sharedReload';
 import { AddCompanyComponent } from './add-company/add-company.component';
 import { AddCompanyService } from './add-company/service/add-company.service';
 import { CompaniesRoutingModule } from './companies.routes';
@@ -63,6 +64,7 @@ import { CompanyComponent } from './company/company.component';
     AddCompanyService,
     ImportService,
     DataTableUtilityService,
+    SharedReload,
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: {
