@@ -43,7 +43,7 @@ export function farmerCreate({ dto, entityId, companyId }: {
       address: {
         create: dto.address,
       },
-      personalId: dto.personalId,
+      personalId: (dto.personalId !== "") ? dto.personalId : null,
     },
     include: {
       address: true,
@@ -69,7 +69,7 @@ function user({ dto, entityId, companyId }: { dto: UserCreateDto; entityId: stri
         id: entityId,
       },
     },
-    employeeId: dto.employeeId,
+    employeeId: (dto.employeeId !== "") ? dto.employeeId : null,
   };
 }
 
