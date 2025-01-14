@@ -7,7 +7,7 @@ import {
 } from '@forest-guard/api-interfaces';
 import { BlockchainConnectorService } from '@forest-guard/blockchain-connector';
 import { PrismaService } from '@forest-guard/database';
-import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { Batch } from '@prisma/client';
 import { mapBatchCombinedToBatchCreateDto } from '../utils/batch.mapper';
 import { createBatchQuery, createOriginBatchQuery, processStepQuery, readBatchByIdQuery } from '../utils/batch.queries';
@@ -182,7 +182,7 @@ export class BatchCreateService {
     const fetchedBatch = await this.prismaService.batch.findUnique({ where: { id: batchId } });
 
     if (!fetchedBatch) {
-      throw new AmqpException(`No batch with id ${fetchedBatch.id} found. `, HttpStatus.NOT_FOUND);
+      throw new AmqpException(`No batch with id ${batchId} found. `, HttpStatus.NOT_FOUND);
     }
     if (!fetchedBatch.active) {
       throw new AmqpException(`Batch '${fetchedBatch.id}' is already inactive. `, HttpStatus.BAD_REQUEST);

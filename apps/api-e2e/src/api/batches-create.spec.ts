@@ -51,7 +51,7 @@ describe('/batches-create', () => {
         recipient: batchCreateDto.recipient,
         processStep: batchCreateDto.processStep,
       }
-      const result = await axios.post(`/batches`, [batchCreateForError], httpHeader);
+      await axios.post(`/batches`, [batchCreateForError], httpHeader);
 
       await expect(
         axios.post(`/batches`, [batchCreateForError], httpHeader)

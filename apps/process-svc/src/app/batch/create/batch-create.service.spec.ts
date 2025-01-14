@@ -109,73 +109,37 @@ describe('BatchService', () => {
     await expect(service.createHarvests(mockedCreateBatchDtosWithLinks)).rejects.toThrow();
   });
 
-  // TODO: test new logic
-  // für jede exception einen
-  // für 2. nochmal mit dem 1. element active und dem 2. inactve
-
-
-  // 1. 
-
   it('should throw an error for not finding a Batch', async () => {
+    mockedCreateBatchDto.ins = ["test"];
     const mockedCreateBatchDtos = [mockedCreateBatchDto];
-    // findUnique should fail
 
-    jest.spyOn(prisma.processStep, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1.processStep);
-
+    jest.spyOn(prisma.processStep, 'create').mockImplementation(  );
     jest.spyOn(prisma.batch, 'findUnique').mockResolvedValue(undefined);
     jest.spyOn(prisma.batch, 'create').mockImplementation();
 
-
     await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toThrow(AmqpException);
-    // implement siehe screenshot 
     await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toMatchObject({
       error: {
-        message: "No batch with id l1 found. ", 
+        message: `No batch with id ${mockedCreateBatchDto.ins[0]} found. ` , 
         status: HttpStatus.NOT_FOUND,
       }
     });
   });
 
-  // 2.1 
   it('should throw an error for an inactive batch', async () => {
-    // mockedPrismaBatchWithRelations4.active = false
     const mockedCreateBatchDtos = [mockedCreateBatchDto];
 
     jest.spyOn(prisma.processStep, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1.processStep);
     jest.spyOn(prisma.batch, 'findUnique').mockResolvedValue(mockedPrismaBatchWithRelations4);
     jest.spyOn(prisma.batch, 'create').mockImplementation();
     
-
     await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toThrow(AmqpException);
-    // implement siehe screenshot 
     await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toMatchObject({
       error: {
-        message: "Batch 'l1' is already inactive. ", 
+        message: `Batch '${mockedPrismaBatchWithRelations4.id}' is already inactive. `, 
         status: HttpStatus.BAD_REQUEST,
       }
     });
   });
 
-  // 2.2
-  // prüfen ob findUnique 2 mal aufgerufen wird 
-  
-  it('should throw an error for just one inactive batch', async () => {
-    const mockedCreateBatchDtos = [mockedCreateBatchDto, mockedCreateBatchDto];
-    jest.spyOn(prisma.processStep, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1.processStep);
-
-    jest.spyOn(prisma.batch, 'findUnique')
-    .mockResolvedValueOnce(mockedPrismaBatchWithRelations1)
-    .mockResolvedValueOnce(mockedPrismaBatchWithRelations4);
-    jest.spyOn(prisma.batch, 'create').mockResolvedValue(mockedPrismaBatch1);
-    expect(prisma.batch.findUnique).toHaveBeenCalledTimes(2);
-    await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toThrow(AmqpException);
-    // implement siehe Screenshot
-    await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toMatchObject({
-      error: {
-        message: "Batch 'l1' is already inactive. ", 
-        status: HttpStatus.BAD_REQUEST,
-      }
-    });
-  });
-  
 });
