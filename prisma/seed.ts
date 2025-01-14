@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { PrismaClient } from '@prisma/client';
 import { Entity, importEntities } from './data_import';
 
@@ -6,7 +14,7 @@ const companies = require('./data/companies.json');
 const entities = require('./data/entities.json');
 const users = require('./data/users.json');
 
-// Do not change the sequence!
+// Do not change the order!
 const dataSets: Entity[] = [
   {
     name: 'address',
