@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../core/services/authentication.service';
 import { Messages } from '../../../shared/messages';
 import { CompanyService } from '../../../shared/services/company/company.service';
-import { SharedReload } from '../../../shared/utils/sharedReload';
 import { CompanyForm } from './model/forms';
 import { AddCompanyService } from './service/add-company.service';
 
@@ -31,8 +30,7 @@ export class AddCompanyComponent {
     public authenticationService: AuthenticationService,
     private readonly companyService: CompanyService,
     private readonly createCompanyService: AddCompanyService,
-    private readonly router: Router,
-    private shade: SharedReload
+    private readonly router: Router
   ) {}
 
   submitCompany() {
@@ -51,7 +49,7 @@ export class AddCompanyComponent {
           })
         )
         .subscribe(() => {
-          SharedReload.reload2$.next(undefined);
+          location.reload();
           this.router.navigate(['/companies', this.authenticationService.getCurrentCompanyId() ?? '']);
           this.loading = false;
           this.companyFormGroup.reset();
