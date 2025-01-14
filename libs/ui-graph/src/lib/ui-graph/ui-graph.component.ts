@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { Edge } from '@forest-guard/api-interfaces';
 import { BaseType, select as d3_select, zoom as d3_zoom, zoomIdentity as d3_zoomIdentity, easeQuadInOut, Selection } from 'd3';
 import { sankey as d3_sankey, sankeyLeft as d3_sankeyLeft, sankeyLinkHorizontal as d3_sankeyLinkHorizontal } from 'd3-sankey';
