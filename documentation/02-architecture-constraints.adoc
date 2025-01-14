@@ -143,7 +143,7 @@ The following political constraints apply:
 
 | *P1*
 | Release as Open Source
-| The source code of the solution is made available as open source. License: Apache License 2.0, Hosted by the Open Logistics Foundation.
+| The source code of the solution is made available as open source. License: Apache License 2.0.
 
 | *P2*
 | All dependencies are Open Source
