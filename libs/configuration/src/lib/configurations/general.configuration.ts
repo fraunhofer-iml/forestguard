@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { LogLevel } from '@nestjs/common';
 import { registerAs } from '@nestjs/config';
 
@@ -27,8 +35,8 @@ export default registerAs(GENERAL_CONFIG_IDENTIFIER, () => ({
     endPoint: process.env['MINIO_ENDPOINT'] || 'localhost',
     port: parseInt(process.env['MINIO_PORT'] || '9000'),
     useSSL: process.env['MINIO_USE_SSL'] === 'true',
-    accessKey: process.env['MINIO_ROOT_USER'] || 'admin',
-    secretKey: process.env['MINIO_ROOT_PASSWORD'] || 'blockchain',
+    accessKey: process.env['MINIO_ACCESS_KEY'] || 'admin',
+    secretKey: process.env['MINIO_SECRET_KEY'] || 'blockchain',
     bucketName: process.env['MINIO_BUCKET_NAME'] || 'forest-guard',
   },
 }));

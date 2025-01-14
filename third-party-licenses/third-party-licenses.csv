@@ -272,7 +272,6 @@
 "@module-federation/webpack-bundler-runtime@0.2.8","MIT",""
 "@msgpackr-extract/msgpackr-extract-linux-x64@3.0.3","MIT","https://github.com/kriszyp/msgpackr-extract"
 "@napi-rs/wasm-runtime@0.2.4","MIT","https://github.com/napi-rs/napi-rs"
-"@nestjs/axios@3.0.3","MIT","https://github.com/nestjs/axios"
 "@nestjs/common@10.3.10","MIT","https://github.com/nestjs/nest"
 "@nestjs/config@3.2.3","MIT","https://github.com/nestjs/config"
 "@nestjs/core@10.3.10","MIT","https://github.com/nestjs/nest"
