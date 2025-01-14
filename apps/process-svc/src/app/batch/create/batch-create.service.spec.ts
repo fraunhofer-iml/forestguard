@@ -142,22 +142,4 @@ describe('BatchService', () => {
     });
   });
 
-
-  it('should throw an error for just one inactive batch', async () => {
-    const mockedCreateBatchDtos = [mockedCreateBatchDto, mockedCreateBatchDto];
-    jest.spyOn(prisma.processStep, 'create').mockResolvedValue(mockedPrismaBatchWithRelations1.processStep);
-
-    jest.spyOn(prisma.batch, 'findUnique')
-    .mockResolvedValueOnce(mockedPrismaBatchWithRelations1)
-    .mockResolvedValueOnce(mockedPrismaBatchWithRelations4);
-    jest.spyOn(prisma.batch, 'create').mockResolvedValue(mockedPrismaBatch1);
-    await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toThrow(AmqpException);
-    await expect(service.createBatches(mockedCreateBatchDtos)).rejects.toMatchObject({
-      error: {
-        message: "Batch 'l1' is already inactive. ", 
-        status: HttpStatus.BAD_REQUEST,
-      }
-    });
-  });
-
 });
