@@ -74,6 +74,17 @@ export function userOrFarmerReadById(id: string) {
   };
 }
 
+export function farmerReadByPersonalId(personalId: string, companyId: string) {
+  return {
+    where: {
+      companyId_personalId: {
+        companyId,
+        personalId,
+      },
+    },
+    include: farmerIncludeProperties(),
+  };
+}
 export function farmerReadByCompanyId(companyId: string) {
   return {
     where: {

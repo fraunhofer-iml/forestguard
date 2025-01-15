@@ -5,15 +5,19 @@ import {
   ImportResponseDto,
   MasterDataImportService,
   UserCreateDto,
+  UserOrFarmerDto,
 } from '@forest-guard/api-interfaces';
 import { UserService } from '../user/user.service';
 import { PlotsOfLandService } from '../plots-of-land/plots-of-land.service';
 import { CompanyService } from '../company/company.service';
 import { COMPANY_IMPORT_SERVICES } from './import.constants';
 import { AmqpException } from '@forest-guard/amqp';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ImportService {
+  private readonly PRISMA_NOT_FOUND_ERROR = 'P2025';
+
   constructor(
     @Inject(COMPANY_IMPORT_SERVICES) private readonly companyImportServices: MasterDataImportService[],
     private readonly companyService: CompanyService,
@@ -31,7 +35,7 @@ export class ImportService {
       employeesCreated: employeesDto.numberOfCreatedEmployees,
       farmersCreated: farmersDto.numberOfCreatedFarmers,
       plotsOfLandCreated: farmersDto.numberOfCreatedPlotsOfLand,
-      errors: [ ...employeesDto.employeeErrors, ...farmersDto.farmerAndPlotOfLandErrors ],
+      errors: [...employeesDto.employeeErrors, ...farmersDto.farmerAndPlotOfLandErrors],
     };
   }
 
@@ -56,8 +60,7 @@ export class ImportService {
           companyId: companyId,
         });
         employeesDto.numberOfCreatedEmployees++;
-      }
-      catch (e) {
+      } catch (e) {
         employeesDto.employeeErrors.push(e.toString());
       }
     }
@@ -70,23 +73,34 @@ export class ImportService {
       numberOfCreatedPlotsOfLand: 0,
       farmerAndPlotOfLandErrors: Array<string>(),
     };
+
     for (const farmerAndPlotOfLand of farmersAndPlotsOfLand) {
       try {
-        const farmer = await this.userService.createFarmer({
-          dto: farmerAndPlotOfLand.farmer,
-          companyId: companyId,
-        });
-        farmersDto.numberOfCreatedFarmers++;
+        let farmer: UserOrFarmerDto;
+
+        try {
+          farmer = await this.userService.readFarmerByPersonalId(farmerAndPlotOfLand.farmer.personalId, companyId);
+        } catch (e) {
+          if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === this.PRISMA_NOT_FOUND_ERROR) {
+            farmer = await this.userService.createFarmer({
+              dto: farmerAndPlotOfLand.farmer,
+              companyId: companyId,
+            });
+            farmersDto.numberOfCreatedFarmers++;
+          } else throw e;
+        }
+
         await this.plotsOfLandService.createPlotOfLand(
           farmerAndPlotOfLand.plotOfLand,
           farmer.id,
         );
         farmersDto.numberOfCreatedPlotsOfLand++;
-      }
-      catch (e) {
+
+      } catch (e) {
         farmersDto.farmerAndPlotOfLandErrors.push(e.toString());
       }
     }
+
     return farmersDto;
   }
 }
