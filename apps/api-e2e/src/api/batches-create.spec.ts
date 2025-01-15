@@ -12,6 +12,7 @@ import { HttpStatus } from '@nestjs/common';
 import { ensureResponseBatch, ensureResponseBatchWithProcess } from './assertions/batches/assertion.utils';
 import { givenFarmer, prepareFarmerWithDto, preparePlotOfLand, Process } from './test-utils/arrange-utils';
 import {
+  getBatchesFromDb,
   prepareBatchCreationWithPlotOfLand,
   prepareTwoPlotsOfLandCreation,
   prepareXPlotsOfLandCreation,
@@ -46,6 +47,32 @@ describe('/batches-create', () => {
     it('should response with no created batches', async () => {
       const response = await axios.post(`/batches`, [], httpHeader);
       expect(response.status).toBe(HttpStatus.NO_CONTENT);
+    });
+
+    it('should throw an error for a batch that is already inactive', async () => {
+      await axios.post(`/batches`, [batchCreateDto], httpHeader);
+      const batch = (await getBatchesFromDb(batchCreateDto.recipient))[0];
+      
+      const batchCreateForError: BatchCreateDto = {
+        ins: [batch.id],
+        weight: batchCreateDto.weight,
+        recipient: batchCreateDto.recipient,
+        processStep: batchCreateDto.processStep,
+      }
+      await axios.post(`/batches`, [batchCreateForError], httpHeader);
+
+      await expect(
+        axios.post(`/batches`, [batchCreateForError], httpHeader)
+      ).rejects.toMatchObject({
+        response: {
+          data: {
+            timestamp: expect.any(String),
+            status: 400,
+            message: `Batch '${batch.id}' is already inactive. `,
+            requestDetails: expect.anything(),
+          },
+        },
+      });
     });
   });
 
