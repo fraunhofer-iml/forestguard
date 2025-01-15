@@ -12,8 +12,7 @@ import {
   convertToMultiPoint,
   convertToMultiPolygon,
   convertToPoint,
-  convertToPolygon,
-  convertUTMtoWGS,
+  convertToPolygon, convertUTMtoWGS,
 } from './coordinate-utils';
 
 describe('Coordinate Utils', () => {
