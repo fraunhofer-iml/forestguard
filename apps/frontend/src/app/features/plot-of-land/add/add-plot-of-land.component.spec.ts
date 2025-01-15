@@ -17,6 +17,7 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { provideRouter, Router } from '@angular/router';
 import { AuthenticationService } from '../../../core/services/authentication.service';
+import { UploadFormSelectType } from '../../../shared/components/upload-form/upload-form-select.type';
 import { Messages } from '../../../shared/messages';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { CultivationService } from '../../../shared/services/cultivation/cultivation.service';
@@ -398,5 +399,25 @@ describe('AddPlotOfLandComponent', () => {
     expect(createPlotOfLandSpy).toHaveBeenCalled();
     expect(createProofSpy).toHaveBeenCalled();
     expect(navigateSpy).toHaveBeenCalledWith(['/pols', plotOfLandId]);
+  });
+
+  it('should remove the file from the matching upload', () => {
+    const upload1: UploadFormSelectType = { key: 'file1', value: 'Proof of Freedom', file: new File([], 'proofOfFreedom.pdf') };
+    const upload2: UploadFormSelectType = { key: 'file2', value: 'Proof of ownership', file: new File([], 'proofOfOwnership.pdf') };
+    component.uploadSelectOption = [upload1, upload2];
+    component.removeFile({ key: 'file1', value: 'Proof of Freedom' });
+
+    expect(component.uploadSelectOption).toEqual([
+      {
+        key: 'file1',
+        value: 'Proof of Freedom',
+        file: undefined,
+      },
+      {
+        file: new File([], 'proofOfOwnership.pdf'),
+        key: 'file2',
+        value: 'Proof of ownership',
+      },
+    ]);
   });
 });

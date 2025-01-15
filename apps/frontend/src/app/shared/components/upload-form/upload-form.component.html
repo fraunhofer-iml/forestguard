@@ -1,34 +1,30 @@
-<div class="grid gap-4"
-  [ngClass]="{ 'grid-cols-1': uploadedFilesPosition === 'bottom', 'grid-cols-2': uploadedFilesPosition === 'right' }">
+<div class="grid gap-4" [ngClass]="{ 'grid-cols-1': uploadedFilesPosition === 'bottom', 'grid-cols-2': uploadedFilesPosition === 'right' }">
   <div class="card">
     <div class="flex items-baseline">
       <h1 class="font-semibold text-gray-700 pb-4 mr-2">{{ title || 'Upload' }}</h1>
       @if (informationText) {
-        <span
-            class="material-symbols-outlined"
-            matTooltip="{{ informationText }}">
-          info
-        </span>
+        <span class="material-symbols-outlined" matTooltip="{{ informationText }}"> info </span>
       }
     </div>
     <form [formGroup]="formGroup">
       @if (selectOptions && selectOptions.length > 0) {
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label class="w-full">Document Type</mat-label>
-        <mat-select formControlName="documentType" placeholder="Select Document Type" class="w-full !border-none">
-          <mat-option *ngFor="let option of selectOptions" [value]="option.value">
-            {{ option.key }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label class="w-full">Document Type</mat-label>
+          <mat-select formControlName="documentType" placeholder="Select Document Type" class="w-full !border-none">
+            <mat-option *ngFor="let option of selectOptions" [value]="option.value">
+              {{ option.key }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       }
       <div class="flex items-center justify-center w-full mt-4">
-        <label for="dropzone-file"
-          class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 hover:bg-gray-100">
+        <label
+          for="dropzone-file"
+          class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 hover:bg-gray-100"
+        >
           <div class="flex flex-col items-center justify-center pt-5 pb-6" *ngIf="!formGroup.value.file">
             <span class="material-symbols-outlined text-gray-500 text-4xl"> cloud_upload </span>
-            <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop
-            </p>
+            <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
             <p class="text-xs text-gray-500">PNG, JPG, PDF</p>
           </div>
           <div class="flex flex-col items-center justify-center pt-5 pb-6" *ngIf="formGroup.value.file">
@@ -41,15 +37,20 @@
       </div>
 
       @if (showDescriptionField) {
-      <mat-form-field class="w-full mt-4" appearance="outline">
-        <mat-label>Description</mat-label>
-        <input matInput formControlName="description" placeholder="Fairtrade Certificate" />
-      </mat-form-field>
+        <mat-form-field class="w-full mt-4" appearance="outline">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description" placeholder="Fairtrade Certificate" />
+        </mat-form-field>
       }
 
       <div class="flex items-center justify-center">
-        <button mat-flat-button class="mt-4 text-center" [disabled]="!formGroup.valid" (click)="submitDocument()"
-          [matTooltip]="buttonTooltip">
+        <button
+          mat-flat-button
+          class="mt-4 text-center"
+          [disabled]="!formGroup.valid"
+          (click)="submitDocument()"
+          [matTooltip]="buttonTooltip"
+        >
           {{ buttonText }}
         </button>
       </div>
@@ -68,8 +69,8 @@
     </div>
     @if (selectOptions && selectOptions.length > 0) {
       @for (option of selectOptions; track $index) {
-        <div class="grid grid-cols-2 border-b-2 p-2">
-          <div class="flex">
+        <div class="grid grid-cols-3 border-b-2 p-2">
+          <div class="col-span-2 flex">
             <span class="material-symbols-outlined border-gray-200" [ngClass]="{ 'text-green-600': option.file }">
               {{ option.file ? 'check_circle' : 'pending' }}
             </span>
@@ -78,9 +79,9 @@
             </div>
           </div>
           @if (option.file) {
-            <div class="text-end">
-              <button class="material-symbols-outlined hover:text-red-400 cursor-pointer" (click)="removeProof.emit(option)">delete</button>
-            </div>
+            <button class="material-symbols-outlined text-end hover:text-red-400 cursor-pointer" (click)="removeProof.emit(option)">
+              delete
+            </button>
           }
         </div>
       }
