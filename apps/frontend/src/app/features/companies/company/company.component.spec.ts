@@ -1,4 +1,12 @@
-import { CompanyDto, farmer1Mock, UserOrFarmerDto } from '@forest-guard/api-interfaces';
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { CompanyDto, farmer1Mock, Role, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { of } from 'rxjs';
 import { HttpClient, HttpHandler } from '@angular/common/http';
@@ -6,6 +14,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
+import { AuthenticationService } from '../../../core/services/authentication.service';
 import { Messages } from '../../../shared/messages';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { ImportService } from '../../../shared/services/import/import.service';
@@ -90,6 +99,13 @@ describe('CompanyComponent', () => {
           provide: ActivatedRoute,
           useValue: {
             params: of('1'),
+          },
+        },
+        {
+          provide: AuthenticationService,
+          useValue: {
+            getCurrentCompanyId: jest.fn().mockReturnValue(''),
+            hasRole: jest.fn().mockReturnValue(Role.COOPERATIVE),
           },
         },
       ],

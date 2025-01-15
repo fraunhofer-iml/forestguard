@@ -1,7 +1,10 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nx"],
+  "plugins": ["@nx", "license-header"],
+  "rules": {
+    "license-header/header": ["error", "../../LICENSE-HEADER"]
+  },
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],

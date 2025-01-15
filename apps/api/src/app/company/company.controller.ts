@@ -1,11 +1,21 @@
-import { BatchDto, CompanyCreateDto, CompanyDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
-import { AuthenticatedUser } from 'nest-keycloak-connect';
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { BatchDto, CompanyCreateDto, CompanyDto, Role, UserOrFarmerDto } from '@forest-guard/api-interfaces';
+import { KeycloakUtil } from '@forest-guard/util';
+import { AuthenticatedUser, Roles } from 'nest-keycloak-connect';
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CompanyService } from './company.service';
 
 @ApiTags('Companies')
 @Controller('companies')
+@Roles({ roles: [KeycloakUtil.toRealmRole(Role.ENABLED)] })
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 

@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { FarmerCreateDto, RoleType, UserCreateDto, UserUpdateDto } from '@forest-guard/api-interfaces';
 
 export function userCreate({ dto, entityId, companyId }: { dto: UserCreateDto; entityId: string; companyId: string }) {
@@ -35,7 +43,7 @@ export function farmerCreate({ dto, entityId, companyId }: {
       address: {
         create: dto.address,
       },
-      personalId: dto.personalId,
+      personalId: (dto.personalId !== "") ? dto.personalId : null,
     },
     include: {
       address: true,
@@ -61,7 +69,7 @@ function user({ dto, entityId, companyId }: { dto: UserCreateDto; entityId: stri
         id: entityId,
       },
     },
-    employeeId: dto.employeeId,
+    employeeId: (dto.employeeId !== "") ? dto.employeeId : null,
   };
 }
 

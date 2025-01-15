@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import {
   BatchCombinedCreateDto,
   BatchCreateDto,
@@ -7,14 +15,15 @@ import {
   Role,
   TAuthenticatedUser,
 } from '@forest-guard/api-interfaces';
+import { KeycloakUtil } from '@forest-guard/util';
 import { AuthenticatedUser, Roles } from 'nest-keycloak-connect';
 import { Body, Controller, Get, Header, Param, Post, StreamableFile } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BatchService } from './batch.service';
-import { KeycloakUtil } from '@forest-guard/util';
 
 @ApiTags('Batches')
 @Controller('batches')
+@Roles({ roles: [KeycloakUtil.toRealmRole(Role.ENABLED)] })
 export class BatchController {
   constructor(private readonly batchService: BatchService) {}
 
@@ -27,7 +36,7 @@ export class BatchController {
   }
 
   @Post('harvests')
-  @Roles({ roles: [KeycloakUtil.toRealmRole(Role.Cooperative)]})
+  @Roles({ roles: [KeycloakUtil.toRealmRole(Role.COOPERATIVE)] })
   @ApiBearerAuth()
   @ApiOperation({ description: 'Create harvest batches' })
   @ApiCreatedResponse({ description: 'Successful creation.' })
@@ -39,7 +48,7 @@ export class BatchController {
   }
 
   @Post('harvests/combined')
-  @Roles({ roles: [KeycloakUtil.toRealmRole(Role.Cooperative)]})
+  @Roles({ roles: [KeycloakUtil.toRealmRole(Role.COOPERATIVE)] })
   @ApiBearerAuth()
   @ApiOperation({ description: 'Create harvest batches to multiple plot of lands' })
   @ApiCreatedResponse({ description: 'Successful creation.' })

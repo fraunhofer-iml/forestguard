@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import {
   CoordinateType,
   CultivationDto,
@@ -11,7 +19,7 @@ import {
 } from '@forest-guard/api-interfaces';
 import { Icon, LatLng, latLng, Layer, marker, polygon, tileLayer } from 'leaflet';
 import { toast } from 'ngx-sonner';
-import { combineLatest, mergeMap, Observable } from 'rxjs';
+import { combineLatest, map, mergeMap, Observable, startWith, switchMap, tap } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -22,9 +30,8 @@ import { CompanyService } from '../../../shared/services/company/company.service
 import { CultivationService } from '../../../shared/services/cultivation/cultivation.service';
 import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
 import { UserService } from '../../../shared/services/user/user.service';
-import { convertToCorrectFormat, convertUTMtoWGS } from '../../../shared/utils/coordinate-utils';
+import { convertToCorrectFormat, convertUTMtoWGS, CoordinateInput } from '@forest-guard/utm';
 import { getFormattedUserName } from '../../../shared/utils/user-company-utils';
-import { CoordinateInput } from './components/coordinate-input/coordinate-input.type';
 import { JsonData } from './model/json-data';
 import { PlotOfLandForm } from './model/plot-of-land-form';
 import { GeneratePlotOfLandService } from './service/generate-plot-of-land.service';
@@ -38,7 +45,7 @@ export class AddPlotOfLandComponent {
   valueChangesOfGeoDataStandard$: Observable<string | null> | undefined;
   users$: Observable<UserDto[]>;
   farmers$: Observable<UserOrFarmerDto[]>;
-  coffeeOptions$: Observable<CultivationDto[]>;
+  coffeeOptions$?: Observable<CultivationDto[]>;
   plotOfLandFormGroup: FormGroup<PlotOfLandForm> = new FormGroup<PlotOfLandForm>({
     processOwner: new FormControl(null, Validators.required),
     region: new FormControl(null, Validators.required),
@@ -97,9 +104,34 @@ export class AddPlotOfLandComponent {
     private readonly authenticationService: AuthenticationService,
     private readonly router: Router
   ) {
-    this.farmers$ = this.companyService.getFarmersByCompanyId(this.authenticationService.getCurrentCompanyId() ?? '');
+    this.farmers$ = this.companyService.getFarmersByCompanyId(this.authenticationService.getCurrentCompanyId() ?? '').pipe(
+      switchMap(
+        (farmers) =>
+          this.plotOfLandFormGroup.controls.processOwner.valueChanges.pipe(
+            startWith(''),
+            map((value) =>
+              farmers.filter((farmer) => {
+                if (!value || value instanceof Object) return farmer;
+
+                return (
+                  farmer.firstName.toLowerCase().includes((value as string).toLowerCase()) ||
+                  farmer.lastName.toLowerCase().includes((value as string).toLowerCase())
+                );
+              })
+            )
+          ) ?? []
+      )
+    );
     this.users$ = this.userService.getUsers();
-    this.coffeeOptions$ = this.cultivationService.readCultivationsByCommodity('coffee');
+    this.coffeeOptions$ = this.cultivationService.readCultivationsByCommodity('coffee').pipe(
+      switchMap(
+        (cultivations) =>
+          this.plotOfLandFormGroup.get('cultivationSort')?.valueChanges.pipe(
+            startWith(''),
+            map((value) => cultivations.filter((cultivation) => cultivation.sort.includes(value ?? '')))
+          ) ?? []
+      )
+    );
     this.handleGeoDataValueChange();
   }
 
@@ -112,14 +144,24 @@ export class AddPlotOfLandComponent {
     if (this.plotOfLandFormGroup.valid && this.geoDataFormGroup.valid && this.plotOfLandFormGroup.value.processOwner) {
       const formData = this.geoDataFormGroup.get('geoDataCoordinates')?.value as CoordinateInput;
 
+      if (typeof this.plotOfLandFormGroup.value.processOwner === 'string') {
+        this.plotOfLandFormGroup.controls.processOwner.setErrors({
+          noUserSelected: true,
+        });
+        this.plotOfLandFormGroup.markAllAsTouched();
+        return;
+      }
+
       const convertedCoordinates =
         this.geoDataStandard === Standard.UTM ? convertUTMtoWGS(formData, this.geoDataFormGroup.get('geoDataZone')?.value) : formData;
-
       const coordinates = convertToCorrectFormat(convertedCoordinates, this.geoDataType);
+      if (this.geoDataStandard === Standard.UTM) {
+        this.geoDataFormGroup.value.geoDataStandard = Standard.WGS;
+      }
 
       this.plotOfLandService
         .createPlotOfLand(
-          this.plotOfLandFormGroup.value.processOwner,
+          (this.plotOfLandFormGroup.value.processOwner as UserOrFarmerDto).id,
           this.generatePlotOfLandService.createNewPlotOfLand(this.plotOfLandFormGroup, this.geoDataFormGroup, coordinates)
         )
         .pipe(

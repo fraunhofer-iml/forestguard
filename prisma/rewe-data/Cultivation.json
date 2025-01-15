@@ -1,0 +1,26 @@
+[
+  {
+    "id": "cm4mtjzk2000ilpucry43s4qw",
+    "commodity": "coffee",
+    "sort": "arabica",
+    "quality": "c1"
+  },
+  {
+    "id": "cm5l46lbq000bolygzuv17i0o",
+    "commodity": "coffee",
+    "sort": "soc1",
+    "quality": "q1"
+  },
+  {
+    "id": "cm5noc2pc0001qb0f09742hxo",
+    "commodity": "coffee",
+    "sort": "robusta",
+    "quality": "1"
+  },
+  {
+    "id": "cm5w7qm3p000212m9818p7sxo",
+    "commodity": "coffee",
+    "sort": "asdf",
+    "quality": "asdf"
+  }
+]

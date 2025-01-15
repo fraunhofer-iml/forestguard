@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import {
   CoordinateType,
   FarmerAndPlotOfLand,
@@ -61,7 +69,7 @@ export class UbirikiImportService implements MasterDataImportService {
             standard: Standard.UTM,
             coordinateType: CoordinateType.Point,
             coordinates: [userData[XlsxColumn.xCoordinate], userData[XlsxColumn.yCoordinate]],
-            zone: userData[XlsxColumn.zone],
+            zone: userData[XlsxColumn.zone] + "L",
           },
           areaInHA: userData[XlsxColumn.areaInHA],
           province: HardcodedPlotsOfLandData.province,

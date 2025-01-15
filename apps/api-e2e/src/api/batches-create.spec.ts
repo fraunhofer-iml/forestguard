@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { BatchCreateDto } from '@forest-guard/api-interfaces';
 import axios from 'axios';
 import { HttpStatus } from '@nestjs/common';
@@ -108,6 +116,7 @@ describe('/batches-create', () => {
       const givenBatchCombinedCreateDto = await prepareXPlotsOfLandCreation(batchCreateDto, 0);
       const plotOfLand1 = await preparePlotOfLand(batchCreateDto.processStep.executedBy);
       const farmerDto = structuredClone(givenFarmer);
+      farmerDto.employeeId = crypto.randomUUID();
       farmerDto.personalId = 'pf2';
       const farmer2 = await prepareFarmerWithDto(farmerDto);
       const plotOfLand2 = await preparePlotOfLand(farmer2.data.id);

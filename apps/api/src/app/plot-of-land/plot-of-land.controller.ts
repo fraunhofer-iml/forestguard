@@ -1,21 +1,32 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import {
   PlotOfLandCreateDto,
   PlotOfLandDto,
   PlotOfLandUpdateDto,
   ProofCreateDto,
   ProofDto,
+  Role,
   TAuthenticatedUser,
 } from '@forest-guard/api-interfaces';
 import { Body, Controller, Get, Param, Patch, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import 'multer';
-import { AuthenticatedUser } from 'nest-keycloak-connect';
+import { KeycloakUtil } from '@forest-guard/util';
+import { AuthenticatedUser, Roles } from 'nest-keycloak-connect';
 import { PlotOfLandService } from './plot-of-land.service';
 import { ProofUploadDto } from './proof-upload.dto';
 
 @ApiTags('PlotsOfLand')
 @Controller('pols')
+@Roles({ roles: [KeycloakUtil.toRealmRole(Role.ENABLED)] })
 export class PlotOfLandController {
   constructor(private plotOfLandService: PlotOfLandService) {}
 

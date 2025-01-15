@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { BatchDto } from '@forest-guard/api-interfaces';
 import { PrismaService } from '@forest-guard/database';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -60,6 +68,7 @@ describe('BatchReadService', () => {
     const mockBatches = [mockedPrismaBatchWithRelations1, mockedPrismaBatchWithRelations2];
 
     jest.spyOn(prisma.batch, 'findMany').mockResolvedValue(mockBatches);
+    jest.spyOn(prisma.batch, 'findUniqueOrThrow').mockResolvedValue(mockBatches[0]);
 
     const result = await service.readBatchesByCompanyId(companyId, '{}', '{}');
     expect(result).toHaveLength(mockBatches.length);

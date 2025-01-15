@@ -1,3 +1,12 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { Role } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
 import { of } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -52,6 +61,7 @@ describe('AddUserComponent', () => {
           provide: AuthenticationService,
           useValue: {
             getCurrentCompanyId: jest.fn().mockReturnValue(''),
+            hasRole: jest.fn().mockReturnValue(Role.COOPERATIVE),
           },
         },
       ],
@@ -79,6 +89,7 @@ describe('AddUserComponent', () => {
   it('should reset form fields when clearInputFields is called', () => {
     component.userFormGroup.setValue({
       employeeId: '123',
+      personalId: '234',
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
@@ -94,6 +105,7 @@ describe('AddUserComponent', () => {
     component.clearInputFields();
     expect(component.userFormGroup.value).toEqual({
       employeeId: null,
+      personalId: null,
       firstName: null,
       lastName: null,
       email: null,
@@ -116,6 +128,7 @@ describe('AddUserComponent', () => {
     generateUserServiceMock.generateNewUser.mockReturnValue({} as any);
     component.userFormGroup.setValue({
       employeeId: '123',
+      personalId: '234',
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
@@ -138,6 +151,7 @@ describe('AddUserComponent', () => {
     generateUserServiceMock.generateNewFarmer.mockReturnValue({} as any);
     component.userFormGroup.setValue({
       employeeId: '123',
+      personalId: '234',
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',

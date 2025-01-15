@@ -1,7 +1,16 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { UiGraphComponent } from '@forest-guard/ui-graph';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -49,6 +58,7 @@ import { BatchUpdateComponent } from './update/batch-update.component';
     MatCardModule,
     SharedModule,
     ReactiveFormsModule,
+    MatAutocompleteModule,
     MatDatepickerToggle,
     MatDatepicker,
     MatDatepickerInput,

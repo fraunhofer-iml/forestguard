@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { AddressCreateDto, FarmerCreateDto, RoleType, UserCreateDto } from '@forest-guard/api-interfaces';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
@@ -56,6 +64,7 @@ describe('GenerateUserService', (): void => {
       lastName: ['Doe'],
       email: ['john.doe@example.com'],
       employeeId: ['123'],
+      personalId: ['234'],
       street: ['123 Street'],
       postalCode: ['12345'],
       city: ['City'],
@@ -71,6 +80,7 @@ describe('GenerateUserService', (): void => {
         'Doe',
         'john.doe@example.com',
         '123',
+        '234',
         '',
         new AddressCreateDto('123 Street', '12345', 'City', 'State', 'Country', 'AdditionalInformation')
       )

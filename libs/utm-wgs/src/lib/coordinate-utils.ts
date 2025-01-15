@@ -1,6 +1,14 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { CoordinateInput } from './coordinate-input.type';
+import { utmToLatLong } from './utm-wgs';
 import { Coordinates, CoordinateType } from '@forest-guard/api-interfaces';
-import { utmToLatLong } from '@forest-guard/utm';
-import { CoordinateInput } from '../../features/plot-of-land/add/components/coordinate-input/coordinate-input.type';
 
 export const convertToCorrectFormat = (coordinates: CoordinateInput, type: CoordinateType): Coordinates => {
   switch (type) {
@@ -16,6 +24,31 @@ export const convertToCorrectFormat = (coordinates: CoordinateInput, type: Coord
       return [];
   }
 };
+
+export const convertCoordinates = (coordinates: Coordinates, zone: string, coordinateType: CoordinateType): Coordinates => {
+  switch (coordinateType) {
+    case CoordinateType.Point: {
+      const point = convertFromPoint(coordinates as [number, number]);
+      const convertedCoordinates = convertUTMtoWGS(point, zone);
+      return convertToPoint(convertedCoordinates);
+    }
+    case CoordinateType.MultiPoint: {
+      const multiPoint = convertFromMultiPoint(coordinates as [number, number][]);
+      const convertedCoordinates = convertUTMtoWGS(multiPoint, zone);
+      return convertToMultiPoint(convertedCoordinates);
+    }
+    case CoordinateType.Polygon: {
+      const polygon = convertFromPolygon(coordinates as [number, number][][]);
+      const convertedCoordinates = convertUTMtoWGS(polygon, zone);
+      return convertToPolygon(convertedCoordinates);
+    }
+    case CoordinateType.MultiPolygon: {
+      const multiPolygon = convertFromMultiPolygon(coordinates as [number, number][][][]);
+      const convertedCoordinates = convertUTMtoWGS(multiPolygon, zone);
+      return convertToMultiPolygon(convertedCoordinates);
+    }
+  }
+}
 
 export const convertToPoint = (geoData: CoordinateInput): number[] => {
   return geoData[0].map((point) => [point.x, point.y]).flat();
@@ -52,7 +85,7 @@ export const convertToMultiPolygon = (geoData: CoordinateInput): number[][][][] 
   return [geoData.map((polygon) => polygon.map((point) => [point.x, point.y]))];
 };
 
-export const convertFromMultiPloygon = (coordinates: [number, number][][][]): CoordinateInput => {
+export const convertFromMultiPolygon = (coordinates: [number, number][][][]): CoordinateInput => {
   return coordinates.flatMap((polygons) => polygons.flatMap((polygon) => convertFromMultiPoint(polygon)));
 };
 

@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { BatchCombinedCreateDto, ProcessStepWithMultipleHarvestedLandsCreateDto } from '@forest-guard/api-interfaces';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
@@ -35,8 +43,8 @@ describe('HarvestService', (): void => {
     const plotsOfLand: string[] = ['ctest401'];
     const formGroup: FormGroup = formBuilder.group({
       dateOfProcess: new Date('2023-01-01'),
-      processOwner: 'McFarland, Guillermo',
-      authorOfEntry: 'Smith, Jane',
+      processOwner: { id: 'McFarland, Guillermo' },
+      authorOfEntry: { id: 'Smith, Jane' },
       weight: 100,
     });
 
@@ -57,8 +65,9 @@ describe('HarvestService', (): void => {
     const plotsOfLand: string[] = ['ctest401'];
     const formGroup: FormGroup = formBuilder.group({
       dateOfProcess: new Date('2023-01-01'),
-      processOwner: 'McFarland, Guillermo',
-      authorOfEntry: 'Smith, Jane',
+      processOwner: { id: 'McFarland, Guillermo' },
+      authorOfEntry: { id: 'Smith, Jane' },
+      recipient: { id: 'Recipient' },
       weight: 100,
     });
 
@@ -66,7 +75,7 @@ describe('HarvestService', (): void => {
 
     const expected: BatchCombinedCreateDto = {
       weight: 100,
-      recipient: '',
+      recipient: 'Recipient',
       processStep: {
         location: '',
         dateOfProcess: '2023-01-01T00:00:00.000Z',

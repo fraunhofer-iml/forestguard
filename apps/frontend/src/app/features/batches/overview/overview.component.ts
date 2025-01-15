@@ -1,5 +1,13 @@
-import { BatchDto } from '@forest-guard/api-interfaces';
-import { map, Observable } from 'rxjs';
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { BatchDto, Role } from '@forest-guard/api-interfaces';
+import { map, Observable, tap } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
@@ -17,7 +25,16 @@ import { getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
   templateUrl: './overview.component.html',
 })
 export class BatchOverviewComponent implements AfterViewInit {
-  displayedColumnsOfBatches: string[] = ['select', 'batchId', 'process', 'dateOfProcess', 'dateOfEntry', 'processOwner', 'weight'];
+  displayedColumnsOfBatches: string[] = [
+    'select',
+    'status',
+    'batchId',
+    'process',
+    'dateOfProcess',
+    'dateOfEntry',
+    'processOwner',
+    'weight',
+  ];
   dataSource: MatTableDataSource<BatchDto> = new MatTableDataSource<BatchDto>();
   selection = new SelectionModel<BatchDto>(true, []);
   paginator?: MatPaginator;
@@ -25,6 +42,7 @@ export class BatchOverviewComponent implements AfterViewInit {
   batches$?: Observable<MatTableDataSource<BatchDto>>;
   getUserOrCompanyName = getUserOrCompanyName;
   protected readonly Uris = Uris;
+  protected readonly Role = Role;
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -37,9 +55,9 @@ export class BatchOverviewComponent implements AfterViewInit {
   }
 
   constructor(
+    readonly authenticationService: AuthenticationService,
     private readonly companyService: CompanyService,
     private readonly router: Router,
-    private readonly authenticationService: AuthenticationService,
     private readonly dataTableUtilityService: DataTableUtilityService
   ) {}
 

@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { toast } from 'ngx-sonner';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -13,11 +21,13 @@ export const authGuard: CanActivateFn = async (route: ActivatedRouteSnapshot, st
   const router: Router = inject(Router);
   const companyService: CompanyService = inject(CompanyService);
 
+  if (!authenticationService.isAccountEnabled()) {
+    return router.navigateByUrl('/unauthorized?account-disabled=true');
+  }
+
   const keycloakCompanyId = authenticationService.getCurrentCompanyId();
 
   const isCompanyAddUrl = state.url.includes(Uris.addCompany);
-  console.log(isCompanyAddUrl);
-  console.log(state.url.includes(Uris.addCompany));
   if (isCompanyAddUrl) {
     return true;
   }

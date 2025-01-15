@@ -1,8 +1,17 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { toast } from 'ngx-sonner';
 import { catchError, EMPTY } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../core/services/authentication.service';
 import { Messages } from '../../../shared/messages';
 import { CompanyService } from '../../../shared/services/company/company.service';
@@ -28,7 +37,8 @@ export class AddCompanyComponent {
   constructor(
     public authenticationService: AuthenticationService,
     private readonly companyService: CompanyService,
-    private readonly createCompanyService: AddCompanyService
+    private readonly createCompanyService: AddCompanyService,
+    private readonly router: Router
   ) {}
 
   submitCompany() {
@@ -47,6 +57,8 @@ export class AddCompanyComponent {
           })
         )
         .subscribe(() => {
+          location.reload();
+          this.router.navigate(['/companies', this.authenticationService.getCurrentCompanyId() ?? '']);
           this.loading = false;
           this.companyFormGroup.reset();
           toast.success(Messages.successCompany);
