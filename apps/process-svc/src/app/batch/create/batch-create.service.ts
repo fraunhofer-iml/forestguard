@@ -18,7 +18,7 @@ import { PrismaService } from '@forest-guard/database';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Batch } from '@prisma/client';
 import { mapBatchCombinedToBatchCreateDto } from '../utils/batch.mapper';
-import { createBatchQuery, createOriginBatchQuery, processStepQuery, readBatchByIdQuery } from '../utils/batch.queries';
+import { createBatchQuery, createOriginBatchQuery, processStepQuery } from '../utils/batch.queries';
 
 @Injectable()
 export class BatchCreateService {
@@ -85,13 +85,12 @@ export class BatchCreateService {
 
   async createBatches(batchCreateDtos: BatchCreateDto[]): Promise<ProcessStepIdResponse> {
     this.hasContentForProcessing(batchCreateDtos);
-
     const processStep = await this.prismaService.processStep.create({
       data: processStepQuery(batchCreateDtos[0].processStep),
     });
-    for (const batch of batchCreateDtos) {
-      for (const currentInBatchId of batch.ins) {
-        await this.verifyActive(currentInBatchId);
+    for (const currentBatch of batchCreateDtos) {
+      for (const currentInBatchId of currentBatch.ins) {
+        await this.ensureBatchIsActive(currentInBatchId);
       }
     }
     for (const dto of batchCreateDtos) {
@@ -152,7 +151,7 @@ export class BatchCreateService {
 
   private async mergeIntoOneHarvestBatch(batchCreateDto: BatchCreateDto, batches: Batch[]): Promise<Batch> {
     for (const currentBatch of batches) {
-      await this.verifyActive(currentBatch.id);
+      await this.ensureBatchIsActive(currentBatch.id);
     }
 
     const mergeBatchCreateDto = structuredClone(batchCreateDto);
@@ -186,7 +185,7 @@ export class BatchCreateService {
     });
   }
   
-  private async verifyActive(batchId: string) {
+  private async ensureBatchIsActive(batchId: string) {
     const fetchedBatch = await this.prismaService.batch.findUnique({ where: { id: batchId } });
 
     if (!fetchedBatch) {
@@ -195,6 +194,5 @@ export class BatchCreateService {
     if (!fetchedBatch.active) {
       throw new AmqpException(`Batch '${fetchedBatch.id}' is already inactive. `, HttpStatus.BAD_REQUEST);
     }
-    return;
   }
 }
