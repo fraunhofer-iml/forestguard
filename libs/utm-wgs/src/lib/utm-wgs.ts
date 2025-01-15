@@ -40,7 +40,7 @@ export function utmToLatLong({ easting, northing, utmRef, strict = true, decimal
       throw new RangeError('northing out of range (must be between 0m and 10,000,000m)');
     }
   }
-  if (zoneNumber < 1 || zoneNumber > 60) {
+  if (isNaN(zoneNumber) || zoneNumber < 1 || zoneNumber > 60) {
     throw new RangeError('zoneNumber out of range (must be between 1 and 60)');
   }
 
