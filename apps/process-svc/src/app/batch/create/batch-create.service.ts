@@ -22,7 +22,10 @@ import { createBatchQuery, createOriginBatchQuery, processStepQuery } from '../u
 
 @Injectable()
 export class BatchCreateService {
-  constructor(private readonly prismaService: PrismaService, private readonly blockchainConnectorService: BlockchainConnectorService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly blockchainConnectorService: BlockchainConnectorService
+  ) {}
 
   private readonly HARVESTING_PROCESS = 'Harvesting';
   private readonly MERGE_PROCESS = 'Merge';
@@ -82,11 +85,14 @@ export class BatchCreateService {
 
   async createBatches(batchCreateDtos: BatchCreateDto[]): Promise<ProcessStepIdResponse> {
     this.hasContentForProcessing(batchCreateDtos);
-
     const processStep = await this.prismaService.processStep.create({
       data: processStepQuery(batchCreateDtos[0].processStep),
     });
-
+    for (const currentBatch of batchCreateDtos) {
+      for (const currentInBatchId of currentBatch.ins) {
+        await this.ensureBatchIsActive(currentInBatchId);
+      }
+    }
     for (const dto of batchCreateDtos) {
       await this.createBatch(dto, processStep.id);
     }
@@ -111,10 +117,7 @@ export class BatchCreateService {
       },
     });
     if (numberOfPlotOfLandMatches !== harvestedLandIds.length) {
-      throw new AmqpException(
-        this.INVALID_PLOTSOFLAND_MESSAGE(harvestedLandIds, processStep.executedBy),
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new AmqpException(this.INVALID_PLOTSOFLAND_MESSAGE(harvestedLandIds, processStep.executedBy), HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -147,6 +150,10 @@ export class BatchCreateService {
   }
 
   private async mergeIntoOneHarvestBatch(batchCreateDto: BatchCreateDto, batches: Batch[]): Promise<Batch> {
+    for (const currentBatch of batches) {
+      await this.ensureBatchIsActive(currentBatch.id);
+    }
+
     const mergeBatchCreateDto = structuredClone(batchCreateDto);
     mergeBatchCreateDto.ins = batches.map((batch) => batch.id);
     mergeBatchCreateDto.weight = batches.reduce((total, batch) => total + batch.weight, 0);
@@ -176,5 +183,16 @@ export class BatchCreateService {
         active: false,
       },
     });
+  }
+  
+  private async ensureBatchIsActive(batchId: string) {
+    const fetchedBatch = await this.prismaService.batch.findUnique({ where: { id: batchId } });
+
+    if (!fetchedBatch) {
+      throw new AmqpException(`No batch with id ${batchId} found. `, HttpStatus.NOT_FOUND);
+    }
+    if (!fetchedBatch.active) {
+      throw new AmqpException(`Batch '${fetchedBatch.id}' is already inactive. `, HttpStatus.BAD_REQUEST);
+    }
   }
 }
