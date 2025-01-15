@@ -84,8 +84,6 @@ async function convertPostgresDumpToJsons(inputFile: string, outputDir: string) 
       const row: TableData = {};
       columns.forEach((column, index) => {
         const camelCaseColumn = snakeToCamelCase(column);
-        // console.log(modelTypes[currentTableName as keyof typeof modelTypes]);
-        // console.log(currentTableName, camelCaseColumn, modelTypes[currentTableName as keyof typeof modelTypes][camelCaseColumn]);
         const fieldType = modelTypes[currentTableName as keyof typeof modelTypes]?.[camelCaseColumn] || 'String';
         row[camelCaseColumn] = convertValue(data[index], fieldType);
       });

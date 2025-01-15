@@ -162,8 +162,6 @@ export class UiGraphComponent implements OnInit, OnChanges {
     this.container.attr('transform', null);
     this.centerGraph();
 
-    console.log(maxNumberOfNodesOnLayer, maxLayer);
-
     this.sankey = d3_sankey()
       .nodeId((d: any) => {
         return d.id;
