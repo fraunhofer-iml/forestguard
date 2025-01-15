@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { PlotOfLandDto, ProofDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import * as L from 'leaflet';
 import { toast } from 'ngx-sonner';
@@ -145,8 +153,6 @@ describe('AddPlotOfLandComponent', () => {
       })
     );
     component.saveGeoData();
-
-    console.log(component.geoDataFormGroup.value);
 
     expect(component.geoDataFormGroup.get('geoDataStandard')?.value).toBe('WGS');
     expect(component.geoDataFormGroup.get('geoDataCoordinates')?.value).toEqual([[]]);

@@ -1,6 +1,14 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { BatchCreateDto, BatchDto, CompanyDto, FGFile, ProcessStepCreateDto, UserDto, UserOrFarmerDto } from '@forest-guard/api-interfaces';
 import { toast } from 'ngx-sonner';
-import { filter, map, merge, Observable, zip } from 'rxjs';
+import { filter, map, merge, Observable, startWith, switchMap, zip } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,7 +18,7 @@ import { BatchService } from '../../../shared/services/batch/batch.service';
 import { CompanyService } from '../../../shared/services/company/company.service';
 import { ProcessStepService } from '../../../shared/services/process-step/process.step.service';
 import { Uris } from '../../../shared/uris';
-import { getFormattedUserName } from '../../../shared/utils/user-company-utils';
+import { getFormattedUserName, getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
 
 @Component({
   selector: 'app-batch-update',
@@ -30,8 +38,8 @@ export class BatchUpdateComponent implements OnInit {
       },
       Validators.required
     ),
-    recordedBy: new FormControl(null, Validators.required),
-    executedBy: new FormControl(null, Validators.required),
+    recordedBy: new FormControl<string | UserOrFarmerDto | null>(null, Validators.required),
+    executedBy: new FormControl<string | UserOrFarmerDto | null>(null, Validators.required),
     plotOfLand: new FormControl(null),
     euInfoSystemId: new FormControl(null),
   });
@@ -41,12 +49,48 @@ export class BatchUpdateComponent implements OnInit {
   });
 
   companies$: Observable<CompanyDto[]> = this.companyService.getCompanies();
-  users$: Observable<UserDto[]> = this.currentCompany.pipe(map((company) => company.employees ?? []));
-  farmers$: Observable<UserOrFarmerDto[]> = this.currentCompany.pipe(map((company) => company.farmers ?? []));
+  users$: Observable<UserDto[]> = this.currentCompany.pipe(
+    map((company) => company.employees ?? []),
+    switchMap(
+      (users) =>
+        this.formGroup.controls['recordedBy'].valueChanges.pipe(
+          startWith(''),
+          map((value) =>
+            users.filter((user) => {
+              if (!value || typeof value !== 'string') return user;
+
+              return (
+                user.firstName.toLowerCase().includes((value as string).toLowerCase() ?? '') ||
+                user.lastName.toLowerCase().includes((value as string).toLowerCase() ?? '')
+              );
+            })
+          )
+        ) ?? []
+    )
+  );
+  processOwners$: Observable<UserOrFarmerDto[]> = this.currentCompany.pipe(
+    map((company) => [...(company.farmers ?? []), ...(company.employees ?? [])]),
+    switchMap(
+      (users) =>
+        this.formGroup.controls['executedBy'].valueChanges.pipe(
+          startWith(''),
+          map((value) =>
+            users.filter((user) => {
+              if (!value || typeof value !== 'string') return user;
+
+              return (
+                user.firstName.toLowerCase().includes((value as string).toLowerCase() ?? '') ||
+                user.lastName.toLowerCase().includes((value as string).toLowerCase() ?? '')
+              );
+            })
+          )
+        ) ?? []
+    )
+  );
   batches$ = new Observable<BatchDto[]>();
 
   protected readonly getFormattedUserName = getFormattedUserName;
-
+  protected readonly getUserOrCompanyName = getUserOrCompanyName;
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
@@ -87,7 +131,7 @@ export class BatchUpdateComponent implements OnInit {
   createBatch(): FormGroup {
     return new FormGroup({
       weight: new FormControl(null, Validators.required),
-      recipient: new FormControl(null, Validators.required),
+      recipient: new FormControl<string | CompanyDto | null>(null, Validators.required),
     });
   }
 
@@ -110,17 +154,19 @@ export class BatchUpdateComponent implements OnInit {
       return;
     }
 
-    const createBatchesDto: BatchCreateDto[] = this.outBatches.value.map((batch: { weight: number; recipient: string }) => ({
+    if (!this.checkFilters()) return;
+
+    const createBatchesDto: BatchCreateDto[] = this.outBatches.value.map((batch: { weight: number; recipient: CompanyDto }) => ({
       weight: batch.weight,
-      recipient: batch.recipient,
+      recipient: batch.recipient.id,
       ins: this.batchIds,
       euInfoSystemId: this.formGroup.value.euInfoSystemId,
       processStep: new ProcessStepCreateDto(
         this.formGroup.value.location,
         this.formGroup.value.dateOfProcess,
         this.formGroup.value.processName,
-        this.formGroup.value.executedBy,
-        this.formGroup.value.recordedBy,
+        this.formGroup.value.executedBy.id,
+        this.formGroup.value.recordedBy.id,
         this.formGroup.value.plotOfLand
       ),
     }));
@@ -135,6 +181,26 @@ export class BatchUpdateComponent implements OnInit {
       toast.success(Messages.successProcessStep);
       this.router.navigateByUrl(Uris.batches);
     });
+  }
+
+  private checkFilters(): boolean {
+    let isValid = true;
+    if (typeof this.formGroup.value.executedBy === 'string') {
+      this.formGroup.controls['executedBy'].setErrors({ invalid: true });
+      isValid = false;
+    }
+    if (typeof this.formGroup.value.recordedBy === 'string') {
+      this.formGroup.controls['recordedBy'].setErrors({ invalid: true });
+      isValid = false;
+    }
+    for (let i = 0; i < this.outBatches.length; i++) {
+      const batch = this.outBatches.controls[i];
+      if (typeof batch.value.recipient === 'string') {
+        batch.get('recipient')?.setErrors({ invalid: true });
+        isValid = false;
+      }
+    }
+    return isValid;
   }
 
   addBatchItem(): void {
