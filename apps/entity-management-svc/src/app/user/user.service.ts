@@ -42,7 +42,7 @@ export class UserService {
   }
 
   async readFarmerByPersonalId(personalId: string, companyId: string): Promise<UserOrFarmerDto> {
-    const user = await this.prismaService.user.findUniqueOrThrow(Queries.farmerReadByPersonalId(personalId, companyId));
+    const user = await this.prismaService.user.findUnique(Queries.farmerReadByPersonalId(personalId, companyId));
     return Mapper.toUserOrFarmerDto(user);
   }
 

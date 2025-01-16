@@ -43,6 +43,7 @@ describe('UserService', () => {
               update: jest.fn(),
               findFirst: jest.fn(),
               findMany: jest.fn(),
+              findUnique: jest.fn(),
               findUniqueOrThrow: jest.fn(),
             },
             entity: {
@@ -106,6 +107,16 @@ describe('UserService', () => {
 
     expect(response).toEqual(Mapper.toUserOrFarmerDto({ ...USER_PRISMA_MOCK, address: undefined }));
     expect(prisma.user.findUniqueOrThrow).toHaveBeenCalledWith(Queries.userOrFarmerReadById(givenUserId));
+  });
+
+  it('should read farmer by personalId', async () => {
+    const givenPersonalId = 'Test personal ID';
+    jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(USER_PRISMA_MOCK);
+
+    const response = await service.readFarmerByPersonalId(givenPersonalId, givenCompanyId);
+
+    expect(response).toEqual(Mapper.toUserOrFarmerDto({ ...USER_PRISMA_MOCK, address: undefined }));
+    expect(prisma.user.findUnique).toHaveBeenCalledWith(Queries.farmerReadByPersonalId(givenPersonalId, givenCompanyId));
   });
 
   it('should create a farmer', async () => {

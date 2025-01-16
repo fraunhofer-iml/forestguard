@@ -39,6 +39,7 @@ describe('ImportService', () => {
           useValue: {
             createUser: jest.fn(),
             createFarmer: jest.fn(),
+            readFarmerByPersonalId: jest.fn(),
           },
         },
         {
@@ -88,6 +89,7 @@ describe('ImportService', () => {
   it('should import master data successfully', async () => {
     const resolvedFarmer = new UserOrFarmerDto('farmerId1', '', '', '', '', '', '');
     jest.spyOn(masterDataImportService, 'import').mockResolvedValue(IMPORT_DTO_MOCK);
+    jest.spyOn(userService, 'readFarmerByPersonalId').mockResolvedValue(null);
     jest.spyOn(userService, 'createFarmer').mockResolvedValue(resolvedFarmer);
 
     const companyId = 'companyId1';
@@ -105,6 +107,10 @@ describe('ImportService', () => {
       dto: IMPORT_DTO_MOCK.employees[0],
       companyId: companyId,
     });
+    expect(userService.readFarmerByPersonalId).toHaveBeenCalledWith(
+      IMPORT_DTO_MOCK.farmersAndPlotsOfLand[0].farmer.personalId,
+      companyId,
+    );
     expect(userService.createFarmer).toHaveBeenCalledWith({
       dto: IMPORT_DTO_MOCK.farmersAndPlotsOfLand[0].farmer,
       companyId: companyId,
@@ -126,6 +132,7 @@ describe('ImportService', () => {
     const resolvedPlotOfLand = new PlotOfLandDto('');
     const errorMessage = 'Something is wrong with this data entry';
     jest.spyOn(masterDataImportService, 'import').mockResolvedValue(importDto);
+    jest.spyOn(userService, 'readFarmerByPersonalId').mockResolvedValue(null);
     jest.spyOn(userService, 'createFarmer').mockResolvedValue(resolvedFarmer);
     jest.spyOn(plotsOfLandService, 'createPlotOfLand')
       .mockResolvedValueOnce(resolvedPlotOfLand)
@@ -141,6 +148,35 @@ describe('ImportService', () => {
       plotsOfLandCreated: importDto.farmersAndPlotsOfLand.length - 1,
       errors: ['Error: ' + errorMessage],
     });
+  });
+
+  it('should import master data with existing farmer', async () => {
+    const resolvedFarmer = new UserOrFarmerDto('farmerId1', '', '', '', '', '', '');
+    jest.spyOn(masterDataImportService, 'import').mockResolvedValue(IMPORT_DTO_MOCK);
+    jest.spyOn(userService, 'readFarmerByPersonalId').mockResolvedValue(resolvedFarmer);
+
+    const companyId = 'companyId1';
+    const actualResult = await importService.importMasterData({ file: null, companyId: companyId });
+
+    expect(actualResult).toEqual({
+      employeesCreated: 1,
+      farmersCreated: 0,
+      plotsOfLandCreated: 1,
+      errors: [],
+    });
+    expect(userService.createUser).toHaveBeenCalledWith({
+      dto: IMPORT_DTO_MOCK.employees[0],
+      companyId: companyId,
+    });
+    expect(userService.readFarmerByPersonalId).toHaveBeenCalledWith(
+      IMPORT_DTO_MOCK.farmersAndPlotsOfLand[0].farmer.personalId,
+      companyId,
+    );
+    expect(userService.createFarmer).toHaveBeenCalledTimes(0);
+    expect(plotsOfLandService.createPlotOfLand).toHaveBeenCalledWith(
+      IMPORT_DTO_MOCK.farmersAndPlotsOfLand[0].plotOfLand,
+      resolvedFarmer.id,
+    );
   });
 
 });

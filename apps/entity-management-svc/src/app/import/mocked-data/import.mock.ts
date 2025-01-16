@@ -3,7 +3,7 @@ import { CoordinateType, FarmerAndPlotOfLand, ImportDto, Standard } from '@fores
 const FARMER_AND_PLOT_OF_LAND_MOCK: FarmerAndPlotOfLand = {
   farmer: {
     lastName: '',
-    personalId: '',
+    personalId: 'personalId1',
     address: {
       street: '',
       city: '',

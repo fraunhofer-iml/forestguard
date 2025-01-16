@@ -5,18 +5,15 @@ import {
   ImportResponseDto,
   MasterDataImportService,
   UserCreateDto,
-  UserOrFarmerDto,
 } from '@forest-guard/api-interfaces';
 import { UserService } from '../user/user.service';
 import { PlotsOfLandService } from '../plots-of-land/plots-of-land.service';
 import { CompanyService } from '../company/company.service';
 import { COMPANY_IMPORT_SERVICES } from './import.constants';
 import { AmqpException } from '@forest-guard/amqp';
-import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ImportService {
-  private readonly PRISMA_NOT_FOUND_ERROR = 'P2025';
 
   constructor(
     @Inject(COMPANY_IMPORT_SERVICES) private readonly companyImportServices: MasterDataImportService[],
@@ -76,18 +73,13 @@ export class ImportService {
 
     for (const farmerAndPlotOfLand of farmersAndPlotsOfLand) {
       try {
-        let farmer: UserOrFarmerDto;
-
-        try {
-          farmer = await this.userService.readFarmerByPersonalId(farmerAndPlotOfLand.farmer.personalId, companyId);
-        } catch (e) {
-          if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === this.PRISMA_NOT_FOUND_ERROR) {
-            farmer = await this.userService.createFarmer({
-              dto: farmerAndPlotOfLand.farmer,
-              companyId: companyId,
-            });
-            farmersDto.numberOfCreatedFarmers++;
-          } else throw e;
+        let farmer = await this.userService.readFarmerByPersonalId(farmerAndPlotOfLand.farmer.personalId, companyId);
+        if (farmer === null) {
+          farmer = await this.userService.createFarmer({
+            dto: farmerAndPlotOfLand.farmer,
+            companyId: companyId,
+          });
+          farmersDto.numberOfCreatedFarmers++;
         }
 
         await this.plotsOfLandService.createPlotOfLand(
