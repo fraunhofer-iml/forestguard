@@ -82,6 +82,8 @@
             <button class="material-symbols-outlined text-end hover:text-red-400 cursor-pointer" (click)="removeProof.emit(option)">
               delete
             </button>
+          } @else {
+            <span class="material-symbols-outlined text-end text-gray-300">delete</span>
           }
         </div>
       }
