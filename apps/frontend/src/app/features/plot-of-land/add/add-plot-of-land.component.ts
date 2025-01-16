@@ -194,6 +194,7 @@ export class AddPlotOfLandComponent {
 
   clearInputFields(): void {
     this.plotOfLandFormGroup.reset();
+    this.uploadSelectOption.forEach((option: UploadFormSelectType) => (option.file = undefined));
   }
 
   submitFile({ file, documentType }: FGFile): void {

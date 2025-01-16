@@ -28,5 +28,8 @@ export const getUserOrCompanyName = (input: UserDto | CompanyDto | undefined): s
 };
 
 export const getFormattedUserName = (user: { firstName?: string; lastName: string }): string => {
-  return user.firstName ? `${user.lastName}, ${user.firstName}` : user.lastName;
+  if (user) {
+    return user.firstName ? `${user.lastName}, ${user.firstName}` : user.lastName;
+  }
+  return '';
 };
