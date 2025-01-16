@@ -67,10 +67,10 @@ services:
       context: ./blockchain
       dockerfile: Dockerfile
       args:
-        GITLAB_TOKEN: ${NFT_FOLDER_GITLAB_TOKEN}
-        DEPLOYMENT_MNEMONIC: ${DEPLOYMENT_MNEMONIC}
-        TOKEN_NAME: ${TOKEN_NAME}
-        TOKEN_SYMBOL: ${TOKEN_SYMBOL}
+        GITLAB_TOKEN: ${SC_NFT_FOLDER_GITLAB_TOKEN}
+        SC_DEPLOYMENT_MNEMONIC: ${SC_DEPLOYMENT_MNEMONIC}
+        SC_TOKEN_NAME: ${SC_TOKEN_NAME}
+        SC_TOKEN_SYMBOL: ${SC_TOKEN_SYMBOL}
     depends_on:
       blockchain-network:
         condition: service_started
