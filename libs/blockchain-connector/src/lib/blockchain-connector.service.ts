@@ -8,7 +8,7 @@
 
 import { AmqpException } from '@forest-guard/amqp';
 import { ConfigurationService } from '@forest-guard/configuration';
-import { TokenMintDto } from '@nft-folder/blockchain-connector';
+import { TokenMintDto } from '@fraunhofer-iml/nft-folder-blockchain-connector';
 import { HttpStatus, Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { Batch, PlotOfLand, Proof } from '@prisma/client';
 import { BatchNftService } from './batch-nft.service';
