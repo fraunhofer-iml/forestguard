@@ -19,13 +19,13 @@ import { Messages } from '../../../shared/messages';
 import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
 import { GeoInformation } from '../../../shared/services/plotOfLand/types/geo-information.types';
 import {
-  convertFromMultiPloygon,
+  convertFromMultiPolygon,
   convertFromMultiPoint,
   convertFromPoint,
   convertFromPolygon,
-} from '../../../shared/utils/coordinate-utils';
+  CoordinateInput,
+} from '@forest-guard/utm';
 import { getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
-import { CoordinateInput } from '../add/components/coordinate-input/coordinate-input.type';
 
 @Component({
   selector: 'app-pol-details',
@@ -39,7 +39,7 @@ export class PlotOfLandDetailsComponent {
     switchMap((id) => this.plotOfLandService.getPlotOfLandById(id)),
     tap((plotOfLand) => {
       this.updateMap(plotOfLand.geoData ?? '');
-    })
+    }),
   );
 
   MINIO_URL = environment.MINIO.URL;
@@ -63,8 +63,9 @@ export class PlotOfLandDetailsComponent {
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly plotOfLandService: PlotOfLandService
-  ) {}
+    private readonly plotOfLandService: PlotOfLandService,
+  ) {
+  }
 
   getProof(type: ProofType, proofs?: ProofDto[]): ProofDto | undefined {
     return proofs?.find((proof) => proof.type === type);
@@ -95,7 +96,7 @@ export class PlotOfLandDetailsComponent {
           catchError((error: HttpErrorResponse) => {
             toast.error(error.error.message);
             return EMPTY;
-          })
+          }),
         )
         .subscribe(() => {
           this.reload$.next(undefined);
@@ -127,7 +128,7 @@ export class PlotOfLandDetailsComponent {
         break;
       }
       case CoordinateType.MultiPolygon: {
-        const polygons = convertFromMultiPloygon(typedGeoData.features[0].geometry.coordinates as [number, number][][][]);
+        const polygons = convertFromMultiPolygon(typedGeoData.features[0].geometry.coordinates as [number, number][][][]);
         this.updatePolygons(polygons);
         break;
       }
