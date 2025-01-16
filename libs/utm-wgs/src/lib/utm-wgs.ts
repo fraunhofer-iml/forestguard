@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { E, K0, M1, R, SQRT_E } from './constants';
 import { meridionalArc, toDegrees, zoneNumberToCentralLongitude } from './utils';
 
@@ -32,7 +40,7 @@ export function utmToLatLong({ easting, northing, utmRef, strict = true, decimal
       throw new RangeError('northing out of range (must be between 0m and 10,000,000m)');
     }
   }
-  if (zoneNumber < 1 || zoneNumber > 60) {
+  if (isNaN(zoneNumber) || zoneNumber < 1 || zoneNumber > 60) {
     throw new RangeError('zoneNumber out of range (must be between 1 and 60)');
   }
 

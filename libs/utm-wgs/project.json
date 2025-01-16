@@ -13,16 +13,6 @@
   },
   "tags": [],
   "targets": {
-    "build": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/libs/utm-wgs",
-        "main": "libs/utm-wgs/src/index.ts",
-        "tsConfig": "libs/utm-wgs/tsconfig.lib.json",
-        "assets": ["libs/utm-wgs/*.md"]
-      }
-    },
     "nx-release-publish": {
       "options": {
         "packageRoot": "dist/{projectRoot}"

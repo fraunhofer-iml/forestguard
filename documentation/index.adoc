@@ -5,7 +5,7 @@
 :sectnumlevels: 5
 :leveloffset: 1
 :icons: font
-:copyright: Open Logistics Foundation License 1.3
+:copyright: Apache License 2.0
 :projectName: Forest Guard
 
 [[section-preface]]

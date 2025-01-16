@@ -1,10 +1,19 @@
-import { GeoDataDto, PlotOfLandCreateDto, PlotOfLandDto, PlotOfLandUpdateDto } from '@forest-guard/api-interfaces';
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { Coordinates, GeoDataDto, PlotOfLandCreateDto, PlotOfLandDto, PlotOfLandUpdateDto, Standard } from '@forest-guard/api-interfaces';
 import { BlockchainConnectorService } from '@forest-guard/blockchain-connector';
 import { ConfigurationService } from '@forest-guard/configuration';
 import { PrismaService } from '@forest-guard/database';
 import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { User } from '@prisma/client';
+import { convertCoordinates } from '@forest-guard/utm';
 
 @Injectable()
 export class PlotsOfLandService {
@@ -110,7 +119,7 @@ export class PlotsOfLandService {
           type: 'Feature',
           geometry: {
             type: geoDataDto.coordinateType,
-            coordinates: geoDataDto.coordinates,
+            coordinates: (geoDataDto.standard === Standard.UTM) ? this.convertToWgsCoordinates(geoDataDto) : geoDataDto.coordinates,
           },
           properties: {
             ProducerName: farmerEntity.firstName + ' ' + farmerEntity.lastName,
@@ -121,6 +130,10 @@ export class PlotsOfLandService {
         },
       ],
     };
+  }
+
+  private convertToWgsCoordinates(geoDataDto: GeoDataDto): Coordinates {
+    return convertCoordinates(geoDataDto.coordinates, geoDataDto.zone, geoDataDto.coordinateType);
   }
 
   async updatePlotOfLand(id: string, plotOfLand: PlotOfLandUpdateDto): Promise<PlotOfLandDto> {

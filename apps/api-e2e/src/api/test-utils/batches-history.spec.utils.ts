@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { BatchCreateDto } from '@forest-guard/api-interfaces';
 import axios from 'axios';
 import { HttpHeader, prisma } from './test.utils';
@@ -31,6 +39,7 @@ async function getActiveBatches() {
 }
 
 async function splitIntoTwoBatches(batchCreateDto: BatchCreateDto, predecessorBatches, marker: string, httpHeader: HttpHeader) {
+  batchCreateDto.ins = [];
   batchCreateDto.ins.push(...predecessorBatches.map((batch) => batch.id));
   batchCreateDto.processStep.location = marker;
   await axios.post(`/batches`, [batchCreateDto, batchCreateDto], httpHeader);

@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { PrismaService } from '@forest-guard/database';
 import { Test, TestingModule } from '@nestjs/testing';
 import { FARMER_PRISMA_MOCK } from './mocked-data/farmer.mock';

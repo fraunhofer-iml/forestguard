@@ -1,4 +1,4 @@
-├─ MIT: 1453
+├─ MIT: 1452
 ├─ ISC: 161
 ├─ Apache-2.0: 92
 ├─ BSD-3-Clause: 41

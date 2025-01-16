@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { AddressCreateDto, RoleType, UserCreateDto } from "@forest-guard/api-interfaces";
 
 export const COMPANY_IDENTIFIER = process.env['UBIRIKI_IMPORT_IDENTIFIER'] || 'Acme Corp';

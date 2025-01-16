@@ -1,5 +1,4 @@
-# PNPM is currently not used
-pnpm-lock.yaml
+**/run-eslint-fix.log
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
@@ -48,3 +47,5 @@ Thumbs.db
 .nx/workspace-data
 .angular
 .scannerwork
+
+/scripts/data

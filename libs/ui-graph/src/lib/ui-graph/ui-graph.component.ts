@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { Edge } from '@forest-guard/api-interfaces';
 import { BaseType, select as d3_select, zoom as d3_zoom, zoomIdentity as d3_zoomIdentity, easeQuadInOut, Selection } from 'd3';
 import { sankey as d3_sankey, sankeyLeft as d3_sankeyLeft, sankeyLinkHorizontal as d3_sankeyLinkHorizontal } from 'd3-sankey';
@@ -30,6 +38,8 @@ export class UiGraphComponent implements OnInit, OnChanges {
 
   @Output() nodeClick = new EventEmitter<string>();
 
+  private minWidth = 1500;
+  private minHeight = 600;
   private margin?: { top: number; right: number; bottom: number; left: number };
   private chart?: Selection<SVGSVGElement, unknown, null, undefined>;
   private svg?: Selection<SVGSVGElement, unknown, null, undefined>;
@@ -65,18 +75,6 @@ export class UiGraphComponent implements OnInit, OnChanges {
       .attr('preserveAspectRatio', 'xMidYMid meet')
       .attr('id', 'dependencyGraphSvg');
 
-    const svgElement = d3_select('svg');
-    this.zoomFn = d3_zoom()
-      .scaleExtent([0.7, 2])
-      .translateExtent([
-        [-this.width / 8, -this.height / 8],
-        [this.width + this.width / 8, this.height + this.height / 8],
-      ])
-      .on('zoom', function (event) {
-        svgElement.selectAll('.dependencyGraphElement').attr('transform', event.transform);
-      });
-    svgElement.call(this.zoomFn);
-
     this.container = this.svg.append('g').attr('class', 'container');
     this.links = this.container.append('g').attr('class', 'links').attr('class', 'dependencyGraphElement');
     this.nodes = this.container.append('g').attr('class', 'nodes').attr('class', 'dependencyGraphElement');
@@ -99,7 +97,38 @@ export class UiGraphComponent implements OnInit, OnChanges {
     }
   }
 
+  private getMaxXandY() {
+    if (!this.data) {
+      return {
+        maxLayer: 0,
+        maxNumberOfNodesOnLayer: 0,
+      };
+    }
+
+    const sankey = d3_sankey()
+      .nodeId((d: any) => {
+        return d.id;
+      })
+      .nodeWidth(64)
+      .nodeAlign(d3_sankeyLeft);
+    const chart = sankey(this.data);
+    const maxLayer = Math.max(...chart.nodes.map((node: any) => node.layer));
+    // get the maximum parallel nodes on the same layer
+    const maxNumberOfNodesOnLayer = Math.max(
+      ...Array.from({ length: maxLayer + 1 }, (_, i) => chart.nodes.filter((node: any) => node.layer === i).length)
+    );
+
+    return {
+      maxLayer,
+      maxNumberOfNodesOnLayer,
+    };
+  }
+
   async update(): Promise<void> {
+    if (!this.data || !this.invalidEdges || !this.nodesWithEUInfoSystemId || !this.nodesWithProcessDocuments) {
+      return;
+    }
+
     const invalidLinkSet = new Set(this.invalidEdges?.map((edge) => `${edge.from}${edge.to}`));
     const getFillColor = (d: any) => {
       const isSelectedNode = d.id === this.selectedNode;
@@ -116,6 +145,15 @@ export class UiGraphComponent implements OnInit, OnChanges {
       return console.error('Missing svg, container, links or nodes');
     }
 
+    const { maxLayer, maxNumberOfNodesOnLayer } = this.getMaxXandY();
+
+    const svgElement = d3_select('svg');
+    this.zoomFn = d3_zoom()
+      .scaleExtent([Math.min(1 / (maxNumberOfNodesOnLayer / 15), 0.3), 2])
+      .on('zoom', function (event) {
+        svgElement.selectAll('.dependencyGraphElement').attr('transform', event.transform);
+      });
+    svgElement.call(this.zoomFn);
     this.svg
       .attr('width', this.width)
       .attr('height', this.height)
@@ -130,9 +168,13 @@ export class UiGraphComponent implements OnInit, OnChanges {
       })
       .nodeWidth(64)
       .nodeAlign(d3_sankeyLeft)
-      .nodePadding(200)
-      .size([this.width - this.margin.left - this.margin.right, this.height - this.margin.top - this.margin.bottom])
-      .iterations(2);
+      .nodePadding(maxNumberOfNodesOnLayer * 100)
+      .size([
+        Math.max(this.width * (Math.sqrt(maxLayer) * Math.max(Math.log(maxNumberOfNodesOnLayer) - 0.4, 0.1)), this.minWidth) -
+          this.margin.left -
+          this.margin.right,
+        Math.max(maxNumberOfNodesOnLayer * 250, this.minHeight) - this.margin.top - this.margin.bottom,
+      ]);
 
     this.sankey(this.data);
 
@@ -544,7 +586,7 @@ export class UiGraphComponent implements OnInit, OnChanges {
    *
    * @param zoomFactor - The factor by which to zoom the graph. Default is 0.7.
    */
-  centerGraph(zoomFactor = 0.7) {
+  centerGraph(zoomFactor = 0.2) {
     const svgSelection = d3_select('svg');
     const zoomCall = svgSelection.transition().duration(this.transitionLength);
 
@@ -557,7 +599,7 @@ export class UiGraphComponent implements OnInit, OnChanges {
    *
    * @param zoomFactor - The factor by which to zoom the graph. Default is 1.5.
    */
-  focusOnCurrentBatch(zoomFactor = 1.5) {
+  focusOnCurrentBatch(zoomFactor = 1) {
     const svgSelection = d3_select('svg');
     const zoomCall = svgSelection.transition().duration(this.transitionLength);
 

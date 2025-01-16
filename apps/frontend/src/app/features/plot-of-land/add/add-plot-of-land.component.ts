@@ -1,3 +1,11 @@
+/*
+ * Copyright Fraunhofer Institute for Material Flow and Logistics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * For details on the licensing terms, see the LICENSE file.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import {
   CoordinateType,
   CultivationDto,
@@ -22,9 +30,8 @@ import { CompanyService } from '../../../shared/services/company/company.service
 import { CultivationService } from '../../../shared/services/cultivation/cultivation.service';
 import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
 import { UserService } from '../../../shared/services/user/user.service';
-import { convertToCorrectFormat, convertUTMtoWGS } from '../../../shared/utils/coordinate-utils';
+import { convertToCorrectFormat, convertUTMtoWGS, CoordinateInput } from '@forest-guard/utm';
 import { getFormattedUserName } from '../../../shared/utils/user-company-utils';
-import { CoordinateInput } from './components/coordinate-input/coordinate-input.type';
 import { JsonData } from './model/json-data';
 import { PlotOfLandForm } from './model/plot-of-land-form';
 import { GeneratePlotOfLandService } from './service/generate-plot-of-land.service';
@@ -147,8 +154,10 @@ export class AddPlotOfLandComponent {
 
       const convertedCoordinates =
         this.geoDataStandard === Standard.UTM ? convertUTMtoWGS(formData, this.geoDataFormGroup.get('geoDataZone')?.value) : formData;
-
       const coordinates = convertToCorrectFormat(convertedCoordinates, this.geoDataType);
+      if (this.geoDataStandard === Standard.UTM) {
+        this.geoDataFormGroup.value.geoDataStandard = Standard.WGS;
+      }
 
       this.plotOfLandService
         .createPlotOfLand(
