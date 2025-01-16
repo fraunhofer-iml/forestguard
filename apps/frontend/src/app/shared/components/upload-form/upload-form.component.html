@@ -23,15 +23,19 @@
       </mat-form-field>
       }
 
-      <div class="flex items-center justify-center w-full mt-4">
+      <div
+        class="flex items-center justify-center w-full mt-4"
+        [ngClass]="{
+          'cursor-pointer': formGroup.get('documentType')?.value || showDescriptionField,
+          'bg-gray-50 hover:bg-gray-100': formGroup.get('documentType')?.value || showDescriptionField,
+        }"
+      >
         <label
           for="dropzone-file"
-          [ngClass]="{
-            'cursor-pointer': (formGroup.get('documentType')?.value) || showDescriptionField,
-            'bg-gray-50 hover:bg-gray-100': (formGroup.get('documentType')?.value) || showDescriptionField,
-          }"
-          [matTooltip]="!formGroup.get('documentType')?.value && selectOptions ? 'Select a Document Type first.' : ''"
           class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg"
+          (drop)="onDrop($event, formGroup.get('documentType')?.value)"
+          (dragover)="onDragOver($event)"
+          [matTooltip]="!formGroup.get('documentType')?.value && selectOptions ? 'Select a Document Type first.' : ''"
         >
           <div class="flex flex-col items-center justify-center pt-5 pb-6" *ngIf="!formGroup.value.file">
             <span class="material-symbols-outlined text-gray-500 text-4xl"> cloud_upload </span>
