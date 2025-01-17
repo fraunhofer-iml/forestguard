@@ -49,6 +49,11 @@ export class UserService {
     return Mapper.toUserOrFarmerDto(user);
   }
 
+  async readFarmerByPersonalId(personalId: string, companyId: string): Promise<UserOrFarmerDto> {
+    const user = await this.prismaService.user.findUnique(Queries.farmerReadByPersonalId(personalId, companyId));
+    return Mapper.toUserOrFarmerDto(user);
+  }
+
   async createFarmer(payload: { dto: FarmerCreateDto; companyId: string }): Promise<UserOrFarmerDto> {
       const fetchedUser = await this.prismaService.user.findFirst({ where: { personalId: payload.dto.personalId, companyId: payload.companyId }});
       if(fetchedUser) {
