@@ -38,12 +38,6 @@ async function bootstrap() {
   app.useGlobalInterceptors(new PrismaErrorsInterceptor());
   app.useLogger(configuration.getGeneralConfiguration().logLevel);
 
-  // TODO-MP: otherwise this microservice will crash
-  // Reason: When proofs are created but the corresponding NFT does not exist, requeueBlockchainRequest() will be called 10 times, causing the microservice to crash.
-  process.on('unhandledRejection', (reason, promise) => {
-    Logger.error('Unhandled Rejection:', reason);
-  });
-
   await app.listen().then(() =>
     Logger.log(
       `🗂️ Entity Manager service is running with RMQ:

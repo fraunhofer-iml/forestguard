@@ -58,7 +58,6 @@ export class BlockchainConnectorService implements OnModuleDestroy {
   }
 
   private async startWorker() {
-    // TODO-MP: check node worker thread
     while (this.serviceRunning) {
       if (this.blockchainRequestQueue.length === 0) {
         await this.delayBlockchainRequest();
@@ -96,10 +95,9 @@ export class BlockchainConnectorService implements OnModuleDestroy {
     const { type, dto, parentIds, numberOfRetries } = blockchainRequest;
 
     if (numberOfRetries > this.maxRetries) {
-      throw new AmqpException(
-        `Number of maximum retries (${this.maxRetries}) exceeded for blockchain request of type: ${type}`,
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
+      // We should not throw an exception here, as this would stop the worker thread
+      this.logger.error(`Number of maximum retries (${this.maxRetries}) exceeded for blockchain request of type: ${type}`);
+      return;
     }
 
     switch (type) {
