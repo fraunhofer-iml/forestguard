@@ -16,7 +16,7 @@ import {
   TokenReadService,
   TokenUpdateDto,
   TokenUpdateService,
-} from '@nft-folder/blockchain-connector';
+} from '@fraunhofer-iml/nft-folder-blockchain-connector';
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { PlotOfLand, Proof } from '@prisma/client';
 
@@ -34,7 +34,7 @@ export class PlotOfLandNftService {
   constructor(
     private readonly dataIntegrityService: DataIntegrityService,
     private readonly fileStorageService: FileStorageService,
-    private readonly tokenCreateService: TokenMintService,
+    private readonly tokenMintService: TokenMintService,
     private readonly tokenReadService: TokenReadService,
     private readonly tokenUpdateService: TokenUpdateService
   ) {}
@@ -69,7 +69,7 @@ export class PlotOfLandNftService {
   }
 
   public async mintNft(dto: TokenMintDto): Promise<void> {
-    const nft = await this.tokenCreateService.mintToken(dto, false);
+    const nft = await this.tokenMintService.mintToken(dto, false);
     this.logger.log(JSON.stringify(nft, null, 2));
   }
 
