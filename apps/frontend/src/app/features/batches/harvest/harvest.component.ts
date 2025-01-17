@@ -19,6 +19,7 @@ import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLan
 import { getUserOrCompanyName } from '../../../shared/utils/user-company-utils';
 import { HarvestForm } from './model/forms';
 import { HarvestService } from './service/harvest.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-harvest',
@@ -158,9 +159,9 @@ export class HarvestComponent {
       this.batchService
         .createHarvestBatchesCombined(this.harvestService.createNewHarvestBatch(this.harvestFormGroup, plotsOfLand))
         .pipe(
-          catchError(() => {
+          catchError((error: HttpErrorResponse) => {
             this.loading = false;
-            toast.error(Messages.errorCreateHarvest);
+            toast.error(error.error.message);
             return EMPTY;
           })
         )

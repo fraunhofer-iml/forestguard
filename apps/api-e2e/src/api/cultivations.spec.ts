@@ -8,12 +8,9 @@
 
 import { CultivationCreateDto, CultivationDto } from '@forest-guard/api-interfaces';
 import axios from 'axios';
-import * as dotenv from 'dotenv';
 import { beforeEachAndAfterAll, createHttpHeader, HttpHeader, prisma } from './test-utils/test.utils';
 
-dotenv.config();
-
-const cultivationCommodity = process.env.CULTIVATION_COMMODITY;
+const cultivationCommodity = 'coffee';
 
 describe('/cultivations', () => {
   let httpHeader: HttpHeader;
