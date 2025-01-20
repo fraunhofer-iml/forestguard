@@ -1,7 +1,63 @@
 {
   "name": "@forest-guard/source",
   "version": "0.3.0",
+  "description": "ForestGuard is a project aimed at tracking deforestation-free coffee using blockchain technology.",
+  "keywords": [
+    "fraunhofer",
+    "monorepo",
+    "nx",
+    "nestjs",
+    "blockchain",
+    "smart contracts",
+    "nft",
+    "ethereum",
+    "forest",
+    "deforestation",
+    "coffee",
+    "tracking"
+  ],
+  "homepage": "https://github.com/fraunhofer-iml/forest-guard",
+  "bugs": "https://github.com/fraunhofer-iml/forest-guard/issues",
   "license": "Apache-2.0",
+  "contributors": [
+    {
+      "name": "Kristin Bäßler",
+      "email": "kristin.baessler@iml.fraunhofer.de"
+    },
+    {
+      "name": "Maximilian Hegenbarth",
+      "email": "maximilian.hegenbarth@iml.fraunhofer.de"
+    },
+    {
+      "name": "Roman Koller",
+      "email": "roman.koller@iml.fraunhofer.de"
+    },
+    {
+      "name": "Antonius Paul",
+      "email": "antonius.paul@iml.fraunhofer.de"
+    },
+    {
+      "name": "Michael Pichura",
+      "email": "michael.pichura@iml.fraunhofer.de"
+    },
+    {
+      "name": "Dominik Schmitt",
+      "email": "dominik.schmitt@iml.fraunhofer.de"
+    },
+    {
+      "name": "Matthias Schönborn",
+      "email": "matthias.schoenborn@iml.fraunhofer.de"
+    },
+    {
+      "name": "Dominik Sparer",
+      "email": "dominik.sparer@iml.fraunhofer.de"
+    }
+  ],
+  "main": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fraunhofer-iml/forest-guard.git"
+  },
   "scripts": {
     "clean": "rm -rf .angular dist node_modules prisma/dev.db prisma/erd.png",
     "set-up-database": "npx prisma db push --force-reset && npx prisma db seed",
