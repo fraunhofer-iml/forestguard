@@ -77,14 +77,8 @@ sync-to-github:
     entrypoint: ['/bin/sh', '-c']
   stage: deploy
   script:
-    - |
-      if git remote | grep -q github; then
-        echo "Remote github already exists, refreshing..."
-        git remote set-url github https://${GH_TOKEN}@github.com/fraunhofer-iml/forest-guard.git
-      else
-        echo "Remote github does not exist, adding..."
-        git remote add github https://${GH_TOKEN}@github.com/fraunhofer-iml/forest-guard.git
-      fi
+    - git remote add github https://${GH_TOKEN}@github.com/fraunhofer-iml/forest-guard.git || true
+    - git remote set-url github https://${GH_TOKEN}@github.com/fraunhofer-iml/forest-guard.git
     - git push github main
   only:
     - main
