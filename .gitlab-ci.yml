@@ -71,6 +71,14 @@ include:
   - 'apps/frontend/.gitlab-ci.yml'
   - 'apps/process-svc/.gitlab-ci.yml'
 
+sync-to-github:
+  stage: deploy
+  script:
+    - git remote add github https://${GH_TOKEN}@github.com/fraunhofer-iml/forest-guard.git
+    - git push github main
+  only:
+    - main
+
 all:deploy:
   stage: deploy
   image: alpine:latest
