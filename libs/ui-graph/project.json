@@ -12,9 +12,6 @@
       "options": {
         "jestConfig": "libs/ui-graph/jest.config.ts"
       }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint"
     }
   }
 }

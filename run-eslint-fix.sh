@@ -32,7 +32,7 @@ echo "[INFO] ESLint fix started." | tee -a "$log_file"
 for dir in "${directories[@]}"; do
     if [ -d "$dir" ]; then
         echo "[INFO] Running eslint in $dir" | tee -a "$log_file"
-        (cd "$dir" && npx eslint --fix './**/*.ts' 2>&1 | tee -a "$log_file")
+        (cd "$dir" && npx eslint --fix './**/*.{ts,js,tsx,jsx}' 2>&1 | tee -a "$log_file")
         if [ $? -ne 0 ]; then
             echo "[ERROR] ESLint failed in $dir" | tee -a "$log_file"
         else
