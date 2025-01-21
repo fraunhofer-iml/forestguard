@@ -1,0 +1,110 @@
+name: Test and Build Pipeline
+
+on:
+  push:
+    branches: [main]
+    tags: # Nur ausführen, wenn ein neuer Tag gepusht wird
+      - '*'
+  pull_request:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  test-and-build:
+    name: Test, Lint and build all Nx Apps
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint all Nx Apps
+        run: npx nx run-many --all -t lint --parallel
+      - name: Test all Nx Apps
+        run: npx nx run-many --all -t test --exclude api-e2e --parallel -- --passWithNoTests
+      - name: Build all Nx Apps
+        run: npx nx run-many --all -t build --parallel
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: dist/
+
+  build-and-push-docker:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    needs: test-and-build
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor}}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Docker API Image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: docker/nest.Dockerfile
+          build-args: APP=api
+          push: true
+          tags: |
+            ghcr.io/fraunhofer-iml/forest-guard/api:latest
+            ghcr.io/fraunhofer-iml/forest-guard/api:${{ github.sha }}
+
+      - name: Build and Push Docker Frontend Image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: docker/angular.Dockerfile
+          build-args: APP=frontend
+          push: true
+          tags: |
+            ghcr.io/fraunhofer-iml/forest-guard/frontend:latest
+            ghcr.io/fraunhofer-iml/forest-guard/frontend:${{ github.sha }}
+
+      - name: Build and Push Docker Entity Management Image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: docker/nest.Dockerfile
+          build-args: APP=entity-management-svc
+          push: true
+          tags: |
+            ghcr.io/fraunhofer-iml/forest-guard/entity-management:latest
+            ghcr.io/fraunhofer-iml/forest-guard/entity-management:${{ github.sha }}
+
+      - name: Build and Push Docker Process Service Image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: docker/nest.Dockerfile
+          build-args: APP=process-svc
+          push: true
+          tags: |
+            ghcr.io/fraunhofer-iml/forest-guard/process-service:latest
+            ghcr.io/fraunhofer-iml/forest-guard/process-service:${{ github.sha }}
