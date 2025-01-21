@@ -72,7 +72,7 @@ jobs:
           file: docker/nest.dockerfile
           build-args: APP=api
           push: true
-          tags: ghcr.io/fraunhofer-iml/forest-guard/api:latest, ghcr.io/fraunhofer-iml/forest-guard/api:${{ github.sha }}
+          tags: ghcr.io/${{ github.repository }}/api:latest, ghcr.io/${{ github.repository }}/api:${{ github.sha }}
 
       - name: Build and Push Docker Frontend Image
         uses: docker/build-push-action@v4
