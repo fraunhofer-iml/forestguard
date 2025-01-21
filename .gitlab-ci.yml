@@ -79,8 +79,7 @@ sync-to-github:
   script:
     - git remote add github https://${GH_TOKEN}@github.com/fraunhofer-iml/forest-guard.git || true
     - git remote set-url github https://${GH_TOKEN}@github.com/fraunhofer-iml/forest-guard.git
-    - git pull github main --rebase
-    - git push github main
+    - git push github main --force-with-lease || true
   only:
     - main
 
