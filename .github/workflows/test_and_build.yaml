@@ -68,7 +68,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: docker/nest.Dockerfile
+          file: docker/nest.dockerfile
           build-args: APP=api
           push: true
           tags: |
@@ -79,7 +79,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: docker/angular.Dockerfile
+          file: docker/angular.dockerfile
           build-args: APP=frontend
           push: true
           tags: |
@@ -90,7 +90,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: docker/nest.Dockerfile
+          file: docker/nest.dockerfile
           build-args: APP=entity-management-svc
           push: true
           tags: |
@@ -101,7 +101,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: docker/nest.Dockerfile
+          file: docker/nest.dockerfile
           build-args: APP=process-svc
           push: true
           tags: |
