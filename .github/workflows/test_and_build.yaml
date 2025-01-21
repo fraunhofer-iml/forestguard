@@ -73,8 +73,8 @@ jobs:
           build-args: APP=api
           push: true
           tags: |
-            ghcr.io/fraunhofer-iml/forest-guard/api:latest
-            ghcr.io/fraunhofer-iml/forest-guard/api:${{ github.sha }}
+            ghcr.io/fraunhofer-iml/forest-guard:api-latest
+            ghcr.io/fraunhofer-iml/forest-guard:api-${{ github.sha }}
 
       - name: Build and Push Docker Frontend Image
         uses: docker/build-push-action@v4
@@ -84,8 +84,8 @@ jobs:
           build-args: APP=frontend
           push: true
           tags: |
-            ghcr.io/fraunhofer-iml/forest-guard/frontend:latest
-            ghcr.io/fraunhofer-iml/forest-guard/frontend:${{ github.sha }}
+            ghcr.io/fraunhofer-iml/forest-guard:frontend-latest
+            ghcr.io/fraunhofer-iml/forest-guard:frontend-${{ github.sha }}
 
       - name: Build and Push Docker Entity Management Image
         uses: docker/build-push-action@v4
@@ -95,8 +95,8 @@ jobs:
           build-args: APP=entity-management-svc
           push: true
           tags: |
-            ghcr.io/fraunhofer-iml/forest-guard/entity-management:latest
-            ghcr.io/fraunhofer-iml/forest-guard/entity-management:${{ github.sha }}
+            ghcr.io/fraunhofer-iml/forest-guard:entity-management-svc-latest
+            ghcr.io/fraunhofer-iml/forest-guard:entity-management-svc-${{ github.sha }}
 
       - name: Build and Push Docker Process Service Image
         uses: docker/build-push-action@v4
@@ -106,5 +106,5 @@ jobs:
           build-args: APP=process-svc
           push: true
           tags: |
-            ghcr.io/fraunhofer-iml/forest-guard/process-service:latest
-            ghcr.io/fraunhofer-iml/forest-guard/process-service:${{ github.sha }}
+            ghcr.io/fraunhofer-iml/forest-guard:process-svc-latest
+            ghcr.io/fraunhofer-iml/forest-guard:process-svc-${{ github.sha }}
