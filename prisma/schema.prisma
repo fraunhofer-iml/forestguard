@@ -168,6 +168,7 @@ model ProcessStep {
 model Batch {
   id             String  @id @default(cuid())
   euInfoSystemId String?
+  hsCode         String?
   weight         Float
   active         Boolean
 
