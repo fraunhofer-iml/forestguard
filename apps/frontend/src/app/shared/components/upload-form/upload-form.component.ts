@@ -27,6 +27,7 @@ export class UploadFormComponent {
 
   @Output() uploadDocument = new EventEmitter<{ file: File; documentType?: string }>();
   @Output() removeDocument = new EventEmitter<{ file: File; documentType?: string }>();
+  @Output() removeProof = new EventEmitter<UploadFormSelectType>();
 
   file: File | null = null;
 
