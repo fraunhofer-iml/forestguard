@@ -85,6 +85,54 @@ describe('/cultivations', () => {
     });
   });
 
+  describe('GET /cultivations/sorts', () => {
+    it('should get two sorts', async () => {
+      await axios.post(`/cultivations`, givenCultivationCreateDto, httpHeader);
+
+      const givenCultivationCreateDto2: CultivationCreateDto = {
+        sort: 'Robusta',
+        quality: 'Ecol',
+      };
+      await axios.post(`/cultivations`, givenCultivationCreateDto2, httpHeader);
+
+      const actualResponseFromGet = await axios.get('/cultivations/sorts', httpHeader);
+
+      expect(actualResponseFromGet.status).toBe(200);
+      expect(actualResponseFromGet.data).toEqual([givenCultivationCreateDto.sort, givenCultivationCreateDto2.sort]);
+    });
+
+    it('should get zero cultivations', async () => {
+      const expectedResponse = [];
+      const actualResponseFromGet = await axios.get('/cultivations/sorts', httpHeader);
+      expect(actualResponseFromGet.status).toBe(200);
+      expect(actualResponseFromGet.data).toEqual(expectedResponse);
+    });
+  });
+
+  describe('GET /cultivations/qualities', () => {
+    it('should get filtered qualities', async () => {
+      await axios.post(`/cultivations`, givenCultivationCreateDto, httpHeader);
+
+      const givenCultivationCreateDto2: CultivationCreateDto = {
+        sort: 'Robusta',
+        quality: 'c1',
+      };
+      await axios.post(`/cultivations`, givenCultivationCreateDto2, httpHeader);
+
+      const actualResponseFromGet = await axios.get('/cultivations/qualities?sort=Robusta', httpHeader);
+
+      expect(actualResponseFromGet.status).toBe(200);
+      expect(actualResponseFromGet.data).toEqual([givenCultivationCreateDto2.quality]);
+    });
+
+    it('should get zero cultivations', async () => {
+      const expectedResponse = [];
+      const actualResponseFromGet = await axios.get('/cultivations/qualities', httpHeader);
+      expect(actualResponseFromGet.status).toBe(200);
+      expect(actualResponseFromGet.data).toEqual(expectedResponse);
+    });
+  });
+
   describe('GET/cultivations/commodities', () => {
     it('should get the declared commodities', async () => {
       const expectedResponse = [cultivationCommodity];

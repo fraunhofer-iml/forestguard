@@ -72,7 +72,7 @@ describe('CultivationService', () => {
       ];
       jest.spyOn(prismaService.cultivation, 'findMany').mockResolvedValue(expectedCultivations);
 
-      const result = await cultivationService.readCultivationsByCommodity(givenType);
+      const result = await cultivationService.readCultivations(givenType);
 
       expect(result).toEqual(expectedCultivations);
       expect(prismaService.cultivation.findMany).toHaveBeenCalledWith({

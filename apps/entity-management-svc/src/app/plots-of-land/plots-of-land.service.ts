@@ -78,9 +78,10 @@ export class PlotsOfLandService {
         cultivatedWith: {
           connectOrCreate: {
             where: {
-              commodity_sort: {
+              commodity_sort_quality: {
                 commodity: this.cultivationCommodity,
                 sort: plotOfLand.cultivationSort.toLowerCase(),
+                quality: plotOfLand.cultivationQuality.toLowerCase(),
               },
             },
             create: {
