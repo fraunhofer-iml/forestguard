@@ -22,6 +22,7 @@ import { AmqpException } from '@forest-guard/amqp';
 
 @Injectable()
 export class ImportService {
+
   constructor(
     @Inject(COMPANY_IMPORT_SERVICES) private readonly companyImportServices: MasterDataImportService[],
     private readonly companyService: CompanyService,
@@ -39,7 +40,7 @@ export class ImportService {
       employeesCreated: employeesDto.numberOfCreatedEmployees,
       farmersCreated: farmersDto.numberOfCreatedFarmers,
       plotsOfLandCreated: farmersDto.numberOfCreatedPlotsOfLand,
-      errors: [ ...employeesDto.employeeErrors, ...farmersDto.farmerAndPlotOfLandErrors ],
+      errors: [...employeesDto.employeeErrors, ...farmersDto.farmerAndPlotOfLandErrors],
     };
   }
 
@@ -64,8 +65,7 @@ export class ImportService {
           companyId: companyId,
         });
         employeesDto.numberOfCreatedEmployees++;
-      }
-      catch (e) {
+      } catch (e) {
         employeesDto.employeeErrors.push(e.toString());
       }
     }
@@ -78,23 +78,29 @@ export class ImportService {
       numberOfCreatedPlotsOfLand: 0,
       farmerAndPlotOfLandErrors: Array<string>(),
     };
+
     for (const farmerAndPlotOfLand of farmersAndPlotsOfLand) {
       try {
-        const farmer = await this.userService.createFarmer({
-          dto: farmerAndPlotOfLand.farmer,
-          companyId: companyId,
-        });
-        farmersDto.numberOfCreatedFarmers++;
+        let farmer = await this.userService.readFarmerByPersonalId(farmerAndPlotOfLand.farmer.personalId, companyId);
+        if (farmer === null) {
+          farmer = await this.userService.createFarmer({
+            dto: farmerAndPlotOfLand.farmer,
+            companyId: companyId,
+          });
+          farmersDto.numberOfCreatedFarmers++;
+        }
+
         await this.plotsOfLandService.createPlotOfLand(
           farmerAndPlotOfLand.plotOfLand,
           farmer.id,
         );
         farmersDto.numberOfCreatedPlotsOfLand++;
-      }
-      catch (e) {
+
+      } catch (e) {
         farmersDto.farmerAndPlotOfLandErrors.push(e.toString());
       }
     }
+
     return farmersDto;
   }
 }
