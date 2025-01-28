@@ -64,4 +64,29 @@ describe('CultivationService', () => {
     const req = httpMock.expectOne(`${environment.CULTIVATIONS.URL}?commodity=${commodity}`);
     req.flush(errorMessage, { status: 500, statusText: 'Server Error' });
   });
+
+  it('should call getSorts and return an array of sorts', () => {
+    const sortsMock = ['Sort 1', 'Sort 2'];
+
+    service.getSorts().subscribe((sorts) => {
+      expect(sorts).toEqual(sortsMock);
+    });
+
+    const req = httpMock.expectOne(`${environment.CULTIVATIONS.URLSORTS}`);
+    expect(req.request.method).toBe('GET');
+    req.flush(sortsMock);
+  });
+
+  it('should call getQualities without sort parameter and return an array of qualities', () => {
+    const qualitiesMock = ['Quality 1', 'Quality 2'];
+
+    service.getQualities().subscribe((qualities) => {
+      expect(qualities).toEqual(qualitiesMock);
+    });
+
+    const req = httpMock.expectOne(`${environment.CULTIVATIONS.URLQUALITIES}`);
+    expect(req.request.method).toBe('GET');
+    expect(req.request.params.has('sort')).toBeFalsy();
+    req.flush(qualitiesMock);
+  });
 });

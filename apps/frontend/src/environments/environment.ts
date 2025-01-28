@@ -24,6 +24,8 @@ export const environment = {
   },
   CULTIVATIONS: {
     URL: `${BASE_URL}/cultivations`,
+    URLSORTS: `${BASE_URL}/cultivations/sorts`,
+    URLQUALITIES: `${BASE_URL}/cultivations/qualities`,
   },
   PLOTSOFLAND: {
     URL: `${BASE_URL}/pols`,

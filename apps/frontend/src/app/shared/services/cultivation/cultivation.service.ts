@@ -8,7 +8,7 @@
 
 import { CultivationDto } from '@forest-guard/api-interfaces';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 
@@ -18,5 +18,15 @@ export class CultivationService {
 
   readCultivationsByCommodity(type: string): Observable<CultivationDto[]> {
     return this.httpClient.get<CultivationDto[]>(`${environment.CULTIVATIONS.URL}?commodity=${type}`);
+  }
+
+  getSorts(): Observable<string[]> {
+    return this.httpClient.get<string[]>(`${environment.CULTIVATIONS.URLSORTS}`);
+  }
+
+  getQualities(sort?: string): Observable<string[]> {
+    let params = new HttpParams();
+    if (sort) params = params.set('sort', sort);
+    return this.httpClient.get<string[]>(`${environment.CULTIVATIONS.URLQUALITIES}`, { params });
   }
 }

@@ -8,7 +8,6 @@
 
 import {
   CoordinateType,
-  CultivationDto,
   FGFile,
   PlotOfLandDto,
   ProofDto,
@@ -17,9 +16,10 @@ import {
   UserDto,
   UserOrFarmerDto,
 } from '@forest-guard/api-interfaces';
+import { convertToCorrectFormat, convertUTMtoWGS, CoordinateInput } from '@forest-guard/utm';
 import { Icon, LatLng, latLng, Layer, marker, polygon, tileLayer } from 'leaflet';
 import { toast } from 'ngx-sonner';
-import { combineLatest, map, mergeMap, Observable, startWith, switchMap, tap } from 'rxjs';
+import { combineLatest, filter, map, mergeMap, Observable, startWith, switchMap, tap } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -30,7 +30,6 @@ import { CompanyService } from '../../../shared/services/company/company.service
 import { CultivationService } from '../../../shared/services/cultivation/cultivation.service';
 import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
 import { UserService } from '../../../shared/services/user/user.service';
-import { convertToCorrectFormat, convertUTMtoWGS, CoordinateInput } from '@forest-guard/utm';
 import { getFormattedUserName } from '../../../shared/utils/user-company-utils';
 import { JsonData } from './model/json-data';
 import { PlotOfLandForm } from './model/plot-of-land-form';
@@ -42,16 +41,17 @@ import { GeneratePlotOfLandService } from './service/generate-plot-of-land.servi
 })
 export class AddPlotOfLandComponent {
   isImportGeoDataVisible = false;
-  valueChangesOfGeoDataStandard$: Observable<string | null> | undefined;
   users$: Observable<UserDto[]>;
   farmers$: Observable<UserOrFarmerDto[]>;
-  coffeeOptions$?: Observable<CultivationDto[]>;
+  coffeeOptions$?: Observable<string[]>;
+  qualityOptions$: Observable<string[]>;
+
   plotOfLandFormGroup: FormGroup<PlotOfLandForm> = new FormGroup<PlotOfLandForm>({
     processOwner: new FormControl(null, Validators.required),
     region: new FormControl(null, Validators.required),
     plotOfLand: new FormControl(null, Validators.required),
     cultivationSort: new FormControl(null, Validators.required),
-    cultivationQuality: new FormControl(null),
+    cultivationQuality: new FormControl({ value: null, disabled: true }),
     localPlotOfLandId: new FormControl(null, Validators.required),
     nationalPlotOfLandId: new FormControl(null, Validators.required),
   });
@@ -78,14 +78,6 @@ export class AddPlotOfLandComponent {
   center: LatLng = latLng(51.514, 7.468);
   layers: Layer[] = [tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 })];
   protected readonly getFormattedUserName = getFormattedUserName;
-
-  getGeoDataStandards() {
-    return Object.values(Standard);
-  }
-
-  getGeoDataCoordinateTypes() {
-    return Object.values(CoordinateType);
-  }
 
   get geoDataStandard() {
     return this.geoDataFormGroup?.get('geoDataStandard')?.value as Standard;
@@ -123,13 +115,22 @@ export class AddPlotOfLandComponent {
       )
     );
     this.users$ = this.userService.getUsers();
-    this.coffeeOptions$ = this.cultivationService.readCultivationsByCommodity('coffee').pipe(
-      switchMap(
-        (cultivations) =>
-          this.plotOfLandFormGroup.get('cultivationSort')?.valueChanges.pipe(
-            startWith(''),
-            map((value) => cultivations.filter((cultivation) => cultivation.sort.includes(value ?? '')))
-          ) ?? []
+    this.coffeeOptions$ = this.cultivationService.getSorts();
+    this.qualityOptions$ = this.plotOfLandFormGroup.controls.cultivationSort.valueChanges.pipe(
+      tap((sort) => {
+        if (!sort) {
+          this.plotOfLandFormGroup.controls.cultivationQuality.disable();
+        }
+        this.plotOfLandFormGroup.controls.cultivationQuality.setValue(null);
+      }),
+      filter((sort): sort is string => !!sort),
+      switchMap((sort) =>
+        this.cultivationService.getQualities(sort).pipe(
+          map((qualities) => {
+            this.plotOfLandFormGroup.controls.cultivationQuality.enable();
+            return qualities;
+          })
+        )
       )
     );
     this.handleGeoDataValueChange();
