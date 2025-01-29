@@ -47,6 +47,10 @@
       <mat-label>EU Info System ID</mat-label>
       <input matInput formControlName="euInfoSystemId" placeholder="ID12345" />
     </mat-form-field>
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>HS Code</mat-label>
+      <input matInput formControlName="hsCode" placeholder="4902 9800" (input)="hsCodeInput($event)" />
+    </mat-form-field>
   </form>
 </div>
 

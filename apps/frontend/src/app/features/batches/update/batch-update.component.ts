@@ -42,6 +42,7 @@ export class BatchUpdateComponent implements OnInit {
     executedBy: new FormControl<string | UserOrFarmerDto | null>(null, Validators.required),
     plotOfLand: new FormControl(null),
     euInfoSystemId: new FormControl(null),
+    hsCode: new FormControl(null),
   });
 
   outputBatchForm: FormGroup = new FormGroup({
@@ -117,6 +118,11 @@ export class BatchUpdateComponent implements OnInit {
     this.batches$ = zip(...observableList);
   }
 
+  hsCodeInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9 ]/g, '');
+  }
+
   getOutputWeight(): number {
     return this.outBatches.controls.reduce((total, group) => {
       const weight = group.get('weight')?.value || 0;
@@ -161,6 +167,7 @@ export class BatchUpdateComponent implements OnInit {
       recipient: batch.recipient.id,
       ins: this.batchIds,
       euInfoSystemId: this.formGroup.value.euInfoSystemId,
+      hsCode: this.formGroup.value.hsCode,
       processStep: new ProcessStepCreateDto(
         this.formGroup.value.location,
         this.formGroup.value.dateOfProcess,
