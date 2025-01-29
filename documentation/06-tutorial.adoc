@@ -44,7 +44,10 @@ To create a new plot of land, select “Plot of Land” from the left side navig
 
 image::images/tutorial/Tutorial-2-Create-PlotOfLand-1.png[]
 
-Fill in all non-optional fields (marked with *). The sort can be selected from a drop-down menu, but can also be entered freely and anew.
+Fill in all non-optional fields (marked with *). +
+The form field “Process Owner” can be selected from a drop-down menu. If the drop-down list is too large, the entries in the drop-down menu can be filtered by starting to enter the term you are looking for into the field. +
+The sort can be selected from a drop-down menu, but can also be entered freely and anew.
+The same applies to cultivation quality.
 
 image::images/tutorial/Tutorial-2-Create-PlotOfLand-2.png[]
 
@@ -70,11 +73,13 @@ image::images/tutorial/Tutorial-2-Create-PlotOfLand-7.png[]
 
 == Create Harvest
 
-To create a batch of a harvested field, first select “Batches” from the left side navigation menu to get to the batches overview.
+To create a batch of a harvested field, first select “Batches” from the left side navigation menu to get to the batches overview. +
+Then click on the "Add Harvest" button on the top right-hand side.
 
 image::images/tutorial/Tutorial-3-Create-Harvest-1.png[]
 
-Fill in all fields.
+Fill in all fields. +
+The form fields “Process Owner”, “Recipient” and “Author of Entry” can be selected from a drop-down menu. If the drop-down list is too large, the entries in the drop-down menu can be filtered by starting to enter the term you are looking for into the field.
 
 image::images/tutorial/Tutorial-3-Create-Harvest-2.png[]
 
@@ -101,6 +106,7 @@ image::images/tutorial/Tutorial-4-Add-Process-1.png[]
 
 In the new view, the input batches are visible at the bottom left. +
 Fill in all data fields. +
+The form fields “Process Owner” and “Author of Entry” can be selected from a drop-down menu. If the drop-down list is too large, the entries in the drop-down menu can be filtered by starting to enter the term you are looking for into the field. +
 Process Name can be used freely to describe the process. +
 The corresponding ID for the EU info system can be added optionally. This can also be done subsequently by creating a new process.
 

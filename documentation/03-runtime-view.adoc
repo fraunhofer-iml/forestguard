@@ -15,7 +15,8 @@
 
 == General Component Communication
 
-TBD
+All inter-component communication is carried out using JSON messages.
+This communication occurs either through direct REST interactions from the frontend to the BFF (Backend for Frontend), or for inter-service communication, via an AMQP messaging queue via a broker instance, as provided by https://www.rabbitmq.com/[RabbitMQ].
 
 == Transaction related schemes and definitions
 
@@ -52,7 +53,7 @@ The Entity Management SVC and Process SVC serves as a Bridge and allows the foll
 |===
 | *ExportToken Controller* | Path | Description
 | CREATE | `/cultivations/create` | Create a new cultivation
-| READ_ALL_BY_COMMODITY | `/cultivations/read-all-by-commodity` | Read all cultivations by commodity
+| READ_ALL | `/cultivations/read-all` | Read all cultivations
 |===
 
 ==== Plots of Land API
@@ -121,6 +122,8 @@ The BFF serves as a Bridge for the frontend and allows the following REST Endpoi
 |===
 | *ExportToken Controller* | Path | Description
 | POST | `/cultivations` | Create a new cultivation
+| GET | `/cultivations/sorts` | Get all cultivation sorts
+| GET | `/cultivations/qualities` | Get all cultivation qualities
 | GET | `/cultivations` | Get all cultivations
 | GET | `/cultivations/commodities` | Get all cultivation commodities
 |===
@@ -165,11 +168,11 @@ The BFF serves as a Bridge for the frontend and allows the following REST Endpoi
 
 In the ForestGuard architecture, an organized series of steps is followed to facilitate activities such as harvesting, processing, add plots of land and more. This is illustrated in the image below.
 
-image:images/06-process-flowchart.svg[]
+image:images/runtime-view/process-flowchart.svg[]
 
 === Login/Register
 
-image:images/06-login-flowchart.svg[]
+image:images/runtime-view/login-flowchart.svg[]
 
 |===
 | *Nr.* | Step | Description
@@ -180,7 +183,7 @@ image:images/06-login-flowchart.svg[]
 
 === Harvesting
 
-image:images/06-harvesting-flowchart.svg[]
+image:images/runtime-view/harvesting-flowchart.svg[]
 
 |===
 | *Nr.* | Step | Description
@@ -194,7 +197,7 @@ image:images/06-harvesting-flowchart.svg[]
 
 === Processing
 
-image:images/06-processing-flowchart.svg[]
+image:images/runtime-view/processing-flowchart.svg[]
 
 |===
 | *Nr.* | Step | Description
@@ -209,7 +212,7 @@ image:images/06-processing-flowchart.svg[]
 
 === Create Company
 
-image:images/06-create-company-flowchart.svg[]
+image:images/runtime-view/create-company-flowchart.svg[]
 
 |===
 | *Nr.* | Step | Description
@@ -222,7 +225,7 @@ image:images/06-create-company-flowchart.svg[]
 
 === Create User/Farmer
 
-image:images/06-create-user-farmer.svg[]
+image:images/runtime-view/create-user-farmer.svg[]
 
 |===
 | *Nr.* | Step | Description
@@ -235,7 +238,7 @@ image:images/06-create-user-farmer.svg[]
 
 === Add Documents to Farmer or Batches
 
-image:images/06-add-documents-flowchart.svg[]
+image:images/runtime-view/add-documents-flowchart.svg[]
 
 |===
 | *Nr.* | Step | Description
@@ -247,7 +250,7 @@ image:images/06-add-documents-flowchart.svg[]
 
 === Import Farmer
 
-image:images/06-import-flowchart.svg[]
+image:images/runtime-view/import-flowchart.svg[]
 
 |===
 | *Nr.* | Step | Description
@@ -258,7 +261,7 @@ image:images/06-import-flowchart.svg[]
 
 === Add Plot of Land to Farmer
 
-image:images/06-add-plot-of-land-flowchart.svg[]
+image:images/runtime-view/add-plot-of-land-flowchart.svg[]
 
 |===
 | *Nr.* | Step | Description
@@ -272,7 +275,7 @@ image:images/06-add-plot-of-land-flowchart.svg[]
 
 === Add/Update Proof to Plot of Land
 
-image:images/06-add-proofs-flowchart.svg[]
+image:images/runtime-view/add-proofs-flowchart.svg[]
 
 |===
 | *Nr.* | Step | Description

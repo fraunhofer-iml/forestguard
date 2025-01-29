@@ -11,10 +11,6 @@
 [[section-preface]]
 = Preface
 
-== Motivation
-
-TBD
-
 == Documentation Approach
 
 The documentation of this project is in English and is based on the https://arc42.de/template[arc42 template].
@@ -60,37 +56,16 @@ Therefore, arc42 is _automatically_ included in Scrum processes.
 include::01-introduction-and-goals.adoc[]
 
 <<<
-include::02-architecture-constraints.adoc[]
+include::02-building-block-view.adoc[]
 
 <<<
-include::03-system-scope-and-context.adoc[]
+include::03-runtime-view.adoc[]
 
 <<<
-include::04-solution-strategy.adoc[]
+include::04-deployment-view.adoc[]
 
 <<<
-include::05-building-block-view.adoc[]
+include::05-risks-and-technical-debts.adoc[]
 
 <<<
-include::06-runtime-view.adoc[]
-
-<<<
-include::07-deployment-view.adoc[]
-
-<<<
-include::08-cross-cutting-concepts.adoc[]
-
-<<<
-include::09-design-decisions.adoc[]
-
-<<<
-include::10-quality-requirements.adoc[]
-
-<<<
-include::11-risks-and-technical-debts.adoc[]
-
-<<<
-include::12-tutorial.adoc[]
-
-<<<
-include::glossary.adoc[]
+include::06-tutorial.adoc[]

@@ -23,7 +23,7 @@ The frontend is a web interface for the user and was developed using Angular.
 The backend consists of an API gateway, which is responsible for routing requests from the frontend to the corresponding service, and a number of services, which provide the business logic. All three backend applications are implemented using TypeScript and Node.js.
 Additionally, the backend utilizes a database, an object storage system, and a blockchain for data storage.
 
-image:images/05_systemarchitecture_components.svg[]
+image:images/building-block-view/systemarchitecture_components.svg[]
 
 
 == Building Blocks - Level 1
@@ -252,4 +252,4 @@ In Level 2, the internal components of the above are shown.
 
 The following section presents the class diagram for ForestGuard, providing a comprehensive overview of all classes and their functions.
 
-image:images/05_fg_entity_uml.svg[]
+image:images/building-block-view/fg_entity_uml.svg[]
