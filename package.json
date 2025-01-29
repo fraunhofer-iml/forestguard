@@ -100,6 +100,7 @@
     "@nestjs/platform-express": "^10.3.9",
     "@nestjs/swagger": "^7.3.1",
     "@prisma/client": "^5.21.1",
+    "@tailwindcss/typography": "^0.5.16",
     "amqp-connection-manager": "^4.1.14",
     "amqplib": "^0.10.4",
     "axios": "^1.6.0",
