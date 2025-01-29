@@ -47,7 +47,7 @@ export class AddPlotOfLandComponent {
   qualityOptions$: Observable<string[]>;
 
   plotOfLandFormGroup: FormGroup<PlotOfLandForm> = new FormGroup<PlotOfLandForm>({
-    processOwner: new FormControl(null, Validators.required),
+    processOwner: new FormControl('', Validators.required),
     region: new FormControl(null, Validators.required),
     plotOfLand: new FormControl(null, Validators.required),
     cultivationSort: new FormControl(null, Validators.required),
@@ -97,22 +97,21 @@ export class AddPlotOfLandComponent {
     private readonly router: Router
   ) {
     this.farmers$ = this.companyService.getFarmersByCompanyId(this.authenticationService.getCurrentCompanyId() ?? '').pipe(
-      switchMap(
-        (farmers) =>
-          this.plotOfLandFormGroup.controls.processOwner.valueChanges.pipe(
-            startWith(''),
-            map((value) =>
-              farmers.filter((farmer) => {
-                if (!value || value instanceof Object) return farmer;
+      switchMap((farmers) => {
+        return this.plotOfLandFormGroup.controls.processOwner.valueChanges.pipe(
+          startWith(''),
+          map((value) =>
+            farmers.filter((farmer) => {
+              if (!value || value instanceof Object) return farmer;
 
-                return (
-                  farmer.firstName.toLowerCase().includes((value as string).toLowerCase()) ||
-                  farmer.lastName.toLowerCase().includes((value as string).toLowerCase())
-                );
-              })
-            )
-          ) ?? []
-      )
+              return (
+                farmer.firstName.toLowerCase().includes((value as string).toLowerCase()) ||
+                farmer.lastName.toLowerCase().includes((value as string).toLowerCase())
+              );
+            })
+          )
+        );
+      })
     );
     this.users$ = this.userService.getUsers();
     this.coffeeOptions$ = this.cultivationService.getSorts();
@@ -195,6 +194,7 @@ export class AddPlotOfLandComponent {
 
   clearInputFields(): void {
     this.plotOfLandFormGroup.reset();
+    this.uploadSelectOption.forEach((option: UploadFormSelectType) => (option.file = undefined));
   }
 
   submitFile({ file, documentType }: FGFile): void {
