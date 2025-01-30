@@ -54,7 +54,9 @@ services:
   # BLOCKCHAIN #
   ##############
   blockchain-network:
-    image: container-registry.gitlab.cc-asp.fraunhofer.de/silicon-economy/base/blockchainbroker/ethereum/networks/hyperledger-besu/dev-network:1.0.0
+    build:
+      context: ./blockchain/network
+      dockerfile: Dockerfile
     depends_on:
       minio-setup:
         condition: service_completed_successfully
@@ -64,7 +66,7 @@ services:
 
   blockchain-network-setup:
     build:
-      context: ./blockchain
+      context: ./blockchain/network-setup
       dockerfile: Dockerfile
       args:
         GITLAB_TOKEN: ${SC_NFT_FOLDER_GITLAB_TOKEN}

@@ -137,6 +137,8 @@ Matthias Schönborn: matthias.schoenborn@iml.fraunhofer.de
 
 ## 🙏 Acknowledgments <a id="acknowledgments"></a>
 
+- [wait-for-it](https://github.com/vishnubob/wait-for-it) for providing the `wait-for-it.sh` script, which is included unmodified in this
+  project under the terms of the [MIT License](https://github.com/vishnubob/wait-for-it/blob/master/LICENSE)
 - [Best-README-Template](https://github.com/othneildrew/Best-README-Template) provided inspiration and structure for creating this README
   file
 - [Img Shields](https://shields.io) enabled the creation of customizable and visually appealing badges for this project
