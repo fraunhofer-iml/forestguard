@@ -16,7 +16,7 @@ import {
   TokenReadService,
   TokenUpdateDto,
   TokenUpdateService,
-} from '@fraunhofer-iml/nft-folder-blockchain-connector';
+} from 'nft-folder-blockchain-connector';
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { PlotOfLand, Proof } from '@prisma/client';
 

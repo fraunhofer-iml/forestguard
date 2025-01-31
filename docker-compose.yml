@@ -69,7 +69,6 @@ services:
       context: ./blockchain/network-setup
       dockerfile: Dockerfile
       args:
-        GITLAB_TOKEN: ${SC_NFT_FOLDER_GITLAB_TOKEN}
         SC_DEPLOYMENT_MNEMONIC: ${SC_DEPLOYMENT_MNEMONIC}
         SC_TOKEN_NAME: ${SC_TOKEN_NAME}
         SC_TOKEN_SYMBOL: ${SC_TOKEN_SYMBOL}

@@ -1,7 +1,5 @@
 FROM node:20-alpine3.18
 
-ARG GITLAB_TOKEN
-
 ARG SC_DEPLOYMENT_MNEMONIC
 ENV DEV_MNEMONIC=${SC_DEPLOYMENT_MNEMONIC}
 
@@ -15,7 +13,7 @@ WORKDIR /usr/src/app
 COPY . .
 
 RUN apk update && apk add --no-cache bash git openssh-client
-RUN git clone https://git:${GITLAB_TOKEN}@gitlab.cc-asp.fraunhofer.de/silicon-economy/base/blockchainbroker/ethereum/projects/nft-folder/smart-contracts.git
+RUN git clone https://github.com/fraunhofer-iml/nft-folder-smart-contracts.git
 
 RUN chmod +x deploy-smart-contracts.sh ./wait-for-it.sh
 

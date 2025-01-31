@@ -7,7 +7,7 @@
  */
 
 import { AmqpException } from '@forest-guard/amqp';
-import { DataIntegrityService, TokenMintDto, TokenMintService, TokenReadService } from '@fraunhofer-iml/nft-folder-blockchain-connector';
+import { DataIntegrityService, TokenMintDto, TokenMintService, TokenReadService } from 'nft-folder-blockchain-connector';
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { Batch } from '@prisma/client';
 
