@@ -19,7 +19,15 @@ import { initializeKeycloak } from './init/keycloak-init.factory';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [CoreModule, BrowserModule, RouterModule.forRoot(appRoutes), NgxSonnerToaster, KeycloakAngularModule],
+  imports: [
+    CoreModule,
+    BrowserModule,
+    RouterModule.forRoot(appRoutes, {
+      anchorScrolling: 'enabled',
+    }),
+    NgxSonnerToaster,
+    KeycloakAngularModule,
+  ],
   providers: [
     provideAnimationsAsync(),
     {

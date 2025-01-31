@@ -29,7 +29,13 @@ export class CultivationService {
     });
   }
 
-  async readCultivationsByCommodity(commodity: string): Promise<CultivationDto[]> {
-    return this.prismaService.cultivation.findMany({ where: { commodity } });
+  async readCultivations(commodity?: string, sort?: string, quality?: string): Promise<CultivationDto[]> {
+    return this.prismaService.cultivation.findMany({
+      where: {
+        commodity: commodity,
+        sort: sort,
+        quality: quality,
+      }
+    });
   }
 }

@@ -1,3 +1,10 @@
+<!-- 
+ ~ Copyright Fraunhofer Institute for Material Flow and Logistics
+ ~
+ ~ Licensed under the Apache License, Version 2.0 (the "License").
+ ~ For details on the licensing terms, see the LICENSE file.
+ ~ SPDX-License-Identifier: Apache-2.0
+-->
 <header class="font-semibold pb-4 flex flex-row gap-2 text-neutral-300 items-center">
   <a routerLink="/batches" class="font-semibold text-gray-700 hover:underline">Batches</a>
   <span class="material-symbols-outlined text-lg"> chevron_right </span>
@@ -46,6 +53,10 @@
     <mat-form-field class="w-full" appearance="outline">
       <mat-label>EU Info System ID</mat-label>
       <input matInput formControlName="euInfoSystemId" placeholder="ID12345" />
+    </mat-form-field>
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>HS Code</mat-label>
+      <input matInput formControlName="hsCode" placeholder="4902 9800" (input)="hsCodeInput($event)" />
     </mat-form-field>
   </form>
 </div>

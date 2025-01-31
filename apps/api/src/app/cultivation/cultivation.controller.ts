@@ -17,7 +17,8 @@ import { CultivationService } from './cultivation.service';
 @Controller('cultivations')
 @Roles({ roles: [KeycloakUtil.toRealmRole(Role.ENABLED)] })
 export class CultivationController {
-  constructor(private readonly cultivationService: CultivationService) {}
+  constructor(private readonly cultivationService: CultivationService) {
+  }
 
   @Post()
   @ApiBearerAuth()
@@ -31,9 +32,43 @@ export class CultivationController {
   @ApiBearerAuth()
   @ApiOperation({ description: 'Get all cultivations' })
   @ApiOkResponse({ description: 'Successful request.' })
-  @ApiQuery({ name: 'commodity', required: true })
-  getCultivationsByCommodity(@Query('commodity') commodity: string): Promise<CultivationDto[]> {
-    return this.cultivationService.readCultivationsByCommodity(commodity);
+  @ApiQuery({ name: 'commodity', required: false })
+  @ApiQuery({ name: 'sort', required: false })
+  @ApiQuery({ name: 'quality', required: false })
+  getCultivationsByCommodity(
+    @Query('commodity') commodity: string,
+    @Query('sort') sort: string,
+    @Query('quality') quality: string,
+  ): Promise<CultivationDto[]> {
+    return this.cultivationService.readCultivations(commodity, sort, quality);
+  }
+
+  @Get('sorts')
+  @ApiBearerAuth()
+  @ApiOperation({ description: 'Get all sorts' })
+  @ApiOkResponse({ description: 'Successful request.' })
+  @ApiQuery({ name: 'commodity', required: false })
+  @ApiQuery({ name: 'quality', required: false })
+  async getSorts(
+    @Query('commodity') commodity: string,
+    @Query('quality') quality: string,
+  ): Promise<string[]> {
+    const cultivations = await this.cultivationService.readCultivations(commodity, undefined, quality);
+    return [...new Set(cultivations.map(cultivation => cultivation.sort))];
+  }
+
+  @Get('qualities')
+  @ApiBearerAuth()
+  @ApiOperation({ description: 'Get all qualities' })
+  @ApiOkResponse({ description: 'Successful request.' })
+  @ApiQuery({ name: 'commodity', required: false })
+  @ApiQuery({ name: 'sort', required: false })
+  async getQualities(
+    @Query('commodity') commodity: string,
+    @Query('sort') sort: string,
+  ): Promise<string[]> {
+    const cultivations = await this.cultivationService.readCultivations(commodity, sort, undefined);
+    return [...new Set(cultivations.map(cultivation => cultivation.quality))];
   }
 
   @Get('commodities')

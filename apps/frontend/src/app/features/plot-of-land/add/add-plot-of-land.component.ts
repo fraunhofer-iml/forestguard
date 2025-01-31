@@ -8,7 +8,6 @@
 
 import {
   CoordinateType,
-  CultivationDto,
   FGFile,
   PlotOfLandDto,
   ProofDto,
@@ -17,9 +16,10 @@ import {
   UserDto,
   UserOrFarmerDto,
 } from '@forest-guard/api-interfaces';
+import { convertToCorrectFormat, convertUTMtoWGS, CoordinateInput } from '@forest-guard/utm';
 import { Icon, LatLng, latLng, Layer, marker, polygon, tileLayer } from 'leaflet';
 import { toast } from 'ngx-sonner';
-import { combineLatest, map, mergeMap, Observable, startWith, switchMap, tap } from 'rxjs';
+import { combineLatest, filter, map, mergeMap, Observable, startWith, switchMap, tap } from 'rxjs';
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -30,7 +30,6 @@ import { CompanyService } from '../../../shared/services/company/company.service
 import { CultivationService } from '../../../shared/services/cultivation/cultivation.service';
 import { PlotOfLandService } from '../../../shared/services/plotOfLand/plotOfLand.service';
 import { UserService } from '../../../shared/services/user/user.service';
-import { convertToCorrectFormat, convertUTMtoWGS, CoordinateInput } from '@forest-guard/utm';
 import { getFormattedUserName } from '../../../shared/utils/user-company-utils';
 import { JsonData } from './model/json-data';
 import { PlotOfLandForm } from './model/plot-of-land-form';
@@ -42,16 +41,17 @@ import { GeneratePlotOfLandService } from './service/generate-plot-of-land.servi
 })
 export class AddPlotOfLandComponent {
   isImportGeoDataVisible = false;
-  valueChangesOfGeoDataStandard$: Observable<string | null> | undefined;
   users$: Observable<UserDto[]>;
   farmers$: Observable<UserOrFarmerDto[]>;
-  coffeeOptions$?: Observable<CultivationDto[]>;
+  coffeeOptions$?: Observable<string[]>;
+  qualityOptions$: Observable<string[]>;
+
   plotOfLandFormGroup: FormGroup<PlotOfLandForm> = new FormGroup<PlotOfLandForm>({
-    processOwner: new FormControl(null, Validators.required),
+    processOwner: new FormControl('', Validators.required),
     region: new FormControl(null, Validators.required),
     plotOfLand: new FormControl(null, Validators.required),
     cultivationSort: new FormControl(null, Validators.required),
-    cultivationQuality: new FormControl(null),
+    cultivationQuality: new FormControl({ value: null, disabled: true }),
     localPlotOfLandId: new FormControl(null, Validators.required),
     nationalPlotOfLandId: new FormControl(null, Validators.required),
   });
@@ -79,14 +79,6 @@ export class AddPlotOfLandComponent {
   layers: Layer[] = [tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 })];
   protected readonly getFormattedUserName = getFormattedUserName;
 
-  getGeoDataStandards() {
-    return Object.values(Standard);
-  }
-
-  getGeoDataCoordinateTypes() {
-    return Object.values(CoordinateType);
-  }
-
   get geoDataStandard() {
     return this.geoDataFormGroup?.get('geoDataStandard')?.value as Standard;
   }
@@ -105,31 +97,39 @@ export class AddPlotOfLandComponent {
     private readonly router: Router
   ) {
     this.farmers$ = this.companyService.getFarmersByCompanyId(this.authenticationService.getCurrentCompanyId() ?? '').pipe(
-      switchMap(
-        (farmers) =>
-          this.plotOfLandFormGroup.controls.processOwner.valueChanges.pipe(
-            startWith(''),
-            map((value) =>
-              farmers.filter((farmer) => {
-                if (!value || value instanceof Object) return farmer;
+      switchMap((farmers) => {
+        return this.plotOfLandFormGroup.controls.processOwner.valueChanges.pipe(
+          startWith(''),
+          map((value) =>
+            farmers.filter((farmer) => {
+              if (!value || value instanceof Object) return farmer;
 
-                return (
-                  farmer.firstName.toLowerCase().includes((value as string).toLowerCase()) ||
-                  farmer.lastName.toLowerCase().includes((value as string).toLowerCase())
-                );
-              })
-            )
-          ) ?? []
-      )
+              return (
+                farmer.firstName.toLowerCase().includes((value as string).toLowerCase()) ||
+                farmer.lastName.toLowerCase().includes((value as string).toLowerCase())
+              );
+            })
+          )
+        );
+      })
     );
     this.users$ = this.userService.getUsers();
-    this.coffeeOptions$ = this.cultivationService.readCultivationsByCommodity('coffee').pipe(
-      switchMap(
-        (cultivations) =>
-          this.plotOfLandFormGroup.get('cultivationSort')?.valueChanges.pipe(
-            startWith(''),
-            map((value) => cultivations.filter((cultivation) => cultivation.sort.includes(value ?? '')))
-          ) ?? []
+    this.coffeeOptions$ = this.cultivationService.getSorts();
+    this.qualityOptions$ = this.plotOfLandFormGroup.controls.cultivationSort.valueChanges.pipe(
+      tap((sort) => {
+        if (!sort) {
+          this.plotOfLandFormGroup.controls.cultivationQuality.disable();
+        }
+        this.plotOfLandFormGroup.controls.cultivationQuality.setValue(null);
+      }),
+      filter((sort): sort is string => !!sort),
+      switchMap((sort) =>
+        this.cultivationService.getQualities(sort).pipe(
+          map((qualities) => {
+            this.plotOfLandFormGroup.controls.cultivationQuality.enable();
+            return qualities;
+          })
+        )
       )
     );
     this.handleGeoDataValueChange();
@@ -194,6 +194,7 @@ export class AddPlotOfLandComponent {
 
   clearInputFields(): void {
     this.plotOfLandFormGroup.reset();
+    this.uploadSelectOption.forEach((option: UploadFormSelectType) => (option.file = undefined));
   }
 
   submitFile({ file, documentType }: FGFile): void {
@@ -201,6 +202,12 @@ export class AddPlotOfLandComponent {
 
     if (!option) return;
     option.file = file;
+  }
+
+  removeFile(upload: UploadFormSelectType): void {
+    this.uploadSelectOption = this.uploadSelectOption.map((uploadedFile: UploadFormSelectType) =>
+      uploadedFile.key === upload.key ? { ...uploadedFile, file: undefined } : uploadedFile
+    );
   }
 
   // #FOR-518 (https://oe160.iml.fraunhofer.de/jira/browse/FOR-518)

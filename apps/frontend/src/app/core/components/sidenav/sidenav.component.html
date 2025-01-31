@@ -1,42 +1,55 @@
+<!-- 
+ ~ Copyright Fraunhofer Institute for Material Flow and Logistics
+ ~
+ ~ Licensed under the Apache License, Version 2.0 (the "License").
+ ~ For details on the licensing terms, see the LICENSE file.
+ ~ SPDX-License-Identifier: Apache-2.0
+-->
 <aside class="w-80 h-svh bg-white fixed py-2">
   <ul>
     <div class="m-4 space-y-2">
       <li class="mb-8">
         <div class="flex items-center">
-          <img ngSrc="./assets/images/logo_forestguard.png" alt="Logo of Forestguard" width="30" height="34"
-            class="mr-4" />
+          <img ngSrc="./assets/images/logo_forestguard.png" alt="Logo of Forestguard" width="30" height="34" class="mr-4" />
           <img ngSrc="./assets/images/forestguard.png" alt="Forestguard" width="140" height="13" />
-      <li class="w-full text-right text-sm text-gray-400">v{{ version }}</li>
-    </div>
-    </li>
-    <li>
-      <a routerLink="/batches" routerLinkActive="bg-secondary-800 hover:bg-secondary-800"
-        class="flex flex-row items-center gap-2 px-4 cursor-pointer py-2 rounded-xl hover:bg-secondary-400/25">
-        <span class="material-symbols-outlined"> rebase_edit </span>
-        Batches
-      </a>
-    </li>
-    <li>
-      <a routerLink="/companies/{{ this.authenticationService.getCurrentCompanyId() }}"
-        routerLinkActive="bg-secondary-800 hover:bg-secondary-800"
-        class="flex flex-row items-center gap-2 px-4 cursor-pointer py-2 rounded-xl hover:bg-secondary-400/25">
-        <span class="material-symbols-outlined"> apartment </span>
-        Company
-      </a>
-    </li>
-    <li>
-      <a routerLink="/pols" routerLinkActive="bg-secondary-800 hover:bg-secondary-800"
-        class="flex flex-row items-center gap-2 px-4 cursor-pointer py-2 rounded-xl hover:bg-secondary-400/25">
-        <span class="material-symbols-outlined"> add_box </span>
-        Add Plot of Land
-      </a>
-    </li>
+          <li class="w-full text-right text-sm text-gray-400">v{{ version }}</li>
+        </div>
+      </li>
+      <li>
+        <a
+          routerLink="/batches"
+          routerLinkActive="bg-secondary-800 hover:bg-secondary-800"
+          class="flex flex-row items-center gap-2 px-4 cursor-pointer py-2 rounded-xl hover:bg-secondary-400/25"
+        >
+          <span class="material-symbols-outlined"> rebase_edit </span>
+          Batches
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/companies/{{ this.authenticationService.getCurrentCompanyId() }}"
+          routerLinkActive="bg-secondary-800 hover:bg-secondary-800"
+          class="flex flex-row items-center gap-2 px-4 cursor-pointer py-2 rounded-xl hover:bg-secondary-400/25"
+        >
+          <span class="material-symbols-outlined"> apartment </span>
+          Company
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/pols"
+          routerLinkActive="bg-secondary-800 hover:bg-secondary-800"
+          class="flex flex-row items-center gap-2 px-4 cursor-pointer py-2 rounded-xl hover:bg-secondary-400/25"
+        >
+          <span class="material-symbols-outlined"> add_box </span>
+          Add Plot of Land
+        </a>
+      </li>
     </div>
   </ul>
   <ul class="absolute bottom-0 left-0 right-0 border-t-2">
     <li class="p-4">
-      <div class="flex flex-row gap-4 items-center mb-4 px-4 py-2 bg-secondary-800 rounded-xl"
-        *ngIf="company$ | async as company">
+      <div class="flex flex-row gap-4 items-center mb-4 px-4 py-2 bg-secondary-800 rounded-xl" *ngIf="company$ | async as company">
         <div class="h-12 w-12 rounded-full bg-primary-400 flex items-center justify-center text-white">
           {{ getCompanyAbbrevation(company.name) }}
         </div>
@@ -44,8 +57,10 @@
           <span>{{ company.name }}</span>
         </div>
       </div>
-      <a (click)="authenticationService.logout()"
-        class="flex flex-row items-center gap-2 cursor-pointer py-2 rounded-xl hover:bg-secondary-400/25 px-4">
+      <a
+        (click)="authenticationService.logout()"
+        class="flex flex-row items-center gap-2 cursor-pointer py-2 rounded-xl hover:bg-secondary-400/25 px-4"
+      >
         <span class="material-symbols-outlined">logout</span>
         Logout
       </a>
@@ -54,8 +69,8 @@
       <img ngSrc="./assets/images/bmuv_support.jpg" alt="BMUV" width="1527" height="569" priority="" />
     </li>
     <li class="my-4 text-xs flex items-center justify-between px-4">
-      <a href="#"> Imprint </a>
-      <a href="#"> Privacy Policy </a>
+      <a href="/imprint"> Imprint </a>
+      <a href="/privacy-policy"> Privacy Policy </a>
     </li>
   </ul>
 </aside>

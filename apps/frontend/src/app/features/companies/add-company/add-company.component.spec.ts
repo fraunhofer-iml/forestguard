@@ -24,6 +24,14 @@ describe('AddCompanyComponent', () => {
   let createCompanyService: jest.Mocked<AddCompanyService>;
 
   beforeEach(async () => {
+    Object.defineProperty(window, 'location', {
+      writable: true,
+      value: {
+        ...window.location,
+        reload: jest.fn(),
+      },
+    });
+
     const companyServiceMock = {
       createCompany: jest.fn(),
     };
@@ -71,7 +79,7 @@ describe('AddCompanyComponent', () => {
       street: ['Example Street', []],
       postalCode: ['Example PostalCode', []],
       city: ['Example City', []],
-      additionalInformation: ['Example AdditionalInformation', []]
+      additionalInformation: ['Example AdditionalInformation', []],
     });
 
     createCompanyService.generateCompany = jest.fn().mockReturnValue(of({ name: 'Example Name' }));

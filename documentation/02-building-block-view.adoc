@@ -1,0 +1,255 @@
+[[chapter-building-block-view]]
+:docinfo: shared
+:toc: left
+:toclevels: 3
+:sectnums:
+:copyright: Apache License 2.0
+
+= Building Block View
+
+The building block view is a static and hierarchical decomposition of the system into building blocks and their relationships.
+It is a collection descriptions for all important components.
+Building blocks may be modules, components, subsystems, classes, interfaces, packages, libraries, frameworks, layers, partitions, tiers, functions, macros, operations, data structures, etc.).
+
+For interface specifications, including all method signatures and their descriptions, we refer to the _OpenAPI_ documents.
+Only other kinds of interfaces are described here.
+This is a simplification of arc42 (which requires a short description of interfaces), to avoid redundancy and inconsistencies, and to reduce documentation efforts.
+
+
+== Overview
+
+The ForestGuard project mainly consists of two parts: a frontend and a backend.
+The frontend is a web interface for the user and was developed using Angular.
+The backend consists of an API gateway, which is responsible for routing requests from the frontend to the corresponding service, and a number of services, which provide the business logic. All three backend applications are implemented using TypeScript and Node.js.
+Additionally, the backend utilizes a database, an object storage system, and a blockchain for data storage.
+
+image:images/building-block-view/systemarchitecture_components.svg[]
+
+
+== Building Blocks - Level 1
+
+In level 1, the components of {projectName} are shown.
+
+[cols="1,1,3",options="header"]
+|===
+| Name
+| Status
+| Responsibility / Description
+
+| Frontend
+| Custom development
+| The frontend is the user interface of the project. All actions such as batch creation are carried out from here and all saved data can be viewed.
+
+| API service
+| Custom development
+| The service that receives the interface calls from the frontend and forwards them to the other services.
+
+| Entity management service
+| Custom development
+| The entity management service is responsible for managing objects such as companies, users, plot of lands or proofs. This includes the creation, fetching and possible updating of these objects.
+
+| Process service
+| Custom development
+| The process service handles all tasks related to batches. This includes creating new harvest batches, creating them on the basis of existing batches and fetching them, including all associated batches.
+
+| Message-broker
+| Message-broker software
+| The service that connects all services from the API service onwards.
+
+| Postgres database
+| Relational database management system
+| All information is stored non-temporarily here.
+
+| MinIO File Storage
+| Object storage system
+| Documents such as deforestation-free certificates are stored here.
+
+| Keycloak
+| Single sign-on system
+| An authorization service with which user logins are implemented and managed.
+|===
+
+
+== Building Blocks - Level 2
+
+In Level 2, the internal components of the above are shown.
+
+=== Frontend
+
+|===
+|Component Collection |Component |Description
+
+.4+|**Batches**
+|Overview View
+|An overview of all active batches. Batches can be sorted and filtered.
+
+|Details View
+|The detailed view of a batch. All information about the batch is displayed. Associated actors, plot of land, attached documents can be viewed. The dependency graph is also displayed. This provides an overview of the complete history of a product. All previous and subsequent batches and processes are displayed.
+
+|Harvest View
+|In the harvest view, new batches can be created that were created directly by harvesting a plot of land.
+
+|Update View
+|In the update view, processes of product batches can be recorded. A process (which can also contain merging or splitting) creates new batches from existing batches.
+
+.2+|**Companies**
+|Company View
+|An overview of the information of the logged-in company and the farmers assigned to it.
+
+|Add Company View
+|The view offers the option of creating a company if no company is assigned at login.
+
+.2+|**Plot of Land**
+|Details View
+|A detailed overview of a plot of land. Any information about the plot of land such as address, assigned farmer, assigned documents or geo data is displayed. It is possible to upload documents at a later date.
+
+|Add View
+|A view to create a plot of land and assign it to a farmer. Geo data must and documents can be attached.
+
+.2+|**User**
+|Farmer View
+|A detailed overview of a farmer. All information about the user such as address, assigned company, assigned plot of land or assigned documents are displayed. It is possible to upload additional documents.
+
+|Add View
+|A view to create either an employee or a farmer. For farmers, documents belonging to them can be uploaded directly.
+
+|===
+
+
+=== API Service
+
+|===
+|Component Collection |Component |Description
+
+.2+|**Batch**
+|Batch Controller
+|Provides REST endpoints that enable operations such as creating or reading batches.
+
+|Batch Service
+|This service calls the corresponding AMQP endpoints.
+
+.2+|**Company**
+|Company Controller
+|Provides REST endpoints that enable operations such as creating or reading companies. Additionally, also operations for reading batches or farmers belonging to the company.
+
+|Company Service
+|This service calls the corresponding AMQP endpoints.
+
+.2+|**Cultivation**
+|Cultivation Controller
+|Provides REST endpoints that enable operations such as creating or reading cultivations.
+
+|Cultivation Service
+|This service calls the corresponding AMQP endpoints.
+
+.2+|**Import**
+|Import Controller
+|Provides REST endpoints that allow existing master data (farmers and plot of lands of a company) to be imported via an Excel file.
+
+|Import Service
+|This service calls the corresponding AMQP endpoints.
+
+.2+|**PlotOfLand**
+|PlotOfLand Controller
+|Provides REST endpoints that enable operations such as creating or reading plots of land or proofs.
+
+|PlotOfLand Service
+|This service calls the corresponding AMQP endpoints.
+
+.2+|**ProcessStep**
+|ProcessStep Controller
+|Provides REST endpoints that allow documents to be added to existing processes.
+
+|ProcessStep Service
+|This service calls the corresponding AMQP endpoints.
+
+.2+|**User**
+|User Controller
+|Provides REST endpoints that enable operations such as creating or reading users (especially farmers).
+
+|User Service
+|This service calls the corresponding AMQP endpoints.
+
+|===
+
+=== Entity Management Service
+
+|===
+|Component Collection |Component |Description
+
+.2+|**Company**
+|Company Controller
+|Provides AMQP endpoints that enable operations such as creating or reading companies.
+
+|Company Service
+|This service offers functionalities such as creating or reading companies.
+
+.2+|**Cultivation**
+|Cultivation Controller
+|Provides AMQP endpoints that enable operations like creating or reading cultivations.
+
+|Cultivation  Service
+|This service offers functionalities such as creating or reading cultivations.
+
+.2+|**Document**
+|Document Controller
+|Provides AMQP endpoints that enable adding and updating documents to processes and farmers.
+
+|Document  Service
+|This service offers functionalities such as adding and updating documents to processes and farmers.
+
+.2+|**Import**
+|Import Controller
+|Provides AMQP endpoints that allow existing master data (farmers and plot of lands of a company) to be imported via an Excel file.
+
+|Import  Service
+|This service offers functionalities that allow existing master data (farmers and plot of lands of a company) to be imported via an Excel file.
+
+.3+|**PlotOfLand**
+|PlotOfLand Controller
+|Provides AMQP endpoints that enable operations such as creating or reading plots of land or proofs.
+
+|PlotOfLand Service
+|This service offers functionalities such as creating or reading  plots of land.
+
+|Proof Service
+|This service offers functionalities such as creating or reading proofs.
+
+.2+|**User**
+|User Controller
+|Provides AMQP endpoints that enable operations such as creating or reading users (especially farmers).
+
+|User Service
+|This service offers functionalities such as creating or reading users (especially farmers).
+
+|===
+
+=== Process Service
+
+|===
+|Component Collection |Component |Description
+
+.5+|**Batch**
+|Batch Controller
+|Provides AMQP endpoints that enable operations such as creating or reading batches.
+
+|BatchCreate Service
+|This service offers functionalities for creating batches (especially harvests).
+
+|BatchExport Service
+|This service offers functionalities for exporting a batch with all its predecessors and successors. In this way, the origin of a batch can be traced back to the beginning and certified.
+
+|BatchRead Service
+|This service offers functionalities for reading batches.
+
+|BatchRelated Service
+|This service offers functionalities for reading a batch with all its predecessors and successors and their relationships.
+
+|===
+
+
+== Building Blocks - Level 3
+
+The following section presents the class diagram for ForestGuard, providing a comprehensive overview of all classes and their functions.
+
+image:images/building-block-view/fg_entity_uml.svg[]

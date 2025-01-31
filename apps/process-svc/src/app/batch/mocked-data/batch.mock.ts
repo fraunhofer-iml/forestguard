@@ -41,6 +41,7 @@ export const mockedCombinedBatchDto: BatchCombinedCreateDto = {
 export const mockedPrismaBatchWithRelations1: BatchWithRelations & { ins: [] } = {
   id: '1',
   euInfoSystemId: '1',
+  hsCode: "090121",
   weight: 100,
   active: true,
   recipientId: '1',
@@ -222,6 +223,7 @@ export const mockedPrismaBatchWithRelations1: BatchWithRelations & { ins: [] } =
 export const mockedPrismaBatchWithRelations2: BatchWithRelations = {
   id: '2',
   euInfoSystemId: '2',
+  hsCode: "090121",
   weight: 200,
   active: false,
   recipientId: '2',
@@ -336,6 +338,7 @@ export const mockedPrismaBatchWithRelations2: BatchWithRelations = {
 export const mockedPrismaBatchWithRelations3: BatchWithRelations = {
   id: '3',
   euInfoSystemId: '2',
+  hsCode: "090121",
   weight: 200,
   active: false,
   recipientId: '2',
@@ -443,6 +446,7 @@ export const mockedPrismaBatchWithRelations3: BatchWithRelations = {
 export const mockedPrismaBatchWithRelations4: BatchWithRelations = {
   id: '4',
   euInfoSystemId: '2',
+  hsCode: "090121",
   weight: 200,
   active: false,
   recipientId: '2',

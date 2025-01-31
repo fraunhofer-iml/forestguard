@@ -27,6 +27,7 @@ export class UploadFormComponent {
 
   @Output() uploadDocument = new EventEmitter<{ file: File; documentType?: string }>();
   @Output() removeDocument = new EventEmitter<{ file: File; documentType?: string }>();
+  @Output() removeProof = new EventEmitter<UploadFormSelectType>();
 
   file: File | null = null;
 
@@ -38,6 +39,18 @@ export class UploadFormComponent {
 
   lengthOfUploadedFiles(): number {
     return this.selectOptions?.filter((option) => option.file).length ?? this.uploadedFiles.length;
+  }
+
+  onDrop(event: DragEvent, documentType: string): void {
+    event.preventDefault();
+    const file = event.dataTransfer?.files[0];
+    if ((file && documentType) || (file && this.showDescriptionField)) {
+      this.formGroup.patchValue({ file });
+    }
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
   }
 
   onFileSelected(event: Event): void {

@@ -129,9 +129,10 @@ describe('PlotsOfLandService', () => {
         cultivatedWith: {
           connectOrCreate: {
             where: {
-              commodity_sort: {
+              commodity_sort_quality: {
                 commodity: 'coffee',
                 sort: cultivationSort.toLowerCase(),
+                quality: cultivationQuality.toLowerCase(),
               },
             },
             create: {
@@ -180,9 +181,10 @@ describe('PlotsOfLandService', () => {
         cultivatedWith: {
           connectOrCreate: {
             where: {
-              commodity_sort: {
+              commodity_sort_quality: {
                 commodity: 'coffee',
                 sort: cultivationSort.toLowerCase(),
+                quality: cultivationQuality.toLowerCase(),
               },
             },
             create: {

@@ -11,6 +11,7 @@ import JSON5 from 'json5';
 
 export const createOriginBatchQuery = (batchCreateDto: BatchCreateDto) => ({
   euInfoSystemId: batchCreateDto.euInfoSystemId,
+  hsCode: batchCreateDto.hsCode,
   weight: batchCreateDto.weight,
   active: true,
   recipient: {

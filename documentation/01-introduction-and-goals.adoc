@@ -19,7 +19,7 @@ SE Services are professional (logistics) services, consisting of IT and/or physi
 They are part of a functional (logistics) process and can be linked and subsequently orchestrated in the sense of that process.
 
 .Silicon Economy big picture
-image:images/01-se-big-picture.png[se-big-picture]
+image:images/introduction-and-goals/se-big-picture.png[se-big-picture]
 
 * *IDS Connector:* Industrial Data Space Connector -Used for secure communication of various contents and management of access rights to various data. (_not yet integrated_)
 
@@ -54,7 +54,7 @@ Modules of the Blockchain Broker can be used to create use case specific functio
 In the next diagram, the modules and internal structure of a Blockchain Broker can be seen:
 
 .Blockchain Broker overview
-image:images/01-overview-blockchain-broker.png[overview-blockchain-broker]
+image:images/introduction-and-goals/overview-blockchain-broker.png[overview-blockchain-broker]
 
 == Requirements Overview
 

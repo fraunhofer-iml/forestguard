@@ -8,7 +8,7 @@
 
 import { version } from 'package.json';
 
-const BASE_URL = 'https://fg-api.apps.blockchain-europe.iml.fraunhofer.de';
+const BASE_URL = 'https://fg-api.public.apps.blockchain-europe.iml.fraunhofer.de';
 
 export const environment = {
   VERSION: version,
@@ -24,6 +24,8 @@ export const environment = {
   },
   CULTIVATIONS: {
     URL: `${BASE_URL}/cultivations`,
+    URLSORTS: `${BASE_URL}/cultivations/sorts`,
+    URLQUALITIES: `${BASE_URL}/cultivations/qualities`,
   },
   PLOTSOFLAND: {
     URL: `${BASE_URL}/pols`,
@@ -44,7 +46,7 @@ export const environment = {
     URL: 'https://minioo.public.apps.blockchain-europe.iml.fraunhofer.de/forest-guard/',
   },
   KEYCLOAK: {
-    URL: 'https://kc.apps.blockchain-europe.iml.fraunhofer.de',
+    URL: 'https://kc.public.apps.blockchain-europe.iml.fraunhofer.de',
     REALM: 'forest-guard',
     CLIENT_ID: 'frontend',
   },

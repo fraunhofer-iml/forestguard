@@ -12,6 +12,7 @@ import { ProcessStepDto } from '../process';
 export class BatchDto {
   id: string;
   euInfoSystemId?: string;
+  hsCode?: string;
   weight: number;
   active: boolean;
   recipient: UserDto | CompanyDto;
@@ -25,6 +26,7 @@ export class BatchDto {
     recipient: UserDto | CompanyDto,
     processStep: ProcessStepDto,
     euInfoSystemId?: string,
+    hsCode?: string,
     hasAllProofs?: boolean
   ) {
     this.id = id;
@@ -33,6 +35,7 @@ export class BatchDto {
     this.recipient = recipient;
     this.processStep = processStep;
     this.euInfoSystemId = euInfoSystemId;
+    this.hsCode = hsCode;
     this.hasAllProofs = hasAllProofs;
   }
 }

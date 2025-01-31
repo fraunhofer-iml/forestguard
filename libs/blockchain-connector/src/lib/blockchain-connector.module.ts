@@ -8,7 +8,7 @@
 
 import { ConfigurationModule } from '@forest-guard/configuration';
 import { FileStorageModule } from '@forest-guard/file-storage';
-import { DataIntegrityModule, TokenModule } from '@fraunhofer-iml/nft-folder-blockchain-connector';
+import { DataIntegrityModule, TokenModule } from 'nft-folder-blockchain-connector';
 import { Module } from '@nestjs/common';
 import { BatchNftService } from './batch-nft.service';
 import { BlockchainConnectorService } from './blockchain-connector.service';
