@@ -1,3 +1,9 @@
+# Copyright Fraunhofer Institute for Material Flow and Logistics
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# For details on the licensing terms, see the LICENSE file.
+# SPDX-License-Identifier: Apache-2.0
+
 name: Test and Build Pipeline
 
 on:
@@ -87,7 +93,7 @@ jobs:
           file: docker/angular.dockerfile
           build-args: APP=frontend
           push: true
-          tags: ghcr.io/fraunhofer-iml/forest-guard/frontend:latest, ghcr.io/fraunhofer-iml/forest-guard/frontend:${{ github.sha }}
+          tags: ghcr.io/${{ github.repository }}/frontend:latest, ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
 
       - name: Build and Push Docker Entity Management Image
         uses: docker/build-push-action@v4
@@ -96,7 +102,7 @@ jobs:
           file: docker/nest.dockerfile
           build-args: APP=entity-management-svc
           push: true
-          tags: ghcr.io/fraunhofer-iml/forest-guard/entity-management-svc:latest, ghcr.io/fraunhofer-iml/forest-guard/entity-management-svc:${{ github.sha }}
+          tags: ghcr.io/${{ github.repository }}/entity-management-svc:latest, ghcr.io/${{ github.repository }}/entity-management-svc:${{ github.sha }}
 
       - name: Build and Push Docker Process Service Image
         uses: docker/build-push-action@v4
@@ -105,4 +111,4 @@ jobs:
           file: docker/nest.dockerfile
           build-args: APP=process-svc
           push: true
-          tags: ghcr.io/fraunhofer-iml/forest-guard/process-svc:latest, ghcr.io/fraunhofer-iml/forest-guard/process-svc:${{ github.sha }}
+          tags: ghcr.io/${{ github.repository }}/process-svc:latest, ghcr.io/${{ github.repository }}/process-svc:${{ github.sha }}
