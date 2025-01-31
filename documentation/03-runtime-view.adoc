@@ -236,6 +236,19 @@ image:images/runtime-view/create-user-farmer.svg[]
 | *6* | *ForestGuard:* Send Response | Get new Farmer or User.
 |===
 
+=== Edit Farmer
+
+image:images/runtime-view/edit-farmer.svg[]
+
+|===
+| *Nr.* | Step | Description
+| *1* | *User:* open Site "Farmer Detail View" in Company Overview | Opens page.
+| *2* | *User:* Insert Data for Farmer | Edit Name, Address, email and phone number.
+| *4* | *ForestGuard:* Check Validity of Request | Farmer must be known.
+| *5* | *ForestGuard:* Edit Farmer  | Edit Farmer  and store profile in Database.
+| *6* | *ForestGuard:* Send Response | Get edited Farmer.
+|===
+
 === Add Documents to Farmer or Batches
 
 image:images/runtime-view/add-documents-flowchart.svg[]

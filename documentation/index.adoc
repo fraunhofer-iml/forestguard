@@ -65,7 +65,4 @@ include::03-runtime-view.adoc[]
 include::04-deployment-view.adoc[]
 
 <<<
-include::05-risks-and-technical-debts.adoc[]
-
-<<<
-include::06-tutorial.adoc[]
+include::05-tutorial.adoc[]
