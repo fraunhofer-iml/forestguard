@@ -39,7 +39,10 @@ jobs:
           cache: ${{ env.NPM_CACHE }}
 
       - name: Install Dependencies
-        run: npm ci --include=dev
+        run: npm install
+
+      - name: Verify Integrity of Provenance Attestations and Registry Signatures for Installed Dependencies
+        run: npm audit signatures
 
       - name: Create GitHub Release
         env:
