@@ -122,7 +122,7 @@ http://localhost:4200
 Username: admin
 Password: admin
 
-For detailed instructions on how to use the application, refer to the xref:chapter-tutorial[Tutorial] chapter in this documentation.
+For detailed instructions on how to use the application, refer to the xref:05-tutorial.adoc#chapter-tutorial[Tutorial] chapter in this documentation.
 
 [NOTE]
 ====
