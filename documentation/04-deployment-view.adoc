@@ -119,10 +119,10 @@ http://localhost:4200
 
 2. *Log in* with the default credentials:
 [source,shell]
-Username: admin  
+Username: admin
 Password: admin
 
-For detailed instructions on how to use the application, refer to the <<chapter-tutorial,Tutorial>> chapter in this documentation.
+For detailed instructions on how to use the application, refer to the xref:chapter-tutorial[Tutorial] chapter in this documentation.
 
 [NOTE]
 ====

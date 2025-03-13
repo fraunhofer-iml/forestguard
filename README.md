@@ -97,8 +97,8 @@ The project consists of the following components:
 ## 🚀 Getting Started <a id="getting-started"></a>
 
 To set up and run ForestGuard locally, please consult the chapters
-[Deployment View](https://github.com/fraunhofer-iml/forest-guard/blob/main/documentation/07-deployment-view.adoc) and
-[Tutorial](https://github.com/fraunhofer-iml/forest-guard/blob/main/documentation/12-tutorial.adoc) in our documentation. These two chapters
+[Deployment View](https://github.com/fraunhofer-iml/forest-guard/blob/main/documentation/04-deployment-view.adoc) and
+[Tutorial](https://github.com/fraunhofer-iml/forest-guard/blob/main/documentation/05-tutorial.adoc) in our documentation. These two chapters
 provide step-by-step instructions to guide you through the process of installing, configuring and running ForestGuard on your local machine.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
