@@ -34,7 +34,7 @@ api:run-integration-tests:
     KC_BOOTSTRAP_ADMIN_USERNAME: admin
     KC_BOOTSTRAP_ADMIN_PASSWORD: admin
     KEYCLOAK_URL: http://keycloak:8080
-    KEYCLOAK_REALM_CONFIG_PATH: ./keycloak/realm/ForestGuard-realm.json
+    KEYCLOAK_REALM_CONFIG_PATH: ./keycloak/realm/Unisoft-realm.json
     KC_LOG_LEVEL: DEBUG
     KC_HTTP_ENABLED: true
     BLOCKCHAIN_ENABLED: false
@@ -47,7 +47,7 @@ api:run-integration-tests:
       echo "Fetching admin JWT from Keycloak..."
       export TOKEN_RESPONSE=$(curl --request POST --url ${KEYCLOAK_URL}/realms/master/protocol/openid-connect/token --header 'Accept: application/x-www-form-urlencoded' --header 'Content-Type: application/x-www-form-urlencoded' --data grant_type=password --data client_id=admin-cli --data username=${KC_BOOTSTRAP_ADMIN_USERNAME} --data password=${KC_BOOTSTRAP_ADMIN_PASSWORD})
       export ADMIN_ACCESS_TOKEN=$(echo $TOKEN_RESPONSE | jq -r .access_token)
-      echo "Importing ForestGuard Keycloak realm configuration..."
+      echo "Importing Unisoft Keycloak realm configuration..."
       curl --request POST --url ${KEYCLOAK_URL}/admin/realms --header "Accept: application/x-www-form-urlencoded" --header "Authorization: Bearer ${ADMIN_ACCESS_TOKEN}" --header "Content-Type: application/json" --data-binary @${KEYCLOAK_REALM_CONFIG_PATH}
     - npx nx serve api &
     - npx nx serve entity-management-svc &
@@ -74,11 +74,8 @@ api:sonarqube-check-mr:
       - /apps/api/.sonar/cache
   script:
     - >
-      sonar-scanner
-      -Dsonar.projectBaseDir=./apps/api/
-      -Dsonar.pullrequest.key=${CI_MERGE_REQUEST_IID}
-      -Dsonar.pullrequest.branch=${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}
-      -Dsonar.pullrequest.base=${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}
+      sonar-scanner -Dsonar.projectBaseDir=./apps/api/ -Dsonar.pullrequest.key=${CI_MERGE_REQUEST_IID}
+      -Dsonar.pullrequest.branch=${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME} -Dsonar.pullrequest.base=${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}
   allow_failure: true
   only:
     - merge_requests

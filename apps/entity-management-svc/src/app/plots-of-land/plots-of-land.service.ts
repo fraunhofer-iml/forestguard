@@ -10,10 +10,10 @@ import { Coordinates, GeoDataDto, PlotOfLandCreateDto, PlotOfLandDto, PlotOfLand
 import { BlockchainConnectorService } from '@forest-guard/blockchain-connector';
 import { ConfigurationService } from '@forest-guard/configuration';
 import { PrismaService } from '@forest-guard/database';
+import { convertCoordinates } from '@forest-guard/utm';
 import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { User } from '@prisma/client';
-import { convertCoordinates } from '@forest-guard/utm';
 
 @Injectable()
 export class PlotsOfLandService {
@@ -120,7 +120,7 @@ export class PlotsOfLandService {
           type: 'Feature',
           geometry: {
             type: geoDataDto.coordinateType,
-            coordinates: (geoDataDto.standard === Standard.UTM) ? this.convertToWgsCoordinates(geoDataDto) : geoDataDto.coordinates,
+            coordinates: geoDataDto.standard === Standard.UTM ? this.convertToWgsCoordinates(geoDataDto) : geoDataDto.coordinates,
           },
           properties: {
             ProducerName: farmerEntity.firstName + ' ' + farmerEntity.lastName,

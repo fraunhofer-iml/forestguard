@@ -102,8 +102,7 @@ paths:
       operationId: BatchController_getExportBatch
       summary: ''
       description: >-
-        Export batch file with all batch information and all previous and next
-        batches
+        Export batch file with all batch information and all previous and next batches
       parameters:
         - name: id
           required: true
@@ -388,8 +387,7 @@ paths:
       requestBody:
         required: true
         description: >-
-          The proof of the given plot of land. Either of type `PROOF_OF_FREEDOM`
-          of `PROOF_OF_OWNERSHIP`.
+          The proof of the given plot of land. Either of type `PROOF_OF_FREEDOM` of `PROOF_OF_OWNERSHIP`.
         content:
           multipart/form-data:
             schema:
@@ -656,7 +654,7 @@ paths:
       security:
         - bearer: []
 info:
-  title: ForestGuard API
+  title: Unisoft API
   description: ''
   version: '0.1'
   contact: {}

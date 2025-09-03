@@ -39,6 +39,35 @@ export class PlotOfLandNftService {
     private readonly tokenUpdateService: TokenUpdateService
   ) {}
 
+  private async hashMetadata(plotOfLand: PlotOfLand): Promise<string> {
+    const metadata = {
+      name: plotOfLand.description || `Plot of Land ${plotOfLand.nationalPlotOfLandId}`,
+      description: `Plot of land located in ${plotOfLand.region}, ${plotOfLand.country}`,
+      attributes: [
+        {
+          trait_type: 'Region',
+          value: plotOfLand.region,
+        },
+        {
+          trait_type: 'Country',
+          value: plotOfLand.country,
+        },
+        {
+          trait_type: 'Area',
+          value: `${plotOfLand.areaInHA} HA`,
+        },
+        {
+          trait_type: 'Plot ID',
+          value: plotOfLand.nationalPlotOfLandId,
+        },
+      ],
+    };
+
+    const metadataString = JSON.stringify(metadata);
+    const buffer = Buffer.from(metadataString, 'utf-8');
+    return this.dataIntegrityService.hashData(buffer);
+  }
+
   public async createDtoForMintingNft(plotOfLand: PlotOfLand): Promise<TokenMintDto> {
     const fetchedPlotOfLandNfts = await this.tokenReadService.getTokens(plotOfLand.id);
 
@@ -50,6 +79,7 @@ export class PlotOfLandNftService {
     }
 
     const plotOfLandHash = await this.hashPlotOfLand(plotOfLand);
+    const metadataHash = await this.hashMetadata(plotOfLand);
 
     return {
       remoteId: plotOfLand.id,
@@ -58,8 +88,8 @@ export class PlotOfLandNftService {
         hash: plotOfLandHash,
       },
       metadata: {
-        uri: '',
-        hash: '',
+        uri: `${this.plotOfLandsUrl}${plotOfLand.id}/metadata`,
+        hash: metadataHash,
       },
       additionalData: JSON.stringify({
         proofs: [],
@@ -69,8 +99,23 @@ export class PlotOfLandNftService {
   }
 
   public async mintNft(dto: TokenMintDto): Promise<void> {
-    const nft = await this.tokenMintService.mintToken(dto, false);
-    this.logger.log(JSON.stringify(nft, null, 2));
+    this.logger.log(`Minting NFT with data: ${JSON.stringify(dto)}`);
+
+    try {
+      const nft = await this.tokenMintService.mintToken(dto, false);
+      this.logger.log(JSON.stringify(nft, null, 2));
+    } catch (error: any) {
+      this.logger.error(`Mint NFT failed: ${error.message}`);
+
+      if (error.transactionReceipt?.logs) {
+        this.logger.log(`Available events in transaction receipt:`);
+        error.transactionReceipt.logs.forEach((log: any, index: any) => {
+          this.logger.log(`Event ${index}: ${JSON.stringify(log, null, 2)}`);
+        });
+      }
+
+      throw error;
+    }
   }
 
   public async createDtoForUpdatingNft(proof: Proof & { plotOfLand: PlotOfLand }): Promise<PlotOfLandTokenUpdateDto> {

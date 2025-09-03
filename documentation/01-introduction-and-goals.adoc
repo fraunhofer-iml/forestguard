@@ -7,13 +7,13 @@
 
 = Introduction and Goals
 
-ForestGuard is a digital traceability solution for proving freedom from deforestation that was developed against the background of the EU Anti-Deforestation Regulation (EUDR).
+Unisoft is a digital traceability solution for proving freedom from deforestation that was developed against the background of the EU Anti-Deforestation Regulation (EUDR).
 
 Many traceability solutions are often not customizable by the user and are not open source, which leads to a dependency on the respective commercial provider. Smallholder farmers in particular face challenges in this context: They often have very limited influence over the use of their data or the choice of traceability solution providers, as this choice is often dictated by their customers.
 
-The source code of the ForestGuard software is openly accessible so that solution providers and supply chain actors can adapt it to their needs. In particular, ForestGuard enables cooperatives and smallholders to digitally record their production steps, manage their own master data and transmit relevant traceability data to downstream actors in the supply chain.
+The source code of the Unisoft software is openly accessible so that solution providers and supply chain actors can adapt it to their needs. In particular, Unisoft enables cooperatives and smallholders to digitally record their production steps, manage their own master data and transmit relevant traceability data to downstream actors in the supply chain.
 
-The solution approach is not limited to the coffee supply chain considered here as an example. Thanks to the open-source publication, ForestGuard is also available for other use cases beyond the EUDR where a reliable information base and verification management is required. +
+The solution approach is not limited to the coffee supply chain considered here as an example. Thanks to the open-source publication, Unisoft is also available for other use cases beyond the EUDR where a reliable information base and verification management is required. +
 Among other things, the solution includes functionalities for
 
 - Master and process data collection from all relevant stakeholders (geodata, recording of harvests, splitting and merging of batches, processing steps, transfer, etc.)

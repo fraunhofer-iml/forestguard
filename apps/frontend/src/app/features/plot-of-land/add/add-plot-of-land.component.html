@@ -32,8 +32,8 @@
       </mat-form-field>
 
       <mat-form-field class="w-full" appearance="outline">
-        <mat-label>Sort Of Coffee</mat-label>
-        <input placeholder="Sort Of Coffee" matInput formControlName="cultivationSort" [matAutocomplete]="cultivationSortAuto" />
+        <mat-label>Sort Of Palm Oil</mat-label>
+        <input placeholder="Sort Of Palm Oil" matInput formControlName="cultivationSort" [matAutocomplete]="cultivationSortAuto" />
         <mat-autocomplete #cultivationSortAuto="matAutocomplete">
           <mat-option *ngFor="let option of coffeeOptions$ | async" [value]="option">
             {{ option }}

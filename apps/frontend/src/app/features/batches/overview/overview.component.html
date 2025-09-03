@@ -47,6 +47,15 @@
         </td>
       </ng-container>
 
+      <!-- Blockchain Address -->
+      <ng-container matColumnDef="batchId">
+        <th mat-header-cell id="id" *matHeaderCellDef mat-sort-header="id">Blockchain Address</th>
+        <td mat-cell *matCellDef="let el">
+          <!-- change this with the address of plot blockchain -->
+          <a class="text-secondary-500 hover:underline" [routerLink]="'/batches/' + el.id">{{ el.id }}</a>
+        </td>
+      </ng-container>
+
       <!-- Batch ID -->
       <ng-container matColumnDef="batchId">
         <th mat-header-cell id="id" *matHeaderCellDef mat-sort-header="id">Batch ID</th>

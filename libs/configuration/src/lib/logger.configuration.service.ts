@@ -8,7 +8,7 @@
 
 import { ConsoleLogger } from '@nestjs/common';
 
-export class ForestGuardLogger extends ConsoleLogger {
+export class UnisoftLogger extends ConsoleLogger {
   constructor() {
     super();
   }
@@ -56,7 +56,7 @@ export class ForestGuardLogger extends ConsoleLogger {
   private createLogObject(message: any, logLevel: string, stack?: string, context?: string) {
     return {
       timestamp: new Date().toISOString(),
-      loggerName: 'ForestGuard-Logger',
+      loggerName: 'Unisoft-Logger',
       threadName: context,
       level: logLevel,
       message: message,

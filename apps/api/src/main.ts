@@ -20,7 +20,7 @@ async function bootstrap() {
   app.enableCors();
   const configuration = app.get(ConfigurationService);
 
-  const swaggerConfig = new DocumentBuilder().setTitle('ForestGuard API').setVersion('0.1').addBearerAuth().build();
+  const swaggerConfig = new DocumentBuilder().setTitle('Unisoft API').setVersion('0.1').addBearerAuth().build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
 
   SwaggerModule.setup(configuration.getGeneralConfiguration().swaggerPath, app, document);

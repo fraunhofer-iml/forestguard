@@ -23,7 +23,7 @@ This communication occurs either through direct REST interactions from the front
 This Chapter outlines all available APIs in the following Order:
 
 1. The Blockchain Connector which accepts AMQP messages related to the process.
-2. The Api exposed through the BFF which the ForestGuard Frontend uses to query for data.
+2. The Api exposed through the BFF which the Unisoft Frontend uses to query for data.
 
 === AMQP specific messaging interfaces and API
 
@@ -166,7 +166,7 @@ The BFF serves as a Bridge for the frontend and allows the following REST Endpoi
 
 == Use Cases and process flows
 
-In the ForestGuard architecture, an organized series of steps is followed to facilitate activities such as harvesting, processing, add plots of land and more. This is illustrated in the image below.
+In the Unisoft architecture, an organized series of steps is followed to facilitate activities such as harvesting, processing, add plots of land and more. This is illustrated in the image below.
 
 image:images/runtime-view/process-flowchart.svg[]
 
@@ -177,8 +177,8 @@ image:images/runtime-view/login-flowchart.svg[]
 |===
 | *Nr.* | Step | Description
 | *1* | *User:* Insert credentials in login page | Add username and password.
-| *2* | *ForestGuard:* Check validity of request | Accountname must be known.
-| *3* | *ForestGuard:* Send response to user | Login to ForestGuard.
+| *2* | *Unisoft:* Check validity of request | Accountname must be known.
+| *3* | *Unisoft:* Send response to user | Login to Unisoft.
 |===
 
 === Harvesting
@@ -188,11 +188,11 @@ image:images/runtime-view/harvesting-flowchart.svg[]
 |===
 | *Nr.* | Step | Description
 | *1* | *User:* Open Page | Open page to 'Add Harvest'.
-| *2* | *ForestGuard:* Get List of Plots of Land by select one Process Owner | Lists all Plots of Land by provided Process Owner.
+| *2* | *Unisoft:* Get List of Plots of Land by select one Process Owner | Lists all Plots of Land by provided Process Owner.
 | *3* | *User:* Enter Harvest Data | Add Plots of Land, Date, Weight, Recipient and Author of Entry.
-| *4* | *ForestGuard:* Check Validity of Request | All Values must be selected and IDs are known.
-| *5* | *ForestGuard:* Store Harvest(s) in DB and Blockchain | Create new Harvest.
-| *6* | *ForestGuard:* Merge multiple inputs into one coffee batch | The process name is changed to merge.
+| *4* | *Unisoft:* Check Validity of Request | All Values must be selected and IDs are known.
+| *5* | *Unisoft:* Store Harvest(s) in DB and Blockchain | Create new Harvest.
+| *6* | *Unisoft:* Merge multiple inputs into one coffee batch | The process name is changed to merge.
 |===
 
 === Processing
@@ -203,11 +203,11 @@ image:images/runtime-view/processing-flowchart.svg[]
 | *Nr.* | Step | Description
 | *1* | *User:* select Batch/Batches to update and open Site to 'Add Process' | Get List of valid coffee batches from Database.
 | *2* | *User:* Enter Process Data | Add Date, Process name, Process Owner, Author of Entry, EU Info System ID, Weight and Recipient.
-| *3* | *ForestGuard:* Check Validity of request | All Values must be selected, IDs are known and batch(es) must be 'active'.
-| *5* | *ForestGuard:* Create Output Coffee Batches | Create new Batch(es).
-| *6* | *ForestGuard:* Store Process Data | Store Batch(es) in DB and Blockchain.
-| *7* | *ForestGuard:* Set Input Coffee Batches as "inactive" | All selected Batch(es) get status 'inactive'
-| *8* | *ForestGuard:* Send Response | Get all new Batch(es).
+| *3* | *Unisoft:* Check Validity of request | All Values must be selected, IDs are known and batch(es) must be 'active'.
+| *5* | *Unisoft:* Create Output Coffee Batches | Create new Batch(es).
+| *6* | *Unisoft:* Store Process Data | Store Batch(es) in DB and Blockchain.
+| *7* | *Unisoft:* Set Input Coffee Batches as "inactive" | All selected Batch(es) get status 'inactive'
+| *8* | *Unisoft:* Send Response | Get all new Batch(es).
 |===
 
 === Create Company
@@ -218,9 +218,9 @@ image:images/runtime-view/create-company-flowchart.svg[]
 | *Nr.* | Step | Description
 | *1* | *User:* First-Time Login | Opens page 'Add Company'.
 | *2* | *User:* Insert Profile Data for Company  | Add name of Company, Address and Additional Information (optional).
-| *4* | *ForestGuard:* Check Validity of Request | All Values must be selected and Company name must be new.
-| *5* | *ForestGuard:* Create new BC-Account | Store Company in Blockchain.
-| *6* | *ForestGuard:* Send Response | Get new Company.
+| *4* | *Unisoft:* Check Validity of Request | All Values must be selected and Company name must be new.
+| *5* | *Unisoft:* Create new BC-Account | Store Company in Blockchain.
+| *6* | *Unisoft:* Send Response | Get new Company.
 |===
 
 === Create User/Farmer
@@ -231,9 +231,9 @@ image:images/runtime-view/create-user-farmer.svg[]
 | *Nr.* | Step | Description
 | *1* | *User:* open Site "Create User/Farmer" in Company Overview | Opens page.
 | *2* | *User:* Insert Date for User or Farmer | Add Name, Address, email, phone number, local farmer ID (by Farmer), employee ID (by user), additional Information (optional) and Documents (optional, by farmer).
-| *4* | *ForestGuard:* Check Validity of Request | All Values must be selected and farmer or user must be new.
-| *5* | *ForestGuard:* Create new Farmer or User | Create new Farmer or User ID and store profile in Database.
-| *6* | *ForestGuard:* Send Response | Get new Farmer or User.
+| *4* | *Unisoft:* Check Validity of Request | All Values must be selected and farmer or user must be new.
+| *5* | *Unisoft:* Create new Farmer or User | Create new Farmer or User ID and store profile in Database.
+| *6* | *Unisoft:* Send Response | Get new Farmer or User.
 |===
 
 === Edit Farmer
@@ -244,9 +244,9 @@ image:images/runtime-view/edit-farmer.svg[]
 | *Nr.* | Step | Description
 | *1* | *User:* open Site "Farmer Detail View" in Company Overview | Opens page.
 | *2* | *User:* Insert Data for Farmer | Edit Name, Address, email and phone number.
-| *4* | *ForestGuard:* Check Validity of Request | Farmer must be known.
-| *5* | *ForestGuard:* Edit Farmer  | Edit Farmer  and store profile in Database.
-| *6* | *ForestGuard:* Send Response | Get edited Farmer.
+| *4* | *Unisoft:* Check Validity of Request | Farmer must be known.
+| *5* | *Unisoft:* Edit Farmer  | Edit Farmer  and store profile in Database.
+| *6* | *Unisoft:* Send Response | Get edited Farmer.
 |===
 
 === Add Documents to Farmer or Batches
@@ -256,9 +256,9 @@ image:images/runtime-view/add-documents-flowchart.svg[]
 |===
 | *Nr.* | Step | Description
 | *1* | *User:* open Page 'Create Farmer' or 'Add Process' | Upload Documents.
-| *2* | *ForestGuard:* Check Validity of Request | Processstep ID must be known (by batch) and at least one Document is provided.
-| *3* | *ForestGuard:* Store documents in DB | Create new Farmers and add them in Database.
-| *4* | *ForestGuard:* Create hash value from Document(s) and store it on BC | Store data in Blockchain.
+| *2* | *Unisoft:* Check Validity of Request | Processstep ID must be known (by batch) and at least one Document is provided.
+| *3* | *Unisoft:* Store documents in DB | Create new Farmers and add them in Database.
+| *4* | *Unisoft:* Create hash value from Document(s) and store it on BC | Store data in Blockchain.
 |===
 
 === Import Farmer
@@ -268,8 +268,8 @@ image:images/runtime-view/import-flowchart.svg[]
 |===
 | *Nr.* | Step | Description
 | *1* | *User:* open Site "Company" and click button "Import Data"| Upload Excel Documents.
-| *2* | *ForestGuard:* Store new Farmers in DB | Created new Farmers in Database.
-| *3* | *ForestGuard:* Update DB | Database will be updated and new Farmers are implemented.
+| *2* | *Unisoft:* Store new Farmers in DB | Created new Farmers in Database.
+| *3* | *Unisoft:* Update DB | Database will be updated and new Farmers are implemented.
 |===
 
 === Add Plot of Land to Farmer
@@ -279,11 +279,11 @@ image:images/runtime-view/add-plot-of-land-flowchart.svg[]
 |===
 | *Nr.* | Step | Description
 | *1* | *User:* open Site to "Plot of Land" | Opens page.
-| *2* | *User:* Insert Plot of Land Data | Add Farmer, Region, Description, Sort of Coffee, Quality (optional), Geo Data, national Plot of Land ID, Local Plot of Land ID and Proofs (optional)
-| *3* | *ForestGuard:* Check Validity of request | All Values must be selected, Farmer ID must be known and Geo Data must have realistic values.
-| *4* | *ForestGuard:* Store Plot of Land data in DB and Blockchain | Create new Plot of Land ID and link to Farmer.
-| *5* | *ForestGuard:* Add Proof to Plot of Land | When proofs exists, add them to Plot of Land
-| *6* | *ForestGuard:* send response to user | Get Plot of Land.
+| *2* | *User:* Insert Plot of Land Data | Add Farmer, Region, Description, Sort of Palm Oil, Quality (optional), Geo Data, national Plot of Land ID, Local Plot of Land ID and Proofs (optional)
+| *3* | *Unisoft:* Check Validity of request | All Values must be selected, Farmer ID must be known and Geo Data must have realistic values.
+| *4* | *Unisoft:* Store Plot of Land data in DB and Blockchain | Create new Plot of Land ID and link to Farmer.
+| *5* | *Unisoft:* Add Proof to Plot of Land | When proofs exists, add them to Plot of Land
+| *6* | *Unisoft:* send response to user | Get Plot of Land.
 |===
 
 === Add/Update Proof to Plot of Land
@@ -292,7 +292,7 @@ image:images/runtime-view/add-proofs-flowchart.svg[]
 
 |===
 | *Nr.* | Step | Description
-| *1* | *ForestGuard:* Check Validity of request | Plot of Land ID must be known and Proof of Freedom from deforestation (.pdf) or Proof of Ownership (.pdf) must be provided.
-| *2* | *ForestGuard:* Store Proof (.pdf) in file system | Store in Database to the Plot of Land.
-| *3* | *ForestGuard:* Create hash value from Proof and store it on BC | Store Proofs in Blockchain.
+| *1* | *Unisoft:* Check Validity of request | Plot of Land ID must be known and Proof of Freedom from deforestation (.pdf) or Proof of Ownership (.pdf) must be provided.
+| *2* | *Unisoft:* Store Proof (.pdf) in file system | Store in Database to the Plot of Land.
+| *3* | *Unisoft:* Create hash value from Proof and store it on BC | Store Proofs in Blockchain.
 |===

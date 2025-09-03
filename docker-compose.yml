@@ -38,17 +38,13 @@ services:
       minio:
         condition: service_started
     entrypoint: >
-      /bin/sh -c "
-      echo '### MinIO setup started' &&
-      mc alias set local http://minio:9000 admin blockchain &&
-      if mc ls local/forest-guard 2>/dev/null; then
+      /bin/sh -c " echo '### MinIO setup started' && mc alias set local http://minio:9000 admin blockchain && if mc ls local/forest-guard
+      2>/dev/null; then
         echo 'Bucket local/forest-guard already exists';
       else
         mc mb local/forest-guard &&
         mc anonymous set download local/forest-guard
-      fi &&
-      echo '### MinIO setup ended'
-      "
+      fi && echo '### MinIO setup ended' "
 
   ##############
   # BLOCKCHAIN #
@@ -105,7 +101,7 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     volumes:
-      - './keycloak/realm/ForestGuard-realm.json:/opt/keycloak/data/import/realm.json'
+      - './keycloak/realm/Unisoft-realm.json:/opt/keycloak/data/import/realm.json'
     healthcheck:
       test: timeout 5s bash -c ':> /dev/tcp/localhost/8080'
       start_period: 10s

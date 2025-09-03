@@ -72,19 +72,24 @@ export class BlockchainConnectorService implements OnModuleDestroy {
   }
 
   private async handleBlockchainRequest() {
-    this.logger.log(`Handling blockchain request | Queue length: ${this.blockchainRequestQueue.length}`);
+    try {
+      this.logger.log(`Handling blockchain request | Queue length: ${this.blockchainRequestQueue.length}`);
 
-    const firstBlockchainRequestFromQueue = this.blockchainRequestQueue.shift();
+      const firstBlockchainRequestFromQueue = this.blockchainRequestQueue.shift();
 
-    if (firstBlockchainRequestFromQueue) {
-      if (firstBlockchainRequestFromQueue.numberOfRetries > 0) {
-        await this.delayBlockchainRequest();
+      if (firstBlockchainRequestFromQueue) {
+        if (firstBlockchainRequestFromQueue.numberOfRetries > 0) {
+          await this.delayBlockchainRequest();
+        }
+        await this.processBlockchainRequest(firstBlockchainRequestFromQueue);
       }
-      await this.processBlockchainRequest(firstBlockchainRequestFromQueue);
+    } catch (error) {
+      this.logger.error(error);
     }
   }
 
   private async processBlockchainRequest(blockchainRequest: BlockchainRequest) {
+    this.logger.log('Processing blockchain request...');
     const id: string = 'remoteId' in blockchainRequest.dto ? blockchainRequest.dto.remoteId : blockchainRequest.dto.plotOfLandId;
     this.logger.log(
       `Processing blockchain request | ID: ${id} | Type: ${blockchainRequest.type} | Retries: ${blockchainRequest.numberOfRetries}`
@@ -100,41 +105,56 @@ export class BlockchainConnectorService implements OnModuleDestroy {
       return;
     }
 
-    switch (type) {
-      case BlockchainRequestType.MINT_PLOT_OF_LAND_NFT:
-        await this.plotOfLandNftService.mintNft(dto as TokenMintDto);
-        break;
-      case BlockchainRequestType.UPDATE_PLOT_OF_LAND_NFT:
-        await this.plotOfLandNftService.updateNft(dto as PlotOfLandTokenUpdateDto, () =>
-          this.blockchainRequestQueue.push(blockchainRequest)
-        );
-        break;
-      case BlockchainRequestType.MINT_BATCH_ROOT_NFT:
-        await this.batchNftService.mintRootNft(dto as TokenMintDto);
-        break;
-      case BlockchainRequestType.MINT_BATCH_LEAF_NFT:
-        if (!parentIds) {
-          throw new AmqpException('parentIds is undefined', HttpStatus.BAD_REQUEST);
-        }
-        await this.batchNftService.mintLeafNft(dto as TokenMintDto, parentIds, () => this.blockchainRequestQueue.push(blockchainRequest));
-        break;
-      default:
-        throw new AmqpException(`Unknown BlockchainRequestType: ${type}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    try {
+      switch (type) {
+        case BlockchainRequestType.MINT_PLOT_OF_LAND_NFT:
+          await this.plotOfLandNftService.mintNft(dto as TokenMintDto);
+          break;
+        case BlockchainRequestType.UPDATE_PLOT_OF_LAND_NFT:
+          await this.plotOfLandNftService.updateNft(dto as PlotOfLandTokenUpdateDto, () =>
+            this.blockchainRequestQueue.push(blockchainRequest)
+          );
+          break;
+        case BlockchainRequestType.MINT_BATCH_ROOT_NFT:
+          await this.batchNftService.mintRootNft(dto as TokenMintDto);
+          break;
+        case BlockchainRequestType.MINT_BATCH_LEAF_NFT:
+          if (!parentIds) {
+            throw new AmqpException('parentIds is undefined', HttpStatus.BAD_REQUEST);
+          }
+          await this.batchNftService.mintLeafNft(dto as TokenMintDto, parentIds, () => this.blockchainRequestQueue.push(blockchainRequest));
+          break;
+        default:
+          throw new AmqpException(`Unknown BlockchainRequestType: ${type}`, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    } catch (error) {
+      this.logger.error(error);
+      if (blockchainRequest.numberOfRetries < this.maxRetries) {
+        blockchainRequest.numberOfRetries++;
+        this.blockchainRequestQueue.push(blockchainRequest);
+      } else {
+        throw error;
+      }
     }
   }
 
   public async mintPlotOfLandNft(plotOfLand: PlotOfLand): Promise<void> {
-    if (!this.blockchainEnabled) {
-      return;
+    try {
+      if (!this.blockchainEnabled) {
+        return;
+      }
+
+      const dto: TokenMintDto = await this.plotOfLandNftService.createDtoForMintingNft(plotOfLand);
+
+      this.blockchainRequestQueue.push({
+        type: BlockchainRequestType.MINT_PLOT_OF_LAND_NFT,
+        dto: dto,
+        numberOfRetries: 0,
+      });
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
     }
-
-    const dto: TokenMintDto = await this.plotOfLandNftService.createDtoForMintingNft(plotOfLand);
-
-    this.blockchainRequestQueue.push({
-      type: BlockchainRequestType.MINT_PLOT_OF_LAND_NFT,
-      dto: dto,
-      numberOfRetries: 0,
-    });
   }
 
   public async updatePlotOfLandNft(proof: Proof & { plotOfLand: PlotOfLand }): Promise<void> {

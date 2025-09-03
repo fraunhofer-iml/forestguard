@@ -6,7 +6,7 @@
 
 <br />
 <div align="center">
-<h2 align="center">ForestGuard</h3>
+<h2 align="center">Unisoft</h3>
   <p align="center">
     A NestJS-based application aimed at tracking deforestation-free coffee using blockchain technology.
     <br />
@@ -40,9 +40,9 @@
 
 ### 📄 Description <a id="description"></a>
 
-ForestGuard ensures that the coffee you drink is sourced from deforestation-free regions. By leveraging blockchain technology, ForestGuard
-provides transparency and traceability in the coffee supply chain, ensuring that every step from the coffee farm to your cup is accountable
-and environmentally friendly.
+Unisoft ensures that the coffee you drink is sourced from deforestation-free regions. By leveraging blockchain technology, Unisoft provides
+transparency and traceability in the coffee supply chain, ensuring that every step from the coffee farm to your cup is accountable and
+environmentally friendly.
 
 ### 🛠️ Built With <a id="built-with"></a>
 
@@ -96,10 +96,9 @@ The project consists of the following components:
 
 ## 🚀 Getting Started <a id="getting-started"></a>
 
-To set up and run ForestGuard locally, please consult the chapters
-[Deployment View](./documentation/04-deployment-view.adoc) and
-[Tutorial](./documentation/05-tutorial.adoc) in our documentation. These two chapters
-provide step-by-step instructions to guide you through the process of installing, configuring and running ForestGuard on your local machine.
+To set up and run Unisoft locally, please consult the chapters [Deployment View](./documentation/04-deployment-view.adoc) and
+[Tutorial](./documentation/05-tutorial.adoc) in our documentation. These two chapters provide step-by-step instructions to guide you through
+the process of installing, configuring and running Unisoft on your local machine.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
